@@ -1,4 +1,6 @@
-﻿namespace MissionPlanner.GCSViews
+﻿using System.Windows.Forms;
+
+namespace MissionPlanner.GCSViews
 {
     partial class FlightData
     {
@@ -1982,7 +1984,7 @@
         private System.Windows.Forms.ToolStripMenuItem russianHudToolStripMenuItem;
         public System.Windows.Forms.ContextMenuStrip contextMenuStripMap;
         public System.Windows.Forms.ContextMenuStrip contextMenuStripHud;
-        private System.Windows.Forms.BindingSource bindingSourceQuickTab;
+        internal System.Windows.Forms.BindingSource bindingSourceQuickTab;
         private System.Windows.Forms.BindingSource bindingSourceStatusTab;
         private System.Windows.Forms.BindingSource bindingSourceGaugesTab;
         private System.Windows.Forms.ToolStripMenuItem setHomeHereToolStripMenuItem;
