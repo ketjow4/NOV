@@ -1066,7 +1066,7 @@ namespace MissionPlanner.Properties {
         ///
         ///It includes both fixed wing (APM) and rotary wing (!ArduCopter) parameters. Some may only be relevant for one platform or another.
         ///
-        ///|| *EEPROM variable name* || *Min* || *Max* || *Default* || *Multiplier* || *Enabled (0 = no, 1 = yes)* [rest of string was truncated]&quot;;.
+        ///|| *EEPROM variable name* || *Min* || *Max* || *Default* || *Multiplier* || *Enabled (0 = no, 1 = [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MAVParam {
             get {
@@ -1110,6 +1110,26 @@ namespace MissionPlanner.Properties {
         internal static System.Drawing.Bitmap new_3DR_04 {
             get {
                 object obj = ResourceManager.GetObject("new-3DR-04", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap novelty {
+            get {
+                object obj = ResourceManager.GetObject("novelty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap novelty2 {
+            get {
+                object obj = ResourceManager.GetObject("novelty2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

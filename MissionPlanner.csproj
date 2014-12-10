@@ -2568,6 +2568,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Swarm\FormationControl.resx">
       <DependentUpon>FormationControl.cs</DependentUpon>
@@ -6269,6 +6270,8 @@
     <None Include="Resources\PlusFramesGreen_04.png" />
     <None Include="Resources\PlusFramesGreen_06.png" />
     <None Include="Resources\pixhawk.jpg" />
+    <None Include="Resources\novelty.png" />
+    <None Include="Resources\novelty2.png" />
     <Content Include="Resources\rover.png" />
     <Content Include="Resources\splash.jpg" />
     <Content Include="Scripts\datetime.py">
