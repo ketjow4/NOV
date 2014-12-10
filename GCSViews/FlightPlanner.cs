@@ -1603,7 +1603,7 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BUT_write_Click(object sender, EventArgs e)
+        public void BUT_write_Click(object sender, EventArgs e)
         {
             if ((altmode)CMB_altmode.SelectedValue == altmode.Absolute)
             {

@@ -6271,7 +6271,6 @@
     <None Include="Resources\PlusFramesGreen_06.png" />
     <None Include="Resources\pixhawk.jpg" />
     <None Include="Resources\novelty.png" />
-    <None Include="Resources\novelty2.png" />
     <Content Include="Resources\rover.png" />
     <Content Include="Resources\splash.jpg" />
     <Content Include="Scripts\datetime.py">

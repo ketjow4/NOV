@@ -48,6 +48,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPS SIGNAL", 1, 5, "%"),
+                new TileButton("WRITE WAYPOINTS", 3, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
             });
 
             var defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { });
