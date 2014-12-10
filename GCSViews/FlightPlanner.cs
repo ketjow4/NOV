@@ -1689,7 +1689,18 @@ namespace MissionPlanner.GCSViews
                     home.lng = (double.Parse(TXT_homelng.Text));
                     home.alt = (float.Parse(TXT_homealt.Text) / CurrentState.multiplierdist); // use saved home
                 }
-                catch { throw new Exception("Your home location is invalid"); }
+                catch
+                {
+                    try
+                    {
+                        home.lat = (double.Parse(Commands.Rows[0].Cells[Lat.Index].Value.ToString()));
+                        home.lng = (double.Parse(Commands.Rows[0].Cells[Lon.Index].Value.ToString()));
+                    }
+                    catch
+                    {
+                        throw new Exception("Your home location is invalid");
+                    }
+                }
 
                 log.Info("wps values " + MainV2.comPort.MAV.wps.Values.Count);
                 log.Info("cmd rows " +(Commands.Rows.Count + 1)); // + home
