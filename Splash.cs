@@ -24,6 +24,6 @@ namespace MissionPlanner
             //    pictureBox1.Image = Program.Logo;
             //    pictureBox1.Visible = true;
             //}
-        }
+        }   
     }
 }

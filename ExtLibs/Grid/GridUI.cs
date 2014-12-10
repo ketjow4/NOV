@@ -1316,7 +1316,7 @@ namespace MissionPlanner
             xmlcamera(true);
         }
 
-        private void BUT_Accept_Click(object sender, EventArgs e)
+        public void BUT_Accept_Click(object sender, EventArgs e)
         {
             if (grid != null && grid.Count > 0)
             {
