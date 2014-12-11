@@ -19,6 +19,8 @@ using log4net;
 using MissionPlanner.Utilities;
 using ProjNet.CoordinateSystems;
 using ProjNet.CoordinateSystems.Transformations;
+using GMap.NET.Internals;
+using MissionPlanner.GCSViews;
 
 namespace MissionPlanner
 {
@@ -127,6 +129,8 @@ namespace MissionPlanner
             // set and angle that is good
             NUM_angle.Value = (decimal)((getAngleOfLongestSide(list) + 360) % 360);
             TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
+            
+            NUM_angle.Value = Tiles.AngleVal;
         }
 
         private void GridUI_Load(object sender, EventArgs e)
@@ -274,7 +278,7 @@ namespace MissionPlanner
             if (plugin.Host.config.ContainsKey("grid_camera"))
             {
 
-                loadsetting("grid_alt", NUM_altitude);
+                //loadsetting("grid_alt", NUM_altitude);
                 //  loadsetting("grid_angle", NUM_angle);
                 loadsetting("grid_camdir", CHK_camdirection);
 
@@ -307,6 +311,9 @@ namespace MissionPlanner
                 // Copter Settings
                 loadsetting("grid_copter_delay", NUM_copter_delay);
                 //loadsetting("grid_copter_headinghold_chk", CHK_copter_headinghold);
+
+                NUM_angle.Value = Tiles.AngleVal;
+                NUM_altitude.Value = Tiles.AltitudeVal;
             }
         }
 
@@ -499,7 +506,7 @@ namespace MissionPlanner
 
             // new grid system test
 
-            grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
 
             List<PointLatLng> list2 = new List<PointLatLng>();
 
@@ -558,7 +565,7 @@ namespace MissionPlanner
                             double angle1 = startangle - (Math.Tan((fovv / 2.0) / (fovh / 2.0)) * rad2deg);
                             double dist1 = Math.Sqrt(Math.Pow(fovh / 2.0, 2) + Math.Pow(fovv / 2.0, 2));
 
-                            double bearing = (double)NUM_angle.Value;// (prevpoint.GetBearing(item) + 360.0) % 360;
+                            double bearing = Tiles.AngleVal;//(double)NUM_angle.Value;// (prevpoint.GetBearing(item) + 360.0) % 360;
 
                             List<PointLatLng> footprint = new List<PointLatLng>();
                             footprint.Add(item.newpos(bearing + angle1, dist1));
@@ -1318,6 +1325,8 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
+            NUM_angle.Value = Tiles.AngleVal;
+            NUM_altitude.Value = Tiles.AltitudeVal;
             if (grid != null && grid.Count > 0)
             {
                 MainV2.instance.FlightPlanner.quickadd = true;
