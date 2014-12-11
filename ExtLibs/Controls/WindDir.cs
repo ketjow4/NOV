@@ -94,7 +94,7 @@ namespace MissionPlanner.Controls
                 e.Graphics.DrawLine(redpen, outx, outy, outx - x1, outy - y1);
             }
 
-            e.Graphics.DrawString(Speed.ToString("0"), this.Font, Brushes.Red, (float)0, (float)0);
+            //e.Graphics.DrawString(Speed.ToString("0"), this.Font, Brushes.Red, (float)0, (float)0);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
