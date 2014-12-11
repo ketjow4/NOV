@@ -327,6 +327,14 @@ namespace MissionPlanner.GCSViews
             {
                 foreach (var label in a.Controls.OfType<Panel>().Select(c => c.Controls[0] as  System.Windows.Forms.Label))
                 {
+                    if (label != null && label.Name == "TIME_IN_THE_AIR")
+                    {
+                        Binding b = new Binding("Text", bindingSource1, "timeInAir", true);
+                        b.Parse += new ConvertEventHandler(FormatToHourAndMinutes);
+                        label.DataBindings.Clear();
+                        label.DataBindings.Add(b);
+                        break;
+                    }
                     if (label != null && label.Name == name)
                         label.DataBindings.Add(new Binding("Text", bindingSource1,
                             binder,
@@ -334,6 +342,11 @@ namespace MissionPlanner.GCSViews
                     break;
                 }
             }
+        }
+
+        private void FormatToHourAndMinutes(object sender, ConvertEventArgs e)      //Fired every time value changes
+        {
+            e.Value = "100 min";            //TODO implement real calculation of time to hours and minutes
         }
 
         void comPort_MavChanged(object sender, EventArgs e)
@@ -435,7 +448,7 @@ namespace MissionPlanner.GCSViews
                     lbl2.Visible = true;
                     //lbl2.Text = fieldValue.ToString();
 
-
+                    
                     tabStatus.Controls.Add(lbl1);
                     tabStatus.Controls.Add(lbl2);
                 }

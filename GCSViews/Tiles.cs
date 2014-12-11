@@ -53,7 +53,7 @@ namespace MissionPlanner.GCSViews
                     Color.FromArgb(255, 255, 51, 0)),
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
-                new TileData("TIME IN THE AIR", 0, 3, "min"),   //TODO implement
+                new TileData("TIME IN THE AIR", 0, 3),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                 new TileData("GROUNG RESOLUTION", 0, 5, "cm"),  //TODO implement
                 new TileButton("DISARM", 0, 7),
