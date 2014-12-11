@@ -50,7 +50,7 @@ namespace MissionPlanner
             IntPtr NotificationFilter,
             Int32 Flags);
 
-            static public int SW_SHOWNORMAL = 1;
+            static public int SW_SHOWNORMAL = 0;
             static public int SW_HIDE = 0;
         }
 
@@ -751,42 +751,42 @@ namespace MissionPlanner
 
         public void MenuSetup_Click(object sender, EventArgs e)
         {
-            if (getConfig("password_protect") == "" || bool.Parse(getConfig("password_protect")) == false)
-            {
-                MyView.ShowScreen("HWConfig");
-            }
-            else
-            {
-                if (Password.VerifyPassword())
-                {
-                    MyView.ShowScreen("HWConfig");
-                }
-            }
+            //if (getConfig("password_protect") == "" || bool.Parse(getConfig("password_protect")) == false)
+            //{
+            //    MyView.ShowScreen("HWConfig");
+            //}
+            //else
+            //{
+            //    if (Password.VerifyPassword())
+            //    {
+            //        MyView.ShowScreen("HWConfig");
+            //    }
+            //}
         }
 
         private void MenuSimulation_Click(object sender, EventArgs e)
         {
-            MyView.ShowScreen("Simulation");
+            //MyView.ShowScreen("Simulation");
         }
 
         private void MenuTuning_Click(object sender, EventArgs e)
         {
-            if (getConfig("password_protect") == "" || bool.Parse(getConfig("password_protect")) == false)
-            {
-                MyView.ShowScreen("SWConfig");
-            }
-            else
-            {
-                if (Password.VerifyPassword())
-                {
-                    MyView.ShowScreen("SWConfig");
-                }
-            }
+            //if (getConfig("password_protect") == "" || bool.Parse(getConfig("password_protect")) == false)
+            //{
+            //    MyView.ShowScreen("SWConfig");
+            //}
+            //else
+            //{
+            //    if (Password.VerifyPassword())
+            //    {
+            //        MyView.ShowScreen("SWConfig");
+            //    }
+            //}
         }
 
         private void MenuTerminal_Click(object sender, EventArgs e)
         {
-            MyView.ShowScreen("Terminal");
+            //MyView.ShowScreen("Terminal");    
         }
 
         public void MenuConnect_Click(object sender, EventArgs e)
@@ -878,7 +878,7 @@ namespace MissionPlanner
             else
             {
                 log.Info("We are connecting");
-                _connectionControl.CMB_serialport.Text = "COM";
+                _connectionControl.CMB_serialport.Text = "TCP";
                 switch (_connectionControl.CMB_serialport.Text)
                 {
                     case "TCP":
@@ -934,7 +934,7 @@ namespace MissionPlanner
 
                     log.Info("Set Portname");
                     // set port, then options
-                    _connectionControl.CMB_serialport.Text = "COM12";
+                    _connectionControl.CMB_serialport.Text = "com12";
                     comPort.BaseStream.PortName = _connectionControl.CMB_serialport.Text;
 
                     log.Info("Set Baudrate");
