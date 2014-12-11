@@ -14,7 +14,7 @@ namespace MissionPlanner.GCSViews
         static TileData angleInfo = null;
 
         private static int altMin = 75;
-        private static int altMax = 1000;
+        private static int altMax = 450;
 
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
         public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
@@ -33,8 +33,8 @@ namespace MissionPlanner.GCSViews
             var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString());
             TileButton angleBtnOk = null;
             angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
-            var altBtnUp = new TileButton("+25", 2, 5, (sender, args) => ChangeAlt(25));
-            var altBtnDown = new TileButton("-25", 3, 5, (sender, args) => ChangeAlt(-25));
+            var altBtnUp = new TileButton("+10", 2, 5, (sender, args) => ChangeAlt(10));
+            var altBtnDown = new TileButton("-10", 3, 5, (sender, args) => ChangeAlt(-10));
             TileButton altBtnOk = null;
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
@@ -53,9 +53,9 @@ namespace MissionPlanner.GCSViews
                     Color.FromArgb(255, 255, 51, 0)),
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
-                new TileData("TIME IN THE AIR", 0, 3),
+                new TileData("TIME IN THE AIR", 0, 3, "min"),   //TODO implement
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
-                new TileData("RADIO SIGNAL", 0, 5, "%"),
+                new TileData("GROUNG RESOLUTION", 0, 5, "cm"),  //TODO implement
                 new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner")),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
@@ -124,7 +124,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
                 new TileData("DISTANCE", 0, 4, "km"),
-                new TileData("RADIO SIGNAL", 0, 5, "km2"),
+                new TileData("RADIO SIGNAL", 0, 5, "%"),
                 new TileButton("WRITE WAYPOINTS", 3, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
@@ -213,7 +213,7 @@ namespace MissionPlanner.GCSViews
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
             tilesArray.Add(new TileButton("ARM/DISARM", 0, 7,
                 (sender, args) => FlightData.instance.BUT_ARM_Click(sender, args)));
-            tilesArray.Add(new TileData("WIND SPED", 9, 0, "m/s"));
+            tilesArray.Add(new TileData("WIND SPEED", 9, 0, "m/s"));
 
             foreach (var tile in tilesArray)
             {
