@@ -346,7 +346,7 @@ namespace MissionPlanner.GCSViews
 
         private void FormatToHourAndMinutes(object sender, ConvertEventArgs e)      //Fired every time value changes
         {
-            e.Value = "100 min";            //TODO implement real calculation of time to hours and minutes
+            e.Value = "100";            //TODO implement real calculation of time to hours and minutes
         }
 
         void comPort_MavChanged(object sender, EventArgs e)

@@ -151,8 +151,12 @@ namespace MissionPlanner.GCSViews
             ),
                 new TileButton("ADD LANDING POINT", 1, 2,
                     (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)),
-               altInfo
-               ,
+               angleInfo,
+               altInfo,
+
+               new TileButton("SAVE WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
+               new TileButton("LOAD WP FILE", 1,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
+               
             });
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;

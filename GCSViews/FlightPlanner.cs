@@ -2239,7 +2239,7 @@ namespace MissionPlanner.GCSViews
             writeKML();
         }
 
-        private void BUT_loadwpfile_Click(object sender, EventArgs e)
+        public void BUT_loadwpfile_Click(object sender, EventArgs e)
         {
             OpenFileDialog fd = new OpenFileDialog();
             fd.Filter = "All Supported Types|*.txt;*.shp|Ardupilot Mission (*.txt)|*.*|Shape file|*.shp";
@@ -5939,7 +5939,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             }
         }
 
-        private void BUT_saveWPFile_Click(object sender, EventArgs e)
+        public void BUT_saveWPFile_Click(object sender, EventArgs e)
         {
             SaveFile_Click(null, null);
         }
