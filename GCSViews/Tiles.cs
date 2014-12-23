@@ -13,6 +13,8 @@ namespace MissionPlanner.GCSViews
         static TileData altInfo = null;
         static TileData angleInfo = null;
 
+        private static bool connected = false;
+
         private static int altMin = 75;
         private static int altMax = 450;
 
@@ -47,6 +49,9 @@ namespace MissionPlanner.GCSViews
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
             var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk };
 
+           
+           
+
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData"),
@@ -56,6 +61,22 @@ namespace MissionPlanner.GCSViews
                 new TileData("TIME IN THE AIR", 0, 3),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                 new TileData("GROUNG RESOLUTION", 0, 5, "cm"),  //TODO implement
+                new TileButton("CONNECT",0,6, (sender, args) =>
+                {
+                    var conBut = sender as Label;
+                    if(connected == false)  //connect
+                    {
+                        //TODO impemelnt connecting
+                        conBut.Text = "DISCONNECT";
+                        connected = true;
+                    }
+                    else                    //disconnect
+                    {
+                        //TODO impemelnt disconnecting
+                        conBut.Text = "CONNECT";
+                        connected = false;
+                    }
+                }),
                 new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner")),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
@@ -65,16 +86,19 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPS SIGNAL", 1, 5, "%"),
             });
 
+            
+
             var defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { });
             var cam1Head = new TileButton("CAMERA 1", 3, 3);
 
             var cam2Head = new TileButton("CAMERA 2", 4, 3);
-            var obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, string.Empty);
+            var obsHeadBtn = new TileButton("OBSERVATION HEAD", 1, 3);
             obsHeadBtn.ClickMethod += (sender, args) =>
             {
                 defaultHead.Label.Visible = cam1Head.Label.Visible = cam2Head.Label.Visible = true;
                 var label = sender as Label;
                 if (label != null) obsHeadBtn.Label.Text = label.Text;
+
             };
 
             EventHandler fnc = (sender, args) =>
@@ -124,7 +148,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
                 new TileData("DISTANCE", 0, 4, "km"),
-                new TileData("RADIO SIGNAL", 0, 5, "%"),
+                new TileData("GROUND RESOLUTION", 0, 5, "cm"),
                 new TileButton("WRITE WAYPOINTS", 3, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
@@ -239,7 +263,11 @@ namespace MissionPlanner.GCSViews
             }
 
         }
+
     }
+
+
+
 
     internal abstract class TileInfo
     {

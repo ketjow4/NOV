@@ -4119,7 +4119,7 @@ namespace MissionPlanner.GCSViews
 
         private void gridv2()
         {
-            polygongridmode = false;
+            polygongridmode = false;        //why?
 
             if (drawnpolygon == null || drawnpolygon.Points.Count == 0)
             {
