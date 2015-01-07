@@ -40,6 +40,7 @@ namespace MissionPlanner.GCSViews
             TileButton altBtnOk = null;
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
+
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
             {
                 var x = !altBtnUp.Visible;
@@ -86,27 +87,25 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPS SIGNAL", 1, 5, "%"),
             });
 
-            
 
-            var defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { });
+            TileButton defaultHead = null;
+            defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { defaultHead.Visible = false; });
             var cam1Head = new TileButton("CAMERA 1", 3, 3);
-
             var cam2Head = new TileButton("CAMERA 2", 4, 3);
-            var obsHeadBtn = new TileButton("OBSERVATION HEAD", 1, 3);
-            obsHeadBtn.ClickMethod += (sender, args) =>
-            {
-                defaultHead.Label.Visible = cam1Head.Label.Visible = cam2Head.Label.Visible = true;
-                var label = sender as Label;
-                if (label != null) obsHeadBtn.Label.Text = label.Text;
 
-            };
+            var obsHeadBtn = new TileButton("OBSERVATION HEAD", 1, 3, (sender, args) =>
+            {
+                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = true;
+                //var label = sender as Label;
+                //if (label != null) obsHeadBtn.Label.Text = label.Text;
+
+            }); 
 
             EventHandler fnc = (sender, args) =>
             {
-                defaultHead.Label.Visible =
-                    cam1Head.Label.Visible = cam2Head.Label.Visible = false;
+                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = false;
             };
-            fnc(null, null);
+
             defaultHead.ClickMethod += fnc;
             cam1Head.ClickMethod += fnc;
             cam2Head.ClickMethod += fnc;
@@ -123,6 +122,7 @@ namespace MissionPlanner.GCSViews
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
+                cam2Head,defaultHead,cam1Head,
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData")),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
@@ -261,6 +261,7 @@ namespace MissionPlanner.GCSViews
                 if (hideList.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
             }
+            //fnc(null, null);
 
         }
 
