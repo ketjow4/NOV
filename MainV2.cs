@@ -597,16 +597,16 @@ namespace MissionPlanner
 
             if (Program.Logo != null)
             {
-                this.Icon = Icon.FromHandle(((Bitmap)Program.Logo).GetHicon());
+                //this.Icon = Icon.FromHandle(((Bitmap)Program.Logo).GetHicon());
             }
 
             if (Program.Logo != null && Program.vvvvz)
             {
-                MenuDonate.Click -= this.toolStripMenuItem1_Click;
-                MenuDonate.Text = "";
-                MenuDonate.Image = Program.Logo;
+                //MenuDonate.Click -= this.toolStripMenuItem1_Click;
+                //MenuDonate.Text = "";
+                //MenuDonate.Image = Program.Logo;
 
-                MenuDonate.Click += MenuCustom_Click;
+                //MenuDonate.Click += MenuCustom_Click;
 
                 MenuFlightData.Visible = false;
                 MenuFlightPlanner.Visible = true;

@@ -48,7 +48,7 @@ namespace MissionPlanner.GCSViews
             });
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk };
+            
 
            
            
@@ -61,23 +61,8 @@ namespace MissionPlanner.GCSViews
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
-                new TileData("GROUNG RESOLUTION", 0, 5, "cm"),  //TODO implement
-                new TileButton("CONNECT",0,6, (sender, args) =>
-                {
-                    var conBut = sender as Label;
-                    if(connected == false)  //connect
-                    {
-                        //TODO impemelnt connecting
-                        conBut.Text = "DISCONNECT";
-                        connected = true;
-                    }
-                    else                    //disconnect
-                    {
-                        //TODO impemelnt disconnecting
-                        conBut.Text = "CONNECT";
-                        connected = false;
-                    }
-                }),
+                new TileData("GROUND RESOLUTION", 0, 5, "cm"),  //TODO implement
+               
                 new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner")),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
@@ -88,27 +73,23 @@ namespace MissionPlanner.GCSViews
             });
 
 
-            TileButton defaultHead = null;
-            defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { defaultHead.Visible = false; });
-            var cam1Head = new TileButton("CAMERA 1", 3, 3);
-            var cam2Head = new TileButton("CAMERA 2", 4, 3);
+            TileButton defaultHead, cam1Head, cam2Head;
+            defaultHead = cam1Head = cam2Head = null;
+            defaultHead = new TileButton("DEFAULT", 2, 3,(sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
+            cam1Head = new TileButton("CAMERA 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
+            cam2Head = new TileButton("CAMERA 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
 
-            var obsHeadBtn = new TileButton("OBSERVATION HEAD", 1, 3, (sender, args) =>
+            TileData obsHeadBtn = null;
+            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "",(sender, args) =>
             {
-                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = true;
-                //var label = sender as Label;
-                //if (label != null) obsHeadBtn.Label.Text = label.Text;
+                var x = !defaultHead.Visible;
+                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = x;
+                obsHeadBtn.Value = "Default";
+            });
 
-            }); 
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,defaultHead,cam1Head,cam2Head };
+            obsHeadBtn.ClickMethod(null,null);
 
-            EventHandler fnc = (sender, args) =>
-            {
-                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = false;
-            };
-
-            defaultHead.ClickMethod += fnc;
-            cam1Head.ClickMethod += fnc;
-            cam2Head.ClickMethod += fnc;
 
             angleInfo = new TileData("ANGLE", 1, 4, "deg", (sender, args) =>
             {
@@ -122,7 +103,7 @@ namespace MissionPlanner.GCSViews
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
-                cam2Head,defaultHead,cam1Head,
+                cam2Head,defaultHead,cam1Head,                                            //TODO change here!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData")),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
@@ -149,12 +130,13 @@ namespace MissionPlanner.GCSViews
                 }), 
                 new TileData("DISTANCE", 0, 4, "km"),
                 new TileData("GROUND RESOLUTION", 0, 5, "cm"),
-                new TileButton("WRITE WAYPOINTS", 3, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
+                new TileButton("WRITE WAYPOINTS", 2, 8, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
                     
                 new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
             {
+                //FlightPlanner.instance.gridV2ToolStripMenuItem_Click(sender, e);              //tutaj to chyba nie działa sprawdzić to po sesji!!!!!
                 {
                     var Host = new Plugin.PluginHost();
                     ToolStripItemCollection col = Host.FPMenuMap.Items;
@@ -243,13 +225,31 @@ namespace MissionPlanner.GCSViews
                 (sender, args) => FlightData.instance.BUT_ARM_Click(sender, args)));
             tilesArray.Add(new TileData("WIND SPEED", 9, 0, "m/s"));
 
+
+            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>
+               {
+                   var conBut = sender as Label;
+                   if (connected == false)  //connect
+                   {
+                       //TODO impemelnt connecting
+                       conBut.Text = "DISCONNECT";
+                       connected = true;
+                   }
+                   else                    //disconnect
+                   {
+                       //TODO impemelnt disconnecting
+                       conBut.Text = "CONNECT";
+                       connected = false;
+                   }
+               }));
+
             foreach (var tile in tilesArray)
             {
                 //TODO: transparent
                 var panel = new Panel
                 {
-                    Size = new Size(158, 64),
-                    Location = new Point(tile.Column * 160, tile.Row * 66),
+                    Size = new Size(168, 64),
+                    Location = new Point(tile.Column * 170, tile.Row * 66),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
                     Parent = p
                 };
@@ -302,7 +302,7 @@ namespace MissionPlanner.GCSViews
         {
             this.unit = unit;
             ClickMethod = handler;
-            panel = new Panel { Size = new Size(158, 64) };
+            panel = new Panel { Size = new Size(163, 64) };
             // panel.Dock = DockStyle.Fill;
             ;
             var headLabel = new Label()
@@ -312,7 +312,9 @@ namespace MissionPlanner.GCSViews
                 Font = new Font("Century Gothic", 10, FontStyle.Italic),
                 Top = 10,
                 Left = 10,
-                Width = 160
+                Width = 165,
+                TextAlign = ContentAlignment.TopLeft
+
             };
             var unitLabel = new Label()
             {

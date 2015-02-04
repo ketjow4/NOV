@@ -88,8 +88,8 @@ namespace MissionPlanner
             if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt"))
                 name = File.ReadAllText(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt", Encoding.UTF8);
 
-            if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png"))
-                Logo = new Bitmap(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png");
+            //if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png"))
+            //    Logo = new Bitmap(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png");
 
             if (name == "VVVVZ")
             {

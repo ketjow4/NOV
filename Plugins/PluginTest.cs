@@ -24,7 +24,7 @@ using System.Windows.Forms;
             ToolStripLabel item = new ToolStripLabel("Test Plugin");
             item.Click += item_Click;
 
-            Host.FDMenuMap.Items.Add(item);
+            //Host.FDMenuMap.Items.Add(item);
 
             return true; 
         }

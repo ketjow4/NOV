@@ -5207,7 +5207,7 @@ namespace MissionPlanner.GCSViews
             MainV2.comPort.MAV.cs.TrackerLocation = new PointLatLngAlt(MouseDownEnd) { Alt = MainV2.comPort.MAV.cs.HomeAlt };
         }
 
-        private void gridV2ToolStripMenuItem_Click(object sender, EventArgs e)
+        public void gridV2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             gridv2();
         }
