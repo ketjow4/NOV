@@ -16,7 +16,6 @@ namespace MissionPlanner.Controls
             InitializeComponent();
             this.BackColor = Color.Transparent;
             this.DoubleBuffered = true;
-
         }
 
         const float rad2deg = (float)(180 / Math.PI);
@@ -35,7 +34,8 @@ namespace MissionPlanner.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
            // e.Graphics.Clear(Color.Transparent);
-
+            this.Width = 64;
+            this.Height = 64;
             try
             {
 
@@ -56,6 +56,7 @@ namespace MissionPlanner.Controls
 
             base.OnPaint(e);
 
+            
             Rectangle outside = new Rectangle(1,1,this.Width - 3, this.Height -3);
 
             e.Graphics.DrawArc(blackpen, outside, 0, 360);

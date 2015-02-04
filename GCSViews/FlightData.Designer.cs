@@ -268,8 +268,16 @@ namespace MissionPlanner.GCSViews
             // 
             // MainH.Panel1
             // 
-            this.MainH.Panel1.Controls.Add(this.SubMainLeft);
+            //this.MainH.Panel1.Controls.Add(this.SubMainLeft);
             this.MainH.Panel1Collapsed = true;
+            //
+            //HUD PANEL
+            //
+            Panel hud = new Panel();
+            hud.Controls.Add(this.hud1);
+            hud.Location = new Point(300, 300);             //TODO work on this!!!!!!
+            this.MainH.Panel2.Controls.Add(hud);
+            //this.MainH.Panel1Collapsed = false;
             // 
             // MainH.Panel2
             // 
@@ -283,11 +291,11 @@ namespace MissionPlanner.GCSViews
             // 
             // SubMainLeft.Panel1
             // 
-            this.SubMainLeft.Panel1.Controls.Add(this.hud1);
+            this.SubMainLeft.Panel1.Controls.Add(this.hud1);        
             // 
             // SubMainLeft.Panel2
             // 
-            this.SubMainLeft.Panel2.Controls.Add(this.tabControlactions);
+            //this.SubMainLeft.Panel2.Controls.Add(this.tabControlactions);
             // 
             // hud1
             // 
@@ -1604,12 +1612,12 @@ namespace MissionPlanner.GCSViews
             
             this.windDir1.BackColor = System.Drawing.Color.Transparent;
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Direction", this.bindingSource1, "wind_dir", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Speed", this.bindingSource1, "wind_vel", true, System.Windows.Forms.DataSourceUpdateMode.Never));
+            //this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Speed", this.bindingSource1, "wind_vel", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.windDir1.Direction = 360D;
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
-            this.windDir1.Location = new Point(0, 200);
+            this.windDir1.Location = new Point(168, 594);
             // 
             // bindingSource1
             // 
