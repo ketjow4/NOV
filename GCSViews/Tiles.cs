@@ -233,12 +233,14 @@ namespace MissionPlanner.GCSViews
                    {
                        //TODO impemelnt connecting
                        conBut.Text = "DISCONNECT";
+                       MainV2.instance.MenuConnect_Click(null, null);
                        connected = true;
                    }
                    else                    //disconnect
                    {
                        //TODO impemelnt disconnecting
                        conBut.Text = "CONNECT";
+                       MainV2.instance.MenuConnect_Click(null, null);
                        connected = false;
                    }
                }));

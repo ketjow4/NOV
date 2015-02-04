@@ -934,7 +934,7 @@ namespace MissionPlanner
 
                     log.Info("Set Portname");
                     // set port, then options
-                    _connectionControl.CMB_serialport.Text = "com12";
+                    _connectionControl.CMB_serialport.Text = "com3";
                     comPort.BaseStream.PortName = _connectionControl.CMB_serialport.Text;
 
                     log.Info("Set Baudrate");
