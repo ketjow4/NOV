@@ -268,16 +268,12 @@ namespace MissionPlanner.GCSViews
             // 
             // MainH.Panel1
             // 
-            //this.MainH.Panel1.Controls.Add(this.SubMainLeft);
+            this.MainH.Panel1.Controls.Add(this.SubMainLeft);
             this.MainH.Panel1Collapsed = true;
             //
             //HUD PANEL
             //
-            Panel hud = new Panel();
-            hud.Controls.Add(this.hud1);
-            hud.Location = new Point(300, 300);             //TODO work on this!!!!!!
-            this.MainH.Panel2.Controls.Add(hud);
-            //this.MainH.Panel1Collapsed = false;
+            this.MainH.Panel2.Controls.Add(SubMainLeft);
             // 
             // MainH.Panel2
             // 
@@ -295,7 +291,7 @@ namespace MissionPlanner.GCSViews
             // 
             // SubMainLeft.Panel2
             // 
-            //this.SubMainLeft.Panel2.Controls.Add(this.tabControlactions);
+            this.SubMainLeft.Panel2.Controls.Add(this.tabControlactions);
             // 
             // hud1
             // 
@@ -431,29 +427,29 @@ namespace MissionPlanner.GCSViews
             // 
             // tabControlactions
             // 
-            //this.tabControlactions.ContextMenuStrip = this.contextMenuStripactionstab;
-            //this.tabControlactions.Controls.Add(this.tabQuick);
-            //this.tabControlactions.Controls.Add(this.tabActions);
-            //this.tabControlactions.Controls.Add(this.tabActionsSimple);
-            //this.tabControlactions.Controls.Add(this.tabGauges);
-            //this.tabControlactions.Controls.Add(this.tabStatus);
-            //this.tabControlactions.Controls.Add(this.tabServo);
-            //this.tabControlactions.Controls.Add(this.tabTLogs);
-            //this.tabControlactions.Controls.Add(this.tablogbrowse);
-            //this.tabControlactions.Controls.Add(this.tabScripts);
-            //this.tabControlactions.Controls.Add(this.tabPagemessages);
-            //resources.ApplyResources(this.tabControlactions, "tabControlactions");
-            //this.tabControlactions.Name = "tabControlactions";
-            //this.tabControlactions.SelectedIndex = 0;
-            //this.tabControlactions.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
-            //this.tabControlactions.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControlactions.ContextMenuStrip = this.contextMenuStripactionstab;
+            this.tabControlactions.Controls.Add(this.tabQuick);
+            this.tabControlactions.Controls.Add(this.tabActions);
+            this.tabControlactions.Controls.Add(this.tabActionsSimple);
+            this.tabControlactions.Controls.Add(this.tabGauges);
+            this.tabControlactions.Controls.Add(this.tabStatus);
+            this.tabControlactions.Controls.Add(this.tabServo);
+            this.tabControlactions.Controls.Add(this.tabTLogs);
+            this.tabControlactions.Controls.Add(this.tablogbrowse);
+            this.tabControlactions.Controls.Add(this.tabScripts);
+            this.tabControlactions.Controls.Add(this.tabPagemessages);
+            resources.ApplyResources(this.tabControlactions, "tabControlactions");
+            this.tabControlactions.Name = "tabControlactions";
+            this.tabControlactions.SelectedIndex = 0;
+            this.tabControlactions.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl1_DrawItem);
+            this.tabControlactions.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // contextMenuStripactionstab
             // 
-            //this.contextMenuStripactionstab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            //this.dropOutToolStripMenuItem});
-            //this.contextMenuStripactionstab.Name = "contextMenuStripactionstab";
-            //resources.ApplyResources(this.contextMenuStripactionstab, "contextMenuStripactionstab");
+            this.contextMenuStripactionstab.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dropOutToolStripMenuItem});
+            this.contextMenuStripactionstab.Name = "contextMenuStripactionstab";
+            resources.ApplyResources(this.contextMenuStripactionstab, "contextMenuStripactionstab");
             // 
             // dropOutToolStripMenuItem
             // 
