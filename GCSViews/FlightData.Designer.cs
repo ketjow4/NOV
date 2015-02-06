@@ -271,7 +271,7 @@ namespace MissionPlanner.GCSViews
             this.MainH.Panel1.Controls.Add(this.SubMainLeft);
             this.MainH.Panel1Collapsed = true;
             //
-            //HUD PANEL
+            //HUD PANEL ADD
             //
             this.MainH.Panel2.Controls.Add(SubMainLeft);
             // 
@@ -282,7 +282,11 @@ namespace MissionPlanner.GCSViews
             // SubMainLeft
             // 
             this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.SubMainLeft, "SubMainLeft");
+            //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");
+            this.SubMainLeft.Size = new Size(266, 200);
+            this.SubMainLeft.Location = new Point(0, 375);
+            this.SubMainLeft.Panel2Collapsed = true;
+            this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
             this.SubMainLeft.Name = "SubMainLeft";
             // 
             // SubMainLeft.Panel1
