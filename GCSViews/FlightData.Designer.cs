@@ -282,7 +282,7 @@ namespace MissionPlanner.GCSViews
             // SubMainLeft
             // 
             this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");
+            //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
             this.SubMainLeft.Size = new Size(266, 200);
             this.SubMainLeft.Location = new Point(0, 375);
             this.SubMainLeft.Panel2Collapsed = true;

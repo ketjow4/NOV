@@ -103,7 +103,7 @@ namespace MissionPlanner.GCSViews
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
-                cam2Head,defaultHead,cam1Head,                                            //TODO change here!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                cam2Head,defaultHead,cam1Head,                                            
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData")),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
@@ -136,7 +136,6 @@ namespace MissionPlanner.GCSViews
                     
                 new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
             {
-                //FlightPlanner.instance.gridV2ToolStripMenuItem_Click(sender, e);              //tutaj to chyba nie działa sprawdzić to po sesji!!!!!
                 {
                     var Host = new Plugin.PluginHost();
                     ToolStripItemCollection col = Host.FPMenuMap.Items;
@@ -144,11 +143,8 @@ namespace MissionPlanner.GCSViews
                     foreach (
                         var toolStripItem in
                             col.Cast<ToolStripItem>()
-                                .Where(item => item.Text.Equals("Auto WP"))
-                                .OfType<ToolStripMenuItem>()
-                                .SelectMany(toolStripMenuItem => toolStripMenuItem.DropDownItems.Cast<object>()
-                                    .OfType<ToolStripItem>()
-                                    .Where(toolStripItem => toolStripItem.Text.Equals("Survey (Grid)"))))
+                                .Where(item => item.Text.Equals("Survey (Grid)"))
+                                .OfType<ToolStripMenuItem>())
                     {
                         toolStripItem.PerformClick();
                     }
@@ -222,23 +218,21 @@ namespace MissionPlanner.GCSViews
             })); // todo not implemented
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
             tilesArray.Add(new TileButton("ARM/DISARM", 0, 7,
-                (sender, args) => FlightData.instance.BUT_ARM_Click(sender, args)));
+                (sender, args) => FlightData.instance.BUT_ARM_Click(sender, args)));       
             tilesArray.Add(new TileData("WIND SPEED", 9, 0, "m/s"));
 
 
-            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>
+            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data
                {
                    var conBut = sender as Label;
                    if (connected == false)  //connect
                    {
-                       //TODO impemelnt connecting
                        conBut.Text = "DISCONNECT";
                        MainV2.instance.MenuConnect_Click(null, null);
                        connected = true;
                    }
                    else                    //disconnect
                    {
-                       //TODO impemelnt disconnecting
                        conBut.Text = "CONNECT";
                        MainV2.instance.MenuConnect_Click(null, null);
                        connected = false;
@@ -263,10 +257,7 @@ namespace MissionPlanner.GCSViews
                 if (hideList.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
             }
-            //fnc(null, null);
-
         }
-
     }
 
 

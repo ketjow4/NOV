@@ -1077,7 +1077,7 @@
         private System.Windows.Forms.Label lbl_area;
         private System.Windows.Forms.Label lbl_spacing;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Label lbl_grndres;
+        private System.Windows.Forms.Label lbl_grndres;     //w tej zmiennej jest wartość ground resolution którą trzebaby podpiąć!!!
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label lbl_distbetweenlines;
         private System.Windows.Forms.Label label25;
