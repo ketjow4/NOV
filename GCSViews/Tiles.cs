@@ -166,7 +166,7 @@ namespace MissionPlanner.GCSViews
             {
                 try
                 {
-                    MainV2.comPort.setMode("Auto");
+                    MainV2.comPort.setMode("FBWB");
                 }
                 catch
                 {
@@ -197,24 +197,40 @@ namespace MissionPlanner.GCSViews
             }));
             tilesArray.Add(new TileButton("LAND", 1, 7, (sender, args) =>
             {
-                FlightData.instance.BUT_loadtelem_Click(null, null);
-                FlightData.instance.BUT_playlog_Click(null, null);
-                try
+                int wpCount = MainV2.comPort.getWPCount();
+                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>;
+                for (int i = 0; i < wpCount; i++)
                 {
-                    FlightData.instance.BUT_clear_track_Click(sender, null);
-
-                    MainV2.comPort.lastlogread = DateTime.MinValue;
-                    MainV2.comPort.MAV.cs.ResetInternals();
-
-                    if (MainV2.comPort.logplaybackfile != null)
-                        MainV2.comPort.logplaybackfile.BaseStream.Position =
-                            (long)(MainV2.comPort.logplaybackfile.BaseStream.Length * (40 / 100.0));
-
-                    FlightData.instance.updateLogPlayPosition();
+                    wpList.Add(MainV2.comPort.getWP((ushort)i));
                 }
-                catch
+                
+                foreach( var wp in wpList)
                 {
+                    //if(wp.id == MAVLink.MAV_CMD.LAND)
+                    //{
+
+                    //}
                 }
+                                                                            
+                
+                //FlightData.instance.BUT_loadtelem_Click(null, null);
+                //FlightData.instance.BUT_playlog_Click(null, null);
+                //try
+                //{
+                //    FlightData.instance.BUT_clear_track_Click(sender, null);
+
+                //    MainV2.comPort.lastlogread = DateTime.MinValue;
+                //    MainV2.comPort.MAV.cs.ResetInternals();
+
+                //    if (MainV2.comPort.logplaybackfile != null)
+                //        MainV2.comPort.logplaybackfile.BaseStream.Position =
+                //            (long)(MainV2.comPort.logplaybackfile.BaseStream.Length * (40 / 100.0));
+
+                //    FlightData.instance.updateLogPlayPosition();
+                //}
+                //catch
+                //{
+                //}
             })); // todo not implemented
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
             tilesArray.Add(new TileButton("ARM/DISARM", 0, 7,
