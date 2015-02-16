@@ -999,20 +999,20 @@ namespace MissionPlanner.Controls
                     redPen.Width = 4;
                 }
 
-                graphicsObject.DrawPolygon(redPen, pointlist);
+                //graphicsObject.DrawPolygon(redPen, pointlist);
 
                 redPen.Width = 2;
 
                 int[] array = new int[] { -60,-45, -30,-20,-10,0,10,20,30,45,60 };
 
-                foreach (int a in array)
-                {
-                    graphicsObject.ResetTransform();
-                    graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2); 
-                    graphicsObject.RotateTransform(a - _roll);
-                    drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, whiteBrush, 0 - 6 - fontoffset, -lengthlong * 8 - extra);
-                    graphicsObject.DrawLine(whitePen, 0, -lengthlong * 3 - extra, 0, -lengthlong * 3 - extra - lengthlong);
-                }
+                //foreach (int a in array)
+                //{
+                //    graphicsObject.ResetTransform();
+                //    graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2); 
+                //    graphicsObject.RotateTransform(a - _roll);
+                //    drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, whiteBrush, 0 - 6 - fontoffset, -lengthlong * 8 - extra);
+                //    graphicsObject.DrawLine(whitePen, 0, -lengthlong * 3 - extra, 0, -lengthlong * 3 - extra - lengthlong);
+                //}
 
                 graphicsObject.ResetTransform();
                 graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
@@ -1022,7 +1022,7 @@ namespace MissionPlanner.Controls
 
                 //DrawRectangle(Pens.Beige, arcrect);
 
-                graphicsObject.DrawArc(whitePen, arcrect, 180 + 30 + -_roll, 120); // 120
+                //graphicsObject.DrawArc(whitePen, arcrect, 180 + 30 + -_roll, 120); // 120
 
                 graphicsObject.ResetTransform();
 
@@ -1300,23 +1300,23 @@ namespace MissionPlanner.Controls
 
                 // extra text data
 
-                if (_lowairspeed)
-                {
-                    drawstring(graphicsObject, "AS " + _airspeed.ToString("0.0"), font, fontsize, (SolidBrush)Brushes.Red, 1, scrollbg.Bottom + 5);
-                }
-                else
-                {
-                    drawstring(graphicsObject, "AS " + _airspeed.ToString("0.0"), font, fontsize, whiteBrush, 1, scrollbg.Bottom + 5);
-                }
+                //if (_lowairspeed)
+                //{
+                //    drawstring(graphicsObject, "AS " + _airspeed.ToString("0.0"), font, fontsize, (SolidBrush)Brushes.Red, 1, scrollbg.Bottom + 5);
+                //}
+                //else
+                //{
+                //    drawstring(graphicsObject, "AS " + _airspeed.ToString("0.0"), font, fontsize, whiteBrush, 1, scrollbg.Bottom + 5);
+                //}
 
-                if (_lowgroundspeed)
-                {
-                    drawstring(graphicsObject, "GS " + _groundspeed.ToString("0.0"), font, fontsize, (SolidBrush)Brushes.Red, 1, scrollbg.Bottom + fontsize + 2 + 10);
-                }
-                else
-                {
-                    drawstring(graphicsObject, "GS " + _groundspeed.ToString("0.0"), font, fontsize, whiteBrush, 1, scrollbg.Bottom + fontsize + 2 + 10);
-                }
+                //if (_lowgroundspeed)
+                //{
+                //    drawstring(graphicsObject, "GS " + _groundspeed.ToString("0.0"), font, fontsize, (SolidBrush)Brushes.Red, 1, scrollbg.Bottom + fontsize + 2 + 10);
+                //}
+                //else
+                //{
+                //    drawstring(graphicsObject, "GS " + _groundspeed.ToString("0.0"), font, fontsize, whiteBrush, 1, scrollbg.Bottom + fontsize + 2 + 10);
+                //}
 
                 //drawstring(e,, new Font("Arial", fontsize + 2), whiteBrush, 1, scrollbg.Bottom + fontsize + 2 + 10);
 
@@ -1465,17 +1465,17 @@ namespace MissionPlanner.Controls
                 //drawstring(graphicsObject, _mode, font, fontsize, whiteBrush, scrollbg.Left - 30, scrollbg.Bottom + 5);
                 //drawstring(graphicsObject, (int)_disttowp + ">" + _wpno, font, fontsize, whiteBrush, scrollbg.Left - 30, scrollbg.Bottom + fontsize + 2 + 10);
 
-                graphicsObject.DrawLine(greenPen, scrollbg.Left - 5, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20, scrollbg.Left - 5, scrollbg.Top - (int)(fontsize) - 2 - 20);
-                graphicsObject.DrawLine(greenPen, scrollbg.Left - 10, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 15, scrollbg.Left - 10, scrollbg.Top - (int)(fontsize) - 2 - 20);
-                graphicsObject.DrawLine(greenPen, scrollbg.Left - 15, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 10, scrollbg.Left - 15, scrollbg.Top - (int)(fontsize ) - 2 - 20);
+                //graphicsObject.DrawLine(greenPen, scrollbg.Left - 5, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20, scrollbg.Left - 5, scrollbg.Top - (int)(fontsize) - 2 - 20);
+                //graphicsObject.DrawLine(greenPen, scrollbg.Left - 10, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 15, scrollbg.Left - 10, scrollbg.Top - (int)(fontsize) - 2 - 20);
+                //graphicsObject.DrawLine(greenPen, scrollbg.Left - 15, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 10, scrollbg.Left - 15, scrollbg.Top - (int)(fontsize ) - 2 - 20);
 
-                drawstring(graphicsObject, _linkqualitygcs.ToString("0") + "%", font, fontsize, whiteBrush, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20);
-                if (_linkqualitygcs == 0)
-                {
-                    graphicsObject.DrawLine(redPen, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20, scrollbg.Left + 50, scrollbg.Top - (int)(fontsize * 2.2) - 2);
+                //drawstring(graphicsObject, _linkqualitygcs.ToString("0") + "%", font, fontsize, whiteBrush, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20);
+                //if (_linkqualitygcs == 0)
+                //{
+                //    graphicsObject.DrawLine(redPen, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20, scrollbg.Left + 50, scrollbg.Top - (int)(fontsize * 2.2) - 2);
 
-                    graphicsObject.DrawLine(redPen, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2, scrollbg.Left + 50, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20);
-                }
+                //    graphicsObject.DrawLine(redPen, scrollbg.Left, scrollbg.Top - (int)(fontsize * 2.2) - 2, scrollbg.Left + 50, scrollbg.Top - (int)(fontsize * 2.2) - 2 - 20);
+                //}
                 //drawstring(graphicsObject, _datetime.ToString("HH:mm:ss"), font, fontsize, whiteBrush, scrollbg.Left - 30, scrollbg.Top - fontsize - 2 - 20);
 
 
@@ -1532,7 +1532,7 @@ namespace MissionPlanner.Controls
 
 
                 if (isNaN)
-                    drawstring(graphicsObject, "NaN Error " + DateTime.Now, font, this.Height / 30 + 10, (SolidBrush)Brushes.Red, 50, 50);
+                    //drawstring(graphicsObject, "NaN Error " + DateTime.Now, font, this.Height / 30 + 10, (SolidBrush)Brushes.Red, 50, 50);
 
                 // custom user items
                 graphicsObject.ResetTransform();
@@ -1588,7 +1588,7 @@ namespace MissionPlanner.Controls
                 {
                     //if ((armedtimer.AddSeconds(8) > DateTime.Now))
                     {
-                        drawstring(graphicsObject, "DISARMED", font, fontsize + 10, (SolidBrush)Brushes.Red, -85, halfheight / -3);
+                        //drawstring(graphicsObject, "DISARMED", font, fontsize + 10, (SolidBrush)Brushes.Red, -85, halfheight / -3);
                         statuslast = status;
                     }
                 }
@@ -1596,20 +1596,20 @@ namespace MissionPlanner.Controls
                 {
                     if ((armedtimer.AddSeconds(8) > DateTime.Now))
                     {
-                        drawstring(graphicsObject, "ARMED", font, fontsize + 20, (SolidBrush)Brushes.Red, -70, halfheight / -3);
+                        //drawstring(graphicsObject, "ARMED", font, fontsize + 20, (SolidBrush)Brushes.Red, -70, halfheight / -3);
                         statuslast = status;
                     }
                 }
 
                 if (failsafe == true)
                 {
-                    drawstring(graphicsObject, "FAILSAFE", font, fontsize + 20, (SolidBrush)Brushes.Red, -85, halfheight / -5);
+                    //drawstring(graphicsObject, "FAILSAFE", font, fontsize + 20, (SolidBrush)Brushes.Red, -85, halfheight / -5);
                     statuslast = status;
                 }
 
                 if (message != "" && messagetime.AddSeconds(15) > DateTime.Now)
                 {
-                    drawstring(graphicsObject, message, font, fontsize + 10, (SolidBrush)Brushes.Red, -halfwidth + 50, halfheight / 3);
+                    //drawstring(graphicsObject, message, font, fontsize + 10, (SolidBrush)Brushes.Red, -halfwidth + 50, halfheight / 3);
                 }
 
 

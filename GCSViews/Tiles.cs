@@ -10,6 +10,8 @@ namespace MissionPlanner.GCSViews
 {
     public class Tiles
     {
+        public static bool armed;
+
         static TileData altInfo = null;
         static TileData angleInfo = null;
 
@@ -70,6 +72,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPS SIGNAL", 1, 5, "%"),
+                new TileData("WIND SPEED", 9, 0, "m/s"),
             });
 
 
@@ -198,59 +201,60 @@ namespace MissionPlanner.GCSViews
             tilesArray.Add(new TileButton("LAND", 1, 7, (sender, args) =>
             {
                 int wpCount = MainV2.comPort.getWPCount();
-                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>;
+                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
                 for (int i = 0; i < wpCount; i++)
                 {
                     wpList.Add(MainV2.comPort.getWP((ushort)i));
                 }
                 
+                Utilities.Locationwp landWP;
+
                 foreach( var wp in wpList)
                 {
-                    //if(wp.id == MAVLink.MAV_CMD.LAND)
-                    //{
-
-                    //}
+                    if(wp.id == (byte)MAVLink.MAV_CMD.LAND)
+                    {
+                        landWP = wp;
+                        break;
+                    }
                 }
-                                                                            
+
+                //MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
+                //MainV2.comPort.doCommand(landWP.id,0,0,0,0,0,0,0);              //how to send commands from waypoints?                
                 
-                //FlightData.instance.BUT_loadtelem_Click(null, null);
-                //FlightData.instance.BUT_playlog_Click(null, null);
-                //try
-                //{
-                //    FlightData.instance.BUT_clear_track_Click(sender, null);
 
-                //    MainV2.comPort.lastlogread = DateTime.MinValue;
-                //    MainV2.comPort.MAV.cs.ResetInternals();
-
-                //    if (MainV2.comPort.logplaybackfile != null)
-                //        MainV2.comPort.logplaybackfile.BaseStream.Position =
-                //            (long)(MainV2.comPort.logplaybackfile.BaseStream.Length * (40 / 100.0));
-
-                //    FlightData.instance.updateLogPlayPosition();
-                //}
-                //catch
-                //{
-                //}
             })); // todo not implemented
+            
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
-            tilesArray.Add(new TileButton("ARM/DISARM", 0, 7,
-                (sender, args) => FlightData.instance.BUT_ARM_Click(sender, args)));       
-            tilesArray.Add(new TileData("WIND SPEED", 9, 0, "m/s"));
+
+            tilesArray.Add(new TileButton("ARM", 0, 7,
+                (sender, args) =>
+                    {
+                        var armBut = sender as Label;
+                        FlightData.instance.BUT_ARM_Click(sender, args);
+                        if (armed)
+                            armBut.Text = "DISARM";
+                        else
+                            armBut.Text = "ARM";
+                    
+                    }
+                    ));       
+            
 
 
-            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data
+            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data cacht exception
                {
                    var conBut = sender as Label;
                    if (connected == false)  //connect
                    {
-                       conBut.Text = "DISCONNECT";
+                      
                        MainV2.instance.MenuConnect_Click(null, null);
+                       conBut.Text = "DISCONNECT";
                        connected = true;
                    }
                    else                    //disconnect
                    {
-                       conBut.Text = "CONNECT";
                        MainV2.instance.MenuConnect_Click(null, null);
+                       conBut.Text = "CONNECT";
                        connected = false;
                    }
                }));

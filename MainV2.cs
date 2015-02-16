@@ -798,10 +798,10 @@ namespace MissionPlanner
             // sanity check
             if (comPort.BaseStream.IsOpen && MainV2.comPort.MAV.cs.groundspeed > 4)
             {
-                if (DialogResult.No == CustomMessageBox.Show("Your model is still moving are you sure you want to disconnect?", "Disconnect", MessageBoxButtons.YesNo))
-                {
-                    return;
-                }
+                //if (DialogResult.No == CustomMessageBox.Show("Your model is still moving are you sure you want to disconnect?", "Disconnect", MessageBoxButtons.YesNo))
+                //{
+                //    return;
+                //}
             }
 
             try
@@ -816,7 +816,7 @@ namespace MissionPlanner
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("Error closing log files (Out of disk space?)\n" + ex.Message, "Error");
+                //CustomMessageBox.Show("Error closing log files (Out of disk space?)\n" + ex.Message, "Error");
             }
 
             comPort.logfile = null;
@@ -922,7 +922,7 @@ namespace MissionPlanner
 
                             if (DateTime.Now > deadline)
                             {
-                                CustomMessageBox.Show("Timeout waiting for autoscan/no mavlink device connected");
+                                //CustomMessageBox.Show("Timeout waiting for autoscan/no mavlink device connected");
                                 _connectionControl.IsConnected(false);
                                 return;
                             }

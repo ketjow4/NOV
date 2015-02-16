@@ -2873,15 +2873,18 @@ namespace MissionPlanner.GCSViews
             // arm the MAV
             try
             {
-                if (MainV2.comPort.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
-                        return;
+                //if (MainV2.comPort.MAV.cs.armed)
+                    //if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
+                        //return;
 
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
-                if (ans == false)
-                    CustomMessageBox.Show("Error: Arm message rejected by MAV", "Error");
+                Tiles.armed = ans;
+                //if (ans == false)
+                //    CustomMessageBox.Show("Error: Arm message rejected by MAV", "Error");
             }
-            catch { CustomMessageBox.Show("Error: No response from MAV", "Error"); }
+            catch { 
+                //CustomMessageBox.Show("Error: No response from MAV", "Error"); 
+            }
 
 
         }
