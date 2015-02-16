@@ -105,6 +105,7 @@ namespace MissionPlanner
 
             InitializeComponent();
 
+            //map = plugin.Host.GetFPMap();
             map.MapProvider = plugin.Host.FDMapType;
 
             routesOverlay = new GMapOverlay("routes");
@@ -135,7 +136,7 @@ namespace MissionPlanner
 
         private void GridUI_Load(object sender, EventArgs e)
         {
-            xmlcamera(false, "camerasBuiltin.xml");
+            //xmlcamera(false, "camerasBuiltin.xml");
 
             xmlcamera(false);
 
@@ -379,7 +380,7 @@ namespace MissionPlanner
             plugin.Host.config["grid_copter_headinghold_chk"] = CHK_copter_headinghold.Checked.ToString();
         }
 
-        private void xmlcamera(bool write, string filename = "cameras.xml")
+        private void xmlcamera(bool write, string filename = "noveltyCam.xml")
         {
             bool exists = File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + filename);
 

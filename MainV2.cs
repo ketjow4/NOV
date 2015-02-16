@@ -878,7 +878,7 @@ namespace MissionPlanner
             else
             {
                 log.Info("We are connecting");
-                _connectionControl.CMB_serialport.Text = "TCP";
+                //_connectionControl.CMB_serialport.Text = "TCP";
                 switch (_connectionControl.CMB_serialport.Text)
                 {
                     case "TCP":
@@ -934,7 +934,7 @@ namespace MissionPlanner
 
                     log.Info("Set Portname");
                     // set port, then options
-                    _connectionControl.CMB_serialport.Text = "com3";
+                    //_connectionControl.CMB_serialport.Text = "com3";
                     comPort.BaseStream.PortName = _connectionControl.CMB_serialport.Text;
 
                     log.Info("Set Baudrate");

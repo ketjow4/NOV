@@ -138,6 +138,12 @@ namespace MissionPlanner.Plugin
             MainV2.instance.FlightPlanner.redrawPolygonSurvey(list);
         }
 
+
+        public Controls.myGMAP GetFPMap()
+        {
+            return MainV2.instance.FlightPlanner.MainMap;
+        }
+
         /// <summary>
         /// add wp to command queue - dont upload to mav
         /// </summary>
