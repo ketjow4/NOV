@@ -105,11 +105,12 @@ namespace MissionPlanner
 
             InitializeComponent();
 
-            //map = plugin.Host.GetFPMap();
+            map = plugin.Host.GetFPMap();
             map.MapProvider = plugin.Host.FDMapType;
 
             routesOverlay = new GMapOverlay("routes");
             map.Overlays.Add(routesOverlay);
+
 
             // Map Events
             map.OnMapZoomChanged += new MapZoomChanged(map_OnMapZoomChanged);
@@ -838,7 +839,10 @@ namespace MissionPlanner
                 float fovv = (float)(Math.Atan(sensorheight / (2 * focallen)) * rad2deg * 2);
 
                 //    mm  / pixels * 100
-                TXT_cmpixel.Text = ((viewheight / imageheight) * 100).ToString("0.00 cm");
+                TXT_cmpixel.Text = ((viewheight / imageheight) * 100).ToString();
+
+                Tiles.GroundRes = Convert.ToDouble(TXT_cmpixel.Text);
+
                 // Imperial
                 inchpixel = (((viewheight / imageheight) * 100) * 0.393701).ToString("0.00 inches");
 
@@ -1326,6 +1330,7 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
+            routesOverlay.Clear();
             NUM_angle.Value = Tiles.AngleVal;
             NUM_altitude.Value = Tiles.AltitudeVal;
             if (grid != null && grid.Count > 0)

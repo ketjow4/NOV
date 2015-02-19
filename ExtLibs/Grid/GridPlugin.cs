@@ -70,8 +70,8 @@ namespace MissionPlanner
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
-                gridui.BUT_Accept_Click(sender, e);
-                //gridui.ShowDialog();
+                //gridui.BUT_Accept_Click(sender, e);
+                gridui.ShowDialog();
             }
             else
             {

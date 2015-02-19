@@ -14,14 +14,21 @@ namespace MissionPlanner.GCSViews
 
         static TileData altInfo = null;
         static TileData angleInfo = null;
+        static TileData groundResInfo = null;
 
         private static bool connected = false;
 
         private static int altMin = 75;
         private static int altMax = 450;
 
+        private static double groundRes;
+
+        public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
         public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
+
+        
+        
 
         public static void ChangeAlt(int v)
         {
@@ -63,7 +70,6 @@ namespace MissionPlanner.GCSViews
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
-                new TileData("GROUND RESOLUTION", 0, 5, "cm"),  //TODO implement
                
                 new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner")),
@@ -132,7 +138,6 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
                 new TileData("DISTANCE", 0, 4, "km"),
-                new TileData("GROUND RESOLUTION", 0, 5, "cm"),
                 new TileButton("WRITE WAYPOINTS", 2, 8, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
@@ -165,6 +170,9 @@ namespace MissionPlanner.GCSViews
             });
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
+
+            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/px");  //TODO implement
+            tilesArray.Add(groundResInfo);
             tilesArray.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
             {
                 try
@@ -370,7 +378,7 @@ namespace MissionPlanner.GCSViews
         public string Value
         {
             get { return valueLabel.Text; }
-            set { valueLabel.Text = value; }
+            set { valueLabel.Text = value;}
         }
     }
 
