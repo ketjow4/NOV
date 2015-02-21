@@ -27,7 +27,7 @@ namespace MissionPlanner.GCSViews
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
         public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
 
-        
+        public static EventHandler calcGrid = null;
         
 
         public static void ChangeAlt(int v)
@@ -36,6 +36,7 @@ namespace MissionPlanner.GCSViews
             if (val < altMin) val = altMin;
             else if (val > altMax) val = altMax;
             FlightPlanner.instance.TXT_DefaultAlt.Text = altInfo.Value = val.ToString();
+            //calcGrid(null, null);
         }
 
         public static void SetTiles(Panel p, bool isFlightMode)

@@ -72,6 +72,7 @@ namespace MissionPlanner
             {
                 //gridui.BUT_Accept_Click(sender, e);
                 gridui.ShowDialog();
+                //gridui.domainUpDown1_ValueChanged(null,null);
             }
             else
             {

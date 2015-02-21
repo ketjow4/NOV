@@ -144,6 +144,7 @@ namespace MissionPlanner.Plugin
             return MainV2.instance.FlightPlanner.MainMap;
         }
 
+
         /// <summary>
         /// add wp to command queue - dont upload to mav
         /// </summary>

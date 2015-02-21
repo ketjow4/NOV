@@ -111,15 +111,17 @@ namespace MissionPlanner
             routesOverlay = new GMapOverlay("routes");
             map.Overlays.Add(routesOverlay);
 
+            Tiles.calcGrid = this.domainUpDown1_ValueChanged;
+
 
             // Map Events
-            map.OnMapZoomChanged += new MapZoomChanged(map_OnMapZoomChanged);
-            map.OnMarkerEnter += new MarkerEnter(map_OnMarkerEnter);
-            map.OnMarkerLeave += new MarkerLeave(map_OnMarkerLeave);
-            map.MouseUp += new MouseEventHandler(map_MouseUp);
+            //map.OnMapZoomChanged += new MapZoomChanged(map_OnMapZoomChanged);
+            //map.OnMarkerEnter += new MarkerEnter(map_OnMarkerEnter);
+            //map.OnMarkerLeave += new MarkerLeave(map_OnMarkerLeave);
+            //map.MouseUp += new MouseEventHandler(map_MouseUp);
 
-            map.OnRouteEnter += new RouteEnter(map_OnRouteEnter);
-            map.OnRouteLeave += new RouteLeave(map_OnRouteLeave);
+            //map.OnRouteEnter += new RouteEnter(map_OnRouteEnter);
+            //map.OnRouteLeave += new RouteLeave(map_OnRouteLeave);
 
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
             if (plugin.Host.config["distunits"] != null)
@@ -131,7 +133,7 @@ namespace MissionPlanner
             // set and angle that is good
             NUM_angle.Value = (decimal)((getAngleOfLongestSide(list) + 360) % 360);
             TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
-            
+
             NUM_angle.Value = Tiles.AngleVal;
         }
 
@@ -150,7 +152,7 @@ namespace MissionPlanner
 
             TRK_zoom.Value = (float)map.Zoom;
 
-            label1.Text += " (" + CurrentState.DistanceUnit+")";
+            label1.Text += " (" + CurrentState.DistanceUnit + ")";
             label24.Text += " (" + CurrentState.SpeedUnit + ")";
         }
 
@@ -501,14 +503,16 @@ namespace MissionPlanner
         }
 
         // Do Work
-        private void domainUpDown1_ValueChanged(object sender, EventArgs e)
+        public void domainUpDown1_ValueChanged(object sender, EventArgs e)
         {
+
             if (CMB_camera.Text != "")
                 doCalc();
 
             // new grid system test
 
-            grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            //grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
 
             List<PointLatLng> list2 = new List<PointLatLng>();
 
@@ -867,11 +871,11 @@ namespace MissionPlanner
             int current = (int)Math.Round(NUM_angle.Value);
 
             int change = current - previous;
-            
+
             if (change > 0) // Positive change
             {
                 int val = Convert.ToInt32(TXT_headinghold.Text) + change;
-                if (val > 359) 
+                if (val > 359)
                 {
                     val = val - 360;
                 }
@@ -1164,8 +1168,8 @@ namespace MissionPlanner
         private void BUT_headingholdplus_Click(object sender, EventArgs e)
         {
             int previous = Convert.ToInt32(TXT_headinghold.Text);
-            if(!CHK_copter_headingholdlock.Checked)
-            {                
+            if (!CHK_copter_headingholdlock.Checked)
+            {
                 if (previous + 180 > 359)
                 {
                     TXT_headinghold.Text = (previous - 180).ToString();
@@ -1191,7 +1195,7 @@ namespace MissionPlanner
         private void BUT_headingholdminus_Click(object sender, EventArgs e)
         {
             int previous = Convert.ToInt32(TXT_headinghold.Text);
-            
+
             if (!CHK_copter_headingholdlock.Checked)
             {
                 if (previous - 180 < 0)
@@ -1330,7 +1334,17 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
+            routesOverlay.Routes.Clear();
+            routesOverlay.Polygons.Clear();
+            routesOverlay.Markers.Clear();
             routesOverlay.Clear();
+
+            for (int i = 0; i < map.Overlays.Count; i++)
+            {
+                if (map.Overlays.ElementAt(i).Id == "routes")
+                    map.Overlays.Remove(map.Overlays.ElementAt(i));
+            }
+            
             NUM_angle.Value = Tiles.AngleVal;
             NUM_altitude.Value = Tiles.AltitudeVal;
             if (grid != null && grid.Count > 0)
