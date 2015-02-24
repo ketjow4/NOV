@@ -505,14 +505,15 @@ namespace MissionPlanner
         // Do Work
         public void domainUpDown1_ValueChanged(object sender, EventArgs e)
         {
-
+            xmlcamera(false);
+            CMB_camera.Text = cameras[Tiles.camName].name;
+            CMB_camera_SelectedIndexChanged(this, null);
             if (CMB_camera.Text != "")
                 doCalc();
 
             // new grid system test
-
-            //grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
-            grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            //grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
 
             List<PointLatLng> list2 = new List<PointLatLng>();
 
@@ -815,7 +816,7 @@ namespace MissionPlanner
             {
                 // entered values
                 float focallen = (float)NUM_focallength.Value;
-                float flyalt = (float)NUM_altitude.Value;
+                float flyalt = (float)Tiles.AltitudeVal;         //NUM_altitude.Value;
                 int imagewidth = int.Parse(TXT_imgwidth.Text);
                 int imageheight = int.Parse(TXT_imgheight.Text);
 
@@ -1334,9 +1335,6 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
-            routesOverlay.Routes.Clear();
-            routesOverlay.Polygons.Clear();
-            routesOverlay.Markers.Clear();
             routesOverlay.Clear();
 
             for (int i = 0; i < map.Overlays.Count; i++)
@@ -1344,9 +1342,7 @@ namespace MissionPlanner
                 if (map.Overlays.ElementAt(i).Id == "routes")
                     map.Overlays.Remove(map.Overlays.ElementAt(i));
             }
-            
-            NUM_angle.Value = Tiles.AngleVal;
-            NUM_altitude.Value = Tiles.AltitudeVal;
+
             if (grid != null && grid.Count > 0)
             {
                 MainV2.instance.FlightPlanner.quickadd = true;
@@ -1444,6 +1440,7 @@ namespace MissionPlanner
             {
                 CustomMessageBox.Show("Bad Grid", "Error");
             }
+
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

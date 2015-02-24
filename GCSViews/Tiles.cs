@@ -12,11 +12,16 @@ namespace MissionPlanner.GCSViews
     {
         public static bool armed;
 
+        public static bool pathAccepted = true;
+
+        public static string camName = "Default";
+
         static TileData altInfo = null;
         static TileData angleInfo = null;
         static TileData groundResInfo = null;
 
         private static bool connected = false;
+        
 
         private static int altMin = 75;
         private static int altMax = 450;
@@ -36,13 +41,13 @@ namespace MissionPlanner.GCSViews
             if (val < altMin) val = altMin;
             else if (val > altMax) val = altMax;
             FlightPlanner.instance.TXT_DefaultAlt.Text = altInfo.Value = val.ToString();
-            //calcGrid(null, null);
+            calcGrid(null, null);
         }
 
         public static void SetTiles(Panel p, bool isFlightMode)
         {
-            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString());
-            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString());
+            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString(); calcGrid(null, null); });
+            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString(); calcGrid(null, null); });
             TileButton angleBtnOk = null;
             angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
             var altBtnUp = new TileButton("+10", 2, 5, (sender, args) => ChangeAlt(10));
@@ -59,9 +64,6 @@ namespace MissionPlanner.GCSViews
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
             
-
-           
-           
 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
@@ -83,21 +85,23 @@ namespace MissionPlanner.GCSViews
             });
 
 
-            TileButton defaultHead, cam1Head, cam2Head;
-            defaultHead = cam1Head = cam2Head = null;
-            defaultHead = new TileButton("DEFAULT", 2, 3,(sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
-            cam1Head = new TileButton("CAMERA 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
-            cam2Head = new TileButton("CAMERA 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; });
-
             TileData obsHeadBtn = null;
+            TileButton defaultHead, cam1Head, cam2Head, accept;
+            defaultHead = cam1Head = cam2Head = accept = null;
+            defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Default"; if (!pathAccepted) calcGrid(null, null); obsHeadBtn.Value = camName; });
+            cam1Head = new TileButton("CAMERA 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 1"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
+            cam2Head = new TileButton("CAMERA 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 2"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
+
+            
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "",(sender, args) =>
             {
                 var x = !defaultHead.Visible;
-                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = x;
-                obsHeadBtn.Value = "Default";
+                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = x;    
             });
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,defaultHead,cam1Head,cam2Head };
+            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
+
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, defaultHead, cam1Head, cam2Head, accept };
             obsHeadBtn.ClickMethod(null,null);
 
 
@@ -114,7 +118,8 @@ namespace MissionPlanner.GCSViews
             {
                 obsHeadBtn,
                 cam2Head,defaultHead,cam1Head,                                            
-                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk,
+                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
+                accept,
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData")),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
                 {
@@ -146,6 +151,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
             {
                 {
+                    pathAccepted = false;
                     var Host = new Plugin.PluginHost();
                     ToolStripItemCollection col = Host.FPMenuMap.Items;
                     int index = col.Count;
@@ -156,6 +162,7 @@ namespace MissionPlanner.GCSViews
                                 .OfType<ToolStripMenuItem>())
                     {
                         toolStripItem.PerformClick();
+                        accept.Visible = true;
                     }
                 }
             }
@@ -244,7 +251,6 @@ namespace MissionPlanner.GCSViews
                             armBut.Text = "DISARM";
                         else
                             armBut.Text = "ARM";
-                    
                     }
                     ));       
             
@@ -252,16 +258,35 @@ namespace MissionPlanner.GCSViews
 
             tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data cacht exception
                {
+
                    var conBut = sender as Label;
                    if (connected == false)  //connect
                    {
-                      
                        MainV2.instance.MenuConnect_Click(null, null);
+                       if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+                       {
+                           foreach (var tile in tilesArray)
+                           {
+                               if (tile.Text == "WIND SPEED")
+                               {
+                                   (tile as TileData).Visible = false;
+                                   FlightData.instance.windDir1.Visible = false;
+                               }
+                           }
+                       }
                        conBut.Text = "DISCONNECT";
                        connected = true;
                    }
                    else                    //disconnect
                    {
+                       foreach (var tile in tilesArray)
+                       {
+                           if (tile.Text == "WIND SPEED")
+                           {
+                               (tile as TileData).Visible = true;
+                               FlightData.instance.windDir1.Visible = true;
+                           }
+                       }
                        MainV2.instance.MenuConnect_Click(null, null);
                        conBut.Text = "CONNECT";
                        connected = false;
@@ -380,6 +405,12 @@ namespace MissionPlanner.GCSViews
         {
             get { return valueLabel.Text; }
             set { valueLabel.Text = value;}
+        }
+
+        public bool Visible
+        {
+            set { if (panel.Parent != null) panel.Parent.Visible = value; }
+            get { return panel.Parent != null && panel.Parent.Visible; }
         }
     }
 

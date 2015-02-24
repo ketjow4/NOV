@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
+using System.ComponentModel;
+
 
 namespace MissionPlanner
 {
@@ -12,6 +14,7 @@ namespace MissionPlanner
         
 
         ToolStripMenuItem but;
+        GridUI gridui;
 
         public override string Name
         {
@@ -63,23 +66,25 @@ namespace MissionPlanner
             return true;
         }
 
+       
+
         void but_Click(object sender, EventArgs e)
         {
-            GridUI gridui = new GridUI(this);
+            gridui = new GridUI(this);
             MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(gridui);
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
-                //gridui.BUT_Accept_Click(sender, e);
-                gridui.ShowDialog();
-                //gridui.domainUpDown1_ValueChanged(null,null);
+                BackgroundWorker bw = new BackgroundWorker();
+                bw.DoWork += new DoWorkEventHandler(bw_DoWork);
+                bw.RunWorkerCompleted += backgroundWorkerCompleted;
+                bw.RunWorkerAsync();         
             }
             else
             {
                 if (CustomMessageBox.Show("No polygon defined. Load a file?", "Load File", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     gridui.LoadGrid();
-                    //gridui.ShowDialog();
                     gridui.BUT_Accept_Click(sender, e);
                 }
                 else
@@ -87,6 +92,18 @@ namespace MissionPlanner
                     CustomMessageBox.Show("Please define a polygon.", "Error");
                 }
             }
+        }
+
+        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (!GCSViews.Tiles.pathAccepted) System.Threading.Thread.Sleep(500);    
+        }
+
+        private void backgroundWorkerCompleted(
+            object sender,
+            RunWorkerCompletedEventArgs e)
+        {
+            gridui.BUT_Accept_Click(sender, e);
         }
 
         public override bool Exit()
