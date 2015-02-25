@@ -21,7 +21,7 @@ namespace MissionPlanner.GCSViews
         static TileData groundResInfo = null;
 
         private static bool connected = false;
-        
+        private static TileData windSpeed = null;
 
         private static int altMin = 75;
         private static int altMax = 450;
@@ -44,6 +44,131 @@ namespace MissionPlanner.GCSViews
             calcGrid(null, null);
         }
 
+        internal static List<TileInfo> commonTiles = null;
+        private static List<Panel> common = new List<Panel>();
+
+        public static void SetCommonTiles()
+        {
+            commonTiles = new List<TileInfo>();
+            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/px");
+            commonTiles.Add(groundResInfo);
+            commonTiles.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
+            {
+                try
+                {
+                    MainV2.comPort.setMode("FBWB");
+                }
+                catch
+                {
+                    CustomMessageBox.Show("The Command failed to execute", "Error");
+                }
+            }, Color.FromArgb(255, 255, 51, 0)));
+            commonTiles.Add(new TileButton("RESTART", 2, 6, (sender, args) =>
+            {
+                try
+                {
+                    MainV2.comPort.setWPCurrent(0);
+                }
+                catch
+                {
+                    CustomMessageBox.Show("The command failed to execute", "Error");
+                }
+            }));
+            commonTiles.Add(new TileButton("RETURN", 2, 7, (sender, args) =>
+            {
+                try
+                {
+                    MainV2.comPort.setMode("RTL");
+                }
+                catch
+                {
+                    CustomMessageBox.Show("The Command failed to execute", "Error");
+                }
+            }));
+            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>
+            {
+                int wpCount = MainV2.comPort.getWPCount();
+                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
+                for (int i = 0; i < wpCount; i++)
+                {
+                    wpList.Add(MainV2.comPort.getWP((ushort)i));
+                }
+
+                Utilities.Locationwp landWP;
+
+                foreach (var wp in wpList)
+                {
+                    if (wp.id == (byte)MAVLink.MAV_CMD.LAND)
+                    {
+                        landWP = wp;
+                        break;
+                    }
+                }
+
+                //MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
+                //MainV2.comPort.doCommand(landWP.id,0,0,0,0,0,0,0);              //how to send commands from waypoints?                
+
+
+            })); // todo not implemented
+  
+
+            commonTiles.Add(new TileButton("ARM", 0, 7,
+                (sender, args) =>
+                {
+                    var armBut = sender as Label;
+                    FlightData.instance.BUT_ARM_Click(sender, args);
+                    if (armed)
+                        armBut.Text = "DISARM";
+                    else
+                        armBut.Text = "ARM";
+                }
+                    ));
+
+            commonTiles.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data cacht exception
+            {
+
+                var conBut = sender as Label;
+                if (connected == false)  //connect
+                {
+                    MainV2.instance.MenuConnect_Click(null, null);
+                    if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+                    {
+                                windSpeed.Visible = false;
+                                FlightData.instance.windDir1.Visible = false;
+                    }
+                    conBut.Text = "DISCONNECT";
+                    connected = true;
+                }
+                else                    //disconnect
+                {
+                    MainV2.instance.MenuConnect_Click(null, null);
+                            windSpeed.Visible = true;
+                            FlightData.instance.windDir1.Visible = true;
+                    conBut.Text = "CONNECT";
+                    connected = false;
+                }
+            }));
+
+            foreach (var tile in commonTiles)
+            {
+                //TODO: transparent
+                var panel = new Panel
+                {
+                    Size = new Size(168, 64),
+                    Location = new Point(tile.Column * 170, tile.Row * 66),
+                    BackColor = Color.FromArgb(220, 0, 0, 0),
+                    //Parent = p
+                };
+
+                panel.Controls.Add(tile.Label);
+                common.Add(panel);
+                //p.Controls.Add(panel);
+                panel.BringToFront();
+            }
+
+        }
+
+
         public static void SetTiles(Panel p, bool isFlightMode)
         {
             var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString(); calcGrid(null, null); });
@@ -63,11 +188,12 @@ namespace MissionPlanner.GCSViews
             });
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
-            
+
+            windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
-               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData"),
+               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}},
                     Color.FromArgb(255, 255, 51, 0)),
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
@@ -75,13 +201,13 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                
                 new TileButton("DISARM", 0, 7),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner")),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>{ MainV2.View.ShowScreen("FlightPlanner"); foreach(var pan in common) {pan.Parent = FlightPlanner.instance.panelBASE; FlightPlanner.instance.panelBASE.Controls.Add(pan); pan.BringToFront();}}),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
                 new TileData("DISTANCE TO HOME", 1, 2, "km"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPS SIGNAL", 1, 5, "%"),
-                new TileData("WIND SPEED", 9, 0, "m/s"),
+                windSpeed,
             });
 
 
@@ -120,7 +246,7 @@ namespace MissionPlanner.GCSViews
                 cam2Head,defaultHead,cam1Head,                                            
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
                 accept,
-                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => MainV2.View.ShowScreen("FlightData")),
+                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}}),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
                 {
                     var s = sender as Label;
@@ -179,119 +305,9 @@ namespace MissionPlanner.GCSViews
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
 
-            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/px");  //TODO implement
-            tilesArray.Add(groundResInfo);
-            tilesArray.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
-            {
-                try
-                {
-                    MainV2.comPort.setMode("FBWB");
-                }
-                catch
-                {
-                    CustomMessageBox.Show("The Command failed to execute", "Error");
-                }
-            }, Color.FromArgb(255, 255, 51, 0)));
-            tilesArray.Add(new TileButton("RESTART", 2, 6, (sender, args) =>
-            {
-                try
-                {
-                    MainV2.comPort.setWPCurrent(0);
-                }
-                catch
-                {
-                    CustomMessageBox.Show("The command failed to execute", "Error");
-                }
-            }));
-            tilesArray.Add(new TileButton("RETURN", 2, 7, (sender, args) =>
-            {
-                try
-                {
-                    MainV2.comPort.setMode("RTL");
-                }
-                catch
-                {
-                    CustomMessageBox.Show("The Command failed to execute", "Error");
-                }
-            }));
-            tilesArray.Add(new TileButton("LAND", 1, 7, (sender, args) =>
-            {
-                int wpCount = MainV2.comPort.getWPCount();
-                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
-                for (int i = 0; i < wpCount; i++)
-                {
-                    wpList.Add(MainV2.comPort.getWP((ushort)i));
-                }
-                
-                Utilities.Locationwp landWP;
-
-                foreach( var wp in wpList)
-                {
-                    if(wp.id == (byte)MAVLink.MAV_CMD.LAND)
-                    {
-                        landWP = wp;
-                        break;
-                    }
-                }
-
-                //MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
-                //MainV2.comPort.doCommand(landWP.id,0,0,0,0,0,0,0);              //how to send commands from waypoints?                
-                
-
-            })); // todo not implemented
+            foreach (var pan in common) { pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront(); }
             
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
-
-            tilesArray.Add(new TileButton("ARM", 0, 7,
-                (sender, args) =>
-                    {
-                        var armBut = sender as Label;
-                        FlightData.instance.BUT_ARM_Click(sender, args);
-                        if (armed)
-                            armBut.Text = "DISARM";
-                        else
-                            armBut.Text = "ARM";
-                    }
-                    ));       
-            
-
-
-            tilesArray.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data cacht exception
-               {
-
-                   var conBut = sender as Label;
-                   if (connected == false)  //connect
-                   {
-                       MainV2.instance.MenuConnect_Click(null, null);
-                       if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
-                       {
-                           foreach (var tile in tilesArray)
-                           {
-                               if (tile.Text == "WIND SPEED")
-                               {
-                                   (tile as TileData).Visible = false;
-                                   FlightData.instance.windDir1.Visible = false;
-                               }
-                           }
-                       }
-                       conBut.Text = "DISCONNECT";
-                       connected = true;
-                   }
-                   else                    //disconnect
-                   {
-                       foreach (var tile in tilesArray)
-                       {
-                           if (tile.Text == "WIND SPEED")
-                           {
-                               (tile as TileData).Visible = true;
-                               FlightData.instance.windDir1.Visible = true;
-                           }
-                       }
-                       MainV2.instance.MenuConnect_Click(null, null);
-                       conBut.Text = "CONNECT";
-                       connected = false;
-                   }
-               }));
 
             foreach (var tile in tilesArray)
             {

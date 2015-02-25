@@ -283,8 +283,8 @@ namespace MissionPlanner.GCSViews
             // 
             this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
-            this.SubMainLeft.Size = new Size(266, 200);
-            this.SubMainLeft.Location = new Point(0, 375);
+            this.SubMainLeft.Size = new Size(235, 195);
+            this.SubMainLeft.Location = new Point(0, 403);
             this.SubMainLeft.Panel2Collapsed = true;
             this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
             this.SubMainLeft.Name = "SubMainLeft";
@@ -1931,7 +1931,7 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.ToolStripMenuItem stopRecordToolStripMenuItem;
         private Controls.MyLabel lbl_logpercent;
         private System.Windows.Forms.ToolStripMenuItem pointCameraHereToolStripMenuItem;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        public System.Windows.Forms.SplitContainer splitContainer1;
         private Controls.MyLabel lbl_hdop;
         private Controls.MyLabel lbl_sats;
         private Controls.HSI Gheading;

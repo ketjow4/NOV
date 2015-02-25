@@ -304,6 +304,7 @@ namespace MissionPlanner.GCSViews
             // first run
             MainV2_AdvancedChanged(null, null);
 
+            Tiles.SetCommonTiles();
             Tiles.SetTiles(splitContainer1.Panel2, true);
             BindLabels();
         }

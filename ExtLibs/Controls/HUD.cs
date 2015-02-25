@@ -926,8 +926,10 @@ namespace MissionPlanner.Controls
 
                     if (bg.Height != 0)
                     {
-                        LinearGradientBrush linearBrush = new LinearGradientBrush(bg, Color.FromArgb(0x9b, 0xb8, 0x24),
-                            Color.FromArgb(0x41, 0x4f, 0x07), LinearGradientMode.Vertical);
+                        //LinearGradientBrush linearBrush = new LinearGradientBrush(bg, Color.FromArgb(0x9b, 0xb8, 0x24),
+                        //    Color.FromArgb(0x41, 0x4f, 0x07), LinearGradientMode.Vertical);
+                        LinearGradientBrush linearBrush = new LinearGradientBrush(bg, Color.SaddleBrown,
+                            Color.FromArgb(103,52,14) , LinearGradientMode.Vertical);
 
                         graphicsObject.FillRectangle(linearBrush, bg);
                     }
@@ -958,7 +960,7 @@ namespace MissionPlanner.Controls
                         {
                             if (a == 0)
                             {
-                                graphicsObject.DrawLine(greenPen, this.Width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg, this.Width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg);
+                                //graphicsObject.DrawLine(greenPen, this.Width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg, this.Width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg);
                             }
                             else
                             {
@@ -1040,9 +1042,9 @@ namespace MissionPlanner.Controls
                 Pen redtemp = new Pen(Color.FromArgb(200, redPen.Color.R, redPen.Color.G, redPen.Color.B));
                 redtemp.Width = 4.0f;
                 // left
-                graphicsObject.DrawLine(redtemp, centercircle.Left - halfwidth / 5, 0, centercircle.Left, 0);
+                //graphicsObject.DrawLine(redtemp, centercircle.Left - halfwidth / 5, 0, centercircle.Left, 0);
                 // right
-                graphicsObject.DrawLine(redtemp, centercircle.Right, 0, centercircle.Right + halfwidth / 5, 0);
+                //graphicsObject.DrawLine(redtemp, centercircle.Right, 0, centercircle.Right + halfwidth / 5, 0);
                 // center point
                 graphicsObject.DrawLine(redtemp, 0-1, 0, centercircle.Right - halfwidth / 3, 0 + halfheight / 10);
                 graphicsObject.DrawLine(redtemp, 0+1, 0, centercircle.Left + halfwidth / 3, 0 + halfheight / 10);

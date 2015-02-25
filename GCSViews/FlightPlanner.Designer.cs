@@ -1314,7 +1314,7 @@
         private System.Windows.Forms.Label lbl_distance;
         private System.Windows.Forms.Label lbl_prevdist;
         private BSE.Windows.Forms.Splitter splitter1;
-        private System.Windows.Forms.Panel panelBASE;
+        public System.Windows.Forms.Panel panelBASE;
         private System.Windows.Forms.Label lbl_homedist;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem clearMissionToolStripMenuItem;

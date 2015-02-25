@@ -853,10 +853,10 @@ namespace MissionPlanner
                 // refresh config window if needed
                 if (MyView.current != null)
                 {
-                    if (MyView.current.Name == "HWConfig")
-                        MyView.ShowScreen("HWConfig");
-                    if (MyView.current.Name == "SWConfig")
-                        MyView.ShowScreen("SWConfig");
+                    //if (MyView.current.Name == "HWConfig")
+                    //    MyView.ShowScreen("HWConfig");
+                    //if (MyView.current.Name == "SWConfig")
+                    //    MyView.ShowScreen("SWConfig");
                 }
 
                 try
@@ -1001,7 +1001,7 @@ namespace MissionPlanner
                         // user selection of sysid
                         MissionPlanner.Controls.SysidSelector id = new SysidSelector();
 
-                        id.ShowDialog();
+                        //id.ShowDialog();
                     }
 
                     comPort.getParamList();
@@ -1045,7 +1045,7 @@ namespace MissionPlanner
 
                                       if (ver2 > ver1)
                                       {
-                                          Common.MessageShowAgain("New Firmware","New firmware available\n" + item.name + "\nPlease upgrade");
+                                          //Common.MessageShowAgain("New Firmware","New firmware available\n" + item.name + "\nPlease upgrade");
                                           break;
                                       }
 
@@ -1072,10 +1072,10 @@ namespace MissionPlanner
                     // refresh config window if needed
                     if (MyView.current != null)
                     {
-                        if (MyView.current.Name == "HWConfig")
-                            MyView.ShowScreen("HWConfig");
-                        if (MyView.current.Name == "SWConfig")
-                            MyView.ShowScreen("SWConfig");
+                        //if (MyView.current.Name == "HWConfig")
+                        //    MyView.ShowScreen("HWConfig");
+                        //if (MyView.current.Name == "SWConfig")
+                        //    MyView.ShowScreen("SWConfig");
                     }
 
 
@@ -1103,7 +1103,7 @@ namespace MissionPlanner
                         comPort.Close();
                     }
                     catch { }
-                    CustomMessageBox.Show("Can not establish a connection\n\n" + ex.Message);
+                    //CustomMessageBox.Show("Can not establish a connection\n\n" + ex.Message);
                     return;
                 }
             }
