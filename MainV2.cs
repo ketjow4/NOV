@@ -874,6 +874,11 @@ namespace MissionPlanner
                 catch { }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
+                foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
+                {
+                    if (tile.Label.Text == "DISCONNECT")
+                        tile.Label.Text = "CONNECT";
+                }
             }
             else
             {
@@ -1092,6 +1097,11 @@ namespace MissionPlanner
 
                     // set connected icon
                     this.MenuConnect.Image = diplayicons.disconnect;
+                    foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
+                    {
+                        if (tile.Label.Text == "CONNECT")
+                            tile.Label.Text = "DISCONNECT";
+                    }
                 }
                 catch (Exception ex)
                 {

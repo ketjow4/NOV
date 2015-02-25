@@ -136,7 +136,7 @@ namespace MissionPlanner.GCSViews
                                 windSpeed.Visible = false;
                                 FlightData.instance.windDir1.Visible = false;
                     }
-                    conBut.Text = "DISCONNECT";
+                    //conBut.Text = "DISCONNECT";
                     connected = true;
                 }
                 else                    //disconnect
@@ -144,7 +144,7 @@ namespace MissionPlanner.GCSViews
                     MainV2.instance.MenuConnect_Click(null, null);
                             windSpeed.Visible = true;
                             FlightData.instance.windDir1.Visible = true;
-                    conBut.Text = "CONNECT";
+                    //conBut.Text = "CONNECT";
                     connected = false;
                 }
             }));
@@ -157,12 +157,9 @@ namespace MissionPlanner.GCSViews
                     Size = new Size(168, 64),
                     Location = new Point(tile.Column * 170, tile.Row * 66),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
-                    //Parent = p
                 };
-
                 panel.Controls.Add(tile.Label);
                 common.Add(panel);
-                //p.Controls.Add(panel);
                 panel.BringToFront();
             }
 
