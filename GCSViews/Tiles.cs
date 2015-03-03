@@ -88,28 +88,31 @@ namespace MissionPlanner.GCSViews
             commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>
             {
                 int wpCount = MainV2.comPort.getWPCount();
-                List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
+                int index = 0;
+                //List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
                 for (int i = 0; i < wpCount; i++)
                 {
-                    wpList.Add(MainV2.comPort.getWP((ushort)i));
-                }
-
-                Utilities.Locationwp landWP;
-
-                foreach (var wp in wpList)
-                {
-                    if (wp.id == (byte)MAVLink.MAV_CMD.LAND)
+                    //wpList.Add(MainV2.comPort.getWP((ushort)i));
+                    if (MainV2.comPort.getWP((ushort)i).id == (byte)MAVLink.MAV_CMD.LAND)
                     {
-                        landWP = wp;
+                        index = i;
                         break;
                     }
                 }
 
-                //MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
-                //MainV2.comPort.doCommand(landWP.id,0,0,0,0,0,0,0);              //how to send commands from waypoints?                
-
-
-            })); // todo not implemented
+                //Utilities.Locationwp landWP;
+                //foreach (var wp in wpList)
+                //{
+                //    index++;
+                //    if (wp.id == (byte)MAVLink.MAV_CMD.LAND)
+                //    {
+                //        landWP = wp;
+                //        break;
+                //    }
+                //}
+                MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);           
+                MainV2.comPort.setWPCurrent((ushort)index);
+            }));
   
 
             commonTiles.Add(new TileButton("ARM", 0, 7,
