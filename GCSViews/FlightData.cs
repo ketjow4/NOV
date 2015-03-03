@@ -313,7 +313,7 @@ namespace MissionPlanner.GCSViews
         {
             BindSingleLabel("ALTITUDE", "alt");
             BindSingleLabel("GROUND_SPEED", "groundspeed");
-            BindSingleLabel("TIME_IN_THE_AIR", "timeInAir");
+            //BindSingleLabel("TIME_IN_THE_AIR", "timeInAir");
             BindSingleLabel("BATTERY_REMAINING", "battery_remaining");
             BindSingleLabel("AIR_SPEED", "airspeed");
             BindSingleLabel("DISTANCE_TO_HOME", "DistToHome");
@@ -326,12 +326,25 @@ namespace MissionPlanner.GCSViews
         {
             foreach (Panel a in splitContainer1.Panel2.Controls.OfType<Panel>())
             {
-                foreach (var label in a.Controls.OfType<Panel>().Select(c => c.Controls[0] as  System.Windows.Forms.Label))
+                foreach (var label in a.Controls.OfType<Panel>().Select(c => c.Controls[0] as System.Windows.Forms.Label))
                 {
                     if (label != null && label.Name == "TIME_IN_THE_AIR")
                     {
                         Binding b = new Binding("Text", bindingSource1, "timeInAir", true);
-                        b.Parse += new ConvertEventHandler(FormatToHourAndMinutes);
+                        //b.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                        b.Format += delegate(object sentFrom, ConvertEventArgs convertEventArgs)
+                        {
+                            string temp;
+                            int timeInSeconds = Convert.ToInt32(convertEventArgs.Value);
+                            int seconds = timeInSeconds % 60;
+                            int minutes = timeInSeconds / 60;
+                            int hours = timeInSeconds / 3600;
+                            if(seconds >= 0 && seconds <= 9)
+                                temp = hours.ToString() + ":" + minutes.ToString() + ":0" + seconds.ToString();
+                            else 
+                                temp = hours.ToString() + ":" + minutes.ToString() + ":" + seconds.ToString();
+                            convertEventArgs.Value = temp;
+                        };
                         label.DataBindings.Clear();
                         label.DataBindings.Add(b);
                         break;
@@ -345,14 +358,6 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void FormatToHourAndMinutes(object sender, ConvertEventArgs e)      //Fired every time value changes
-        {
-            int timeInSeconds = Convert.ToInt32(e.Value);
-            int seconds = timeInSeconds % 60;
-            int minutes = timeInSeconds / 60;
-            int hours = timeInSeconds / 3600;
-            e.Value = hours.ToString() + " : " + minutes.ToString() + " : " + seconds.ToString();
-        }
 
         void comPort_MavChanged(object sender, EventArgs e)
         {
@@ -453,7 +458,7 @@ namespace MissionPlanner.GCSViews
                     lbl2.Visible = true;
                     //lbl2.Text = fieldValue.ToString();
 
-                    
+
                     tabStatus.Controls.Add(lbl1);
                     tabStatus.Controls.Add(lbl2);
                 }
@@ -1117,7 +1122,7 @@ namespace MissionPlanner.GCSViews
                                     }
                                     else if (MAV.cs.firmware == MainV2.Firmwares.ArduTracker)
                                     {
-                                        routes.Markers.Add(new GMapMarkerAntennaTracker(portlocation,MAV.cs.yaw));
+                                        routes.Markers.Add(new GMapMarkerAntennaTracker(portlocation, MAV.cs.yaw));
                                     }
                                     else
                                     {
@@ -1150,7 +1155,7 @@ namespace MissionPlanner.GCSViews
                         try
                         {
                             if (MainV2.comPort.MAV.param.ContainsKey("MNT_STAB_PAN") &&
-                               // (float)MainV2.comPort.MAV.param["MNT_STAB_PAN"] == 1 &&
+                                // (float)MainV2.comPort.MAV.param["MNT_STAB_PAN"] == 1 &&
                                 (float)MainV2.comPort.MAV.param["MNT_STAB_TILT"] == 1 &&
                                 (float)MainV2.comPort.MAV.param["MNT_STAB_ROLL"] == 0)
                             {
@@ -1191,7 +1196,7 @@ namespace MissionPlanner.GCSViews
                         gMapControl1.Invalidate();
 
                         tracklast = DateTime.Now;
-                    }  
+                    }
                 }
                 catch (Exception ex) { log.Error(ex); Console.WriteLine("FD Main loop exception " + ex.ToString()); }
             }
@@ -2628,7 +2633,7 @@ namespace MissionPlanner.GCSViews
         {
             MainV2.config["CHK_autopan"] = CHK_autopan.Checked.ToString();
 
-                //GCSViews.FlightPlanner.instance.autopan = CHK_autopan.Checked;
+            //GCSViews.FlightPlanner.instance.autopan = CHK_autopan.Checked;
         }
 
         private void setMJPEGSourceToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2875,15 +2880,16 @@ namespace MissionPlanner.GCSViews
             try
             {
                 //if (MainV2.comPort.MAV.cs.armed)
-                    //if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
-                        //return;
+                //if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
+                //return;
 
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
                 Tiles.armed = ans;
                 //if (ans == false)
                 //    CustomMessageBox.Show("Error: Arm message rejected by MAV", "Error");
             }
-            catch { 
+            catch
+            {
                 //CustomMessageBox.Show("Error: No response from MAV", "Error"); 
             }
 
@@ -3129,7 +3135,7 @@ namespace MissionPlanner.GCSViews
 
                 if (res == System.Windows.Forms.DialogResult.OK)
                 {
-                    BinaryLog.ConvertBin(ofd.FileName,sfd.FileName);
+                    BinaryLog.ConvertBin(ofd.FileName, sfd.FileName);
                 }
             }
         }

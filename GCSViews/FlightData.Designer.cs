@@ -282,12 +282,12 @@ namespace MissionPlanner.GCSViews
             // SubMainLeft
             // 
             this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
-            this.SubMainLeft.Size = new Size(235, 195);
-            this.SubMainLeft.Location = new Point(0, 403);
-            this.SubMainLeft.Panel2Collapsed = true;
-            this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
-            this.SubMainLeft.Name = "SubMainLeft";
+            resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
+            //this.SubMainLeft.Size = new Size(235, 195);
+            //this.SubMainLeft.Location = new Point(0, 403);
+            //this.SubMainLeft.Panel2Collapsed = true;
+            //this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
+            //this.SubMainLeft.Name = "SubMainLeft";
             // 
             // SubMainLeft.Panel1
             // 
