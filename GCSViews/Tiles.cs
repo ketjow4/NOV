@@ -41,7 +41,8 @@ namespace MissionPlanner.GCSViews
             if (val < altMin) val = altMin;
             else if (val > altMax) val = altMax;
             FlightPlanner.instance.TXT_DefaultAlt.Text = altInfo.Value = val.ToString();
-            calcGrid(null, null);
+            if( calcGrid != null)
+                calcGrid(null, null);
         }
 
         internal static List<TileInfo> commonTiles = null;
@@ -50,7 +51,7 @@ namespace MissionPlanner.GCSViews
         public static void SetCommonTiles()
         {
             commonTiles = new List<TileInfo>();
-            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/px");
+            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p");
             commonTiles.Add(groundResInfo);
             commonTiles.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
             {
@@ -127,7 +128,7 @@ namespace MissionPlanner.GCSViews
                 }
                     ));
 
-            commonTiles.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>            //todo change here that in flight planning name is the same as in flight data cacht exception
+            commonTiles.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>
             {
 
                 var conBut = sender as Label;
@@ -171,8 +172,8 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTiles(Panel p, bool isFlightMode)
         {
-            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString(); calcGrid(null, null); });
-            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString(); calcGrid(null, null); });
+            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString(); if(calcGrid != null) calcGrid(null, null); });
+            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString(); if (calcGrid != null) calcGrid(null, null); });
             TileButton angleBtnOk = null;
             angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
             var altBtnUp = new TileButton("+10", 2, 5, (sender, args) => ChangeAlt(10));
@@ -197,7 +198,7 @@ namespace MissionPlanner.GCSViews
                     Color.FromArgb(255, 255, 51, 0)),
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
-                new TileData("TIME IN THE AIR", 0, 3),   
+                new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                
                 new TileButton("DISARM", 0, 7),
@@ -215,8 +216,8 @@ namespace MissionPlanner.GCSViews
             TileButton defaultHead, cam1Head, cam2Head, accept;
             defaultHead = cam1Head = cam2Head = accept = null;
             defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Default"; if (!pathAccepted) calcGrid(null, null); obsHeadBtn.Value = camName; });
-            cam1Head = new TileButton("CAMERA 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 1"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
-            cam2Head = new TileButton("CAMERA 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 2"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
+            cam1Head = new TileButton("NOV 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 1"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
+            cam2Head = new TileButton("NOV 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 2"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
 
             
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "",(sender, args) =>
@@ -224,6 +225,8 @@ namespace MissionPlanner.GCSViews
                 var x = !defaultHead.Visible;
                 defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = x;    
             });
+
+            obsHeadBtn.Value = "Default";
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
 
@@ -375,7 +378,7 @@ namespace MissionPlanner.GCSViews
                 Font = new Font("Century Gothic", 10, FontStyle.Italic),
                 Top = 10,
                 Left = 10,
-                Width = 165,
+                Width = 168,
                 TextAlign = ContentAlignment.TopLeft
 
             };
@@ -387,7 +390,7 @@ namespace MissionPlanner.GCSViews
                 TextAlign = ContentAlignment.BottomRight,
             };
             unitLabel.Top = 64 - unitLabel.Height - 12;
-            unitLabel.Left = 158 - unitLabel.Width - 10;
+            unitLabel.Left = 168 - unitLabel.Width - 10;
 
             valueLabel = new Label()
             {
