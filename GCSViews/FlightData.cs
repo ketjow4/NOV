@@ -331,7 +331,6 @@ namespace MissionPlanner.GCSViews
                     if (label != null && label.Name == "TIME_IN_THE_AIR")
                     {
                         Binding b = new Binding("Text", bindingSource1, "timeInAir", true);
-                        //b.DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
                         b.Format += delegate(object sentFrom, ConvertEventArgs convertEventArgs)
                         {
                             string temp;
@@ -339,10 +338,7 @@ namespace MissionPlanner.GCSViews
                             int seconds = timeInSeconds % 60;
                             int minutes = timeInSeconds / 60;
                             int hours = timeInSeconds / 3600;
-                            if(seconds >= 0 && seconds <= 9)
-                                temp = hours.ToString() + ":" + minutes.ToString() + ":0" + seconds.ToString();
-                            else 
-                                temp = hours.ToString() + ":" + minutes.ToString() + ":" + seconds.ToString();
+                            temp = hours.ToString() + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
                             convertEventArgs.Value = temp;
                         };
                         label.DataBindings.Clear();

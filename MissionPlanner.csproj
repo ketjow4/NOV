@@ -99,8 +99,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>LOGO.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -6132,6 +6131,7 @@
     <Content Include="Lib\__phello__.foo.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="LOGO.ico" />
     <Content Include="mavcmd.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -6257,6 +6257,7 @@
     <None Include="Resources\marker_06.png" />
     <None Include="Resources\marker_07.png" />
     <None Include="Resources\heli.png" />
+    <None Include="Resources\LOGO.ico" />
     <Content Include="Resources\MAVCmd.zh-TW.txt" />
     <Content Include="Resources\MAVParam.zh-TW.txt" />
     <Content Include="Resources\new frames-01.png" />
@@ -6270,6 +6271,7 @@
     <None Include="Resources\PlusFramesGreen_06.png" />
     <None Include="Resources\pixhawk.jpg" />
     <None Include="Resources\novelty.png" />
+    <None Include="Resources\novelty_splash.bmp" />
     <Content Include="Resources\rover.png" />
     <Content Include="Resources\splash.jpg" />
     <Content Include="Scripts\datetime.py">

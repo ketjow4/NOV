@@ -597,7 +597,7 @@ namespace MissionPlanner
 
             if (Program.Logo != null)
             {
-                //this.Icon = Icon.FromHandle(((Bitmap)Program.Logo).GetHicon());
+                this.Icon = Icon.FromHandle(((Bitmap)Program.Logo).GetHicon());
             }
 
             if (Program.Logo != null && Program.vvvvz)
