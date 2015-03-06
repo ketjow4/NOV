@@ -51,8 +51,8 @@ namespace MissionPlanner.GCSViews
         public static void SetCommonTiles()
         {
             commonTiles = new List<TileInfo>();
-            groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p");
-            commonTiles.Add(groundResInfo);
+            
+            //commonTiles.Add(groundResInfo);
             commonTiles.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
             {
                 try
@@ -86,7 +86,7 @@ namespace MissionPlanner.GCSViews
                     CustomMessageBox.Show("The Command failed to execute", "Error");
                 }
             }));
-            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>
+            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>                  //TODO chceck index value wheter it is start from 0 or 1
             {
                 int wpCount = MainV2.comPort.getWPCount();
                 int index = 0;
@@ -100,7 +100,6 @@ namespace MissionPlanner.GCSViews
                         break;
                     }
                 }
-
                 //Utilities.Locationwp landWP;
                 //foreach (var wp in wpList)
                 //{
@@ -207,7 +206,8 @@ namespace MissionPlanner.GCSViews
                 new TileData("DISTANCE TO HOME", 1, 2, "km"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
-                new TileData("GPS SIGNAL", 1, 5, "%"),
+                new TileData("GPS SIGNAL", 1, 5, "%"),              //TODO  change here to gpshdop and sat count
+                new TileData("RADIO SIGNAL", 0, 5, "%"),            //TODO ADD some data here!!!!
                 windSpeed,
             });
 
@@ -249,6 +249,8 @@ namespace MissionPlanner.GCSViews
                 cam2Head,defaultHead,cam1Head,                                            
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
                 accept,
+
+                groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p"),
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}}),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>
                 {
@@ -272,7 +274,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
-                new TileData("DISTANCE", 0, 4, "km"),
+                new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
                 new TileButton("WRITE WAYPOINTS", 2, 8, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
