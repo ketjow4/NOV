@@ -346,10 +346,17 @@ namespace MissionPlanner.GCSViews
                         break;
                     }
                     if (label != null && label.Name == name)
-                        label.DataBindings.Add(new Binding("Text", bindingSource1,
-                            binder,
-                            true));
-                    break;
+                    {
+                        Binding b = new Binding("Text", bindingSource1, binder,true);
+                        b.Format += delegate(object sentFrom, ConvertEventArgs eventargs)
+                        {
+                            double value = Convert.ToDouble(eventargs.Value);
+                            eventargs.Value = value.ToString("0.##");
+                        };
+                        label.DataBindings.Add(b);
+                        break;
+                    }
+                        
                 }
             }
         }
