@@ -1085,73 +1085,73 @@ namespace MissionPlanner.Controls
                 }
 
                 //DRAWING HEADING 
-                //for (int a = start; a <= _heading + 60; a += 1)
-                //{
-                //    // target heading
-                //    if (((int)(a + 360) % 360) == (int)_targetheading)
-                //    {
-                //        greenPen.Width = 6;
-                //        graphicsObject.DrawLine(greenPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
-                //    }
+                for (int a = start; a <= _heading + 60; a += 1)
+                {
+                    // target heading
+                    if (((int)(a + 360) % 360) == (int)_targetheading)
+                    {
+                        greenPen.Width = 6;
+                        graphicsObject.DrawLine(greenPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+                    }
 
-                //    if (((int)(a + 360) % 360) == (int)_groundcourse)
-                //    {
-                //        blackPen.Width = 6;
-                //        graphicsObject.DrawLine(blackPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
-                //        blackPen.Width = 2;
-                //    }
+                    if (((int)(a + 360) % 360) == (int)_groundcourse)
+                    {
+                        blackPen.Width = 6;
+                        graphicsObject.DrawLine(blackPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+                        blackPen.Width = 2;
+                    }
 
-                //    if ((int)a % 15 == 0)
-                //    {
-                //        //Console.WriteLine(a + " " + Math.Round(a, 1, MidpointRounding.AwayFromZero));
-                //        //Console.WriteLine(space +" " + a +" "+ (headbg.Left + 5 + space * (a - start)));
-                //        graphicsObject.DrawLine(whitePen, headbg.Left + 5 + space * (a - start), headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
-                //        int disp = (int)a;
-                //        if (disp < 0)
-                //            disp += 360;
-                //        disp = disp % 360;
-                //        if (disp == 0)
-                //        {
-                //            drawstring(graphicsObject, "N".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 45)
-                //        {
-                //            drawstring(graphicsObject, "NE".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 90)
-                //        {
-                //            drawstring(graphicsObject, "E".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 135)
-                //        {
-                //            drawstring(graphicsObject, "SE".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 180)
-                //        {
-                //            drawstring(graphicsObject, "S".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 225)
-                //        {
-                //            drawstring(graphicsObject, "SW".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 270)
-                //        {
-                //            drawstring(graphicsObject, "W".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else if (disp == 315)
-                //        {
-                //            drawstring(graphicsObject, "NW".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //        else
-                //        {
-                //            drawstring(graphicsObject, (disp % 360).ToString().PadLeft(3), font, fontsize, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //        }
-                //    }
-                //    else if ((int)a % 5 == 0)
-                //    {
-                //        graphicsObject.DrawLine(whitePen, headbg.Left + 5 + space * (a - start), headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
-                //    }
-                //}
+                    if ((int)a % 15 == 0)
+                    {
+                        //Console.WriteLine(a + " " + Math.Round(a, 1, MidpointRounding.AwayFromZero));
+                        //Console.WriteLine(space +" " + a +" "+ (headbg.Left + 5 + space * (a - start)));
+                        graphicsObject.DrawLine(whitePen, headbg.Left + 5 + space * (a - start), headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
+                        int disp = (int)a;
+                        if (disp < 0)
+                            disp += 360;
+                        disp = disp % 360;
+                        if (disp == 0)
+                        {
+                            drawstring(graphicsObject, "N".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 45)
+                        {
+                            drawstring(graphicsObject, "NE".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 90)
+                        {
+                            drawstring(graphicsObject, "E".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 135)
+                        {
+                            drawstring(graphicsObject, "SE".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 180)
+                        {
+                            drawstring(graphicsObject, "S".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 225)
+                        {
+                            drawstring(graphicsObject, "SW".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 270)
+                        {
+                            drawstring(graphicsObject, "W".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else if (disp == 315)
+                        {
+                            drawstring(graphicsObject, "NW".PadLeft(2), font, fontsize + 4, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                        else
+                        {
+                            drawstring(graphicsObject, (disp % 360).ToString().PadLeft(3), font, fontsize, whiteBrush, headbg.Left - 5 + space * (a - start) - fontoffset, headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                        }
+                    }
+                    else if ((int)a % 5 == 0)
+                    {
+                        graphicsObject.DrawLine(whitePen, headbg.Left + 5 + space * (a - start), headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
+                    }
+                }
 
                 //RectangleF rect = new RectangleF(headbg.Width / 2 - (fontsize * 2.4f) / 2, 0, (fontsize * 2.4f), headbg.Height);
 
