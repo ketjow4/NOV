@@ -108,7 +108,7 @@ namespace MissionPlanner
             map = plugin.Host.GetFPMap();
             map.MapProvider = plugin.Host.FDMapType;
 
-            routesOverlay = new GMapOverlay("routes");
+            routesOverlay = new GMapOverlay("routes_grid");
             map.Overlays.Add(routesOverlay);
 
             Tiles.calcGrid = this.domainUpDown1_ValueChanged;
@@ -678,7 +678,7 @@ namespace MissionPlanner
             lbl_photoevery.Text = secondsToNice(((double)NUM_spacing.Value / flyspeedms));
             map.HoldInvalidation = false;
             if (!isMouseDown)
-                map.ZoomAndCenterMarkers("routes");
+                map.ZoomAndCenterMarkers("routes_grid");
 
             CalcHeadingHold();
         }
@@ -1339,7 +1339,7 @@ namespace MissionPlanner
 
             for (int i = 0; i < map.Overlays.Count; i++)
             {
-                if (map.Overlays.ElementAt(i).Id == "routes")
+                if (map.Overlays.ElementAt(i).Id == "routes_grid")
                     map.Overlays.Remove(map.Overlays.ElementAt(i));
             }
 
