@@ -21,6 +21,8 @@ namespace MissionPlanner.GCSViews
         static TileData groundResInfo = null;
         static TileData flightTime = null;          //estimated flight time
 
+        public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
+
         private static bool connected = false;
         private static TileData windSpeed = null;
 

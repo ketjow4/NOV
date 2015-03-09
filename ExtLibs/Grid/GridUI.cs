@@ -287,6 +287,7 @@ namespace MissionPlanner
                 loadsetting("grid_camdir", CHK_camdirection);
 
                 loadsetting("grid_usespeed", CHK_usespeed);
+                CHK_usespeed.Checked = true;
 
                 loadsetting("grid_dist", NUM_Distance);
                 loadsetting("grid_overshoot1", NUM_overshoot);
@@ -673,7 +674,10 @@ namespace MissionPlanner
             lbl_strips.Text = ((int)(strips / 2)).ToString();
             double seconds = ((routetotal * 1000.0) / ((flyspeedms) * 0.8));
             // reduce flying speed by 20 %
-            lbl_flighttime.Text = secondsToNice(seconds);
+            double secs = seconds % 60;
+            int mins = (int)(seconds / 60) % 60;
+            int hours = (int)(seconds / 3600) % 24;
+            Tiles.EstimatedFlightTime = hours + ":" + mins.ToString("00") + ":" + secs.ToString("00");
             seconds = ((routetotal * 1000.0) / (flyspeedms));
             lbl_photoevery.Text = secondsToNice(((double)NUM_spacing.Value / flyspeedms));
             map.HoldInvalidation = false;
