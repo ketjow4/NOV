@@ -320,7 +320,9 @@ namespace MissionPlanner.GCSViews
             BindSingleLabel("BATTERY_VOLTAGE", "battery_voltage");
             BindSingleLabel("CURRENT", "current");
             BindSingleLabel("RADIO_SIGNAL", "linkqualitygcs");
-            BindSingleLabel("FLIGHT TIME", "cos");                  //TO DO get some data in here
+            BindSingleLabel("GPSHDOP", "gpshdop");
+            BindSingleLabel("GPS_SAT_COUNT", "satcount");
+            //BindSingleLabel("FLIGHT TIME", "cos");                  //TO DO get some data in here
         }
 
         void BindSingleLabel(string name, string binder)

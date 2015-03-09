@@ -206,8 +206,9 @@ namespace MissionPlanner.GCSViews
                 new TileData("DISTANCE TO HOME", 1, 2, "km"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
-                new TileData("GPS SIGNAL", 1, 5, "%"),              //TODO  change here to gpshdop and sat count
-                new TileData("RADIO SIGNAL", 0, 5, "%"),            //TODO ADD some data here!!!!
+                new TileData("GPSHDOP", 1, 5, ""),              //TODO  change here to gpshdop and sat count
+                new TileData("GPS SAT COUNT", 2, 5, ""),              //TODO  change here to gpshdop and sat count
+                new TileData("RADIO SIGNAL", 0, 5, "%"),            
                 windSpeed,
             });
 
