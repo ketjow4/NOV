@@ -1090,15 +1090,15 @@ namespace MissionPlanner.Controls
                     // target heading
                     if (((int)(a + 360) % 360) == (int)_targetheading)
                     {
-                        greenPen.Width = 6;
-                        graphicsObject.DrawLine(greenPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+                        //greenPen.Width = 6;
+                        //graphicsObject.DrawLine(greenPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
                     }
 
                     if (((int)(a + 360) % 360) == (int)_groundcourse)
                     {
-                        blackPen.Width = 6;
-                        graphicsObject.DrawLine(blackPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
-                        blackPen.Width = 2;
+                        //blackPen.Width = 6;
+                        //graphicsObject.DrawLine(blackPen, headbg.Left + 5 + space * (a - start), headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+                        //blackPen.Width = 2;
                     }
 
                     if ((int)a % 15 == 0)
@@ -1153,21 +1153,21 @@ namespace MissionPlanner.Controls
                     }
                 }
 
-                //RectangleF rect = new RectangleF(headbg.Width / 2 - (fontsize * 2.4f) / 2, 0, (fontsize * 2.4f), headbg.Height);
+                RectangleF rect = new RectangleF(headbg.Width / 2 - (fontsize * 2.4f) / 2, 0, (fontsize * 2.4f), headbg.Height);
 
-                
 
-                //FillRectangle(new SolidBrush(Color.FromArgb(220,255,255,255)), rect);
 
-                //if (Math.Abs(_heading - _targetheading) < 4)
-                //{
-                //    drawstring(graphicsObject, (heading % 360).ToString("0").PadLeft(3), font, fontsize, whiteBrush, headbg.Width / 2 - (fontsize * 1f), headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //}
-                //else
-                //{
-                //    drawstring(graphicsObject, (heading % 360).ToString("0").PadLeft(3), font, fontsize, whiteBrush, headbg.Width / 2 - (fontsize * 1f), headbg.Bottom - 24 - (int)(fontoffset * 1.7));
-                //}
+                FillRectangle(new SolidBrush(Color.FromArgb(220, 255, 255, 255)), rect);
 
+                if (Math.Abs(_heading - _targetheading) < 4)
+                {
+                    drawstring(graphicsObject, (heading % 360).ToString("0").PadLeft(3), font, fontsize, whiteBrush, headbg.Width / 2 - (fontsize * 1f), headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                }
+                else
+                {
+                    drawstring(graphicsObject, (heading % 360).ToString("0").PadLeft(3), font, fontsize, whiteBrush, headbg.Width / 2 - (fontsize * 1f), headbg.Bottom - 24 - (int)(fontoffset * 1.7));
+                }
+                //END DRAW HEADING
                 
 
                 float xtspace = this.Width / 10.0f / 3.0f;

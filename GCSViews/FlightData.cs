@@ -322,7 +322,6 @@ namespace MissionPlanner.GCSViews
             BindSingleLabel("RADIO_SIGNAL", "linkqualitygcs");
             BindSingleLabel("GPSHDOP", "gpshdop");
             BindSingleLabel("GPS_SAT_COUNT", "satcount");
-            //BindSingleLabel("FLIGHT TIME", "cos");                  //TO DO get some data in here
         }
 
         void BindSingleLabel(string name, string binder)

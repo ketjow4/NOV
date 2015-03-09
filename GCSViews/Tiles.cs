@@ -19,6 +19,7 @@ namespace MissionPlanner.GCSViews
         static TileData altInfo = null;
         static TileData angleInfo = null;
         static TileData groundResInfo = null;
+        static TileData flightTime = null;          //estimated flight time
 
         private static bool connected = false;
         private static TileData windSpeed = null;
@@ -275,7 +276,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
-                new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
+                flightTime = new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
                 new TileButton("WRITE WAYPOINTS", 2, 8, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
