@@ -46,6 +46,16 @@ namespace MissionPlanner.GCSViews
                 calcGrid(null, null);
         }
 
+        public static void ChangeAngle(int v)
+        {
+            int val = Convert.ToInt32(angleInfo.Value) + v;
+            if (val < 0) val = 360;
+            else if (val > 360) val = 0;
+            angleInfo.Value = val.ToString();
+            if (calcGrid != null)
+                calcGrid(null, null);
+        }
+
         internal static List<TileInfo> commonTiles = null;
         private static List<Panel> common = new List<Panel>();
 
@@ -172,8 +182,8 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTiles(Panel p, bool isFlightMode)
         {
-            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) + 5).ToString(); if(calcGrid != null) calcGrid(null, null); });
-            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { angleInfo.Value = (Convert.ToInt32(angleInfo.Value) - 5).ToString(); if (calcGrid != null) calcGrid(null, null); });
+            var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { ChangeAngle(5); });
+            var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { ChangeAngle(-5); });
             TileButton angleBtnOk = null;
             angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
             var altBtnUp = new TileButton("+10", 2, 5, (sender, args) => ChangeAlt(10));
