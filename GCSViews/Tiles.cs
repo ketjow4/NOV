@@ -99,30 +99,18 @@ namespace MissionPlanner.GCSViews
                     CustomMessageBox.Show("The Command failed to execute", "Error");
                 }
             }));
-            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>                  //TODO chceck index value wheter it is start from 0 or 1
+            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>                  //index value start from 0
             {
                 int wpCount = MainV2.comPort.getWPCount();
                 int index = 0;
-                //List<Utilities.Locationwp> wpList = new List<Utilities.Locationwp>();
                 for (int i = 0; i < wpCount; i++)
                 {
-                    //wpList.Add(MainV2.comPort.getWP((ushort)i));
-                    if (MainV2.comPort.getWP((ushort)i).id == (byte)MAVLink.MAV_CMD.LAND)
+                    if (MainV2.comPort.getWP((ushort)i).id == (byte)MAVLink.MAV_CMD.RETURN_TO_LAUNCH)
                     {
                         index = i;
                         break;
                     }
                 }
-                //Utilities.Locationwp landWP;
-                //foreach (var wp in wpList)
-                //{
-                //    index++;
-                //    if (wp.id == (byte)MAVLink.MAV_CMD.LAND)
-                //    {
-                //        landWP = wp;
-                //        break;
-                //    }
-                //}
                 MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);           
                 MainV2.comPort.setWPCurrent((ushort)index);
             }));
@@ -152,7 +140,6 @@ namespace MissionPlanner.GCSViews
                                 windSpeed.Visible = false;
                                 FlightData.instance.windDir1.Visible = false;
                     }
-                    //conBut.Text = "DISCONNECT";
                     connected = true;
                 }
                 else                    //disconnect
@@ -160,7 +147,6 @@ namespace MissionPlanner.GCSViews
                     MainV2.instance.MenuConnect_Click(null, null);
                             windSpeed.Visible = true;
                             FlightData.instance.windDir1.Visible = true;
-                    //conBut.Text = "CONNECT";
                     connected = false;
                 }
             }));

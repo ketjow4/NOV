@@ -911,6 +911,7 @@ namespace MissionPlanner.Controls
                 // draw sky
                 if (bgon == true)
                 {
+                    
                     RectangleF bg = new RectangleF(-halfwidth * 2, -halfheight * 2, this.Width * 2, halfheight * 2 + pitchoffset);
 
                     if (bg.Height != 0)
