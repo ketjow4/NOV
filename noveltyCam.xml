@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Cameras>
+  <Camera>
+    <name>Default</name>
+    <flen>5</flen>
+    <imgh>3456</imgh>
+    <imgw>4608</imgw>
+    <senh>4.62</senh>
+    <senw>6.16</senw>
+  </Camera>
+    <Camera>
+    <name>Nov 1</name>
+    <flen>4</flen>
+    <imgh>4096</imgh>
+    <imgw>2560</imgw>
+    <senh>3</senh>
+    <senw>5.2</senw>
+  </Camera>
+    <Camera>
+    <name>Nov 2</name>
+    <flen>3</flen>
+    <imgh>2048</imgh>
+    <imgw>1024</imgw>
+    <senh>4.5</senh>
+    <senw>6.0</senw>
+  </Camera>
+</Cameras>

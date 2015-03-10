@@ -2687,6 +2687,9 @@
     <Content Include="aircraft\Rascal\thumbnail.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ARDU.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ArduCopterConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -6215,6 +6218,9 @@
     <None Include="Resources\quadhover_14.png" />
     <None Include="Resources\maggps.png" />
     <Content Include="mpdesktop.ico" />
+    <Content Include="noveltyCam.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ParameterMetaDataBackup.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

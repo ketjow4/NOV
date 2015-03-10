@@ -503,6 +503,34 @@ namespace MissionPlanner
             }
         }
 
+        public float ReadAvgSpeed(String filename)
+        {
+            bool exists = File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + filename);
+            float result = 0;
+            try
+            {
+                using (XmlTextReader xmlreader = new XmlTextReader(Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + filename))
+                {
+                    while (xmlreader.Read())
+                    {
+                        xmlreader.MoveToElement();
+                        try
+                        {
+                            switch (xmlreader.Name)
+                            {
+                                case "FlyingSpeed":
+                                    result = float.Parse(xmlreader.ReadString(), new System.Globalization.CultureInfo("en-US"));
+                                    break;
+                            }
+                        }
+                        catch (Exception ex) { Console.WriteLine(ex.Message); }
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Bad Platform File: " + ex.ToString()); }
+            return result;
+        }
+
         // Do Work
         public void domainUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -668,7 +696,15 @@ namespace MissionPlanner
                 lbl_footprint.Text = TXT_fovH.Text + " x " + TXT_fovV.Text + " m";
             }
 
-            double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
+
+            double flyspeedms = 0;
+            //MainV2.comPort.MAV.cs.firmware
+            //if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+            {
+                flyspeedms = ReadAvgSpeed("ARDU.xml");
+            }
+            
+            //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
 
             lbl_pictures.Text = images.ToString();
             lbl_strips.Text = ((int)(strips / 2)).ToString();
