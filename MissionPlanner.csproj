@@ -368,6 +368,9 @@
     <Compile Include="GCSViews\ConfigurationView\ConfigWizard.Designer.cs">
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\TransparentLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GCSViews\Tiles.cs" />
     <Compile Include="Joystick\Joy_Do_Repeat_Servo.cs">
       <SubType>Form</SubType>

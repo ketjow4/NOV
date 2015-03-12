@@ -58,6 +58,8 @@ namespace MissionPlanner.Controls
 
         bool started = false;
 
+        public string warning;
+
         public bool SixteenXNine = false;
 
         static ImageCodecInfo ici = GetImageCodec("image/jpeg");
@@ -1581,7 +1583,7 @@ namespace MissionPlanner.Controls
                 graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
 
                 // draw armed
-
+                warning = "";
                 if (status != statuslast)
                 {
                     armedtimer = DateTime.Now;
@@ -1589,32 +1591,50 @@ namespace MissionPlanner.Controls
 
                 if (status == false) // not armed
                 {
-                    //if ((armedtimer.AddSeconds(8) > DateTime.Now))
+                    if ((armedtimer.AddSeconds(8) > DateTime.Now))
                     {
+                        warning += "DISARMED ";
                         //drawstring(graphicsObject, "DISARMED", font, fontsize + 10, (SolidBrush)Brushes.Red, -85, halfheight / -3);
                         statuslast = status;
                     }
+                    else
+                        warning = "";
                 }
                 else if (status == true) // armed
                 {
                     if ((armedtimer.AddSeconds(8) > DateTime.Now))
                     {
+                        warning += "ARMED ";
                         //drawstring(graphicsObject, "ARMED", font, fontsize + 20, (SolidBrush)Brushes.Red, -70, halfheight / -3);
                         statuslast = status;
                     }
+                    else
+                        warning = "";
                 }
 
                 if (failsafe == true)
                 {
+                    warning += "FAILSAFE ";
                     //drawstring(graphicsObject, "FAILSAFE", font, fontsize + 20, (SolidBrush)Brushes.Red, -85, halfheight / -5);
                     statuslast = status;
+                }
+                else
+                {
+                    //if (warning.Contains("ARMED "))
+                    //    warning.Remove(6);
+                    //else
+                    //    warning.Remove(9);
                 }
 
                 if (message != "" && messagetime.AddSeconds(15) > DateTime.Now)
                 {
+                    warning += message;
                     //drawstring(graphicsObject, message, font, fontsize + 10, (SolidBrush)Brushes.Red, -halfwidth + 50, halfheight / 3);
                 }
-
+                else
+                {
+                    warning = "";
+                }
 
 
                 graphicsObject.ResetTransform();

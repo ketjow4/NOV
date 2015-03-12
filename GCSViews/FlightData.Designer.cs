@@ -130,6 +130,9 @@ namespace MissionPlanner.GCSViews
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+
+            this.warning = new TransparentLabel();
+
             this.lbl_hdop = new MissionPlanner.Controls.MyLabel();
             this.lbl_sats = new MissionPlanner.Controls.MyLabel();
             this.gMapControl1 = new MissionPlanner.Controls.myGMAP();
@@ -1593,6 +1596,19 @@ namespace MissionPlanner.GCSViews
             //this.splitContainer1.Panel2.Controls.Add(this.lbl_sats);
             this.splitContainer1.Panel2.Controls.Add(this.gMapControl1);
             this.splitContainer1.Panel2.Controls.Add(this.TRK_zoom);
+
+            this.splitContainer1.Panel2.Controls.Add(this.warning);
+            this.warning.Size = new Size(500, 50);
+            this.warning.BackColor = Color.Transparent;
+            this.warning.Location = new Point(500, 500);
+            this.warning.BringToFront();
+
+            
+            
+            
+
+
+
             // 
             // zg1
             // 
@@ -1891,7 +1907,7 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.SplitContainer MainH;
         private System.Windows.Forms.SplitContainer SubMainLeft;
         private System.Windows.Forms.ToolStripMenuItem goHereToolStripMenuItem;
-        private Controls.HUD hud1;
+        public Controls.HUD hud1;
         private Controls.MyButton BUT_clear_track;
         private System.Windows.Forms.CheckBox CB_tuning;
         private Controls.MyButton BUT_RAWSensor;
@@ -1982,6 +1998,7 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        public  TransparentLabel warning;
         private System.Windows.Forms.TabPage tabScripts;
         private Controls.MyButton BUT_edit_selected;
         private System.Windows.Forms.Label labelSelectedScript;
@@ -2020,6 +2037,7 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.ToolStripMenuItem addPoiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
+        public Panel warningPanel;
 
     }
 }
