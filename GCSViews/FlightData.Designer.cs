@@ -1600,7 +1600,7 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.Panel2.Controls.Add(this.warning);
             this.warning.Size = new Size(500, 50);
             this.warning.BackColor = Color.Transparent;
-            this.warning.Location = new Point(500, 500);
+            this.warning.Location = new Point(500, 500);        //TODO change when there will be resolution settings
             this.warning.BringToFront();
 
             
@@ -2037,7 +2037,5 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.ToolStripMenuItem addPoiToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
-        public Panel warningPanel;
-
     }
 }

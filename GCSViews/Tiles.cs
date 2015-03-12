@@ -134,6 +134,7 @@ namespace MissionPlanner.GCSViews
                 var conBut = sender as Label;
                 if (connected == false)  //connect
                 {
+                    FlightData.instance.warning.Visible = true;
                     MainV2.instance.MenuConnect_Click(null, null);
                     if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                     {
@@ -144,6 +145,8 @@ namespace MissionPlanner.GCSViews
                 }
                 else                    //disconnect
                 {
+                    FlightData.instance.warning.Visible = false;
+                    FlightData.instance.hud1.warning = "";
                     MainV2.instance.MenuConnect_Click(null, null);
                             windSpeed.Visible = true;
                             FlightData.instance.windDir1.Visible = true;

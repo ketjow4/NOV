@@ -124,10 +124,15 @@ public class TransparentLabel : DrawingArea
     public string Text { set; get; }
 
 
+    public TransparentLabel()
+    {
+        this.Visible = false;
+    }
+
     protected override void OnDraw()
     {
         text = MissionPlanner.GCSViews.FlightData.instance.hud1.warning;
-        float fontSize = 17.25f;
+        float fontSize = 24.00f;
         Point textPosition = new Point(0, 0);
         DrawText(text, "Microsoft Sans Serif", fontSize
             , FontStyle.Regular, Brushes.Red, textPosition);
