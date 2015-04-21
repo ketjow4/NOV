@@ -153,14 +153,18 @@ namespace MissionPlanner.GCSViews
                     connected = false;
                 }
             }));
-
+            
             foreach (var tile in commonTiles)
             {
                 //TODO: transparent
                 var panel = new Panel
                 {
-                    Size = new Size(168, 64),
-                    Location = new Point(tile.Column * 170, tile.Row * 66),
+                    //Size = new Size(168, 64),
+                    //Location = new Point(tile.Column * 170, tile.Row * 66),
+                    //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
+                    //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
+                    Size = new Size(130, 55),
+                    Location = new Point(tile.Column * 132, tile.Row * 57),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
                 };
                 panel.Controls.Add(tile.Label);
@@ -215,25 +219,44 @@ namespace MissionPlanner.GCSViews
             });
 
 
+            XmlHelper.ReadCameraName("noveltyCam.xml");
+
             TileData obsHeadBtn = null;
-            TileButton defaultHead, cam1Head, cam2Head, accept;
-            defaultHead = cam1Head = cam2Head = accept = null;
-            defaultHead = new TileButton("DEFAULT", 2, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Default"; if (!pathAccepted) calcGrid(null, null); obsHeadBtn.Value = camName; });
-            cam1Head = new TileButton("NOV 1", 3, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 1"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
-            cam2Head = new TileButton("NOV 2", 4, 3, (sender, args) => { cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false; camName = "Nov 2"; if (!pathAccepted)calcGrid(null, null); obsHeadBtn.Value = camName; });
+            TileButton accept;
+            accept = null;
+
+            List<TileButton> cameras_buttons = new List<TileButton>();
+
+            int i = 0;
+            foreach (var camera in XmlHelper.cameras)
+            {
+                cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, (sender, args) => { cameras_buttons.ForEach(cam => cam.Visible = false); /*cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false;*/  camName = (sender as Label).Text; if (!pathAccepted) calcGrid(null, null); obsHeadBtn.Value = camName; }));
+                i++;
+            }
+
 
             
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "",(sender, args) =>
             {
-                var x = !defaultHead.Visible;
-                defaultHead.Visible = cam1Head.Visible = cam2Head.Visible = x;    
+                var x = !cameras_buttons.ElementAt(0).Visible;
+                cameras_buttons.ForEach(cam => cam.Visible = x);
             });
 
+            obsHeadBtn.ValueLabel.Width = 100;   
             obsHeadBtn.Value = "Default";
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, defaultHead, cam1Head, cam2Head, accept };
+            var list = (TileInfo[])cameras_buttons.ToArray();
+
+            List<TileInfo> hidelist2 = new List<TileInfo>();
+
+
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, accept,};
+
+            hidelist2.AddRange(hideList);
+            hidelist2.AddRange(list);
+         
             obsHeadBtn.ClickMethod(null,null);
 
 
@@ -249,7 +272,6 @@ namespace MissionPlanner.GCSViews
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
-                cam2Head,defaultHead,cam1Head,                                            
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
                 accept,
 
@@ -310,6 +332,7 @@ namespace MissionPlanner.GCSViews
                new TileButton("LOAD WP FILE", 1,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
                
             });
+            tilesFlightPlanning.AddRange(cameras_buttons);
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
 
@@ -322,17 +345,21 @@ namespace MissionPlanner.GCSViews
                 //TODO: transparent
                 var panel = new Panel
                 {
-                    Size = new Size(168, 64),
-                    Location = new Point(tile.Column * 170, tile.Row * 66),
+                    //Size = new Size(168, 64),
+                    //Location = new Point(tile.Column * 170, tile.Row * 66),
+                    //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
+                    //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
+                    Size = new Size(130, 55),
+                    Location = new Point(tile.Column * 132, tile.Row * 57),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
                     Parent = p
                 };
 
                 panel.Controls.Add(tile.Label);
-
+                 
                 p.Controls.Add(panel);
                 panel.BringToFront();
-                if (hideList.Contains(tile) && tile is TileButton)
+                if(hidelist2.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
             }
         }
@@ -373,17 +400,23 @@ namespace MissionPlanner.GCSViews
         {
             this.unit = unit;
             ClickMethod = handler;
-            panel = new Panel { Size = new Size(163, 64) };
+            //panel = new Panel { Size = new Size(163, 64) };
+            //panel = new Panel { Size = new Size((int)(MainV2.View.Width * 0.1019), (int)(MainV2.View.Height * 0.072)) };
+            panel = new Panel { Size = new Size(127, 55) };
             // panel.Dock = DockStyle.Fill;
             ;
             var headLabel = new Label()
             {
                 Text = text,
                 ForeColor = Color.FromArgb(255, 41, 171, 226),
-                Font = new Font("Century Gothic", 10, FontStyle.Italic),
-                Top = 10,
-                Left = 10,
-                Width = 168,
+                //Font = new Font("Century Gothic", 10, FontStyle.Italic),
+                Font = new Font("Century Gothic", 8, FontStyle.Italic),
+                //Top = 10,
+                //Left = 10,
+                //Width = 168,
+                Top = 7,
+                Left = 7,
+                Width = 130,
                 TextAlign = ContentAlignment.TopLeft
 
             };
@@ -391,22 +424,31 @@ namespace MissionPlanner.GCSViews
             {
                 Text = unit,
                 ForeColor = Color.White,
-                Font = new Font("Century Gothic", 12),
+                //Font = new Font("Century Gothic", 12),
+                Font = new Font("Century Gothic", 10),
                 TextAlign = ContentAlignment.BottomRight,
             };
-            unitLabel.Top = 64 - unitLabel.Height - 12;
-            unitLabel.Left = 168 - unitLabel.Width - 10;
+            //unitLabel.Top = 64 - unitLabel.Height - 12;
+            //unitLabel.Left = 168 - unitLabel.Width - 10;
+            unitLabel.Top = 55 - unitLabel.Height - 8;
+            unitLabel.Left = 130 - unitLabel.Width - 0;
 
             valueLabel = new Label()
             {
                 ForeColor = Color.White,
-                Font = new Font("Century Gothic", 18),
-                Left = 10,
+                //Font = new Font("Century Gothic", 18),
+                Font = new Font("Century Gothic", 15),
+                //Left = 10,
+                //Text = "0",
+                //Height = 25,
+                Left = 4,
                 Text = "0",
-                Height = 25,
+                Height = 20,
+                Width = 80,         //new for 1280x800 design
                 Name = text.Replace(' ', '_').Replace('\n', '_')
             };
-            valueLabel.Top = 64 - valueLabel.Height - 12;
+            //valueLabel.Top = 64 - valueLabel.Height - 12;
+            valueLabel.Top = 55 - valueLabel.Height - 8;
             panel.Controls.Add(unitLabel);
             panel.Controls.Add(valueLabel);
             valueLabel.BringToFront();
@@ -419,6 +461,11 @@ namespace MissionPlanner.GCSViews
             panel.Dock = DockStyle.Fill;
         }
         public EventHandler ClickMethod;
+
+        public Label ValueLabel
+        {
+            get { return valueLabel; }
+        }
 
         public override Control Label
         {
@@ -455,7 +502,8 @@ namespace MissionPlanner.GCSViews
                 AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-                Font = new Font("Century Gothic", 14)
+                //Font = new Font("Century Gothic", 14)
+                Font = new Font("Century Gothic", 11)
             };
             label.Click += ClickMethod;
         }

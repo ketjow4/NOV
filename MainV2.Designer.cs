@@ -230,7 +230,8 @@ namespace MissionPlanner
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-
+            this.Size = new System.Drawing.Size(1280,800);
+            //this.AutoSize = false;
         }
 
         #endregion

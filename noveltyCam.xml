@@ -24,4 +24,12 @@
     <senh>4.5</senh>
     <senw>6.0</senw>
   </Camera>
+  <Camera>
+    <name>Nov 3</name>
+    <flen>3</flen>
+    <imgh>2048</imgh>
+    <imgw>1024</imgw>
+    <senh>4.5</senh>
+    <senw>6.0</senw>
+  </Camera>
 </Cameras>

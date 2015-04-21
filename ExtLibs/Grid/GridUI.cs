@@ -698,10 +698,17 @@ namespace MissionPlanner
 
 
             double flyspeedms = 0;
+
             //MainV2.comPort.MAV.cs.firmware
             //if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+
+            if (File.Exists("ARDU.xml"))
             {
                 flyspeedms = ReadAvgSpeed("ARDU.xml");
+            }
+            else
+            {
+                flyspeedms = 5.0;
             }
             
             //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);

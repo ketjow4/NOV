@@ -91,17 +91,17 @@ namespace MissionPlanner
             if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png"))
                 Logo = new Bitmap(Application.StartupPath + Path.DirectorySeparatorChar + "logo.png");
 
-            if (name == "VVVVZ")
-            {
-                vvvvz = true;
-                // set pw
-                MainV2.config["password"] = "viDQSk/lmA2qEE8GA7SIHqu0RG2hpkH973MPpYO87CI=";
-                MainV2.config["password_protect"] = "True";
-                // prevent wizard
-                MainV2.config["newuser"] = "11/02/2014";
-                // invalidate update url
-                System.Configuration.ConfigurationManager.AppSettings["UpdateLocationVersion"] = "";
-            }
+            //if (name == "VVVVZ")
+            //{
+            //    vvvvz = true;
+            //    // set pw
+            //    MainV2.config["password"] = "viDQSk/lmA2qEE8GA7SIHqu0RG2hpkH973MPpYO87CI=";
+            //    MainV2.config["password_protect"] = "True";
+            //    // prevent wizard
+            //    MainV2.config["newuser"] = "11/02/2014";
+            //    // invalidate update url
+            //    System.Configuration.ConfigurationManager.AppSettings["UpdateLocationVersion"] = "";
+            //}
 
             CleanupFiles();
 

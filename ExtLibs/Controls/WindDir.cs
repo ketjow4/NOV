@@ -34,8 +34,8 @@ namespace MissionPlanner.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
            // e.Graphics.Clear(Color.Transparent);
-            this.Width = 64;
-            this.Height = 64;
+            this.Width = 55;
+            this.Height = 55;
             try
             {
 

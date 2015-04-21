@@ -52,6 +52,8 @@ abstract public class DrawingArea : Panel
         // Calls the OnDraw subclass method
         OnDraw();
         this.Invalidate();
+
+        //this.InvokePaint(this, new PaintEventArgs(graphics,this.ClientRectangle)); //TODO CHCECK HERE LATER 
         //this.BringToFront();
     }
 
@@ -127,12 +129,16 @@ public class TransparentLabel : DrawingArea
     public TransparentLabel()
     {
         this.Visible = false;
+        this.DoubleBuffered = true;
     }
 
     protected override void OnDraw()
     {
+        //pobawić się z layoutem żeby wszystko działało tak jak powinno!!!!! 
+
         text = MissionPlanner.GCSViews.FlightData.instance.hud1.warning;
         float fontSize = 24.00f;
+        this.Size = new Size((int)text.Length * 8, (int)fontSize * 2);      //TODO chceck if this is working
         Point textPosition = new Point(0, 0);
         DrawText(text, "Microsoft Sans Serif", fontSize
             , FontStyle.Regular, Brushes.Red, textPosition);

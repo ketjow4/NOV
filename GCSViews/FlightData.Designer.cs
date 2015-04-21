@@ -285,12 +285,15 @@ namespace MissionPlanner.GCSViews
             // SubMainLeft
             // 
             this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
-            //this.SubMainLeft.Size = new Size(235, 195);
-            //this.SubMainLeft.Location = new Point(0, 403);
-            //this.SubMainLeft.Panel2Collapsed = true;
-            //this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
-            //this.SubMainLeft.Name = "SubMainLeft";
+            //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
+
+            //responsive 
+            
+            this.SubMainLeft.Size = new Size(210, 157);
+            this.SubMainLeft.Location = new Point(0, 570);
+            this.SubMainLeft.Panel2Collapsed = true;
+            this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
+            this.SubMainLeft.Name = "SubMainLeft";
             // 
             // SubMainLeft.Panel1
             // 
@@ -1598,9 +1601,11 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.Panel2.Controls.Add(this.TRK_zoom);
 
             this.splitContainer1.Panel2.Controls.Add(this.warning);
+            //this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            //this.AutoSize = true;
             this.warning.Size = new Size(500, 50);
             this.warning.BackColor = Color.Transparent;
-            this.warning.Location = new Point(500, 500);        //TODO change when there will be resolution settings
+            this.warning.Location = new Point(640, 400);        //TODO change when there will be resolution settings
             this.warning.BringToFront();
 
             
@@ -1633,7 +1638,7 @@ namespace MissionPlanner.GCSViews
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
-            this.windDir1.Location = new Point(168, 594);
+            this.windDir1.Location = new Point(130, 513);       //change
             // 
             // bindingSource1
             // 

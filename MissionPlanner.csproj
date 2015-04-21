@@ -372,6 +372,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GCSViews\Tiles.cs" />
+    <Compile Include="GCSViews\XmlHelper.cs" />
     <Compile Include="Joystick\Joy_Do_Repeat_Servo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -6220,7 +6221,6 @@
     <None Include="Resources\quadhover_12.png" />
     <None Include="Resources\quadhover_14.png" />
     <None Include="Resources\maggps.png" />
-    <Content Include="mpdesktop.ico" />
     <Content Include="noveltyCam.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
