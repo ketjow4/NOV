@@ -330,7 +330,35 @@ namespace MissionPlanner.GCSViews
 
                new TileButton("SAVE WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
                new TileButton("LOAD WP FILE", 1,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
-               
+               new TileButton("LOAD WP PLATFORM",2,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
+
+               new TileButton("SHOW WP",3,8,(sender,args) => 
+               {
+                   Form wp = new Form();
+                   System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightPlanner));
+
+                   Panel panel = new Panel();
+                   //panel.Dock = DockStyle.Fill;
+
+                   resources.ApplyResources(panel, "panelBASE");
+
+                   wp.Size = new Size(850, 400);
+                   wp.FormBorderStyle = FormBorderStyle.FixedSingle;
+                   wp.StartPosition = FormStartPosition.CenterScreen;
+
+                   FlightPlanner.instance.panelWaypoints.Visible = true;
+                   FlightPlanner.instance.panelWaypoints.Dock = DockStyle.Fill;
+                   //FlightPlanner.instance.panelWaypoints.
+                   panel.Controls.Add(FlightPlanner.instance.panelWaypoints);
+                   wp.Controls.Add(panel);
+
+                   wp.FormClosing += (sender3, args3) => { FlightPlanner.instance.panelWaypoints.Visible = false;}; 
+                   wp.FormClosed += (sender2, args2) => { FlightPlanner.instance.panelWaypoints.Visible = false;};
+
+                   wp.ShowDialog();
+               }),
+
+
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
 

@@ -671,7 +671,7 @@ namespace MissionPlanner.GCSViews
 
             writeKML();
 
-            panelWaypoints.Expand = false;
+            //panelWaypoints.Expand = false;
 
             // switch the action and wp table
             if (MainV2.getConfig("FP_docking") == "Bottom")
