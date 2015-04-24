@@ -5147,9 +5147,9 @@ namespace MissionPlanner.GCSViews
         public void takeoffToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // altitude
-            string alt = "10";
+            string alt = "30";
 
-            if (System.Windows.Forms.DialogResult.Cancel == InputBox.Show("Altitude", "Please enter your takeoff altitude", ref alt))
+            if (System.Windows.Forms.DialogResult.Cancel == InputBox2.Show("Altitude", "Please enter your takeoff altitude", ref alt))
                 return;
 
             int alti = -1;
@@ -5159,20 +5159,21 @@ namespace MissionPlanner.GCSViews
                 MessageBox.Show("Bad Alt");
                 return;
             }
+            //if (alti < 30) alti = 30;
 
             // take off pitch
             int topi = 0;
 
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane || MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.Ateryx)
             {
-                string top = "15";
+                string top = "0";
 
-                if (System.Windows.Forms.DialogResult.Cancel == InputBox.Show("Takeoff Pitch", "Please enter your takeoff pitch", ref top))
-                    return;
+                //if (System.Windows.Forms.DialogResult.Cancel == InputBox.Show("Takeoff Pitch", "Please enter your takeoff pitch", ref top))
+                //    return;
 
                 if (!int.TryParse(top, out topi))
                 {
-                    MessageBox.Show("Bad Takeoff pitch");
+                    //MessageBox.Show("Bad Takeoff pitch");
                     return;
                 }
             }

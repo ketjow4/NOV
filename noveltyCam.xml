@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Cameras>
   <Camera>
-    <name>Default</name>
+    <name>DEFAULT</name>
     <flen>5</flen>
     <imgh>3456</imgh>
     <imgw>4608</imgw>
@@ -9,7 +9,7 @@
     <senw>6.16</senw>
   </Camera>
     <Camera>
-    <name>Nov 1</name>
+    <name>NOV 1</name>
     <flen>4</flen>
     <imgh>4096</imgh>
     <imgw>2560</imgw>
@@ -17,7 +17,7 @@
     <senw>5.2</senw>
   </Camera>
     <Camera>
-    <name>Nov 2</name>
+    <name>NOV 2</name>
     <flen>3</flen>
     <imgh>2048</imgh>
     <imgw>1024</imgw>
@@ -25,7 +25,7 @@
     <senw>6.0</senw>
   </Camera>
   <Camera>
-    <name>Nov 3</name>
+    <name>NOV 3</name>
     <flen>3</flen>
     <imgh>2048</imgh>
     <imgw>1024</imgw>

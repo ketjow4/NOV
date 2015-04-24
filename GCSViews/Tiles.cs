@@ -14,7 +14,7 @@ namespace MissionPlanner.GCSViews
 
         public static bool pathAccepted = true;
 
-        public static string camName = "Default";
+        public static string camName = "DEFAULT";
 
         static TileData altInfo = null;
         static TileData angleInfo = null;
@@ -26,8 +26,8 @@ namespace MissionPlanner.GCSViews
         private static bool connected = false;
         private static TileData windSpeed = null;
 
-        private static int altMin = 75;
-        private static int altMax = 450;
+        private static int altMin = 30;
+        private static int altMax = 30000;
 
         private static double groundRes;
 
@@ -181,8 +181,8 @@ namespace MissionPlanner.GCSViews
             var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { ChangeAngle(-5); });
             TileButton angleBtnOk = null;
             angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
-            var altBtnUp = new TileButton("+10", 2, 5, (sender, args) => ChangeAlt(10));
-            var altBtnDown = new TileButton("-10", 3, 5, (sender, args) => ChangeAlt(-10));
+            var altBtnUp = new TileButton("+5", 2, 5, (sender, args) => ChangeAlt(5));
+            var altBtnDown = new TileButton("-5", 3, 5, (sender, args) => ChangeAlt(-5));
             TileButton altBtnOk = null;
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
@@ -212,8 +212,8 @@ namespace MissionPlanner.GCSViews
                 new TileData("DISTANCE TO HOME", 1, 2, "km"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
-                new TileData("GPSHDOP", 1, 5, ""),              //TODO  change here to gpshdop and sat count
-                new TileData("GPS SAT COUNT", 2, 5, ""),              //TODO  change here to gpshdop and sat count
+                new TileData("GPSHDOP", 1, 5, ""),              
+                new TileData("GPS SAT COUNT", 2, 5, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),            
                 windSpeed,
             });
@@ -242,8 +242,8 @@ namespace MissionPlanner.GCSViews
                 cameras_buttons.ForEach(cam => cam.Visible = x);
             });
 
-            obsHeadBtn.ValueLabel.Width = 100;   
-            obsHeadBtn.Value = "Default";
+            obsHeadBtn.ValueLabel.Width = 120;   
+            obsHeadBtn.Value = "DEFAULT";
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
 
@@ -415,7 +415,7 @@ namespace MissionPlanner.GCSViews
                 //Left = 10,
                 //Width = 168,
                 Top = 7,
-                Left = 7,
+                Left = 2,
                 Width = 130,
                 TextAlign = ContentAlignment.TopLeft
 

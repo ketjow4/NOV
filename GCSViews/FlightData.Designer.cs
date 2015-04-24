@@ -289,7 +289,7 @@ namespace MissionPlanner.GCSViews
 
             //responsive 
             
-            this.SubMainLeft.Size = new Size(210, 157);
+            this.SubMainLeft.Size = new Size(270, 203);
             this.SubMainLeft.Location = new Point(0, 570);
             this.SubMainLeft.Panel2Collapsed = true;
             this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
