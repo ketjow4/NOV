@@ -368,6 +368,7 @@
     <Compile Include="GCSViews\ConfigurationView\ConfigWizard.Designer.cs">
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
     <Compile Include="GCSViews\TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>

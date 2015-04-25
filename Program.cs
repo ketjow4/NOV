@@ -66,6 +66,7 @@ namespace MissionPlanner
             Controls.MainSwitcher.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox2.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
+            MissionPlanner.GCSViews.FlightPlannerWaypointsForm.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
 
             // setup settings provider
             MissionPlanner.Comms.CommsBase.Settings += CommsBase_Settings;
@@ -190,11 +191,11 @@ namespace MissionPlanner
           //  if (Debugger.IsAttached)
           //      ThemeManager.doxamlgen();
 
-            if (File.Exists("simple.txt"))
-            {
-                Application.Run(new GCSViews.Simple());
-                return;
-            }
+            //if (File.Exists("simple.txt"))
+            //{
+            //    Application.Run(new GCSViews.Simple());
+            //    return;
+            //}
 
             Splash = new MissionPlanner.Splash();
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();

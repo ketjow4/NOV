@@ -334,28 +334,7 @@ namespace MissionPlanner.GCSViews
 
                new TileButton("SHOW WP",3,8,(sender,args) => 
                {
-                   Form wp = new Form();
-                   System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightPlanner));
-
-                   Panel panel = new Panel();
-                   //panel.Dock = DockStyle.Fill;
-
-                   resources.ApplyResources(panel, "panelBASE");
-
-                   wp.Size = new Size(850, 400);
-                   wp.FormBorderStyle = FormBorderStyle.FixedSingle;
-                   wp.StartPosition = FormStartPosition.CenterScreen;
-
-                   FlightPlanner.instance.panelWaypoints.Visible = true;
-                   FlightPlanner.instance.panelWaypoints.Dock = DockStyle.Fill;
-                   //FlightPlanner.instance.panelWaypoints.
-                   panel.Controls.Add(FlightPlanner.instance.panelWaypoints);
-                   wp.Controls.Add(panel);
-
-                   wp.FormClosing += (sender3, args3) => { FlightPlanner.instance.panelWaypoints.Visible = false;}; 
-                   wp.FormClosed += (sender2, args2) => { FlightPlanner.instance.panelWaypoints.Visible = false;};
-
-                   wp.ShowDialog();
+                   FlightPlannerWaypointsForm.Show();
                }),
 
 
