@@ -5096,7 +5096,20 @@ namespace MissionPlanner.GCSViews
 
             ChangeColumnHeader(MAVLink.MAV_CMD.LAND.ToString());
 
-            setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, 1);
+            //HOME
+            //double.Parse(TXT_homelat.Text), double.Parse(TXT_homelng.Text), (int)double.Parse(TXT_homealt.Text)
+
+            //OLD CALL
+            //setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, 1);
+
+            if (TXT_homelat.Text == "" || TXT_homelng.Text == "")       //if there is no home set land at current map  position
+            {
+                setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, 1);
+            }
+            else
+            {
+                setfromMap(double.Parse(TXT_homelat.Text), double.Parse(TXT_homelng.Text), 1);
+            }
 
             writeKML();
         }

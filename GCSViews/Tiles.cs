@@ -202,13 +202,13 @@ namespace MissionPlanner.GCSViews
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
 
-            var fsBtnUp = new TileButton("+1", 5, 8, (sender, args) => ChangeSpeed(1));
-            var fsBtnDown = new TileButton("-1", 6, 8, (sender, args) => ChangeSpeed(-1));
+            var fsBtnUp = new TileButton("+1", 4, 7, (sender, args) => ChangeSpeed(1));
+            var fsBtnDown = new TileButton("-1", 5, 7, (sender, args) => ChangeSpeed(-1));
             TileButton fsBtnOk = null;
-            fsBtnOk = new TileButton("OK", 7, 8, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
+            fsBtnOk = new TileButton("OK", 6, 7, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
 
 
-            flyingSpeed = new TileData("FLYING SPEED",4,8,"m/s", (sender, args) =>
+            flyingSpeed = new TileData("FLYING SPEED",3,7,"m/s", (sender, args) =>
             {
                 var x = !fsBtnUp.Visible;
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
@@ -240,7 +240,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPSHDOP", 1, 5, ""),              
-                new TileData("GPS SAT COUNT", 2, 5, ""),          
+                new TileData("GPS SAT COUNT", 1, 8, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
                 mode = new TileData("MODE",0,8,""),
                 windSpeed,
