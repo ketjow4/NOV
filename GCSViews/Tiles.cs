@@ -16,6 +16,7 @@ namespace MissionPlanner.GCSViews
 
         public static string camName = "DEFAULT";
 
+        static TileData flyingSpeed = null;
         static TileData altInfo = null;
         static TileData angleInfo = null;
         static TileData groundResInfo = null;
@@ -29,11 +30,15 @@ namespace MissionPlanner.GCSViews
         private static int altMin = 30;
         private static int altMax = 30000;
 
+        private static int fsMin = 1;
+        private static int fsMax = 20;
+
         private static double groundRes;
 
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
         public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
+        public static int FlyingSpeed { get { return Convert.ToInt32(flyingSpeed.Value); } }
 
         public static EventHandler calcGrid = null;
         
@@ -54,6 +59,16 @@ namespace MissionPlanner.GCSViews
             if (val < 0) val = 360;
             else if (val > 360) val = 0;
             angleInfo.Value = val.ToString();
+            if (calcGrid != null)
+                calcGrid(null, null);
+        }
+
+        public static void ChangeSpeed(int v)
+        {
+            int val = Convert.ToInt32(flyingSpeed.Value) + v;
+            if (val < fsMin) val = fsMin;
+            else if (val > fsMax) val = fsMax;
+            flyingSpeed.Value = val.ToString();
             if (calcGrid != null)
                 calcGrid(null, null);
         }
@@ -187,6 +202,18 @@ namespace MissionPlanner.GCSViews
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
 
+            var fsBtnUp = new TileButton("+1", 5, 8, (sender, args) => ChangeSpeed(1));
+            var fsBtnDown = new TileButton("-1", 6, 8, (sender, args) => ChangeSpeed(-1));
+            TileButton fsBtnOk = null;
+            fsBtnOk = new TileButton("OK", 7, 8, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
+
+
+            flyingSpeed = new TileData("FLYING SPEED",4,8,"m/s", (sender, args) =>
+            {
+                var x = !fsBtnUp.Visible;
+                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
+            });
+            flyingSpeed.Value = "1";
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
             {
                 var x = !altBtnUp.Visible;
@@ -252,7 +279,7 @@ namespace MissionPlanner.GCSViews
             List<TileInfo> hidelist2 = new List<TileInfo>();
 
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, accept,};
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, accept, fsBtnUp,fsBtnOk,fsBtnDown};
 
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(list);
@@ -274,6 +301,7 @@ namespace MissionPlanner.GCSViews
                 obsHeadBtn,
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
                 accept,
+                fsBtnDown,fsBtnOk,fsBtnUp,flyingSpeed,
 
                 groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p"),
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}}),
