@@ -322,6 +322,7 @@ namespace MissionPlanner.GCSViews
             BindSingleLabel("RADIO_SIGNAL", "linkqualitygcs");
             BindSingleLabel("GPSHDOP", "gpshdop");
             BindSingleLabel("GPS_SAT_COUNT", "satcount");
+            BindSingleLabel("MODE", "mode");
         }
 
         void BindSingleLabel(string name, string binder)
@@ -350,11 +351,14 @@ namespace MissionPlanner.GCSViews
                     if (label != null && label.Name == name)
                     {
                         Binding b = new Binding("Text", bindingSource1, binder,true);
-                        b.Format += delegate(object sentFrom, ConvertEventArgs eventargs)
+                        if (label.Name != "MODE")
                         {
-                            double value = Convert.ToDouble(eventargs.Value);
-                            eventargs.Value = value.ToString("0.##");
-                        };
+                            b.Format += delegate(object sentFrom, ConvertEventArgs eventargs)
+                            {
+                                double value = Convert.ToDouble(eventargs.Value);
+                                eventargs.Value = value.ToString("0.##");
+                            };
+                        }
                         label.DataBindings.Add(b);
                         break;
                     }

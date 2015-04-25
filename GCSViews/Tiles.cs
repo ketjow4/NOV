@@ -223,7 +223,7 @@ namespace MissionPlanner.GCSViews
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
 
             windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
-
+            TileData mode; 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}},
@@ -241,10 +241,11 @@ namespace MissionPlanner.GCSViews
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPSHDOP", 1, 5, ""),              
                 new TileData("GPS SAT COUNT", 2, 5, ""),          
-                new TileData("RADIO SIGNAL", 0, 5, "%"),            
+                new TileData("RADIO SIGNAL", 0, 5, "%"),
+                mode = new TileData("MODE",0,8,""),
                 windSpeed,
             });
-
+            mode.ValueLabel.Width = 120;
 
             XmlHelper.ReadCameraName("noveltyCam.xml");
 
