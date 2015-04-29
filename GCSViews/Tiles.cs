@@ -21,6 +21,9 @@ namespace MissionPlanner.GCSViews
         static TileData angleInfo = null;
         static TileData groundResInfo = null;
         static TileData flightTime = null;          //estimated flight time
+        static TileData distanceTile = null;
+
+        public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } } 
 
         public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
 
@@ -30,8 +33,8 @@ namespace MissionPlanner.GCSViews
         private static int altMin = 30;
         private static int altMax = 30000;
 
-        private static int fsMin = 1;
-        private static int fsMax = 20;
+        private static int fsMin = 3;
+        private static int fsMax = 8;
 
         private static double groundRes;
 
@@ -213,7 +216,7 @@ namespace MissionPlanner.GCSViews
                 var x = !fsBtnUp.Visible;
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
             });
-            flyingSpeed.Value = "1";
+            flyingSpeed.Value = "3";
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
             {
                 var x = !altBtnUp.Visible;
@@ -329,7 +332,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
                 flightTime = new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
-                new TileButton("WRITE WAYPOINTS", 2, 8, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
+                new TileButton("WRITE WAYPOINTS", 2, 0, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
                     
@@ -364,6 +367,11 @@ namespace MissionPlanner.GCSViews
                new TileButton("SHOW WP",3,8,(sender,args) => 
                {
                    FlightPlannerWaypointsForm.Show();
+               }),
+
+               distanceTile = new TileData("Distance",3,6,"km",(sender, args) => 
+               {
+                   //distanceTile.Value = distance;
                }),
 
 

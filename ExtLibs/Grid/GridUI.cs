@@ -689,7 +689,7 @@ namespace MissionPlanner
             {
                 // Meters
                 lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
-                lbl_distance.Text = routetotal.ToString("0.##") + " km";
+                lbl_distance.Text = routetotal.ToString("0.##"); // +" km";
                 //lbl_spacing.Text = NUM_spacing.Value.ToString("#") + " m";
                 lbl_grndres.Text = TXT_cmpixel.Text;
                 lbl_distbetweenlines.Text = NUM_Distance.Value.ToString("0.##") + " m";
@@ -703,6 +703,8 @@ namespace MissionPlanner
             //if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
 
             flyspeedms = Tiles.FlyingSpeed;
+
+            Tiles.Distance = lbl_distance.Text;
 
             //if (File.Exists("ARDU.xml"))
             //{
