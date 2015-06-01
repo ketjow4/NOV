@@ -1215,6 +1215,23 @@ namespace MissionPlanner.GCSViews
                     }
 
                     lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(dist + homedist, false);
+
+                    //Here added calculation of distans in waypoint mode
+                    if (dist * 1000 + homedist * 1000 < 10000)
+                    {
+                        Tiles.DistanceUnit = "m";
+                        Tiles.Distance = FormatDistance(dist * 1000 + homedist * 1000, false);
+                    }
+                    else
+                    {
+                        Tiles.DistanceUnit = "km";
+                        Tiles.Distance = FormatDistance(dist + homedist, false);
+                    }
+                    double seconds = (((dist + homedist) * 1000) / ((Tiles.FlyingSpeed) * 0.8));
+                    double secs = seconds % 60;
+                    int mins = (int)(seconds / 60) % 60;
+                    int hours = (int)(seconds / 3600) % 24;
+                    Tiles.EstimatedFlightTime = hours + ":" + mins.ToString("00") + ":" + secs.ToString("00");
                 }
 
                 setgradanddistandaz();

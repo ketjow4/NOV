@@ -717,6 +717,7 @@
             // 
             resources.ApplyResources(this.lbl_distance, "lbl_distance");
             this.lbl_distance.Name = "lbl_distance";
+            //this.lbl_distance.Location = new System.Drawing.Point(200,200);
             // 
             // lbl_homedist
             // 

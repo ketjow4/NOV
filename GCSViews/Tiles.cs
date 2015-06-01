@@ -23,7 +23,9 @@ namespace MissionPlanner.GCSViews
         static TileData flightTime = null;          //estimated flight time
         static TileData distanceTile = null;
 
-        public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } } 
+        public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } }
+
+        public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
 
         public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
 
@@ -197,8 +199,10 @@ namespace MissionPlanner.GCSViews
         {
             var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { ChangeAngle(5); });
             var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { ChangeAngle(-5); });
+            var angleBtnUp1 = new TileButton("+1", 4, 4, (sender, args) => { ChangeAngle(1); });
+            var angleBtnDown1 = new TileButton("-1", 5, 4, (sender, args) => { ChangeAngle(-1); });
             TileButton angleBtnOk = null;
-            angleBtnOk = new TileButton("OK", 4, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = false);
+            angleBtnOk = new TileButton("OK", 6, 4, (sender, args) => angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false);
             var altBtnUp = new TileButton("+5", 2, 5, (sender, args) => ChangeAlt(5));
             var altBtnDown = new TileButton("-5", 3, 5, (sender, args) => ChangeAlt(-5));
             TileButton altBtnOk = null;
@@ -283,7 +287,7 @@ namespace MissionPlanner.GCSViews
             List<TileInfo> hidelist2 = new List<TileInfo>();
 
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, accept, fsBtnUp,fsBtnOk,fsBtnDown};
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp,fsBtnOk,fsBtnDown};
 
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(list);
@@ -294,7 +298,7 @@ namespace MissionPlanner.GCSViews
             angleInfo = new TileData("ANGLE", 1, 4, "deg", (sender, args) =>
             {
                 var x = !angleBtnUp.Visible;
-                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnOk.Visible = x;
+                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
             });
 
             const string polygonmodestring = "POLYGON\nMODE";
@@ -303,7 +307,7 @@ namespace MissionPlanner.GCSViews
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
-                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, 
+                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, angleBtnUp1, angleBtnDown1, 
                 accept,
                 fsBtnDown,fsBtnOk,fsBtnUp,flyingSpeed,
 
@@ -439,6 +443,7 @@ namespace MissionPlanner.GCSViews
         private readonly string unit;
         private readonly Panel panel;
         private readonly Label valueLabel;
+        private readonly Label unitLabel;
         public TileData(string text, int row, int column, string unit = "", EventHandler handler = null)
             : base(text, row, column)
         {
@@ -464,7 +469,7 @@ namespace MissionPlanner.GCSViews
                 TextAlign = ContentAlignment.TopLeft
 
             };
-            var unitLabel = new Label()
+            unitLabel = new Label()
             {
                 Text = unit,
                 ForeColor = Color.White,
@@ -505,6 +510,11 @@ namespace MissionPlanner.GCSViews
             panel.Dock = DockStyle.Fill;
         }
         public EventHandler ClickMethod;
+
+        public Label UnitLabel
+        {
+            get { return unitLabel; }
+        }
 
         public Label ValueLabel
         {

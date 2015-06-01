@@ -704,6 +704,7 @@ namespace MissionPlanner
 
             flyspeedms = Tiles.FlyingSpeed;
 
+            Tiles.DistanceUnit = "km";
             Tiles.Distance = lbl_distance.Text;
 
             //if (File.Exists("ARDU.xml"))
@@ -714,7 +715,6 @@ namespace MissionPlanner
             //{
             //    flyspeedms = 5.0;
             //}
-            
             //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
 
             lbl_pictures.Text = images.ToString();
