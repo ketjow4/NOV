@@ -369,11 +369,12 @@
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
-    <Compile Include="GCSViews\TransparentLabel.cs">
+    <Compile Include="GCSViews\Modification\TilesClass.cs" />
+    <Compile Include="GCSViews\Modification\TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GCSViews\Tiles.cs" />
-    <Compile Include="GCSViews\XmlHelper.cs" />
+    <Compile Include="GCSViews\Modification\XmlHelper.cs" />
     <Compile Include="Joystick\Joy_Do_Repeat_Servo.cs">
       <SubType>Form</SubType>
     </Compile>

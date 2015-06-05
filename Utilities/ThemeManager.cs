@@ -18,7 +18,7 @@ namespace MissionPlanner.Utilities
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static Themes _currentTheme = Themes.BurntKermit;
+        private static Themes _currentTheme = Themes.BurntKermit; //Themes.BurntKermit;
         public static Themes CurrentTheme { get { return _currentTheme; } }
 
         public enum Themes

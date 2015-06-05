@@ -418,6 +418,8 @@ namespace MissionPlanner
 
             if (config["theme"] != null)
             {
+                
+                //change color here
                 ThemeManager.SetTheme((ThemeManager.Themes)Enum.Parse(typeof(ThemeManager.Themes), MainV2.config["theme"].ToString()));
 
                 if (ThemeManager.CurrentTheme == ThemeManager.Themes.Custom)

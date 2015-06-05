@@ -6,28 +6,32 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using IronPython.Runtime.Operations;
 
+using MissionPlanner.GCSViews.Modification; //classes for tiles
+
 namespace MissionPlanner.GCSViews
 {
     public class Tiles
     {
         public static bool armed;
-
         public static bool pathAccepted = true;
-
         public static string camName = "DEFAULT";
 
-        static TileData flyingSpeed = null;
-        static TileData altInfo = null;
-        static TileData angleInfo = null;
-        static TileData groundResInfo = null;
-        static TileData flightTime = null;          //estimated flight time
-        static TileData distanceTile = null;
-
+        public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
+        public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
+        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
+        public static int FlyingSpeed { get { return Convert.ToInt32(flyingSpeed.Value); } }
         public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } }
-
         public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
-
         public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
+
+        public static EventHandler calcGrid = null;
+
+        private static TileData flyingSpeed = null;
+        private static TileData altInfo = null;
+        private static TileData angleInfo = null;
+        private static TileData groundResInfo = null;
+        private static TileData flightTime = null;          //estimated flight time
+        private static TileData distanceTile = null;
 
         private static bool connected = false;
         private static TileData windSpeed = null;
@@ -40,14 +44,8 @@ namespace MissionPlanner.GCSViews
 
         private static double groundRes;
 
-        public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
-        public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
-        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
-        public static int FlyingSpeed { get { return Convert.ToInt32(flyingSpeed.Value); } }
-
-        public static EventHandler calcGrid = null;
         
-
+       
         public static void ChangeAlt(int v)
         {
             int val = Convert.ToInt32(altInfo.Value) + v;
@@ -86,7 +84,7 @@ namespace MissionPlanner.GCSViews
             commonTiles = new List<TileInfo>();
             
             //commonTiles.Add(groundResInfo);
-            commonTiles.Add(new TileButton("AUTO", 1, 6, (sender, e) =>
+            commonTiles.Add(new TileButton("AUTO", 1, 7, (sender, e) =>
             {
                 try
                 {
@@ -97,7 +95,7 @@ namespace MissionPlanner.GCSViews
                     CustomMessageBox.Show("The Command failed to execute", "Error");
                 }
             }, Color.FromArgb(255, 255, 51, 0)));
-            commonTiles.Add(new TileButton("RESTART", 2, 6, (sender, args) =>
+            commonTiles.Add(new TileButton("RESTART", 2, 7, (sender, args) =>
             {
                 try
                 {
@@ -108,7 +106,7 @@ namespace MissionPlanner.GCSViews
                     CustomMessageBox.Show("The command failed to execute", "Error");
                 }
             }));
-            commonTiles.Add(new TileButton("RETURN", 2, 7, (sender, args) =>
+            commonTiles.Add(new TileButton("RETURN", 2, 8, (sender, args) =>
             {
                 try
                 {
@@ -119,7 +117,7 @@ namespace MissionPlanner.GCSViews
                     CustomMessageBox.Show("The Command failed to execute", "Error");
                 }
             }));
-            commonTiles.Add(new TileButton("LAND", 1, 7, (sender, args) =>                  //index value start from 0
+            commonTiles.Add(new TileButton("LAND", 1, 8, (sender, args) =>                  //index value start from 0
             {
                 int wpCount = MainV2.comPort.getWPCount();
                 int index = 0;
@@ -136,7 +134,7 @@ namespace MissionPlanner.GCSViews
             }));
   
 
-            commonTiles.Add(new TileButton("ARM", 0, 7,
+            commonTiles.Add(new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
                     var armBut = sender as Label;
@@ -148,7 +146,7 @@ namespace MissionPlanner.GCSViews
                 }
                     ));
 
-            commonTiles.Add(new TileButton("CONNECT", 0, 6, (sender, args) =>
+            commonTiles.Add(new TileButton("CONNECT", 0, 7, (sender, args) =>
             {
 
                 var conBut = sender as Label;
@@ -195,6 +193,7 @@ namespace MissionPlanner.GCSViews
         }
 
 
+        
         public static void SetTiles(Panel p, bool isFlightMode)
         {
             var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { ChangeAngle(5); });
@@ -209,13 +208,13 @@ namespace MissionPlanner.GCSViews
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
 
-            var fsBtnUp = new TileButton("+1", 4, 7, (sender, args) => ChangeSpeed(1));
-            var fsBtnDown = new TileButton("-1", 5, 7, (sender, args) => ChangeSpeed(-1));
+            var fsBtnUp = new TileButton("+1", 2, 6, (sender, args) => ChangeSpeed(1));
+            var fsBtnDown = new TileButton("-1", 3, 6, (sender, args) => ChangeSpeed(-1));
             TileButton fsBtnOk = null;
-            fsBtnOk = new TileButton("OK", 6, 7, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
+            fsBtnOk = new TileButton("OK", 4, 6, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
 
 
-            flyingSpeed = new TileData("FLYING SPEED",3,7,"m/s", (sender, args) =>
+            flyingSpeed = new TileData("FLYING SPEED",1,6,"m/s", (sender, args) =>
             {
                 var x = !fsBtnUp.Visible;
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
@@ -231,6 +230,8 @@ namespace MissionPlanner.GCSViews
 
             windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
             TileData mode; 
+
+            //------------------------------------------------------------Flight Mode tiles
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}},
@@ -247,9 +248,9 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPSHDOP", 1, 5, ""),              
-                new TileData("GPS SAT COUNT", 1, 8, ""),          
+                new TileData("GPS SAT COUNT", 1, 6, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
-                mode = new TileData("MODE",0,8,""),
+                mode = new TileData("MODE",0,6,""),
                 windSpeed,
             });
             mode.ValueLabel.Width = 120;
@@ -364,19 +365,16 @@ namespace MissionPlanner.GCSViews
                angleInfo,
                altInfo,
 
-               new TileButton("SAVE WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
-               new TileButton("LOAD WP FILE", 1,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
-               new TileButton("LOAD WP PLATFORM",2,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
+               new TileButton("SAVE WP FILE", 3,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
+               new TileButton("LOAD WP FILE", 3,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
+               new TileButton("LOAD WP PLATFORM",4,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
 
-               new TileButton("SHOW WP",3,8,(sender,args) => 
+               new TileButton("SHOW WP",3,0,(sender,args) => 
                {
                    FlightPlannerWaypointsForm.Show();
                }),
 
-               distanceTile = new TileData("Distance",3,6,"km",(sender, args) => 
-               {
-                   //distanceTile.Value = distance;
-               }),
+               distanceTile = new TileData("Distance",0,6,"km"),
 
 
             });
@@ -413,168 +411,5 @@ namespace MissionPlanner.GCSViews
         }
     }
 
-
-
-
-    internal abstract class TileInfo
-    {
-        protected readonly string text;
-
-        public int Row { get; private set; }
-        public int Column { get; private set; }
-
-        protected TileInfo(string text, int row, int column)
-        {
-            this.text = text;
-            Row = row;
-            Column = column;
-        }
-
-        public string Text
-        {
-            get { return text; }
-        }
-
-        public abstract Control Label { get; }
-    }
-
-    internal class TileData : TileInfo
-    {
-        private readonly string unit;
-        private readonly Panel panel;
-        private readonly Label valueLabel;
-        private readonly Label unitLabel;
-        public TileData(string text, int row, int column, string unit = "", EventHandler handler = null)
-            : base(text, row, column)
-        {
-            this.unit = unit;
-            ClickMethod = handler;
-            //panel = new Panel { Size = new Size(163, 64) };
-            //panel = new Panel { Size = new Size((int)(MainV2.View.Width * 0.1019), (int)(MainV2.View.Height * 0.072)) };
-            panel = new Panel { Size = new Size(127, 55) };
-            // panel.Dock = DockStyle.Fill;
-            ;
-            var headLabel = new Label()
-            {
-                Text = text,
-                ForeColor = Color.FromArgb(255, 41, 171, 226),
-                //Font = new Font("Century Gothic", 10, FontStyle.Italic),
-                Font = new Font("Century Gothic", 8, FontStyle.Italic),
-                //Top = 10,
-                //Left = 10,
-                //Width = 168,
-                Top = 7,
-                Left = 2,
-                Width = 130,
-                TextAlign = ContentAlignment.TopLeft
-
-            };
-            unitLabel = new Label()
-            {
-                Text = unit,
-                ForeColor = Color.White,
-                //Font = new Font("Century Gothic", 12),
-                Font = new Font("Century Gothic", 10),
-                TextAlign = ContentAlignment.BottomRight,
-            };
-            //unitLabel.Top = 64 - unitLabel.Height - 12;
-            //unitLabel.Left = 168 - unitLabel.Width - 10;
-            unitLabel.Top = 55 - unitLabel.Height - 8;
-            unitLabel.Left = 130 - unitLabel.Width - 0;
-
-            valueLabel = new Label()
-            {
-                ForeColor = Color.White,
-                //Font = new Font("Century Gothic", 18),
-                Font = new Font("Century Gothic", 15),
-                //Left = 10,
-                //Text = "0",
-                //Height = 25,
-                Left = 4,
-                Text = "0",
-                Height = 20,
-                Width = 80,         //new for 1280x800 design
-                Name = text.Replace(' ', '_').Replace('\n', '_')
-            };
-            //valueLabel.Top = 64 - valueLabel.Height - 12;
-            valueLabel.Top = 55 - valueLabel.Height - 8;
-            panel.Controls.Add(unitLabel);
-            panel.Controls.Add(valueLabel);
-            valueLabel.BringToFront();
-            panel.Controls.Add(headLabel);
-            panel.Click += ClickMethod;
-            foreach (var label in panel.Controls.OfType<Label>())
-            {
-                label.Click += ClickMethod;
-            }
-            panel.Dock = DockStyle.Fill;
-        }
-        public EventHandler ClickMethod;
-
-        public Label UnitLabel
-        {
-            get { return unitLabel; }
-        }
-
-        public Label ValueLabel
-        {
-            get { return valueLabel; }
-        }
-
-        public override Control Label
-        {
-            get { return panel; }
-        }
-
-        public string Value
-        {
-            get { return valueLabel.Text; }
-            set { valueLabel.Text = value;}
-        }
-
-        public bool Visible
-        {
-            set { if (panel.Parent != null) panel.Parent.Visible = value; }
-            get { return panel.Parent != null && panel.Parent.Visible; }
-        }
-    }
-
-    internal class TileButton : TileInfo
-    {
-        private readonly Color color;
-        private Label label;
-
-        public TileButton(string text, int row, int column, EventHandler handler = null, Color? color = null)
-            : base(text, row, column)
-        {
-            this.color = color == null ? Color.White : color.GetValueOrDefault();
-            ClickMethod += handler;
-            label = new Label
-            {
-                Text = text,
-                ForeColor = this.color,
-                AutoSize = false,
-                TextAlign = ContentAlignment.MiddleCenter,
-                Dock = DockStyle.Fill,
-                //Font = new Font("Century Gothic", 14)
-                Font = new Font("Century Gothic", 11)
-            };
-            label.Click += ClickMethod;
-        }
-
-        public EventHandler ClickMethod;
-
-        public override Control Label
-        {
-            get { return label; }
-        }
-
-        public bool Visible
-        {
-            set { if (label.Parent != null) label.Parent.Visible = value; }
-            get { return label.Parent != null && label.Parent.Visible; }
-        }
-
-    }
 
 }
