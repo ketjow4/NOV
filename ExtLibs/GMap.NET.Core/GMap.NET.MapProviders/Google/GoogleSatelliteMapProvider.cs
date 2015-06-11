@@ -19,7 +19,7 @@ namespace GMap.NET.MapProviders
          Instance = new GoogleSatelliteMapProvider();
       }
 
-      public string Version = "150";
+      public string Version = "172";
 
       #region GMapProvider Members
 
