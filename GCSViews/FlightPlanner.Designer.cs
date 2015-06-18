@@ -753,7 +753,7 @@
             this.MainMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Fractional;
             this.MainMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.MainMap.ShowTileGridLines = false;
-            this.MainMap.Zoom = 0D;
+            this.MainMap.Zoom = 3D;
             this.MainMap.Paint += new System.Windows.Forms.PaintEventHandler(this.MainMap_Paint);
             // 
             // contextMenuStrip1

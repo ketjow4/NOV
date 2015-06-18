@@ -640,6 +640,7 @@ namespace MissionPlanner.GCSViews
 
             trackBar1.Value = (int)MainMap.Zoom;
 
+
             // check for net and set offline if needed
             try
             {
@@ -2368,6 +2369,7 @@ namespace MissionPlanner.GCSViews
                 lock (thisLock)
                 {
                     MainMap.Zoom = trackBar1.Value;
+                    FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
                 }
             }
             catch { }
@@ -2864,7 +2866,9 @@ namespace MissionPlanner.GCSViews
                         lock (thisLock)
                         {
                             MainMap.Position = new PointLatLng(center.Position.Lat + latdif, center.Position.Lng + lngdif);
+                            FlightData.instance.gMapControl1.Position = MainMap.Position;
                         }
+                        
                     }
                     catch { }
                 }
@@ -3063,6 +3067,7 @@ namespace MissionPlanner.GCSViews
         private void Planner_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = trackBar1.Value;
+            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -3086,6 +3091,7 @@ namespace MissionPlanner.GCSViews
         private void MainMap_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = MainMap.Zoom + 0.01;
+            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e)
@@ -3095,6 +3101,7 @@ namespace MissionPlanner.GCSViews
                 lock (thisLock)
                 {
                     MainMap.Zoom = trackBar1.Value;
+                    FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
                 }
             }
             catch { }

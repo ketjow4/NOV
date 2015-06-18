@@ -309,6 +309,7 @@ namespace MissionPlanner.GCSViews
             BindLabels();
         }
 
+
         void BindLabels()
         {
             BindSingleLabel("ALTITUDE", "alt");
@@ -525,6 +526,8 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+
+        //Pamiętać że przy każdym przełączeniu widoku jest wywoływana funkcja Activate!!!!!!!!!!!!!!!
         public void Activate()
         {
             log.Info("Activate Called");
@@ -583,25 +586,25 @@ namespace MissionPlanner.GCSViews
 
             CheckBatteryShow();
 
-            if (MainV2.getConfig("maplast_lat") != "")
-            {
-                try
-                {
-                    gMapControl1.Position = new PointLatLng(double.Parse(MainV2.getConfig("maplast_lat")), double.Parse(MainV2.getConfig("maplast_lng")));
-                    if (Math.Round(double.Parse(MainV2.getConfig("maplast_lat")), 1) == 0)
-                    {
-                        // no zoom in
-                        Zoomlevel.Value = 3;
-                        TRK_zoom.Value = 3;
-                    }
-                    else
-                    {
-                        Zoomlevel.Value = (decimal)float.Parse(MainV2.getConfig("maplast_zoom"));
-                        TRK_zoom.Value = (float)Zoomlevel.Value;
-                    }
-                }
-                catch { }
-            }
+            //if (MainV2.getConfig("maplast_lat") != "")
+            //{
+            //    try
+            //    {
+            //        gMapControl1.Position = new PointLatLng(double.Parse(MainV2.getConfig("maplast_lat")), double.Parse(MainV2.getConfig("maplast_lng")));
+            //        if (Math.Round(double.Parse(MainV2.getConfig("maplast_lat")), 1) == 0)
+            //        {
+            //            // no zoom in
+            //            Zoomlevel.Value = 3;
+            //            TRK_zoom.Value = 3;
+            //        }
+            //        else
+            //        {
+            //            Zoomlevel.Value = (decimal)float.Parse(MainV2.getConfig("maplast_zoom"));
+            //            TRK_zoom.Value = (float)Zoomlevel.Value;
+            //        }
+            //    }
+            //    catch { }
+            //}
 
             hud1.doResize();
         }
@@ -1371,7 +1374,7 @@ namespace MissionPlanner.GCSViews
                 {
                     if (lastmapposchange.Second != DateTime.Now.Second)
                     {
-                        gMapControl1.Position = currentloc;
+                        //gMapControl1.Position = currentloc;
                         lastmapposchange = DateTime.Now;
                     }
                     //hud1.Refresh();
@@ -1387,6 +1390,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     gMapControl1.Zoom = zoom;
+                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 catch { }
             });
@@ -1677,7 +1681,7 @@ namespace MissionPlanner.GCSViews
 
         private void gMapControl1_Click(object sender, EventArgs e)
         {
-
+            
         }
 
         internal PointLatLng MouseDownStart = new PointLatLng();
@@ -1736,10 +1740,12 @@ namespace MissionPlanner.GCSViews
                 if (gMapControl1.MaxZoom + 1 == (double)Zoomlevel.Value)
                 {
                     gMapControl1.Zoom = (double)Zoomlevel.Value - .1;
+                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 else
                 {
                     gMapControl1.Zoom = (double)Zoomlevel.Value;
+                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
             }
             catch { }
@@ -1757,6 +1763,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     gMapControl1.Position = new PointLatLng(gMapControl1.Position.Lat + latdif, gMapControl1.Position.Lng + lngdif);
+                    FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
                 }
                 catch { }
             }
@@ -1828,6 +1835,7 @@ namespace MissionPlanner.GCSViews
         private void gMapControl1_Resize(object sender, EventArgs e)
         {
             gMapControl1.Zoom = gMapControl1.Zoom + 0.01;
+            FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
         }
 
         internal void BUT_loadtelem_Click(object sender, EventArgs e)
@@ -2893,7 +2901,8 @@ namespace MissionPlanner.GCSViews
                 //return;
 
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
-                Tiles.armed = ans;
+                Tiles.armed = MainV2.comPort.MAV.cs.armed;
+
                 //if (ans == false)
                 //    CustomMessageBox.Show("Error: Arm message rejected by MAV", "Error");
             }
@@ -2982,10 +2991,12 @@ namespace MissionPlanner.GCSViews
                 if (gMapControl1.MaxZoom + 1 == (double)TRK_zoom.Value)
                 {
                     gMapControl1.Zoom = (double)TRK_zoom.Value - .1;
+                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 else
                 {
                     gMapControl1.Zoom = (double)TRK_zoom.Value;
+                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
             }
             catch { }

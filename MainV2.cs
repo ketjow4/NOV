@@ -798,13 +798,13 @@ namespace MissionPlanner
             log.Info("MenuConnect Start");
 
             // sanity check
-            if (comPort.BaseStream.IsOpen && MainV2.comPort.MAV.cs.groundspeed > 4)
-            {
+            //if (comPort.BaseStream.IsOpen && MainV2.comPort.MAV.cs.groundspeed > 4)
+            //{
                 //if (DialogResult.No == CustomMessageBox.Show("Your model is still moving are you sure you want to disconnect?", "Disconnect", MessageBoxButtons.YesNo))
                 //{
                 //    return;
                 //}
-            }
+            //}
 
             try
             {
@@ -830,8 +830,8 @@ namespace MissionPlanner
                 log.Info("We are disconnecting");
                 try
                 {
-                    if (speechEngine != null) // cancel all pending speech
-                        speechEngine.SpeakAsyncCancelAll();
+                    //if (speechEngine != null) // cancel all pending speech
+                    //    speechEngine.SpeakAsyncCancelAll();
 
                     comPort.BaseStream.DtrEnable = false;
                     comPort.Close();
@@ -875,7 +875,7 @@ namespace MissionPlanner
                 }
                 catch { }
 
-                this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
+                //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
                 foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
                 {
                     if (tile.Label.Text == "DISCONNECT")
@@ -1011,7 +1011,9 @@ namespace MissionPlanner
                         //id.ShowDialog();
                     }
 
-                    comPort.getParamList();
+
+                    //Pobieranie parametrów z autopilote, chwilowo niepotrzebne przyśpieszy działanie łączenia się z platformą
+                    //comPort.getParamList();
                         
                     // detect firmware we are conected to.
                         if (comPort.MAV.cs.firmware == Firmwares.ArduCopter2)
