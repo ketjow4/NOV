@@ -301,6 +301,9 @@ namespace MissionPlanner
 
             InitializeComponent();
 
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+
             MyView = new MainSwitcher(this);
 
             View = MyView;

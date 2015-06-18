@@ -250,6 +250,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPSHDOP", 1, 5, ""),              
                 new TileData("GPS SAT COUNT", 1, 6, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
+                new TileButton("EXIT",2,0, (sender,e) => { MainV2.instance.Close();}),
                 mode = new TileData("MODE",0,6,""),
                 windSpeed,
             });
