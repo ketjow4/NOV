@@ -386,6 +386,8 @@ namespace MissionPlanner.GCSViews
             MainMap.OnMarkerEnter += new MarkerEnter(MainMap_OnMarkerEnter);
             MainMap.OnMarkerLeave += new MarkerLeave(MainMap_OnMarkerLeave);
 
+            MainMap.MouseWheel += MainMap_MouseWheel;
+
             MainMap.MapScaleInfoEnabled = false;
             MainMap.ScalePen = new Pen(Color.Red);
 
@@ -494,6 +496,12 @@ namespace MissionPlanner.GCSViews
             panelAction.Visible = false;
             Tiles.SetTiles(panelBASE, false);
 
+        }
+
+        void MainMap_MouseWheel(object sender, MouseEventArgs e)
+        {
+            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
+            FlightData.instance.gMapControl1.Position = MainMap.Position;
         }
 
         void updateCMDParams()

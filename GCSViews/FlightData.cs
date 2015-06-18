@@ -262,6 +262,7 @@ namespace MissionPlanner.GCSViews
             gMapControl1.Zoom = 3;
 
             gMapControl1.OnMapZoomChanged += new MapZoomChanged(gMapControl1_OnMapZoomChanged);
+            gMapControl1.MouseWheel += gMapControl1_MouseWheel;
 
             gMapControl1.DisableFocusOnMouseEnter = true;
 
@@ -307,6 +308,12 @@ namespace MissionPlanner.GCSViews
             Tiles.SetCommonTiles();
             Tiles.SetTiles(splitContainer1.Panel2, true);
             BindLabels();
+        }
+
+        void gMapControl1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+            FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
         }
 
 
@@ -605,7 +612,7 @@ namespace MissionPlanner.GCSViews
             //    }
             //    catch { }
             //}
-
+            gMapControl1.Focus();
             hud1.doResize();
         }
 
