@@ -16,6 +16,8 @@ namespace MissionPlanner.GCSViews
         public static bool pathAccepted = true;
         public static string camName = "DEFAULT";
 
+
+        public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
         public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
@@ -32,6 +34,8 @@ namespace MissionPlanner.GCSViews
         private static TileData groundResInfo = null;
         private static TileData flightTime = null;          //estimated flight time
         private static TileData distanceTile = null;
+        private static TileButton accept = null;
+    
 
         private static bool connected = false;
         private static TileData windSpeed = null;
@@ -267,8 +271,7 @@ namespace MissionPlanner.GCSViews
             XmlHelper.ReadCameraName("noveltyCam.xml");
 
             TileData obsHeadBtn = null;
-            TileButton accept;
-            accept = null;
+
 
 
 
@@ -370,7 +373,7 @@ namespace MissionPlanner.GCSViews
                                 .OfType<ToolStripMenuItem>())
                     {
                         toolStripItem.PerformClick();
-                        accept.Visible = true;
+                        //accept.Visible = true;
                     }
                 }
             }

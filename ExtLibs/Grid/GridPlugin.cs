@@ -75,6 +75,7 @@ namespace MissionPlanner
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
+                GCSViews.Tiles.PathAcceptButtonVisible = true;
                 BackgroundWorker bw = new BackgroundWorker();
                 bw.DoWork += new DoWorkEventHandler(bw_DoWork);
                 bw.RunWorkerCompleted += backgroundWorkerCompleted;
@@ -86,6 +87,7 @@ namespace MissionPlanner
                 {
                     gridui.LoadGrid();
                     gridui.BUT_Accept_Click(sender, e);
+                    GCSViews.Tiles.PathAcceptButtonVisible = true;
                 }
                 else
                 {
