@@ -196,6 +196,8 @@ namespace MissionPlanner.GCSViews
         
         public static void SetTiles(Panel p, bool isFlightMode)
         {
+            List<TileButton> cameras_buttons = new List<TileButton>();
+
             var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { ChangeAngle(5); });
             var angleBtnDown = new TileButton("-5", 3, 4, (sender, args) => { ChangeAngle(-5); });
             var angleBtnUp1 = new TileButton("+1", 4, 4, (sender, args) => { ChangeAngle(1); });
@@ -218,12 +220,18 @@ namespace MissionPlanner.GCSViews
             {
                 var x = !fsBtnUp.Visible;
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
+                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
+                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
+                cameras_buttons.ForEach(cam => cam.Visible = false);
             });
             flyingSpeed.Value = "3";
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
             {
                 var x = !altBtnUp.Visible;
                 altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = x;
+                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
+                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
+                cameras_buttons.ForEach(cam => cam.Visible = false);
             });
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
@@ -262,7 +270,7 @@ namespace MissionPlanner.GCSViews
             TileButton accept;
             accept = null;
 
-            List<TileButton> cameras_buttons = new List<TileButton>();
+
 
             int i = 0;
             foreach (var camera in XmlHelper.cameras)
@@ -277,6 +285,9 @@ namespace MissionPlanner.GCSViews
             {
                 var x = !cameras_buttons.ElementAt(0).Visible;
                 cameras_buttons.ForEach(cam => cam.Visible = x);
+                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
+                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
+                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
             });
 
             obsHeadBtn.ValueLabel.Width = 120;   
@@ -301,6 +312,9 @@ namespace MissionPlanner.GCSViews
             {
                 var x = !angleBtnUp.Visible;
                 angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
+                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
+                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
+                cameras_buttons.ForEach(cam => cam.Visible = false);
             });
 
             const string polygonmodestring = "POLYGON\nMODE";
