@@ -67,6 +67,7 @@ namespace MissionPlanner
             MissionPlanner.Controls.InputBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox2.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.GCSViews.FlightPlannerWaypointsForm.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
+            
 
             // setup settings provider
             MissionPlanner.Comms.CommsBase.Settings += CommsBase_Settings;

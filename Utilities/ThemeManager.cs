@@ -79,8 +79,6 @@ namespace MissionPlanner.Utilities
                 default:
                     break;
             }
-
-                    
         }
 
 
@@ -188,6 +186,7 @@ namespace MissionPlanner.Utilities
             temp.Add(new GCSViews.ConfigurationView.ConfigRawParams());
             temp.Add(new GCSViews.ConfigurationView.ConfigSimplePids());
             temp.Add(new GCSViews.ConfigurationView.ConfigTradHeli());
+
 
             foreach (var ctl in temp)
             {

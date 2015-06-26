@@ -141,6 +141,16 @@ namespace MissionPlanner.GCSViews
             commonTiles.Add(new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
+                    PreFlightCheck window = new PreFlightCheck();
+
+                    if (window.ShowDialog() == DialogResult.OK)
+                    {
+                            //TODO zapis do pliku danych kto, kiedy i gdzie zrobił preflight check
+                    }
+                    else
+                        return;     //jeśli nie zaakceptowano to powrót i brak arm
+
+
                     var armBut = sender as Label;
                     FlightData.instance.BUT_ARM_Click(sender, args);
                     if (armed)
@@ -373,7 +383,6 @@ namespace MissionPlanner.GCSViews
                                 .OfType<ToolStripMenuItem>())
                     {
                         toolStripItem.PerformClick();
-                        //accept.Visible = true;
                     }
                 }
             }
