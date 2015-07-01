@@ -1603,11 +1603,11 @@ namespace MissionPlanner.GCSViews
 
             this.transparent.Parent = this.gMapControl1;
             this.transparent.Text = "";
-            this.transparent.Font = new Font("Century Gothic", 24);
+            this.transparent.Font = new Font("Century Gothic", 36);
             this.transparent.ForeColor = Color.Red;
             
-            this.transparent.Size = new System.Drawing.Size(500, 100);
-            this.transparent.Location = new Point(600, 300);
+            this.transparent.Size = new System.Drawing.Size(600, 200);
+            this.transparent.Location = new Point(340, 300);
             this.transparent.BackColor = Color.Transparent;
             this.transparent.BringToFront();
 

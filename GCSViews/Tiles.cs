@@ -341,7 +341,7 @@ namespace MissionPlanner.GCSViews
             obsHeadBtn.ValueLabel.Width = 120;
             obsHeadBtn.Value = "DEFAULT";
 
-            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
+            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; calcGrid = null; });
 
             var list = (TileInfo[])cameras_buttons.ToArray();
 
