@@ -35,6 +35,7 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.SkipButton = new MissionPlanner.Controls.MyButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,12 +51,14 @@
             // 
             // checkBox1
             // 
+            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.checkBox1.Location = new System.Drawing.Point(3, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(213, 60);
+            this.checkBox1.Size = new System.Drawing.Size(262, 68);
             this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "Mój własny tekst";
+            this.checkBox1.Text = "Battery for RC and UAV is fully charged";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // employee_data
@@ -78,24 +81,27 @@
             // 
             // checkBox2
             // 
+            this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox2.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox2.Location = new System.Drawing.Point(3, 69);
+            this.checkBox2.Location = new System.Drawing.Point(3, 77);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(213, 60);
+            this.checkBox2.Size = new System.Drawing.Size(262, 60);
             this.checkBox2.TabIndex = 7;
-            this.checkBox2.Text = "Mój własny tekst";
+            this.checkBox2.Text = "Propellers are mounted correctly";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // checkBox3
             // 
+            this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox3.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox3.Location = new System.Drawing.Point(3, 135);
+            this.checkBox3.Location = new System.Drawing.Point(3, 151);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(213, 61);
+            this.checkBox3.Size = new System.Drawing.Size(262, 61);
             this.checkBox3.TabIndex = 8;
-            this.checkBox3.Text = "Mój własny tekst";
+            this.checkBox3.Text = "No physical damege seen on UAV";
             this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // tableLayoutPanel1
             // 
@@ -110,14 +116,25 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(244, 199);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(268, 223);
             this.tableLayoutPanel1.TabIndex = 9;
+            // 
+            // SkipButton
+            // 
+            this.SkipButton.Location = new System.Drawing.Point(12, 306);
+            this.SkipButton.Name = "SkipButton";
+            this.SkipButton.Size = new System.Drawing.Size(74, 44);
+            this.SkipButton.TabIndex = 10;
+            this.SkipButton.Text = "Skip prefligh check";
+            this.SkipButton.UseVisualStyleBackColor = true;
+            this.SkipButton.Click += new System.EventHandler(this.SkipButton_Click);
             // 
             // PreFlightCheck
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(367, 362);
+            this.Controls.Add(this.SkipButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.myLabel1);
             this.Controls.Add(this.employee_data);
@@ -138,6 +155,7 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private Controls.MyButton SkipButton;
 
 
     }

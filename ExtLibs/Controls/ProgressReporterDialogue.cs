@@ -253,6 +253,19 @@ namespace MissionPlanner.Controls
         }
 
 
+        public void ShowMessage(string text)
+        {
+           
+            this.btnCancel.Visible = true;
+            this.lblProgressMessage.Text = "jdsakdjhsadsakjdsadsadsa";//text;
+            this.lblProgressMessage.Visible = true;
+            this.progressBar1.Visible = false;
+            this.btnCancel.Text = "OK";
+            this.Show();
+            //doWorkArgs.CancelRequested = true;
+        }
+
+
         private void btn_Close_Click(object sender, EventArgs e)
         {
             // we have already cancelled, and this now a 'close' button

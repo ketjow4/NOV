@@ -141,11 +141,17 @@ namespace MissionPlanner.GCSViews
             commonTiles.Add(new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
+                    if(!connected)
+                    {
+                        CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        return;
+                    }
+
                     PreFlightCheck window = new PreFlightCheck();
 
                     if (window.ShowDialog() == DialogResult.OK)
                     {
-                            //TODO zapis do pliku danych kto, kiedy i gdzie zrobił preflight check
+                          //zapis do logów jest w środku klasy PreFlightCheck
                     }
                     else
                         return;     //jeśli nie zaakceptowano to powrót i brak arm
