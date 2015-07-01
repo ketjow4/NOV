@@ -1633,12 +1633,11 @@ namespace MissionPlanner.Controls
                 }
                 else
                 {
-                    warning = "";
+                    //warning = "";
                 }
 
 
                 graphicsObject.ResetTransform();
-
 
 
                 

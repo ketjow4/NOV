@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using IronPython.Runtime.Operations;
+using System.Threading;
 
 using MissionPlanner.GCSViews.Modification; //classes for tiles
 
@@ -12,7 +13,8 @@ namespace MissionPlanner.GCSViews
 {
     public class Tiles
     {
-        public static bool armed;
+        public static bool armed = false;
+        public static bool connected = false;
         public static bool pathAccepted = true;
         public static string camName = "DEFAULT";
 
@@ -35,9 +37,9 @@ namespace MissionPlanner.GCSViews
         private static TileData flightTime = null;          //estimated flight time
         private static TileData distanceTile = null;
         private static TileButton accept = null;
-    
 
-        private static bool connected = false;
+
+
         private static TileData windSpeed = null;
 
         private static int altMin = 30;
@@ -48,15 +50,15 @@ namespace MissionPlanner.GCSViews
 
         private static double groundRes;
 
-        
-       
+
+
         public static void ChangeAlt(int v)
         {
             int val = Convert.ToInt32(altInfo.Value) + v;
             if (val < altMin) val = altMin;
             else if (val > altMax) val = altMax;
             FlightPlanner.instance.TXT_DefaultAlt.Text = altInfo.Value = val.ToString();
-            if( calcGrid != null)
+            if (calcGrid != null)
                 calcGrid(null, null);
         }
 
@@ -86,7 +88,7 @@ namespace MissionPlanner.GCSViews
         public static void SetCommonTiles()
         {
             commonTiles = new List<TileInfo>();
-            
+
             //commonTiles.Add(groundResInfo);
             commonTiles.Add(new TileButton("AUTO", 1, 7, (sender, e) =>
             {
@@ -133,30 +135,31 @@ namespace MissionPlanner.GCSViews
                         break;
                     }
                 }
-                MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);           
+                MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
                 MainV2.comPort.setWPCurrent((ushort)index);
             }));
-  
+
 
             commonTiles.Add(new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
-                    if(!connected)
+                    if (!armed)         //jeśli rozbrajamy to nie robimy preflightcheck
                     {
-                        CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        return;
+                        if (!connected)
+                        {
+                            CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                            return;
+                        }
+
+                        PreFlightCheck window = new PreFlightCheck();
+
+                        if (window.ShowDialog() == DialogResult.OK)
+                        {
+                            //zapis do logów jest w środku klasy PreFlightCheck
+                        }
+                        else
+                            return;     //jeśli nie zaakceptowano to powrót i brak arm
                     }
-
-                    PreFlightCheck window = new PreFlightCheck();
-
-                    if (window.ShowDialog() == DialogResult.OK)
-                    {
-                          //zapis do logów jest w środku klasy PreFlightCheck
-                    }
-                    else
-                        return;     //jeśli nie zaakceptowano to powrót i brak arm
-
-
                     var armBut = sender as Label;
                     FlightData.instance.BUT_ARM_Click(sender, args);
                     if (armed)
@@ -172,26 +175,28 @@ namespace MissionPlanner.GCSViews
                 var conBut = sender as Label;
                 if (connected == false)  //connect
                 {
-                    FlightData.instance.warning.Visible = true;
+                    //FlightData.instance.warning.Visible = true;
                     MainV2.instance.MenuConnect_Click(null, null);
                     if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                     {
-                                windSpeed.Visible = false;
-                                FlightData.instance.windDir1.Visible = false;
+                        windSpeed.Visible = false;
+                        FlightData.instance.windDir1.Visible = false;
                     }
-                    connected = true;
                 }
                 else                    //disconnect
                 {
-                    FlightData.instance.warning.Visible = false;
+                    //FlightData.instance.warning.Visible = false;
                     FlightData.instance.hud1.warning = "";
                     MainV2.instance.MenuConnect_Click(null, null);
-                            windSpeed.Visible = true;
-                            FlightData.instance.windDir1.Visible = true;
-                    connected = false;
+                    windSpeed.Visible = true;
+                    FlightData.instance.windDir1.Visible = true;
                 }
+
+                armed = MainV2.comPort.MAV.cs.armed;
+                if(armed)
+                    commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
             }));
-            
+
             foreach (var tile in commonTiles)
             {
                 //TODO: transparent
@@ -210,10 +215,36 @@ namespace MissionPlanner.GCSViews
                 panel.BringToFront();
             }
 
+            Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
+            thread.Start();
+
+        }
+
+        public static void RefreshTransparentLabel()
+        {
+            try
+            {
+                while(!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
+                    System.Threading.Thread.Sleep(1000);
+                string text = "";
+                while (true)
+                {
+                    FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
+                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate { FlightData.instance.transparent.Text = text; }));
+                    System.Threading.Thread.Sleep(500);
+                    if (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
+                        return;
+                }
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show("Transparent Label error" + ex.Message);
+                // log errors
+            }
         }
 
 
-        
+
         public static void SetTiles(Panel p, bool isFlightMode)
         {
             List<TileButton> cameras_buttons = new List<TileButton>();
@@ -236,7 +267,7 @@ namespace MissionPlanner.GCSViews
             fsBtnOk = new TileButton("OK", 4, 6, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
 
 
-            flyingSpeed = new TileData("FLYING SPEED",1,6,"m/s", (sender, args) =>
+            flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", (sender, args) =>
             {
                 var x = !fsBtnUp.Visible;
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
@@ -257,7 +288,7 @@ namespace MissionPlanner.GCSViews
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
 
             windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
-            TileData mode; 
+            TileData mode;
 
             //------------------------------------------------------------Flight Mode tiles
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
@@ -299,8 +330,8 @@ namespace MissionPlanner.GCSViews
             }
 
 
-            
-            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "",(sender, args) =>
+
+            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", (sender, args) =>
             {
                 var x = !cameras_buttons.ElementAt(0).Visible;
                 cameras_buttons.ForEach(cam => cam.Visible = x);
@@ -309,7 +340,7 @@ namespace MissionPlanner.GCSViews
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
             });
 
-            obsHeadBtn.ValueLabel.Width = 120;   
+            obsHeadBtn.ValueLabel.Width = 120;
             obsHeadBtn.Value = "DEFAULT";
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; });
@@ -319,12 +350,12 @@ namespace MissionPlanner.GCSViews
             List<TileInfo> hidelist2 = new List<TileInfo>();
 
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp,fsBtnOk,fsBtnDown};
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp, fsBtnOk, fsBtnDown };
 
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(list);
-         
-            obsHeadBtn.ClickMethod(null,null);
+
+            obsHeadBtn.ClickMethod(null, null);
 
 
             angleInfo = new TileData("ANGLE", 1, 4, "deg", (sender, args) =>
@@ -416,7 +447,7 @@ namespace MissionPlanner.GCSViews
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
 
             foreach (var pan in common) { pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront(); }
-            
+
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
 
             foreach (var tile in tilesArray)
@@ -435,10 +466,10 @@ namespace MissionPlanner.GCSViews
                 };
 
                 panel.Controls.Add(tile.Label);
-                 
+
                 p.Controls.Add(panel);
                 panel.BringToFront();
-                if(hidelist2.Contains(tile) && tile is TileButton)
+                if (hidelist2.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
             }
         }

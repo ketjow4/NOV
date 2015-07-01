@@ -136,7 +136,7 @@ public class TransparentLabel : DrawingArea
     {
         //pobawić się z layoutem żeby wszystko działało tak jak powinno!!!!! 
 
-        text = MissionPlanner.GCSViews.FlightData.instance.hud1.warning;
+        text = "";  //MissionPlanner.GCSViews.FlightData.instance.hud1.warning;
         float fontSize = 24.00f;
         this.Size = new Size((int)text.Length * 8, (int)fontSize * 2);      //TODO chceck if this is working
         Point textPosition = new Point(0, 0);

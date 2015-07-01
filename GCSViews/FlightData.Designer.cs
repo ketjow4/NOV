@@ -131,7 +131,7 @@ namespace MissionPlanner.GCSViews
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
 
-            this.warning = new TransparentLabel();
+            this.transparent = new Label();
 
             this.lbl_hdop = new MissionPlanner.Controls.MyLabel();
             this.lbl_sats = new MissionPlanner.Controls.MyLabel();
@@ -1600,15 +1600,21 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.Panel2.Controls.Add(this.gMapControl1);
             this.splitContainer1.Panel2.Controls.Add(this.TRK_zoom);
 
-            this.splitContainer1.Panel2.Controls.Add(this.warning);
-            //this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            //this.AutoSize = true;
-            this.warning.Size = new Size(500, 50);
-            this.warning.BackColor = Color.Transparent;
-            this.warning.Location = new Point(640, 400);        //TODO change when there will be resolution settings
-            this.warning.BringToFront();
 
+            this.transparent.Parent = this.gMapControl1;
+            this.transparent.Text = "";
+            this.transparent.Font = new Font("Century Gothic", 24);
+            this.transparent.ForeColor = Color.Red;
             
+            this.transparent.Size = new System.Drawing.Size(500, 100);
+            this.transparent.Location = new Point(600, 300);
+            this.transparent.BackColor = Color.Transparent;
+            this.transparent.BringToFront();
+
+            this.transparent.Click += new System.EventHandler(this.gMapControl1_Click);
+            this.transparent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseDown);
+            this.transparent.MouseLeave += new System.EventHandler(this.gMapControl1_MouseLeave);
+            this.transparent.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseMove);
             
             
 
@@ -2003,7 +2009,9 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        public  TransparentLabel warning;
+
+        public Label transparent;
+
         private System.Windows.Forms.TabPage tabScripts;
         private Controls.MyButton BUT_edit_selected;
         private System.Windows.Forms.Label labelSelectedScript;

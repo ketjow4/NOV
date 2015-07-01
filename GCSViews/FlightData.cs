@@ -2908,6 +2908,8 @@ namespace MissionPlanner.GCSViews
                 //return;
 
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
+
+                System.Threading.Thread.Sleep(1000);         //wait for MAV change state to ARMED
                 Tiles.armed = MainV2.comPort.MAV.cs.armed;
 
                 //if (ans == false)

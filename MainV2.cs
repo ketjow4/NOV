@@ -882,7 +882,10 @@ namespace MissionPlanner
                 foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
                 {
                     if (tile.Label.Text == "DISCONNECT")
+                    {
                         tile.Label.Text = "CONNECT";
+                        GCSViews.Tiles.connected = false;
+                    }
                 }
             }
             else
@@ -1107,7 +1110,10 @@ namespace MissionPlanner
                     foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
                     {
                         if (tile.Label.Text == "CONNECT")
+                        {
                             tile.Label.Text = "DISCONNECT";
+                            GCSViews.Tiles.connected = true;
+                        }
                     }
                 }
                 catch (Exception ex)

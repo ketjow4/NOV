@@ -98,7 +98,7 @@ namespace MissionPlanner.GCSViews
                     enabled = false;
 
                 ReadyButton.Invoke(new MethodInvoker(delegate { ReadyButton.Enabled = enabled; }));
-                System.Threading.Thread.Sleep(250);
+                System.Threading.Thread.Sleep(100);
             }
         }
 
