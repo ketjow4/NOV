@@ -139,8 +139,8 @@ namespace MissionPlanner.GCSViews
                 MainV2.comPort.setWPCurrent((ushort)index);
             }));
 
-
-            commonTiles.Add(new TileButton("ARM", 0, 8,
+            TileButton ArmButton = null;
+            ArmButton = new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
                     if (!armed)         //jeśli rozbrajamy to nie robimy preflightcheck
@@ -160,23 +160,24 @@ namespace MissionPlanner.GCSViews
                         else
                             return;     //jeśli nie zaakceptowano to powrót i brak arm
                     }
-                    var armBut = sender as Label;
                     FlightData.instance.BUT_ARM_Click(sender, args);
                     if (armed)
-                        armBut.Text = "DISARM";
+                        ArmButton.Label.Text = "DISARM";
                     else
-                        armBut.Text = "ARM";
-                }
-                    ));
+                        ArmButton.Label.Text = "ARM";
+                });
+
+            commonTiles.Add(ArmButton);
 
             commonTiles.Add(new TileButton("CONNECT", 0, 7, (sender, args) =>
             {
-
                 var conBut = sender as Label;
                 if (connected == false)  //connect
                 {
-                    //FlightData.instance.warning.Visible = true;
                     MainV2.instance.MenuConnect_Click(null, null);
+                    armed = MainV2.comPort.MAV.cs.armed;
+                    if (armed)
+                        commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
                     if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                     {
                         windSpeed.Visible = false;
@@ -185,16 +186,13 @@ namespace MissionPlanner.GCSViews
                 }
                 else                    //disconnect
                 {
-                    //FlightData.instance.warning.Visible = false;
+                    if (armed)
+                        ArmButton.ClickMethod(ArmButton, null);     //disarm before disconnect
                     FlightData.instance.hud1.warning = "";
                     MainV2.instance.MenuConnect_Click(null, null);
                     windSpeed.Visible = true;
                     FlightData.instance.windDir1.Visible = true;
-                }
-
-                armed = MainV2.comPort.MAV.cs.armed;
-                if(armed)
-                    commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
+                } 
             }));
 
             foreach (var tile in commonTiles)

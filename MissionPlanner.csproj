@@ -376,9 +376,6 @@
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
-    <Compile Include="GCSViews\Modification\TransparentLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>
