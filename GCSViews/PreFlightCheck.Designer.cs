@@ -30,6 +30,7 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreFlightCheck));
             this.ReadyButton = new MissionPlanner.Controls.MyButton();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.employee_data = new System.Windows.Forms.ComboBox();
@@ -145,6 +146,7 @@ namespace MissionPlanner.GCSViews
             this.Controls.Add(this.myLabel1);
             this.Controls.Add(this.employee_data);
             this.Controls.Add(this.ReadyButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PreFlightCheck";
             this.Text = "PreFlightCheck";
             this.tableLayoutPanel1.ResumeLayout(false);

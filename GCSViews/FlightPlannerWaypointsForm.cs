@@ -21,8 +21,7 @@ namespace MissionPlanner.GCSViews
             wp.SuspendLayout();
             Panel panelBASE = new Panel();
             panelBASE.SuspendLayout();
-            //panel.Dock = DockStyle.Fill;
-
+            //panel.Dock = DockStyle.Fill;      
             resources.ApplyResources(panelBASE, "panelBASE");
             panelBASE.BackColor = System.Drawing.Color.FromArgb(40, 40, 40);
 
@@ -32,10 +31,9 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.panelWaypoints.SuspendLayout();
             FlightPlanner.instance.panelWaypoints.Visible = true;
             FlightPlanner.instance.panelWaypoints.Dock = DockStyle.Fill;
-           
 
             panelBASE.Controls.Add(FlightPlanner.instance.panelWaypoints);
-            
+
             wp.Controls.Add(panelBASE);
 
             wp.FormClosing += (sender3, args3) => { FlightPlanner.instance.panelWaypoints.Visible = false; };
@@ -43,8 +41,8 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.panelWaypoints.ResumeLayout();
             panelBASE.ResumeLayout();
             wp.ResumeLayout();
-
-
+            wp.Icon = new Icon("LOGO.ico");
+            wp.Text = "Waypointy";
             wp.ShowDialog();
         }
 
