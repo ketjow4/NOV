@@ -94,7 +94,7 @@ namespace MissionPlanner.Controls
                      if (!this.Focused)
                      {
                          this.Focus();
-                         //Application.DoEvents();
+                         Application.DoEvents();
                      }
                 });
             }
