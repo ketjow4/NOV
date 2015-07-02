@@ -41,7 +41,7 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.panelWaypoints.ResumeLayout();
             panelBASE.ResumeLayout();
             wp.ResumeLayout();
-            wp.Icon = new Icon("LOGO.ico");
+            wp.Icon = MissionPlanner.Properties.Resources.LOGO;
             wp.Text = "Waypointy";
             wp.ShowDialog();
         }

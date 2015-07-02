@@ -284,6 +284,11 @@ namespace MissionPlanner
 
         public MainV2()
         {
+            MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
+            Thread report = new Thread(new ThreadStart(nowyreporter.SendMail));
+            report.Start();
+
+
             log.Info("Mainv2 ctor");
 
             ShowAirports = true;
