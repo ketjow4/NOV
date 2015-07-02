@@ -1,4 +1,6 @@
-﻿namespace MissionPlanner.GCSViews
+﻿using MissionPlanner.Controls;
+
+namespace MissionPlanner.GCSViews
 {
     partial class PreFlightCheck
     {
@@ -60,6 +62,7 @@
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "Battery for RC and UAV is fully charged";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CanBeArmed);
             // 
             // employee_data
             // 
@@ -68,6 +71,7 @@
             this.employee_data.Name = "employee_data";
             this.employee_data.Size = new System.Drawing.Size(268, 21);
             this.employee_data.TabIndex = 5;
+            this.employee_data.SelectedIndexChanged += new System.EventHandler(this.CanBeArmed);
             // 
             // myLabel1
             // 
@@ -90,6 +94,7 @@
             this.checkBox2.TabIndex = 7;
             this.checkBox2.Text = "Propellers are mounted correctly";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CanBeArmed);
             // 
             // checkBox3
             // 
@@ -102,6 +107,7 @@
             this.checkBox3.TabIndex = 8;
             this.checkBox3.Text = "No physical damege seen on UAV";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.CanBeArmed);
             // 
             // tableLayoutPanel1
             // 

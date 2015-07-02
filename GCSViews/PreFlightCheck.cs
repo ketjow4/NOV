@@ -14,7 +14,6 @@ namespace MissionPlanner.GCSViews
 {
     public partial class PreFlightCheck : Form
     {
-        private BackgroundWorker bw = new BackgroundWorker();
 
         public PreFlightCheck()
         {
@@ -25,11 +24,6 @@ namespace MissionPlanner.GCSViews
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
 
             ReadEmployeeData("data.csv");
-
-            bw.WorkerReportsProgress = false;
-            bw.WorkerSupportsCancellation = true;
-            bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-            bw.RunWorkerAsync();
         }
 
         private void ReadEmployeeData(string FilePath)
@@ -53,7 +47,6 @@ namespace MissionPlanner.GCSViews
 
         private void ReadyButton_Click(object sender, EventArgs e)
         {
-            bw.CancelAsync();
             SaveLogFile();
             DialogResult = DialogResult.OK;
         }
@@ -67,40 +60,16 @@ namespace MissionPlanner.GCSViews
 
             using (StreamWriter outfile = new StreamWriter(pathString))
             {
-                outfile.WriteLine("Wykonano Preflight check");
-                outfile.WriteLine("Czas wykonania: " + DateTime.Now.ToString());
-                outfile.WriteLine("Dane pracownika: " + employee_data.SelectedItem);
-                outfile.WriteLine("Wszystkie systemy sprawne, platforma gotowa do lotu");
+                outfile.WriteLine("Done Preflight check");
+                outfile.WriteLine("Time: " + DateTime.Now.ToString());
+                outfile.WriteLine("Employee data: " + employee_data.SelectedItem);
+                outfile.WriteLine("All system are checked and ready to fly.");
                 outfile.Close();
             }
             // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
         }
 
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
-        {
-            while (true)
-            {
-                Boolean enabled = true;
-                foreach (var checkbox in this.tableLayoutPanel1.Controls)
-                {
-                    if ((checkbox as CheckBox).Checked == false)
-                    {
-                        enabled = false;
-                    }
-                }
-                object SelectedItem = new object();
-                if (employee_data.InvokeRequired)
-                {
-                    employee_data.Invoke(new MethodInvoker(delegate { SelectedItem = employee_data.SelectedItem; }));
-                }
-                if (SelectedItem == null)
-                    enabled = false;
-
-                ReadyButton.Invoke(new MethodInvoker(delegate { ReadyButton.Enabled = enabled; }));
-                System.Threading.Thread.Sleep(100);
-            }
-        }
 
         private String CreateLogFile()
         {
@@ -115,7 +84,6 @@ namespace MissionPlanner.GCSViews
 
         private void SkipButton_Click(object sender, EventArgs e)
         {
-            bw.CancelAsync();
             DialogResult = DialogResult.OK;
 
             String pathString = CreateLogFile();
@@ -123,12 +91,30 @@ namespace MissionPlanner.GCSViews
 
             using (StreamWriter outfile = new StreamWriter(pathString))
             {
-                outfile.WriteLine("Pominięto Preflight check");
-                outfile.WriteLine("Czas wykonania: " + DateTime.Now.ToString());
+                outfile.WriteLine("Skipped Preflight check");
+                outfile.WriteLine("Time: " + DateTime.Now.ToString());
                 outfile.Close();
             }
             // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
+        }
+
+        private void CanBeArmed(object sender, EventArgs e)
+        {
+            Boolean enabled = true;
+            foreach (var checkbox in this.tableLayoutPanel1.Controls)
+            {
+                if ((checkbox as CheckBox).Checked == false)
+                {
+                    enabled = false;
+                }
+            }
+            object SelectedItem = new object();
+            SelectedItem = employee_data.SelectedItem; 
+            if (SelectedItem == null)
+                enabled = false;
+
+            ReadyButton.Enabled = enabled;
         }
     }
 }
