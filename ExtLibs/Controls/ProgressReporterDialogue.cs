@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Reflection;
 using log4net;
+using System.Drawing;
 
 namespace MissionPlanner.Controls
 {
@@ -39,6 +40,10 @@ namespace MissionPlanner.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.btnClose.Visible = false;
 
+            this.progressBar1._BGGradTop = Color.FromArgb(41, 171, 226);
+            this.progressBar1._BGGradBot = Color.FromArgb(12, 67, 90);
+            this.progressBar1._TextColor = Color.White;
+            this.progressBar1._Outline = Color.FromArgb(12, 67, 90);
         }
 
         /// <summary>

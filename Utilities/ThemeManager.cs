@@ -18,7 +18,7 @@ namespace MissionPlanner.Utilities
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static Themes _currentTheme = Themes.BurntKermit; //Themes.BurntKermit;
+        private static Themes _currentTheme = Themes.Custom; //Themes.BurntKermit;
         public static Themes CurrentTheme { get { return _currentTheme; } }
 
         public enum Themes
@@ -425,9 +425,10 @@ mc:Ignorable=""d""
                 {
                     Controls.MyButton but = (MyButton)ctl;
                     but.BGGradTop = ButBG;
+                    but.BGGradBot = Color.FromArgb(12, 67, 90);
                     try
                     {
-                        but.BGGradBot = Color.FromArgb(ButBG.ToArgb() - 0x333333);
+                        //but.BGGradBot = Color.FromArgb(ButBG.ToArgb() - 0x333333);
                     }
                     catch { }
                     but.TextColor = TextColor;
@@ -582,8 +583,8 @@ mc:Ignorable=""d""
 
                     bsv.BackColor = BGColor;
                     bsv.ButtonsAreaBgColor = ControlBGColor;
-                    bsv.HighlightColor2 = Color.FromArgb(0x94, 0xc1, 0x1f);
-                    bsv.HighlightColor1 = Color.FromArgb(0x40, 0x57, 0x04);
+                    bsv.HighlightColor2 = Color.FromArgb(41, 171, 226);
+                    bsv.HighlightColor1 = Color.FromArgb(12, 67, 90);
                     bsv.SelectedTextColor = Color.White;
                     bsv.UnSelectedTextColor = Color.Gray;
                     bsv.ButtonsAreaPencilColor = Color.DarkGray;
@@ -591,7 +592,7 @@ mc:Ignorable=""d""
                 else if (ctl.GetType() == typeof(HorizontalProgressBar2) || ctl.GetType() == typeof(VerticalProgressBar2))
                 {
                     ((HorizontalProgressBar2)ctl).BackgroundColor = ControlBGColor;
-                    ((HorizontalProgressBar2)ctl).ValueColor = Color.FromArgb(148, 193, 31);
+                    ((HorizontalProgressBar2)ctl).ValueColor = Color.FromArgb(41, 171, 226);
                 }
 
                 if (ctl.Controls.Count > 0)
