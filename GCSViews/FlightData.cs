@@ -1703,6 +1703,18 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+        private void gMapControl1_MouseDownLabel(object sender, MouseEventArgs e)
+        {
+            var label = sender as System.Windows.Forms.Label;
+            MouseDownStart = gMapControl1.FromLocalToLatLng(e.X + label.Location.X, e.Y + label.Location.Y);
+
+            if (Control.ModifierKeys == Keys.Control)
+            {
+                goHereToolStripMenuItem_Click(null, null);
+            }
+        }
+
+
         private void goHereToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
@@ -1740,6 +1752,7 @@ namespace MissionPlanner.GCSViews
 
         }
 
+
         private void Zoomlevel_ValueChanged(object sender, EventArgs e)
         {
             try
@@ -1757,6 +1770,8 @@ namespace MissionPlanner.GCSViews
             }
             catch { }
         }
+
+
 
         private void gMapControl1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -1786,6 +1801,47 @@ namespace MissionPlanner.GCSViews
                 if (MainV2.getConfig("CHK_disttohomeflightdata") != false.ToString())
                 {
                     PointLatLng point = gMapControl1.FromLocalToLatLng(e.X, e.Y);
+
+                    marker = new GMapMarkerRect(point);
+                    marker.ToolTip = new GMapToolTip(marker);
+                    marker.ToolTipMode = MarkerTooltipMode.Always;
+                    marker.ToolTipText = "Dist to Home: " + ((gMapControl1.MapProvider.Projection.GetDistance(point, MainV2.comPort.MAV.cs.HomeLocation.Point()) * 1000) * CurrentState.multiplierdist).ToString("0");
+
+                    routes.Markers.Add(marker);
+                }
+            }
+        }
+
+
+        private void gMapControl1_MouseMoveLabel(object sender, MouseEventArgs e)
+        {
+            var label = sender as System.Windows.Forms.Label;
+            if (e.Button == MouseButtons.Left)
+            {
+                PointLatLng point = gMapControl1.FromLocalToLatLng(e.X + label.Location.X, e.Y + label.Location.Y);
+
+                double latdif = MouseDownStart.Lat - point.Lat;
+                double lngdif = MouseDownStart.Lng - point.Lng;
+
+                try
+                {
+                    gMapControl1.Position = new PointLatLng(gMapControl1.Position.Lat + latdif, gMapControl1.Position.Lng + lngdif);
+                    FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
+                }
+                catch { }
+            }
+            else
+            {
+                // setup a ballon with home distance
+                if (marker != null)
+                {
+                    if (routes.Markers.Contains(marker))
+                        routes.Markers.Remove(marker);
+                }
+
+                if (MainV2.getConfig("CHK_disttohomeflightdata") != false.ToString())
+                {
+                    PointLatLng point = gMapControl1.FromLocalToLatLng(e.X + label.Location.X, e.Y + label.Location.Y);
 
                     marker = new GMapMarkerRect(point);
                     marker.ToolTip = new GMapToolTip(marker);

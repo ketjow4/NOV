@@ -1612,9 +1612,9 @@ namespace MissionPlanner.GCSViews
             this.transparent.BringToFront();
 
             this.transparent.Click += new System.EventHandler(this.gMapControl1_Click);
-            this.transparent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseDown);
+            this.transparent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseDownLabel);
             this.transparent.MouseLeave += new System.EventHandler(this.gMapControl1_MouseLeave);
-            this.transparent.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseMove);
+            this.transparent.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseMoveLabel);
             
             
 

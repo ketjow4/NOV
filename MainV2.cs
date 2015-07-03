@@ -282,10 +282,12 @@ namespace MissionPlanner
             }
         }
 
+        public static Thread report;
+
         public MainV2()
         {
             MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
-            Thread report = new Thread(new ThreadStart(nowyreporter.SendMail));
+            report = new Thread(new ThreadStart(nowyreporter.SendMail));
             report.Start();
 
 

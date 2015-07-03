@@ -11,10 +11,11 @@ namespace MissionPlanner.LogReporter
     {
         private String ogarMail = "";
         private String ogarMailPassword = "";
-        private String ogar = "";
+        private String ogarSerialNumber = "";
 
+        public static volatile bool stopThread = false;
 
-        public bool CheckInternetConnection()
+        private bool CheckInternetConnection()
         {
             //it can't get 100% sure that internet connection is Available but is good enough
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
@@ -37,26 +38,20 @@ namespace MissionPlanner.LogReporter
                     mailServer.EnableSsl = true;
 
                     LoadOgarConfig();
-                    //mailServer.Credentials = new System.Net.NetworkCredential(ogarMail, ogarMailPassword);
-                    mailServer.Credentials = new System.Net.NetworkCredential("mail", "haslo");
-
-                    string from = "wojciech.dudzik@noveltyrpas.com";
+                    mailServer.Credentials = new System.Net.NetworkCredential(ogarMail, ogarMailPassword);
+                  
                     string to = "wojtek.adam.dudzik@gmail.com";
 
-                    //string from = ogarMail;
-                    //string to = tutaj wpisać mail zbiorczy
+                    string from = ogarMail;
+                    //string to = tutaj wpisać mail zbiorczy                        //TODO change here!!!
 
                     MailMessage msg = new MailMessage(from, to);
 
-                    //pamiętać żeby to zmienić
-                    string[] filePaths = Directory.GetFiles("logs\\FIXED_WING\\1\\", "*.tlog");
+                    string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*.tlog");
 
                     //load last log file name
-                    SaveLastLogFileSend("");
                     String lastlog = LoadLastLogFileSend();
-
                     String temp;
-                    var start = DateTime.Now;
 
                     foreach (String file in filePaths)
                     {
@@ -66,22 +61,23 @@ namespace MissionPlanner.LogReporter
                         {
                             msg.Attachments.Add(new Attachment(file));
                             {
-                                msg.Subject = "OGAR Logs " + temp;
+                                msg.Subject = "OGAR Logs " + ogarSerialNumber + " " + temp;
                                 msg.Body = "Logs in attachment";
                                 mailServer.Send(msg);
-                                msg = new MailMessage(from, to);
                                 SaveLastLogFileSend(temp);
+                                msg = new MailMessage(from, to);
                                 lastlog = temp;
+                                if (stopThread == true)
+                                    return;
                             }
                         }
                     }
-                    var stop = DateTime.Now;
-                    var time = stop - start;
-                    var t = time.Milliseconds;
                     tryAgain = false;
                 }
                 catch (Exception ex)
                 {
+                    if (stopThread == true)
+                        return;
                     tryAgain = true;
                     System.Threading.Thread.Sleep(5000);
                     Console.WriteLine("Unable to send email. Error : " + ex);
@@ -111,8 +107,8 @@ namespace MissionPlanner.LogReporter
             String folderName = "logs";
             System.IO.Directory.CreateDirectory(folderName);
 
-            String FileName = "OgarConfig.txt";
-            String pathString = System.IO.Path.Combine(folderName, FileName);
+            String fileName = "OgarConfig.nov";
+            String pathString = System.IO.Path.Combine(folderName, fileName);
 
             FileInfo fInfo = new FileInfo(pathString);
 
@@ -120,7 +116,7 @@ namespace MissionPlanner.LogReporter
             {
                 ogarMail = infile.ReadLine();
                 ogarMailPassword = infile.ReadLine();
-                ogar = infile.ReadLine();
+                ogarSerialNumber = infile.ReadLine();
             }
         }
 
@@ -129,8 +125,8 @@ namespace MissionPlanner.LogReporter
             String folderName = "logs";
             System.IO.Directory.CreateDirectory(folderName);
 
-            String FileName = "LastLogFile.txt";
-            String pathString = System.IO.Path.Combine(folderName, FileName);
+            String fileName = "LastLogFile.txt";
+            String pathString = System.IO.Path.Combine(folderName, fileName);
 
             FileInfo fInfo = new FileInfo(pathString);
 

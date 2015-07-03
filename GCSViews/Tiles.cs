@@ -37,7 +37,7 @@ namespace MissionPlanner.GCSViews
         private static TileData flightTime = null;          //estimated flight time
         private static TileData distanceTile = null;
         private static TileButton accept = null;
-
+        private static TileButton ArmButton = null;
 
 
         private static TileData windSpeed = null;
@@ -139,7 +139,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.comPort.setWPCurrent((ushort)index);
             }));
 
-            TileButton ArmButton = null;
+
             ArmButton = new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
@@ -218,6 +218,7 @@ namespace MissionPlanner.GCSViews
 
         }
 
+        //this refresh transparent label and ARM/DISARM button when it's armed through RC 
         public static void RefreshTransparentLabel()
         {
             try
@@ -229,6 +230,14 @@ namespace MissionPlanner.GCSViews
                 {
                     FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
                     FlightData.instance.transparent.Invoke(new MethodInvoker(delegate { FlightData.instance.transparent.Text = text; }));
+
+                    ArmButton.Label.Invoke(new MethodInvoker(delegate
+                    {
+                        if (MainV2.comPort.MAV.cs.armed)
+                            ArmButton.Label.Text = "DISARM";
+                        else
+                            ArmButton.Label.Text = "ARM";
+                    }));
                     System.Threading.Thread.Sleep(500);
                     if (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
                         return;
@@ -307,7 +316,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPSHDOP", 1, 5, ""),              
                 new TileData("GPS SAT COUNT", 1, 6, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
-                new TileButton("EXIT",2,0, (sender,e) => { MainV2.instance.Close();}),
+                new TileButton("EXIT",2,0, (sender,e) => { MissionPlanner.LogReporter.LogReporter.stopThread = true;   MainV2.instance.Close();}),
                 mode = new TileData("MODE",0,6,""),
                 windSpeed,
             });
