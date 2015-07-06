@@ -264,6 +264,23 @@ namespace MissionPlanner.GCSViews
             gMapControl1.OnMapZoomChanged += new MapZoomChanged(gMapControl1_OnMapZoomChanged);
             gMapControl1.MouseWheel += gMapControl1_MouseWheel;
 
+            transparent.MouseWheel += gMapControl1_ZoomTransparentLabel;
+            
+            transparent.MouseEnter += (sender, e) =>
+            {
+                if (!transparent.Focused)
+                {
+                    transparent.BringToFront();
+                    transparent.Focus();
+                }
+            };
+
+            transparent.MouseLeave += (sender, e) =>
+            {
+                if (transparent.Focused)
+                    transparent.Parent.Focus();
+            };
+
             gMapControl1.DisableFocusOnMouseEnter = true;
 
             gMapControl1.OnMarkerEnter += gMapControl1_OnMarkerEnter;
@@ -668,6 +685,17 @@ namespace MissionPlanner.GCSViews
         }
 
         void gMapControl1_OnMapZoomChanged()
+        {
+            try
+            { // Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+                TRK_zoom.Value = (float)gMapControl1.Zoom;
+                Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
+            }
+            catch { }
+        }
+
+
+        void gMapControl1_ZoomTransparentLabel(object sender, MouseEventArgs e)
         {
             try
             { // Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
