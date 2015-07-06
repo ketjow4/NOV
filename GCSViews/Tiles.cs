@@ -161,7 +161,7 @@ namespace MissionPlanner.GCSViews
                             return;     //jeśli nie zaakceptowano to powrót i brak arm
                     }
                     FlightData.instance.BUT_ARM_Click(sender, args);
-                    if (armed)
+                    if (armed && connected)
                         ArmButton.Label.Text = "DISARM";
                     else
                         ArmButton.Label.Text = "ARM";
@@ -238,6 +238,8 @@ namespace MissionPlanner.GCSViews
                         else
                             ArmButton.Label.Text = "ARM";
                     }));
+
+
                     System.Threading.Thread.Sleep(500);
                     if (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
                         return;

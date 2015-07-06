@@ -262,6 +262,7 @@ namespace MissionPlanner.GCSViews
             gMapControl1.Zoom = 3;
 
             gMapControl1.OnMapZoomChanged += new MapZoomChanged(gMapControl1_OnMapZoomChanged);
+
             gMapControl1.MouseWheel += gMapControl1_MouseWheel;
 
             transparent.MouseWheel += gMapControl1_ZoomTransparentLabel;
@@ -699,6 +700,15 @@ namespace MissionPlanner.GCSViews
         {
             try
             { // Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+
+                if (e.Delta > 0)
+                {
+                    gMapControl1.Zoom += 1;
+                }
+                if (e.Delta < 0)
+                {
+                    gMapControl1.Zoom -= 1; 
+                }
                 TRK_zoom.Value = (float)gMapControl1.Zoom;
                 Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
             }
