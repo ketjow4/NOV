@@ -29,15 +29,65 @@ namespace MissionPlanner.LogReporter
             }
             bool tryAgain = true;
 
+
+            string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+
+            List<String> prepared = new List<String>();
+
+            foreach (String file in filePaths)
+            {
+                using (var fs = new FileStream(file, FileMode.Open))
+                {
+                    long length = fs.Length;
+                    if (length > 26200000)                           //większy niż 25 MB czyli nie mieści się w załączniku
+                    {
+                        fs.Close();
+                        SplitFile(file, (int)(length / 26200000) + 1);
+                    }
+                }
+            }
+
+            if (stopThread == true)
+                return;
+
+            //load last log file name
+            String lastlog = LoadLastLogFileSend();
+            String temp;
+            filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+            foreach (String file in filePaths)
+            {
+                temp = file.Substring(17, 19);
+                if (String.Compare(temp, lastlog, true) < 0)
+                {
+                    File.Delete(file);
+                }
+            }
+
+            filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+
+            foreach (String file in filePaths)
+            {
+                var fs = new FileStream(file, FileMode.Open);
+                if (fs.Length > 26200000)                           //większy niż 25 MB czyli nie mieści się w załączniku
+                {
+                    continue;
+                }
+                else
+                    prepared.Add(file);
+            }
+
             while (tryAgain)
             {
-
                 try
                 {
                     SmtpClient mailServer = new SmtpClient("smtp.gmail.com", 587);
                     mailServer.EnableSsl = true;
 
                     LoadOgarConfig();
+
+                    ogarMail = "moj@gmail.com";
+                    ogarMailPassword = "password";
+
                     mailServer.Credentials = new System.Net.NetworkCredential(ogarMail, ogarMailPassword);
                   
                     string to = "wojtek.adam.dudzik@gmail.com";
@@ -46,17 +96,12 @@ namespace MissionPlanner.LogReporter
                     //string to = tutaj wpisać mail zbiorczy                        //TODO change here!!!
 
                     MailMessage msg = new MailMessage(from, to);
+                    
 
-                    string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*.tlog");
 
-                    //load last log file name
-                    String lastlog = LoadLastLogFileSend();
-                    String temp;
-
-                    foreach (String file in filePaths)
+                    foreach (String file in prepared)
                     {
-
-                        temp = file.Substring(18, 19);
+                        temp = file.Substring(17, 19);
                         if (String.Compare(temp, lastlog, true) > 0)
                         {
                             msg.Attachments.Add(new Attachment(file));
@@ -136,5 +181,42 @@ namespace MissionPlanner.LogReporter
             }
         }
 
+        List<string> Packets = new List<string>();
+        string mergeFolder;
+
+        public bool SplitFile(string SourceFile, int nNoofFiles)
+        {
+            bool Split = false;
+            try
+            {
+                FileStream fs = new FileStream(SourceFile, FileMode.Open, FileAccess.Read);
+                int SizeofEachFile = (int)Math.Ceiling((double)fs.Length / nNoofFiles);
+                for (int i = 0; i < nNoofFiles; i++)
+                {
+                    string baseFileName = Path.GetFileNameWithoutExtension(SourceFile);
+                    string Extension = Path.GetExtension(SourceFile);
+                    FileStream outputFile = new FileStream(Path.GetDirectoryName(SourceFile) + "\\" + baseFileName + "." +
+                        i.ToString().PadLeft(5, Convert.ToChar("0")) + Extension + ".tmp", FileMode.Create, FileAccess.Write);
+                    mergeFolder = Path.GetDirectoryName(SourceFile);
+                    int bytesRead = 0;
+                    byte[] buffer = new byte[SizeofEachFile];
+                    if ((bytesRead = fs.Read(buffer, 0, SizeofEachFile)) > 0)
+                    {
+                        outputFile.Write(buffer, 0, bytesRead);
+                        //outp.Write(buffer, 0, BytesRead);
+                        string packet = baseFileName + "." + i.ToString().PadLeft(3, Convert.ToChar("0")) + Extension.ToString();
+                        Packets.Add(packet);
+                    }
+                    outputFile.Close();
+                }
+                fs.Close();
+            }
+            catch (Exception Ex)
+            {
+                //throw new ArgumentException(Ex.Message);
+            }
+
+            return Split;
+        }
     }
 }
