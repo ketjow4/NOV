@@ -21,39 +21,13 @@ namespace MissionPlanner.LogReporter
             return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
         }
 
-        public void SendMail()
+
+        private void DeleteOldFiles()
         {
-            while (!CheckInternetConnection())
-            {
-                System.Threading.Thread.Sleep(1000);
-            }
-            bool tryAgain = true;
-
-
-            string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
-
-            List<String> prepared = new List<String>();
-
-            foreach (String file in filePaths)
-            {
-                using (var fs = new FileStream(file, FileMode.Open))
-                {
-                    long length = fs.Length;
-                    if (length > 26200000)                           //większy niż 25 MB czyli nie mieści się w załączniku
-                    {
-                        fs.Close();
-                        SplitFile(file, (int)(length / 26200000) + 1);
-                    }
-                }
-            }
-
-            if (stopThread == true)
-                return;
-
             //load last log file name
             String lastlog = LoadLastLogFileSend();
             String temp;
-            filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+            String[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
             foreach (String file in filePaths)
             {
                 temp = file.Substring(17, 19);
@@ -62,19 +36,53 @@ namespace MissionPlanner.LogReporter
                     File.Delete(file);
                 }
             }
+        }
+
+        //split too big files into smaller ones and give the list of files to send
+        private List<String> PrepareFilesToSend()
+        {
+            string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+            List<String> prepared = new List<String>();
+
+            foreach (String file in filePaths)
+            {
+                using (var fs = new FileStream(file, FileMode.Open))
+                {
+                    long length = fs.Length;
+                    if (length > 26200000)                           //file is > 25 MB it can be send in single mail
+                    {
+                        fs.Close();
+                        SplitFile(file, (int)(length / 26200000) + 1);
+                    }
+                }
+            }
+            if (stopThread == true)
+                return null;
 
             filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
 
             foreach (String file in filePaths)
             {
                 var fs = new FileStream(file, FileMode.Open);
-                if (fs.Length > 26200000)                           //większy niż 25 MB czyli nie mieści się w załączniku
-                {
+                if (fs.Length > 26200000)                           //file is > 25 MB it can be send in single mail
                     continue;
-                }
                 else
                     prepared.Add(file);
             }
+            return prepared;
+        }
+
+
+
+        public void SendMail()
+        {
+            while (!CheckInternetConnection())
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
+
+            bool tryAgain = true;
+            List<String> prepared = PrepareFilesToSend();
 
             while (tryAgain)
             {
@@ -85,19 +93,21 @@ namespace MissionPlanner.LogReporter
 
                     LoadOgarConfig();
 
+                    //TODO change here!!!
                     ogarMail = "moj@gmail.com";
                     ogarMailPassword = "password";
 
                     mailServer.Credentials = new System.Net.NetworkCredential(ogarMail, ogarMailPassword);
-                  
+                    //TODO change here!!!
                     string to = "wojtek.adam.dudzik@gmail.com";
 
                     string from = ogarMail;
                     //string to = tutaj wpisać mail zbiorczy                        //TODO change here!!!
 
                     MailMessage msg = new MailMessage(from, to);
-                    
 
+                    String lastlog = LoadLastLogFileSend();
+                    String temp;
 
                     foreach (String file in prepared)
                     {
@@ -203,7 +213,6 @@ namespace MissionPlanner.LogReporter
                     if ((bytesRead = fs.Read(buffer, 0, SizeofEachFile)) > 0)
                     {
                         outputFile.Write(buffer, 0, bytesRead);
-                        //outp.Write(buffer, 0, BytesRead);
                         string packet = baseFileName + "." + i.ToString().PadLeft(3, Convert.ToChar("0")) + Extension.ToString();
                         Packets.Add(packet);
                     }
@@ -215,7 +224,6 @@ namespace MissionPlanner.LogReporter
             {
                 //throw new ArgumentException(Ex.Message);
             }
-
             return Split;
         }
     }
