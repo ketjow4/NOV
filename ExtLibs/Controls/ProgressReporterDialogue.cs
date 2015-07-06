@@ -288,8 +288,8 @@ namespace MissionPlanner.Controls
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var message = this.workerException.Message
-                          + Environment.NewLine + Environment.NewLine
-                          + this.workerException.StackTrace;
+                          + Environment.NewLine + Environment.NewLine;
+                          //+ this.workerException.StackTrace;
 
             CustomMessageBox.Show(message,"Exception Details",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }

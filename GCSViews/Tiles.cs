@@ -50,6 +50,8 @@ namespace MissionPlanner.GCSViews
 
         private static double groundRes;
 
+        
+
 
 
         public static void ChangeAlt(int v)
@@ -218,6 +220,8 @@ namespace MissionPlanner.GCSViews
 
         }
 
+        private static volatile bool firstTime = true;
+
         //this refresh transparent label and ARM/DISARM button when it's armed through RC 
         public static void RefreshTransparentLabel()
         {
@@ -240,6 +244,27 @@ namespace MissionPlanner.GCSViews
                     }));
 
 
+                    var homeLoc = MainV2.comPort.MAV.cs.HomeLocation;
+
+                    if (homeLoc.Lat != 0)
+                    {
+                        if (MainV2.comPort.MAV.cs.gpsstatus != 0 && MainV2.comPort.MAV.cs.gpsstatus != 1 && firstTime)
+                        {
+                            //System.Threading.Thread.Sleep(1000);
+                            FlightData.instance.gMapControl1.Invoke(new MethodInvoker(delegate
+                                {
+                                    FlightData.instance.gMapControl1.Position = MainV2.comPort.MAV.cs.HomeLocation;
+                                    FlightData.instance.gMapControl1.Zoom = 16;
+                                }));
+
+                            FlightPlanner.instance.MainMap.Invoke(new MethodInvoker(delegate
+                                {
+                                    FlightPlanner.instance.MainMap.Position = MainV2.comPort.MAV.cs.HomeLocation;
+                                    FlightPlanner.instance.MainMap.Zoom = 16;
+                                })); 
+                            firstTime = false;
+                        }
+                    }
                     System.Threading.Thread.Sleep(500);
                     if (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
                         return;
@@ -312,7 +337,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>{ MainV2.View.ShowScreen("FlightPlanner"); foreach(var pan in common) {pan.Parent = FlightPlanner.instance.panelBASE; FlightPlanner.instance.panelBASE.Controls.Add(pan); pan.BringToFront();}}),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
-                new TileData("DISTANCE TO HOME", 1, 2, "km"),
+                new TileData("DISTANCE TO HOME", 1, 2, "m"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPSHDOP", 1, 5, ""),              
