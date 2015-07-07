@@ -96,7 +96,7 @@ namespace MissionPlanner.GCSViews
             {
                 try
                 {
-                    MainV2.comPort.setMode("FBWB");
+                    MainV2.comPort.setMode("AUTO");
                 }
                 catch
                 {

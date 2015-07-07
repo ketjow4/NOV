@@ -56,7 +56,7 @@ namespace MissionPlanner.GCSViews
             // 
             // ReadyButton
             // 
-            this.ReadyButton.Location = new System.Drawing.Point(306, 501);
+            this.ReadyButton.Location = new System.Drawing.Point(305, 535);
             this.ReadyButton.Name = "ReadyButton";
             this.ReadyButton.Size = new System.Drawing.Size(105, 44);
             this.ReadyButton.TabIndex = 1;
@@ -80,7 +80,7 @@ namespace MissionPlanner.GCSViews
             // employee_data
             // 
             this.employee_data.FormattingEnabled = true;
-            this.employee_data.Location = new System.Drawing.Point(12, 41);
+            this.employee_data.Location = new System.Drawing.Point(18, 41);
             this.employee_data.Name = "employee_data";
             this.employee_data.Size = new System.Drawing.Size(268, 21);
             this.employee_data.TabIndex = 5;
@@ -89,7 +89,7 @@ namespace MissionPlanner.GCSViews
             // myLabel1
             // 
             this.myLabel1.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.myLabel1.Location = new System.Drawing.Point(12, 12);
+            this.myLabel1.Location = new System.Drawing.Point(18, 12);
             this.myLabel1.Name = "myLabel1";
             this.myLabel1.resize = false;
             this.myLabel1.Size = new System.Drawing.Size(75, 23);
@@ -133,7 +133,7 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel1.Controls.Add(this.checkBox3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.checkBox2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.checkBox1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(15, 157);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(15, 191);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 6;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
@@ -197,7 +197,7 @@ namespace MissionPlanner.GCSViews
             // 
             // SkipButton
             // 
-            this.SkipButton.Location = new System.Drawing.Point(12, 501);
+            this.SkipButton.Location = new System.Drawing.Point(11, 535);
             this.SkipButton.Name = "SkipButton";
             this.SkipButton.Size = new System.Drawing.Size(74, 44);
             this.SkipButton.TabIndex = 10;
@@ -218,7 +218,7 @@ namespace MissionPlanner.GCSViews
             // Gps_fix
             // 
             this.Gps_fix.Controls.Add(this.label1);
-            this.Gps_fix.Location = new System.Drawing.Point(101, 68);
+            this.Gps_fix.Location = new System.Drawing.Point(107, 68);
             this.Gps_fix.Name = "Gps_fix";
             this.Gps_fix.Size = new System.Drawing.Size(83, 38);
             this.Gps_fix.TabIndex = 12;
@@ -226,7 +226,7 @@ namespace MissionPlanner.GCSViews
             // batteryVoltage
             // 
             this.batteryVoltage.Controls.Add(this.label2);
-            this.batteryVoltage.Location = new System.Drawing.Point(12, 68);
+            this.batteryVoltage.Location = new System.Drawing.Point(18, 68);
             this.batteryVoltage.Name = "batteryVoltage";
             this.batteryVoltage.Size = new System.Drawing.Size(83, 38);
             this.batteryVoltage.TabIndex = 13;
@@ -246,14 +246,16 @@ namespace MissionPlanner.GCSViews
             this.warning_label.AutoSize = true;
             this.warning_label.Font = new System.Drawing.Font("Century Gothic", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.warning_label.ForeColor = System.Drawing.Color.Red;
-            this.warning_label.Location = new System.Drawing.Point(9, 118);
+            this.warning_label.Location = new System.Drawing.Point(12, 109);
+            this.warning_label.MaximumSize = new System.Drawing.Size(405, 0);
             this.warning_label.Name = "warning_label";
             this.warning_label.Size = new System.Drawing.Size(0, 36);
             this.warning_label.TabIndex = 15;
+            this.warning_label.UseMnemonic = false;
             // 
             // myButton1
             // 
-            this.myButton1.Location = new System.Drawing.Point(101, 501);
+            this.myButton1.Location = new System.Drawing.Point(100, 535);
             this.myButton1.Name = "myButton1";
             this.myButton1.Size = new System.Drawing.Size(114, 44);
             this.myButton1.TabIndex = 16;
@@ -265,7 +267,7 @@ namespace MissionPlanner.GCSViews
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 557);
+            this.ClientSize = new System.Drawing.Size(426, 591);
             this.Controls.Add(this.myButton1);
             this.Controls.Add(this.warning_label);
             this.Controls.Add(this.batteryVoltage);
