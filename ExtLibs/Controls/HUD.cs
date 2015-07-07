@@ -1493,14 +1493,16 @@ namespace MissionPlanner.Controls
 
                 //    text = "Bat " + _batterylevel.ToString("0.00v") + " " + _current.ToString("0.0 A") + " " + (_batteryremaining) + "%";
 
-                //    if (lowvoltagealert)
-                //    {
-                //        drawstring(graphicsObject, text, font, fontsize + 2, (SolidBrush)Brushes.Red, fontsize, this.Height - 30 - fontoffset);
-                //    }
-                //    else
-                //    {
-                //        drawstring(graphicsObject, text, font, fontsize + 2, whiteBrush, fontsize, this.Height - 30 - fontoffset);
-                //    }
+
+                //TODO
+                if (lowvoltagealert)
+                {
+                    //drawstring(graphicsObject, text, font, fontsize + 2, (SolidBrush)Brushes.Red, fontsize, this.Height - 30 - fontoffset);
+                }
+                else
+                {
+                    //drawstring(graphicsObject, text, font, fontsize + 2, whiteBrush, fontsize, this.Height - 30 - fontoffset);
+                }
                 //}
                 // gps
 

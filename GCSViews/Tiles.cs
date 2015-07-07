@@ -411,6 +411,14 @@ namespace MissionPlanner.GCSViews
                 accept,
                 fsBtnDown,fsBtnOk,fsBtnUp,flyingSpeed,
 
+                new TileButton("COMPASS\nCALIBRATION",4,0,(sender,e) => 
+                {
+                    if(CustomMessageBox.Show("Do you want to do compass calibration","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        MagCalib.DoGUIMagCalib(); 
+                    }
+                }),
+
                 groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p"),
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}}),
                 new TileButton(polygonmodestring, 0, 1, (sender, e) =>

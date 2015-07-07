@@ -24,6 +24,8 @@ namespace MissionPlanner.GCSViews
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
 
             ReadEmployeeData("data.csv");
+
+            AutoCheck();
         }
 
         private void ReadEmployeeData(string FilePath)
@@ -109,12 +111,52 @@ namespace MissionPlanner.GCSViews
                     enabled = false;
                 }
             }
+
+            if (!AutoCheck())
+            {
+                enabled = false;
+            }
+
             object SelectedItem = new object();
             SelectedItem = employee_data.SelectedItem; 
             if (SelectedItem == null)
                 enabled = false;
 
             ReadyButton.Enabled = enabled;
+        }
+
+        private bool AutoCheck()
+        {
+            Boolean enabled = true;
+            if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2)
+            {
+                Gps_fix.BackColor = Color.Green;
+            }
+            else
+            {
+                enabled = false;
+                Gps_fix.BackColor = Color.Red;
+            }
+            if (FlightData.instance.hud1.lowvoltagealert)
+            {
+                enabled = false;
+                batteryVoltage.BackColor = Color.Red;
+            }
+            else
+                batteryVoltage.BackColor = Color.Green;
+            warning_label.Text = FlightData.instance.hud1.warning;
+
+            if (warning_label.Text != "")
+                enabled = false;
+            return enabled;
+        }
+
+        private void myButton1_Click(object sender, EventArgs e)
+        {
+            if (CustomMessageBox.Show("Do you want to do compass calibration", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                MagCalib.DoGUIMagCalib();
+            }
         }
     }
 }
