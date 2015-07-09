@@ -944,6 +944,11 @@ namespace MissionPlanner
         /// <param name="ofs">offsets</param>
         public static void SaveOffsets(double[] ofs)
         {
+            if (ofs[0] > 400 || ofs[0] < -400 || ofs[1] > 400 || ofs[1] < -400 || ofs[2] > 400 || ofs[2] < -400)
+            {
+                CustomMessageBox.Show("Offset are not in proper range. \n Please make calibration again before next flight", "Mag offset warning");
+            }
+            
             if (MainV2.comPort.MAV.param.ContainsKey("COMPASS_OFS_X") && MainV2.comPort.BaseStream.IsOpen)
             {
                 try

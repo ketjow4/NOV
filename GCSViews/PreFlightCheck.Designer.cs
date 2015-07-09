@@ -49,6 +49,7 @@ namespace MissionPlanner.GCSViews
             this.label2 = new System.Windows.Forms.Label();
             this.warning_label = new System.Windows.Forms.Label();
             this.myButton1 = new MissionPlanner.Controls.MyButton();
+            this.checkBox8 = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.Gps_fix.SuspendLayout();
             this.batteryVoltage.SuspendLayout();
@@ -56,7 +57,7 @@ namespace MissionPlanner.GCSViews
             // 
             // ReadyButton
             // 
-            this.ReadyButton.Location = new System.Drawing.Point(305, 535);
+            this.ReadyButton.Location = new System.Drawing.Point(309, 583);
             this.ReadyButton.Name = "ReadyButton";
             this.ReadyButton.Size = new System.Drawing.Size(105, 44);
             this.ReadyButton.TabIndex = 1;
@@ -101,7 +102,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox2.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox2.Location = new System.Drawing.Point(3, 51);
+            this.checkBox2.Location = new System.Drawing.Point(3, 45);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(396, 36);
             this.checkBox2.TabIndex = 7;
@@ -114,7 +115,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox3.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox3.Location = new System.Drawing.Point(3, 99);
+            this.checkBox3.Location = new System.Drawing.Point(3, 87);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(396, 36);
             this.checkBox3.TabIndex = 8;
@@ -126,6 +127,7 @@ namespace MissionPlanner.GCSViews
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.checkBox8, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.checkBox7, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.checkBox6, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.checkBox5, 0, 3);
@@ -133,18 +135,18 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel1.Controls.Add(this.checkBox3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.checkBox2, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.checkBox1, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(15, 191);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 227);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(402, 338);
+            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(402, 350);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // checkBox7
@@ -152,7 +154,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox7.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox7.Location = new System.Drawing.Point(3, 291);
+            this.checkBox7.Location = new System.Drawing.Point(3, 255);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(396, 38);
             this.checkBox7.TabIndex = 12;
@@ -164,7 +166,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox6.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox6.Location = new System.Drawing.Point(3, 243);
+            this.checkBox6.Location = new System.Drawing.Point(3, 213);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(396, 36);
             this.checkBox6.TabIndex = 11;
@@ -176,7 +178,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox5.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox5.Location = new System.Drawing.Point(3, 195);
+            this.checkBox5.Location = new System.Drawing.Point(3, 171);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(396, 36);
             this.checkBox5.TabIndex = 10;
@@ -188,7 +190,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBox4.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.checkBox4.Location = new System.Drawing.Point(3, 147);
+            this.checkBox4.Location = new System.Drawing.Point(3, 129);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(396, 36);
             this.checkBox4.TabIndex = 9;
@@ -197,7 +199,7 @@ namespace MissionPlanner.GCSViews
             // 
             // SkipButton
             // 
-            this.SkipButton.Location = new System.Drawing.Point(11, 535);
+            this.SkipButton.Location = new System.Drawing.Point(9, 583);
             this.SkipButton.Name = "SkipButton";
             this.SkipButton.Size = new System.Drawing.Size(74, 44);
             this.SkipButton.TabIndex = 10;
@@ -255,7 +257,7 @@ namespace MissionPlanner.GCSViews
             // 
             // myButton1
             // 
-            this.myButton1.Location = new System.Drawing.Point(100, 535);
+            this.myButton1.Location = new System.Drawing.Point(98, 583);
             this.myButton1.Name = "myButton1";
             this.myButton1.Size = new System.Drawing.Size(114, 44);
             this.myButton1.TabIndex = 16;
@@ -263,11 +265,23 @@ namespace MissionPlanner.GCSViews
             this.myButton1.UseVisualStyleBackColor = true;
             this.myButton1.Click += new System.EventHandler(this.myButton1_Click);
             // 
+            // checkBox8
+            // 
+            this.checkBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBox8.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.checkBox8.Location = new System.Drawing.Point(3, 299);
+            this.checkBox8.Name = "checkBox8";
+            this.checkBox8.Size = new System.Drawing.Size(396, 36);
+            this.checkBox8.TabIndex = 13;
+            this.checkBox8.Text = "Throttle on RC is all way down";
+            this.checkBox8.UseVisualStyleBackColor = true;
+            // 
             // PreFlightCheck
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(426, 591);
+            this.ClientSize = new System.Drawing.Size(426, 638);
             this.Controls.Add(this.myButton1);
             this.Controls.Add(this.warning_label);
             this.Controls.Add(this.batteryVoltage);
@@ -310,6 +324,7 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.CheckBox checkBox5;
         private System.Windows.Forms.CheckBox checkBox4;
         private MyButton myButton1;
+        private System.Windows.Forms.CheckBox checkBox8;
 
 
     }

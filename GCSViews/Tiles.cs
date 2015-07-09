@@ -16,7 +16,7 @@ namespace MissionPlanner.GCSViews
         public static bool armed = false;
         public static bool connected = false;
         public static bool pathAccepted = true;
-        public static string camName = "DEFAULT";
+        public static string camName = "GEOSCANNER";
 
 
         public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
@@ -42,8 +42,8 @@ namespace MissionPlanner.GCSViews
 
         private static TileData windSpeed = null;
 
-        private static int altMin = 30;
-        private static int altMax = 30000;
+        private static int altMin = 50;
+        private static int altMax = 500;
 
         private static int fsMin = 3;
         private static int fsMax = 8;
@@ -375,7 +375,7 @@ namespace MissionPlanner.GCSViews
             });
 
             obsHeadBtn.ValueLabel.Width = 120;
-            obsHeadBtn.Value = "DEFAULT";
+            obsHeadBtn.Value = "GEOSCANNER";
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; calcGrid = null; });
 
