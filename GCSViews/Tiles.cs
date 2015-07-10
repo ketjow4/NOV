@@ -145,7 +145,7 @@ namespace MissionPlanner.GCSViews
             ArmButton = new TileButton("ARM", 0, 8,
                 (sender, args) =>
                 {
-                    if (!armed)         //jeśli rozbrajamy to nie robimy preflightcheck
+                    if (!MainV2.comPort.MAV.cs.armed)         //jeśli rozbrajamy to nie robimy preflightcheck
                     {
                         if (!connected)
                         {
@@ -164,9 +164,13 @@ namespace MissionPlanner.GCSViews
                     }
                     FlightData.instance.BUT_ARM_Click(sender, args);
                     if (armed && connected)
+                    {
                         ArmButton.Label.Text = "DISARM";
+                        ThreadSafeMapZoomToHome();
+                    }
                     else
                         ArmButton.Label.Text = "ARM";
+                    
                 });
 
             commonTiles.Add(ArmButton);
@@ -188,7 +192,7 @@ namespace MissionPlanner.GCSViews
                 }
                 else                    //disconnect
                 {
-                    if (armed)
+                    if (MainV2.comPort.MAV.cs.armed)
                         ArmButton.ClickMethod(ArmButton, null);     //disarm before disconnect
                     FlightData.instance.hud1.warning = "";
                     MainV2.instance.MenuConnect_Click(null, null);
@@ -217,10 +221,34 @@ namespace MissionPlanner.GCSViews
 
             Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
             thread.Start();
-
         }
 
         private static volatile bool firstTime = true;
+
+
+        
+        private static void ThreadSafeMapZoomToHome()
+        {
+            if (MainV2.comPort.MAV.cs.HomeLocation.Lat != 0)
+            {
+                if (MainV2.comPort.MAV.cs.gpsstatus != 0 && MainV2.comPort.MAV.cs.gpsstatus != 1)
+                {
+                    FlightData.instance.gMapControl1.Invoke(new MethodInvoker(delegate
+                    {
+                        FlightData.instance.gMapControl1.Position = MainV2.comPort.MAV.cs.HomeLocation;
+                        FlightData.instance.gMapControl1.Zoom = 16;
+                    }));
+                    if (FlightPlanner.instance.IsHandleCreated)
+                    {
+                        FlightPlanner.instance.MainMap.Invoke(new MethodInvoker(delegate
+                        {
+                            FlightPlanner.instance.MainMap.Position = MainV2.comPort.MAV.cs.HomeLocation;
+                            FlightPlanner.instance.MainMap.Zoom = 16;
+                        }));
+                    }
+                }
+            }
+        }
 
         //this refresh transparent label and ARM/DISARM button when it's armed through RC 
         public static void RefreshTransparentLabel()
@@ -229,6 +257,8 @@ namespace MissionPlanner.GCSViews
             {
                 while(!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
                     System.Threading.Thread.Sleep(1000);
+
+                
                 string text = "";
                 while (true)
                 {
@@ -256,12 +286,14 @@ namespace MissionPlanner.GCSViews
                                     FlightData.instance.gMapControl1.Position = MainV2.comPort.MAV.cs.HomeLocation;
                                     FlightData.instance.gMapControl1.Zoom = 16;
                                 }));
-
-                            FlightPlanner.instance.MainMap.Invoke(new MethodInvoker(delegate
-                                {
-                                    FlightPlanner.instance.MainMap.Position = MainV2.comPort.MAV.cs.HomeLocation;
-                                    FlightPlanner.instance.MainMap.Zoom = 16;
-                                })); 
+                            if (FlightPlanner.instance.IsHandleCreated)
+                            {
+                                FlightPlanner.instance.MainMap.Invoke(new MethodInvoker(delegate
+                                    {
+                                        FlightPlanner.instance.MainMap.Position = MainV2.comPort.MAV.cs.HomeLocation;
+                                        FlightPlanner.instance.MainMap.Zoom = 16;
+                                    }));
+                            }
                             firstTime = false;
                         }
                     }

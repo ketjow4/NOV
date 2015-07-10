@@ -41,7 +41,7 @@ namespace MissionPlanner.LogReporter
         //split too big files into smaller ones and give the list of files to send
         private List<String> PrepareFilesToSend()
         {
-            string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+            string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*.tlog");
             List<String> prepared = new List<String>();
 
             foreach (String file in filePaths)
@@ -59,7 +59,7 @@ namespace MissionPlanner.LogReporter
             if (stopThread == true)
                 return null;
 
-            filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
+            filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*.tlog");
 
             foreach (String file in filePaths)
             {
@@ -78,9 +78,11 @@ namespace MissionPlanner.LogReporter
         {
             while (!CheckInternetConnection())
             {
+                
                 System.Threading.Thread.Sleep(1000);
             }
 
+            DeleteOldFiles();
             bool tryAgain = true;
             List<String> prepared = PrepareFilesToSend();
 
@@ -93,17 +95,13 @@ namespace MissionPlanner.LogReporter
 
                     LoadOgarConfig();
 
-                    //TODO change here!!!
-                    ogarMail = "moj@gmail.com";
-                    ogarMailPassword = "password";
 
                     mailServer.Credentials = new System.Net.NetworkCredential(ogarMail, ogarMailPassword);
-                    //TODO change here!!!
-                    string to = "wojtek.adam.dudzik@gmail.com";
 
+                    string to = "ogarlogi@noveltyrpas.com";
                     string from = ogarMail;
-                    //string to = tutaj wpisać mail zbiorczy                        //TODO change here!!!
 
+                  
                     MailMessage msg = new MailMessage(from, to);
 
                     String lastlog = LoadLastLogFileSend();

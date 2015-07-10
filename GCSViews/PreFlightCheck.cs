@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 using MissionPlanner.Controls;
 
@@ -14,6 +15,8 @@ namespace MissionPlanner.GCSViews
 {
     public partial class PreFlightCheck : Form
     {
+        private Thread thread;
+        private volatile bool stop = false;
 
         public PreFlightCheck()
         {
@@ -26,7 +29,65 @@ namespace MissionPlanner.GCSViews
             ReadEmployeeData("data.csv");
 
             AutoCheck();
+            thread = new Thread(new ThreadStart(Do_AutoCheck));
+            thread.Start();
         }
+
+        public void Do_AutoCheck()
+        {
+            try
+            {
+                while(!stop)
+                {
+                Boolean enabled = true;
+                String text = "";
+                float gpsfix = 0;
+                float gpshdop = 0;
+
+                FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { gpsfix =  FlightData.instance.hud1.gpsfix; gpshdop = FlightData.instance.hud1.gpshdop;}));
+
+                if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
+                {
+                    Gps_fix.Invoke(new MethodInvoker(delegate{ Gps_fix.BackColor = Color.Green;}));
+                }
+                else
+                {
+                    enabled = false;
+                    Gps_fix.Invoke(new MethodInvoker(delegate{ Gps_fix.BackColor = Color.Red;}));
+                }
+                if (FlightData.instance.hud1.lowvoltagealert)
+                {
+                    enabled = false;
+                    batteryVoltage.Invoke(new MethodInvoker(delegate { batteryVoltage.BackColor = Color.Red;}));
+                }
+                else
+                    batteryVoltage.Invoke(new MethodInvoker(delegate { batteryVoltage.BackColor = Color.Green;}));
+                
+                warning_label.Invoke(new MethodInvoker(delegate { warning_label.Text = FlightData.instance.hud1.warning;
+                                                              text   = warning_label.Text;}));
+
+            if (text != "")
+                enabled = false;
+
+
+            if (enabled == false)
+            {
+                ReadyButton.Invoke(new MethodInvoker(delegate { ReadyButton.Enabled = enabled; }));
+            }
+            if(stop)
+                break;
+
+            Thread.Sleep(100);
+                }
+            }
+            catch (Exception ex)
+            {
+                //silnet errors here because of no waiting to kill process before close window
+                //MessageBox.Show("Transparent Label error" + ex.Message);
+                // log errors
+            }
+        }
+        
 
         private void ReadEmployeeData(string FilePath)
         {
@@ -50,6 +111,7 @@ namespace MissionPlanner.GCSViews
         private void ReadyButton_Click(object sender, EventArgs e)
         {
             SaveLogFile();
+            stop = true;
             DialogResult = DialogResult.OK;
         }
 
@@ -86,6 +148,9 @@ namespace MissionPlanner.GCSViews
 
         private void SkipButton_Click(object sender, EventArgs e)
         {
+            CustomMessageBox.Show("Manufacturer don't take resposibility for flight without preFlight Check\n" +
+                                  "Take it into consideration! (warranty is not included when flying without preFlighCheck)");
+
             DialogResult = DialogResult.OK;
 
             String pathString = CreateLogFile();
@@ -128,7 +193,7 @@ namespace MissionPlanner.GCSViews
         private bool AutoCheck()
         {
             Boolean enabled = true;
-            if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2)
+            if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2.21)
             {
                 Gps_fix.BackColor = Color.Green;
             }
