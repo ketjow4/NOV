@@ -127,18 +127,14 @@ namespace MissionPlanner.GCSViews
             }));
             commonTiles.Add(new TileButton("LAND", 1, 8, (sender, args) =>                  //index value start from 0
             {
-                int wpCount = MainV2.comPort.getWPCount();
-                int index = 0;
-                for (int i = 0; i < wpCount; i++)
+                try
                 {
-                    if (MainV2.comPort.getWP((ushort)i).id == (byte)MAVLink.MAV_CMD.RETURN_TO_LAUNCH)
-                    {
-                        index = i;
-                        break;
-                    }
+                    MainV2.comPort.setMode("LAND");
                 }
-                MainV2.comPort.doCommand(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
-                MainV2.comPort.setWPCurrent((ushort)index);
+                catch
+                {
+                    CustomMessageBox.Show("The Command failed to execute", "Error");
+                }
             }));
 
 
