@@ -967,7 +967,7 @@ namespace MissionPlanner
                     log.Info("Set Baudrate");
                     try
                     {
-                        _connectionControl.CMB_baudrate.Text = "115200";
+                        _connectionControl.CMB_baudrate.Text = "115200";        //TODO Zmienić tak żeby pobierał z pliku config.
                         comPort.BaseStream.BaudRate = int.Parse(_connectionControl.CMB_baudrate.Text);
                     }
                     catch (Exception exp) {

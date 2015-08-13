@@ -28,6 +28,10 @@ namespace MissionPlanner.GCSViews
         public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
         public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
 
+        public static int SideLap { get { return Convert.ToInt32(sideLap.Value); } }
+        public static int OverLap { get { return Convert.ToInt32(overLap.Value); } }
+        public static int ImagesCount { set { Images.Value = value.ToString(); } }
+
         public static EventHandler calcGrid = null;
 
         private static TileData flyingSpeed = null;
@@ -38,7 +42,15 @@ namespace MissionPlanner.GCSViews
         private static TileData distanceTile = null;
         private static TileButton accept = null;
         private static TileButton ArmButton = null;
+        private static TileButton SaveWPFile = null;
+        private static TileButton LoadWPFile = null;
+        private static TileButton LoadWPPlatform = null;
 
+        private static TileData sideLap = null;
+        private static TileData overLap = null;
+        private static TileData Images = null;
+        private static TileButton SideLapOK = null;
+        private static TileButton OverLapOK = null;
 
         private static TileData windSpeed = null;
 
@@ -50,9 +62,7 @@ namespace MissionPlanner.GCSViews
 
         private static double groundRes;
 
-        
-
-
+       
 
         public static void ChangeAlt(int v)
         {
@@ -80,6 +90,26 @@ namespace MissionPlanner.GCSViews
             if (val < fsMin) val = fsMin;
             else if (val > fsMax) val = fsMax;
             flyingSpeed.Value = val.ToString();
+            if (calcGrid != null)
+                calcGrid(null, null);
+        }
+
+        public static void ChangeSideLap(int v)
+        {
+            int val = Convert.ToInt32(sideLap.Value) + v;
+            if (val > 100) val = 100;
+            if (val < 0) val = 0;
+            sideLap.Value = val.ToString();
+            if (calcGrid != null)
+                calcGrid(null, null);
+        }
+
+        public static void ChangeOverLap(int v)
+        {
+            int val = Convert.ToInt32(overLap.Value) + v;
+            if (val > 100) val = 100;
+            if (val < 0) val = 0;
+            overLap.Value = val.ToString();
             if (calcGrid != null)
                 calcGrid(null, null);
         }
@@ -322,28 +352,62 @@ namespace MissionPlanner.GCSViews
             TileButton altBtnOk = null;
             altBtnOk = new TileButton("OK", 4, 5, (sender, args) => altBtnDown.Visible = altBtnUp.Visible = altBtnOk.Visible = false);
 
+            var SideLapUp1 = new TileButton("+1", 2, 7, (sender, args) => { ChangeSideLap(1); });
+            var SideLapUp5 = new TileButton("+5", 4, 7, (sender, args) => { ChangeSideLap(5); });
+            var SideLapDown1 = new TileButton("-1", 3, 7, (sender, args) => { ChangeSideLap(-1);});
+            var SideLapDown5 = new TileButton("-5", 5, 7, (sender, args) => { ChangeSideLap(-5);});
+            SideLapOK = new TileButton("OK", 6, 7, (sender, args) => { SideLapUp1.Visible = SideLapUp5.Visible = SideLapDown5.Visible = SideLapDown1.Visible = SideLapOK.Visible = false; });
+
+
+            var OverLapUp1 = new TileButton("+1", 1, 8, (sender, args) => { ChangeOverLap(1); });
+            var OverLapUp5 = new TileButton("+5", 3, 8, (sender, args) => { ChangeOverLap(5); });
+            var OverLapDown1 = new TileButton("-1", 2, 8, (sender, args) => { ChangeOverLap(-1); });
+            var OverLapDown5 = new TileButton("-5", 4, 8, (sender, args) => { ChangeOverLap(-5); });
+            OverLapOK = new TileButton("OK", 5, 8, (sender, args) => { OverLapDown1.Visible = OverLapDown5.Visible = OverLapUp1.Visible = OverLapUp5.Visible = OverLapOK.Visible = false; });
+
+
+            Images = new TileData("IMAGES NUBMER", 0, 7, "");
+            Images.Value = "0";
 
             var fsBtnUp = new TileButton("+1", 2, 6, (sender, args) => ChangeSpeed(1));
             var fsBtnDown = new TileButton("-1", 3, 6, (sender, args) => ChangeSpeed(-1));
             TileButton fsBtnOk = null;
             fsBtnOk = new TileButton("OK", 4, 6, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
 
+            List<TileButton> dropdownHideList = new TileButton[] { SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
+                                                                   OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
+                                                                   angleBtnDown, angleBtnDown1, angleBtnUp, angleBtnUp1, angleBtnOk,
+                                                                   altBtnDown, altBtnUp,  altBtnOk, fsBtnDown, fsBtnUp, fsBtnOk}.ToList();
+
+            sideLap = new TileData("SIDELAP", 1, 7, "%", (sender, args) =>
+            {
+                var x = !SideLapUp1.Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
+                SideLapDown1.Visible = SideLapDown5.Visible = SideLapUp1.Visible = SideLapUp5.Visible = SideLapOK.Visible = x;
+                cameras_buttons.ForEach(cam => cam.Visible = false);
+            });
+
+            overLap = new TileData("OVERLAP", 0, 8, "%", (sender, args) =>
+            {
+                var x = !OverLapUp1.Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
+                OverLapDown1.Visible = OverLapDown5.Visible = OverLapUp1.Visible = OverLapUp5.Visible = OverLapOK.Visible = x;
+                cameras_buttons.ForEach(cam => cam.Visible = false);
+            });
 
             flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", (sender, args) =>
             {
                 var x = !fsBtnUp.Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
                 fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
-                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
-                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
                 cameras_buttons.ForEach(cam => cam.Visible = false);
             });
             flyingSpeed.Value = "3";
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
             {
                 var x = !altBtnUp.Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
                 altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = x;
-                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
-                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
                 cameras_buttons.ForEach(cam => cam.Visible = false);
             });
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
@@ -371,7 +435,13 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPSHDOP", 1, 5, ""),              
                 new TileData("GPS SAT COUNT", 1, 6, ""),          
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
-                new TileButton("EXIT",2,0, (sender,e) => { MissionPlanner.LogReporter.LogReporter.stopThread = true;   MainV2.instance.Close();}),
+                new TileButton("EXIT",2,0, (sender,e) => 
+                { 
+                    MissionPlanner.LogReporter.LogReporter.stopThread = true;
+                    MainV2.config["grid_sidelap"] = SideLap.ToString();
+                    MainV2.config["grid_overlap"] = OverLap.ToString();
+                    MainV2.instance.Close();
+                }),
                 mode = new TileData("MODE",0,6,""),
                 windSpeed,
             });
@@ -396,23 +466,40 @@ namespace MissionPlanner.GCSViews
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", (sender, args) =>
             {
                 var x = !cameras_buttons.ElementAt(0).Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
                 cameras_buttons.ForEach(cam => cam.Visible = x);
-                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
-                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
-                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
+                //altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
+                //angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
+                //fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
             });
 
             obsHeadBtn.ValueLabel.Width = 120;
             obsHeadBtn.Value = "GEOSCANNER";
 
-            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => { pathAccepted = true; accept.Visible = false; calcGrid = null; });
+            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => 
+            { 
+                pathAccepted = true; accept.Visible = false; calcGrid = null;
+                foreach (var t in commonTiles)
+                {
+                    (t as TileButton).Visible = true;
+                }
+                SaveWPFile.Visible = true;
+                LoadWPFile.Visible = true;
+                LoadWPPlatform.Visible = true;
+                sideLap.Visible = false;
+                overLap.Visible = false;
+                Images.Visible = false;
+                dropdownHideList.ForEach(t => t.Visible = false);
+            });
 
             var list = (TileInfo[])cameras_buttons.ToArray();
 
             List<TileInfo> hidelist2 = new List<TileInfo>();
 
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp, fsBtnOk, fsBtnDown };
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp, fsBtnOk, fsBtnDown, sideLap, overLap, Images,
+                                            SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
+                                            OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK};
 
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(list);
@@ -423,9 +510,10 @@ namespace MissionPlanner.GCSViews
             angleInfo = new TileData("ANGLE", 1, 4, "deg", (sender, args) =>
             {
                 var x = !angleBtnUp.Visible;
+                dropdownHideList.ForEach(tile => tile.Visible = false);
                 angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
-                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
-                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
+                //altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
+                //fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
                 cameras_buttons.ForEach(cam => cam.Visible = false);
             });
 
@@ -438,6 +526,9 @@ namespace MissionPlanner.GCSViews
                 altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, angleBtnUp1, angleBtnDown1, 
                 accept,
                 fsBtnDown,fsBtnOk,fsBtnUp,flyingSpeed,
+                sideLap,overLap,Images,
+                SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
+                OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
 
                 new TileButton("COMPASS\nCALIBRATION",4,0,(sender,e) => 
                 {
@@ -477,8 +568,18 @@ namespace MissionPlanner.GCSViews
                     Color.FromArgb(255, 255, 51, 0)),
                     
                 new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
-            {
                 {
+                    foreach (var t in commonTiles)
+                    {
+                        (t as TileButton).Visible = false;
+                    }
+                    SaveWPFile.Visible = false;
+                    LoadWPFile.Visible = false;
+                    LoadWPPlatform.Visible = false;
+                    sideLap.Visible = true;
+                    overLap.Visible = true;
+                    Images.Visible = true;
+
                     pathAccepted = false;
                     var Host = new Plugin.PluginHost();
                     ToolStripItemCollection col = Host.FPMenuMap.Items;
@@ -492,16 +593,15 @@ namespace MissionPlanner.GCSViews
                         toolStripItem.PerformClick();
                     }
                 }
-            }
             ),
                 new TileButton("ADD LANDING POINT", 1, 2,
                     (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)),
                angleInfo,
                altInfo,
 
-               new TileButton("SAVE WP FILE", 3,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
-               new TileButton("LOAD WP FILE", 3,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
-               new TileButton("LOAD WP PLATFORM",4,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
+               SaveWPFile = new TileButton("SAVE WP FILE", 3,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
+               LoadWPFile = new TileButton("LOAD WP FILE", 3,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
+               LoadWPPlatform = new TileButton("LOAD WP PLATFORM",4,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
 
                new TileButton("SHOW WP",3,0,(sender,args) => 
                {
@@ -519,6 +619,13 @@ namespace MissionPlanner.GCSViews
             foreach (var pan in common) { pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront(); }
 
             // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
+
+            var sideValue = MainV2.config["grid_sidelap"];
+            var overValue = MainV2.config["grid_overlap"];
+
+            ChangeSideLap( Convert.ToInt32(sideValue) );
+            ChangeOverLap(Convert.ToInt32(overValue));
+           
 
             foreach (var tile in tilesArray)
             {

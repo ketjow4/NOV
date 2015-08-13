@@ -717,7 +717,9 @@ namespace MissionPlanner
             //}
             //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
 
-            lbl_pictures.Text = images.ToString();
+            //lbl_pictures.Text = images.ToString();
+            Tiles.ImagesCount = images;
+
             lbl_strips.Text = ((int)(strips / 2)).ToString();
             double seconds = ((routetotal * 1000.0) / ((flyspeedms) * 0.8));
             // reduce flying speed by 20 %
@@ -874,8 +876,11 @@ namespace MissionPlanner
                 float sensorwidth = float.Parse(TXT_senswidth.Text);
                 float sensorheight = float.Parse(TXT_sensheight.Text);
 
-                int overlap = (int)num_overlap.Value;
-                int sidelap = (int)num_sidelap.Value;
+                //int overlap = (int)num_overlap.Value;
+                //int sidelap = (int)num_sidelap.Value;
+
+                int overlap = Tiles.OverLap;
+                int sidelap = Tiles.SideLap;
 
 
                 // scale      mm / mm
