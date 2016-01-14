@@ -962,13 +962,14 @@ namespace MissionPlanner
                     log.Info("Set Portname");
                     // set port, then options
                     //_connectionControl.CMB_serialport.Text = "com3";
+                    
                     comPort.BaseStream.PortName = _connectionControl.CMB_serialport.Text;
 
                     log.Info("Set Baudrate");
                     try
                     {
-                        _connectionControl.CMB_baudrate.Text = "115200";        //TODO Zmienić tak żeby pobierał z pliku config.
-                        comPort.BaseStream.BaudRate = int.Parse(_connectionControl.CMB_baudrate.Text);
+                        var baudrate = config["baudrate"].ToString();
+                        comPort.BaseStream.BaudRate = int.Parse(baudrate);
                     }
                     catch (Exception exp) {
                         log.Error(exp); 
@@ -1353,8 +1354,6 @@ namespace MissionPlanner
 
                     xmlwriter.WriteElementString("comport", comPortName);
 
-                    xmlwriter.WriteElementString("baudrate", _connectionControl.CMB_baudrate.Text);
-
                     xmlwriter.WriteElementString("APMFirmware", MainV2.comPort.MAV.cs.firmware.ToString());
 
                     foreach (string key in config.Keys)
@@ -1403,7 +1402,7 @@ namespace MissionPlanner
                                         break;
                                     case "baudrate":
                                         string temp2 = xmlreader.ReadString();
-
+                                        config["baudrate"] = temp2;
                                         _connectionControl.CMB_baudrate.SelectedIndex = _connectionControl.CMB_baudrate.FindString(temp2);
                                         if (_connectionControl.CMB_baudrate.SelectedIndex == -1)
                                         {

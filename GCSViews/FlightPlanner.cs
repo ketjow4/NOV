@@ -495,7 +495,6 @@ namespace MissionPlanner.GCSViews
             panelWaypoints.Visible = false;
             panelAction.Visible = false;
             Tiles.SetTiles(panelBASE, false);
-
         }
 
         void MainMap_MouseWheel(object sender, MouseEventArgs e)
