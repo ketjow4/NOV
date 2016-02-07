@@ -16,7 +16,6 @@ namespace MissionPlanner.Comms
         public int bps { get; set; }
         int currentbps = 0;
         int bytecredit = 0;
-        int sleepvalue = 1;
         DateTime lastread = DateTime.MinValue;
         int lastsecond = 0;
 
@@ -37,6 +36,9 @@ namespace MissionPlanner.Comms
         }
         public int Read(byte[] buffer, int offset, int count)
         {
+            if (!IsOpen)
+                throw new EndOfStreamException("File not open");
+
             while (true) 
             {
                 // check if we have credit and continue

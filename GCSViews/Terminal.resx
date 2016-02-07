@@ -138,7 +138,7 @@
   <data name="TXT_terminal.Text" xml:space="preserve">
     <value>*NOTE* Please click connect above
 CLI Works only on first connect of power, log download only over USB
-</value>
+Newer versions only support log download via mavlink, please see the flightdata &gt; dataflahs logs</value>
   </data>
   <data name="&gt;&gt;TXT_terminal.Name" xml:space="preserve">
     <value>TXT_terminal</value>
@@ -340,6 +340,9 @@ CLI Works only on first connect of power, log download only over USB
   </data>
   <data name="CMB_boardtype.Items2" xml:space="preserve">
     <value>VRX/VRBRAIN</value>
+  </data>
+  <data name="CMB_boardtype.Items3" xml:space="preserve">
+    <value>NSH</value>
   </data>
   <data name="CMB_boardtype.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 4</value>

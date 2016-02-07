@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections;
 using System.Drawing;
-using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using MissionPlanner.Controls.BackstageView;
-using System.Collections;
 using MissionPlanner.Controls;
 using MissionPlanner.Utilities;
 
@@ -15,54 +11,32 @@ namespace MissionPlanner.GCSViews.ConfigurationView
 {
     public partial class ConfigArducopter : UserControl, IActivate
     {
-        Hashtable changes = new Hashtable();
-        static Hashtable tooltips = new Hashtable();
+        // from http://stackoverflow.com/questions/2512781/winforms-big-paragraph-tooltip/2512895#2512895
+        private const int maximumSingleLineTooltipLength = 50;
+        private static Hashtable tooltips = new Hashtable();
+        private readonly Hashtable changes = new Hashtable();
         internal bool startup = true;
-
-        public struct paramsettings // hk's
-        {
-            public string name;
-            public float minvalue;
-            public float maxvalue;
-            public float normalvalue;
-            public float scale;
-            public string desc;
-        }
 
         public ConfigArducopter()
         {
             InitializeComponent();
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == (Keys.Control | Keys.S))
-            {
-                BUT_writePIDS_Click(null, null);
-                return true;
-            }
-
-            return false;
-        }
-
         public void Activate()
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
             {
-                this.Enabled = false;
+                Enabled = false;
                 return;
+            }
+            if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+            {
+                Enabled = true;
             }
             else
             {
-                if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
-                {
-                    this.Enabled = true;
-                }
-                else
-                {
-                    this.Enabled = false;
-                    return;
-                }
+                Enabled = false;
+                return;
             }
 
             startup = true;
@@ -70,20 +44,53 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             changes.Clear();
 
             // ensure the fields are populated before setting them
-            CH7_OPT.DataSource = ParameterMetaDataRepository.GetParameterOptionsInt("CH7_OPT", MainV2.comPort.MAV.cs.firmware.ToString()).ToList(); 
-            CH7_OPT.DisplayMember = "Value";
-            CH7_OPT.ValueMember = "Key";
+            TUNE.setup(
+                ParameterMetaDataRepository.GetParameterOptionsInt("TUNE", MainV2.comPort.MAV.cs.firmware.ToString())
+                    .ToList(), "TUNE", MainV2.comPort.MAV.param);
+            CH7_OPT.setup(
+                ParameterMetaDataRepository.GetParameterOptionsInt("CH7_OPT", MainV2.comPort.MAV.cs.firmware.ToString())
+                    .ToList(), "CH7_OPT", MainV2.comPort.MAV.param);
+            CH8_OPT.setup(
+                ParameterMetaDataRepository.GetParameterOptionsInt("CH8_OPT", MainV2.comPort.MAV.cs.firmware.ToString())
+                    .ToList(), "CH8_OPT", MainV2.comPort.MAV.param);
 
-            CH8_OPT.DataSource = ParameterMetaDataRepository.GetParameterOptionsInt("CH8_OPT", MainV2.comPort.MAV.cs.firmware.ToString()).ToList(); 
-            CH8_OPT.DisplayMember = "Value";
-            CH8_OPT.ValueMember = "Key";
+            TUNE_LOW.setup(0, 10000, 1000, 0.01f, "TUNE_LOW", MainV2.comPort.MAV.param);
+            TUNE_HIGH.setup(0, 10000, 1000, 0.01f, "TUNE_HIGH", MainV2.comPort.MAV.param);
 
-            TUNE.DataSource = ParameterMetaDataRepository.GetParameterOptionsInt("TUNE", MainV2.comPort.MAV.cs.firmware.ToString()).ToList();
-            TUNE.DisplayMember = "Value";
-            TUNE.ValueMember = "Key";
-
-            // prefill all fields
-            processToScreen();
+            HLD_LAT_P.setup(0, 0, 1, 0.001f, new[] {"HLD_LAT_P", "POS_XY_P"}, MainV2.comPort.MAV.param);
+            LOITER_LAT_D.setup(0, 0, 1, 0.001f, "LOITER_LAT_D", MainV2.comPort.MAV.param);
+            LOITER_LAT_I.setup(0, 0, 1, 0.001f, new[] {"LOITER_LAT_I", "VEL_XY_I"}, MainV2.comPort.MAV.param);
+            LOITER_LAT_IMAX.setup(0, 0, 10, 1f, new[] {"LOITER_LAT_IMAX", "VEL_XY_IMAX"}, MainV2.comPort.MAV.param);
+            LOITER_LAT_P.setup(0, 0, 1, 0.001f, new[] {"LOITER_LAT_P", "VEL_XY_P"}, MainV2.comPort.MAV.param);
+            RATE_PIT_FF.setup(0, 0, 1, 0.001f, "RATE_PIT_VFF", MainV2.comPort.MAV.param);
+            RATE_PIT_D.setup(0, 0, 1, 0.001f, "RATE_PIT_D", MainV2.comPort.MAV.param);
+            RATE_PIT_I.setup(0, 0, 1, 0.001f, "RATE_PIT_I", MainV2.comPort.MAV.param);
+            RATE_PIT_IMAX.setup(0, 0, 10, 1f, "RATE_PIT_IMAX", MainV2.comPort.MAV.param);
+            RATE_PIT_P.setup(0, 0, 1, 0.001f, "RATE_PIT_P", MainV2.comPort.MAV.param);
+            RATE_RLL_D.setup(0, 0, 1, 0.001f, "RATE_RLL_D", MainV2.comPort.MAV.param);
+            RATE_RLL_I.setup(0, 0, 1, 0.001f, "RATE_RLL_I", MainV2.comPort.MAV.param);
+            RATE_RLL_IMAX.setup(0, 0, 10, 1f, "RATE_RLL_IMAX", MainV2.comPort.MAV.param);
+            RATE_RLL_P.setup(0, 0, 1, 0.001f, "RATE_RLL_P", MainV2.comPort.MAV.param);
+            RATE_RLL_FF.setup(0, 0, 1, 0.001f, "RATE_RLL_VFF", MainV2.comPort.MAV.param);
+            RATE_YAW_D.setup(0, 0, 1, 0.001f, "RATE_YAW_D", MainV2.comPort.MAV.param);
+            RATE_YAW_FF.setup(0, 0, 1, 0.001f, "RATE_YAW_VFF", MainV2.comPort.MAV.param);
+            RATE_YAW_I.setup(0, 0, 1, 0.001f, "RATE_YAW_I", MainV2.comPort.MAV.param);
+            RATE_YAW_IMAX.setup(0, 0, 10, 1f, "RATE_YAW_IMAX", MainV2.comPort.MAV.param);
+            RATE_YAW_P.setup(0, 0, 1, 0.001f, "RATE_YAW_P", MainV2.comPort.MAV.param);
+            STB_PIT_P.setup(0, 0, 1, 0.001f, "STB_PIT_P", MainV2.comPort.MAV.param);
+            STB_RLL_P.setup(0, 0, 1, 0.001f, "STB_RLL_P", MainV2.comPort.MAV.param);
+            STB_YAW_P.setup(0, 0, 1, 0.001f, "STB_YAW_P", MainV2.comPort.MAV.param);
+            THR_ACCEL_D.setup(0, 0, 1, 0.001f, new[] {"THR_ACCEL_D", "ACCEL_Z_D"}, MainV2.comPort.MAV.param);
+            THR_ACCEL_I.setup(0, 0, 1, 0.001f, new[] {"THR_ACCEL_I", "ACCEL_Z_I"}, MainV2.comPort.MAV.param);
+            THR_ACCEL_IMAX.setup(0, 0, 10, 1f, new[] {"THR_ACCEL_IMAX", "ACCEL_Z_IMAX"}, MainV2.comPort.MAV.param);
+            THR_ACCEL_P.setup(0, 0, 1, 0.001f, new[] {"THR_ACCEL_P", "ACCEL_Z_P"}, MainV2.comPort.MAV.param);
+            THR_ALT_P.setup(0, 0, 1, 0.001f, new[] {"THR_ALT_P", "POS_Z_P"}, MainV2.comPort.MAV.param);
+            THR_RATE_P.setup(0, 0, 1, 0.001f, new[] {"THR_RATE_P", "VEL_Z_P"}, MainV2.comPort.MAV.param);
+            WPNAV_LOIT_SPEED.setup(0, 0, 1, 0.001f, "WPNAV_LOIT_SPEED", MainV2.comPort.MAV.param);
+            WPNAV_RADIUS.setup(0, 0, 1, 0.001f, "WPNAV_RADIUS", MainV2.comPort.MAV.param);
+            WPNAV_SPEED.setup(0, 0, 1, 0.001f, "WPNAV_SPEED", MainV2.comPort.MAV.param);
+            WPNAV_SPEED_DN.setup(0, 0, 1, 0.001f, "WPNAV_SPEED_DN", MainV2.comPort.MAV.param);
+            WPNAV_SPEED_UP.setup(0, 0, 1, 0.001f, "WPNAV_SPEED_UP", MainV2.comPort.MAV.param);
 
             // unlock entries if they differ
             if (RATE_RLL_P.Value != RATE_PIT_P.Value || RATE_RLL_I.Value != RATE_PIT_I.Value
@@ -100,17 +107,25 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             startup = false;
         }
 
-        // from http://stackoverflow.com/questions/2512781/winforms-big-paragraph-tooltip/2512895#2512895
-        private const int maximumSingleLineTooltipLength = 50;
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Control | Keys.S))
+            {
+                BUT_writePIDS_Click(null, null);
+                return true;
+            }
+
+            return false;
+        }
 
         private static string AddNewLinesForTooltip(string text)
         {
             if (text.Length < maximumSingleLineTooltipLength)
                 return text;
-            int lineLength = (int)Math.Sqrt((double)text.Length) * 2;
-            StringBuilder sb = new StringBuilder();
-            int currentLinePosition = 0;
-            for (int textIndex = 0; textIndex < text.Length; textIndex++)
+            var lineLength = (int) Math.Sqrt(text.Length)*2;
+            var sb = new StringBuilder();
+            var currentLinePosition = 0;
+            for (var textIndex = 0; textIndex < text.Length; textIndex++)
             {
                 // If we have reached the target line length and the next      
                 // character is whitespace then begin a new line.   
@@ -131,7 +146,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             return sb.ToString();
         }
 
-        void disableNumericUpDownControls(Control inctl)
+        private void disableNumericUpDownControls(Control inctl)
         {
             foreach (Control ctl in inctl.Controls)
             {
@@ -139,145 +154,39 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                 {
                     disableNumericUpDownControls(ctl);
                 }
-                if (ctl.GetType() == typeof(NumericUpDown))
+                if (ctl.GetType() == typeof (NumericUpDown))
                 {
                     ctl.Enabled = false;
                 }
             }
         }
 
-        internal void processToScreen()
-        {
-            toolTip1.RemoveAll();
-
-            disableNumericUpDownControls(this);
-
-
-            // process hashdefines and update display
-            foreach (string value in MainV2.comPort.MAV.param.Keys)
-            {
-                if (value == null || value == "")
-                    continue;
-
-                //System.Diagnostics.Debug.WriteLine("Doing: " + value);
-
-
-                string name = value;
-                Control[] text = this.Controls.Find(name, true);
-                foreach (Control ctl in text)
-                {
-                    try
-                    {
-                        if (ctl.GetType() == typeof(NumericUpDown))
-                        {
-
-                            float numbervalue = (float)MainV2.comPort.MAV.param[value];
-
-                            MAVLinkInterface.modifyParamForDisplay(true, value, ref numbervalue);
-
-                            NumericUpDown thisctl = ((NumericUpDown)ctl);
-                            thisctl.Maximum = 9000;
-                            thisctl.Minimum = -9000;
-                            thisctl.Value = (decimal)numbervalue;
-                            thisctl.Increment = (decimal)0.0001;
-                            if (thisctl.Name.EndsWith("_P") || thisctl.Name.EndsWith("_I") || thisctl.Name.EndsWith("_D")
-                                || thisctl.Name.EndsWith("_LOW") || thisctl.Name.EndsWith("_HIGH") || thisctl.Value == 0
-                                || thisctl.Value.ToString("0.####", new System.Globalization.CultureInfo("en-US")).Contains("."))
-                            {
-                                thisctl.DecimalPlaces = 4;
-                            }
-                            else
-                            {
-                                thisctl.Increment = (decimal)1;
-                                thisctl.DecimalPlaces = 1;
-                            }
-
-                            if (thisctl.Name.ToUpper().EndsWith("THR_RATE_IMAX"))
-                            {
-                                thisctl.Maximum = 1000; // is a pwm
-                                thisctl.Minimum = 0;
-                            } else if (thisctl.Name.EndsWith("_IMAX"))
-                            {
-                                thisctl.Maximum = 1800;
-                                thisctl.Minimum = -1800;
-                            }
-
-                            thisctl.Enabled = true;
-
-                            ThemeManager.ApplyThemeTo(thisctl);
-
-                            thisctl.Validated += null;
-                            if (tooltips[value] != null)
-                            {
-                                try
-                                {
-                                    toolTip1.SetToolTip(ctl, ((paramsettings)tooltips[value]).desc);
-                                }
-                                catch { }
-                            }
-                            thisctl.Validated += new EventHandler(EEPROM_View_float_TextChanged);
-
-                        }
-                        else if (ctl.GetType() == typeof(ComboBox))
-                        {
-
-                            ComboBox thisctl = ((ComboBox)ctl);
-
-                            thisctl.SelectedValue = (int)(float)MainV2.comPort.MAV.param[value];
-
-                            thisctl.Validated += new EventHandler(ComboBox_Validated);
-
-                            ThemeManager.ApplyThemeTo(thisctl);
-                        }
-                    }
-                    catch { }
-
-                }
-                if (text.Length == 0)
-                {
-                    //Console.WriteLine(name + " not found");
-                }
-
-            }
-        }
-
-               void ComboBox_Validated(object sender, EventArgs e)
-        {
-            EEPROM_View_float_TextChanged(sender, e);
-        }
-
-        void Configuration_Validating(object sender, CancelEventArgs e)
-        {
-            EEPROM_View_float_TextChanged(sender, e);
-        }
-
         internal void EEPROM_View_float_TextChanged(object sender, EventArgs e)
         {
-            if (startup == true)
+            if (startup)
                 return;
 
             float value = 0;
-            string name = ((Control)sender).Name;
+            var name = ((Control) sender).Name;
 
             // do domainupdown state check
             try
             {
-                if (sender.GetType() == typeof(NumericUpDown))
+                if (sender.GetType() == typeof (MavlinkNumericUpDown))
                 {
-                    value = (float)((NumericUpDown)sender).Value;
-                    MAVLinkInterface.modifyParamForDisplay(false, ((Control)sender).Name, ref value);
+                    value = ((MAVLinkParamChanged) e).value;
                     changes[name] = value;
                 }
-                else if (sender.GetType() == typeof(ComboBox))
+                else if (sender.GetType() == typeof (MavlinkComboBox))
                 {
-                    value = (int)((ComboBox)sender).SelectedValue;
+                    value = ((MAVLinkParamChanged) e).value;
                     changes[name] = value;
                 }
-                ((Control)sender).BackColor = Color.Green;
+                ((Control) sender).BackColor = Color.Green;
             }
             catch (Exception)
             {
-                ((Control)sender).BackColor = Color.Red;
+                ((Control) sender).BackColor = Color.Red;
             }
 
             try
@@ -289,26 +198,25 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                     {
                         if (name.Contains("_RLL_"))
                         {
-                            string newname = name.Replace("_RLL_", "_PIT_");
-                            Control[] arr = this.Controls.Find(newname, true);
+                            var newname = name.Replace("_RLL_", "_PIT_");
+                            var arr = Controls.Find(newname, true);
                             changes[newname] = value;
 
                             if (arr.Length > 0)
                             {
-                                arr[0].Text = ((Control)sender).Text;
+                                arr[0].Text = ((Control) sender).Text;
                                 arr[0].BackColor = Color.Green;
                             }
-
                         }
                         else if (name.Contains("_PIT_"))
                         {
-                            string newname = name.Replace("_PIT_", "_RLL_");
-                            Control[] arr = this.Controls.Find(newname, true);
+                            var newname = name.Replace("_PIT_", "_RLL_");
+                            var arr = Controls.Find(newname, true);
                             changes[newname] = value;
 
                             if (arr.Length > 0)
                             {
-                                arr[0].Text = ((Control)sender).Text;
+                                arr[0].Text = ((Control) sender).Text;
                                 arr[0].BackColor = Color.Green;
                             }
                         }
@@ -317,64 +225,57 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                 // keep nav_lat and nav_lon paired
                 if (name.Contains("NAV_LAT_"))
                 {
-                    string newname = name.Replace("NAV_LAT_", "NAV_LON_");
-                    Control[] arr = this.Controls.Find(newname, true);
+                    var newname = name.Replace("NAV_LAT_", "NAV_LON_");
+                    var arr = Controls.Find(newname, true);
                     changes[newname] = value;
 
                     if (arr.Length > 0)
                     {
-                        arr[0].Text = ((Control)sender).Text;
+                        arr[0].Text = ((Control) sender).Text;
                         arr[0].BackColor = Color.Green;
                     }
                 }
                 // keep loiter_lat and loiter_lon paired
                 if (name.Contains("LOITER_LAT_"))
                 {
-                    string newname = name.Replace("LOITER_LAT_", "LOITER_LON_");
-                    Control[] arr = this.Controls.Find(newname, true);
+                    var newname = name.Replace("LOITER_LAT_", "LOITER_LON_");
+                    var arr = Controls.Find(newname, true);
                     changes[newname] = value;
 
                     if (arr.Length > 0)
                     {
-                        arr[0].Text = ((Control)sender).Text;
-                        arr[0].BackColor = Color.Green;
-                    }
-                }
-                // keep nav_lat and nav_lon paired
-                if (name.Contains("HLD_LAT_"))
-                {
-                    string newname = name.Replace("HLD_LAT_", "HLD_LON_");
-                    Control[] arr = this.Controls.Find(newname, true);
-                    changes[newname] = value;
-
-                    if (arr.Length > 0)
-                    {
-                        arr[0].Text = ((Control)sender).Text;
+                        arr[0].Text = ((Control) sender).Text;
                         arr[0].BackColor = Color.Green;
                     }
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private void BUT_writePIDS_Click(object sender, EventArgs e)
         {
-            var temp = (Hashtable)changes.Clone();
+            var temp = (Hashtable) changes.Clone();
 
             foreach (string value in temp.Keys)
             {
                 try
                 {
-                    if ((float)changes[value] > (float)MainV2.comPort.MAV.param[value] * 2.0f)
-                        if (CustomMessageBox.Show(value +" has more than doubled the last input. Are you sure?", "Large Value", MessageBoxButtons.YesNo) == DialogResult.No)
+                    if ((float) changes[value] > (float) MainV2.comPort.MAV.param[value]*2.0f)
+                        if (
+                            CustomMessageBox.Show(value + " has more than doubled the last input. Are you sure?",
+                                "Large Value", MessageBoxButtons.YesNo) == DialogResult.No)
                             return;
 
-                    MainV2.comPort.setParam(value, (float)changes[value]);
+                    MainV2.comPort.setParam(value, (float) changes[value]);
+
+                    changes.Remove(value);
 
                     try
                     {
                         // set control as well
-                        var textControls = this.Controls.Find(value, true);
+                        var textControls = Controls.Find(value, true);
                         if (textControls.Length > 0)
                         {
                             textControls[0].BackColor = Color.FromArgb(0x43, 0x44, 0x45);
@@ -382,28 +283,26 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                     }
                     catch
                     {
-
                     }
-
                 }
                 catch
                 {
-                    CustomMessageBox.Show("Set " + value + " Failed", "Error");
+                    CustomMessageBox.Show(string.Format(Strings.ErrorSetValueFailed, value), Strings.ERROR);
                 }
             }
         }
 
         /// <summary>
-        /// Handles the Click event of the BUT_rerequestparams control.
+        ///     Handles the Click event of the BUT_rerequestparams control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected void BUT_rerequestparams_Click(object sender, EventArgs e)
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
                 return;
 
-            ((Control)sender).Enabled = false;
+            ((Control) sender).Enabled = false;
 
             try
             {
@@ -411,14 +310,14 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("Error: getting param list " + ex.ToString(), "Error");
+                CustomMessageBox.Show(Strings.ErrorReceivingParams + ex, Strings.ERROR);
             }
 
 
-            ((Control)sender).Enabled = true;
+            ((Control) sender).Enabled = true;
 
 
-            this.Activate();
+            Activate();
         }
 
         private void BUT_refreshpart_Click(object sender, EventArgs e)
@@ -426,28 +325,30 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             if (!MainV2.comPort.BaseStream.IsOpen)
                 return;
 
-            ((Control)sender).Enabled = false;
+            ((Control) sender).Enabled = false;
 
 
             updateparam(this);
 
-            ((Control)sender).Enabled = true;
+            ((Control) sender).Enabled = true;
 
 
-            this.Activate();
+            Activate();
         }
 
-        void updateparam(Control parentctl)
+        private void updateparam(Control parentctl)
         {
             foreach (Control ctl in parentctl.Controls)
             {
-                if (typeof(NumericUpDown) == ctl.GetType() || typeof(ComboBox) == ctl.GetType())
+                if (typeof (MavlinkNumericUpDown) == ctl.GetType() || typeof (ComboBox) == ctl.GetType())
                 {
                     try
                     {
                         MainV2.comPort.GetParam(ctl.Name);
                     }
-                    catch { }
+                    catch
+                    {
+                    }
                 }
 
                 if (ctl.Controls.Count > 0)
@@ -456,6 +357,10 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                 }
             }
         }
-        
+
+        private void numeric_ValueUpdated(object sender, EventArgs e)
+        {
+            EEPROM_View_float_TextChanged(sender, e);
+        }
     }
 }

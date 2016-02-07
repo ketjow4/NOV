@@ -62,13 +62,16 @@ namespace MissionPlanner.Utilities
             param.Add(new KeyValuePair<string, string>("t", "event"));
             param.Add(new KeyValuePair<string, string>("an", Application.ProductName));
             param.Add(new KeyValuePair<string, string>("av", Application.ProductVersion));
-            param.Add(new KeyValuePair<string, string>("ec", cat));
-            param.Add(new KeyValuePair<string, string>("ea", action));
-            param.Add(new KeyValuePair<string, string>("el", label));
-            param.Add(new KeyValuePair<string, string>("ev", value));
 
             param.Add(new KeyValuePair<string, string>("cd", currentscreen));
             param.Add(new KeyValuePair<string, string>("dp", currentscreen));
+
+            param.Add(new KeyValuePair<string, string>("ec", cat));
+            param.Add(new KeyValuePair<string, string>("ea", action));
+            param.Add(new KeyValuePair<string, string>("el", label));
+            if (value != "")
+                param.Add(new KeyValuePair<string, string>("ev", value));
+
 
             if (sessionstart == false)
             {
@@ -137,21 +140,25 @@ namespace MissionPlanner.Utilities
 
             try
             {
-                string[] lines = ex.StackTrace.Split(new char[] { '\n' });
-
                 string reportline = "";
 
-                foreach (string line in lines)
+                if (ex.StackTrace != null)
                 {
-                    if (line.Contains(":line"))
-                    {
-                        reportline = line;
-                        break;
-                    }
-                }
-                // 150 bytes
+                    string[] lines = ex.StackTrace.Split(new char[] {'\n'});
 
-                reportline = reportline.Replace(@"c:\Users\hog\Documents\Visual Studio 2010\Projects\MissionPlanner.", "");
+                    foreach (string line in lines)
+                    {
+                        if (line.Contains(":line"))
+                        {
+                            reportline = line;
+                            break;
+                        }
+                    }
+                    // 150 bytes
+
+                    reportline =
+                        reportline.Replace(@"c:\Users\hog\Documents\Visual Studio 2010\Projects\MissionPlanner.", "");
+                }
 
                 param.Add(new KeyValuePair<string, string>("exd", ex.Message + reportline));
             }
@@ -160,8 +167,13 @@ namespace MissionPlanner.Utilities
                 param.Add(new KeyValuePair<string, string>("exd", ex.Message));
             }
             param.Add(new KeyValuePair<string, string>("exf", "0"));
-
-            param.Add(new KeyValuePair<string, string>("cd5", ex.ToString().Substring(0,140)));
+            try
+            {
+                param.Add(new KeyValuePair<string, string>("cd5", ex.ToString().Substring(0, 140)));
+            }
+            catch
+            {
+            }
 
             param.Add(new KeyValuePair<string, string>("ul", Application.CurrentCulture.Name));
             param.Add(new KeyValuePair<string, string>("sd", Screen.PrimaryScreen.BitsPerPixel + "-bits"));

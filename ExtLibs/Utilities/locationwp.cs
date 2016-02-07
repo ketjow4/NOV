@@ -10,6 +10,31 @@ namespace MissionPlanner.Utilities
     /// </summary>
     public struct Locationwp
     {
+        public Locationwp Set(double lat, double lng, double alt, byte id)
+        {
+            this.lat = lat;
+            this.lng = lng;
+            this.alt = (float)alt;
+            this.id = id;
+
+            return this;
+        }
+
+        public static implicit operator MAVLink.mavlink_mission_item_t(Locationwp input)
+        {
+            return new MAVLink.mavlink_mission_item_t()
+            {
+                command = input.id,
+                param1 = input.p1,
+                param2 = input.p2,
+                param3 = input.p3,
+                param4 = input.p4,
+                x = (float)input.lat,
+                y = (float)input.lng,
+                z = (float)input.alt
+            };
+        }
+   
         public byte id;				// command id
         public byte options;
         public float p1;				// param 1

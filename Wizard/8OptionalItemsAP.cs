@@ -49,7 +49,10 @@ namespace MissionPlanner.Wizard
                 MainV2.comPort.setParam("SR3_RAW_SENS", 2);
                 MainV2.comPort.setParam("SR3_RC_CHAN", 2);
             }
-            catch (Exception ex) { CustomMessageBox.Show("Error setting parameters " + ex.ToString(),"Error"); }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show(Strings.ErrorSettingParameter + ex.ToString(), Strings.ERROR);
+            }
 
             connected();
         }
@@ -58,7 +61,7 @@ namespace MissionPlanner.Wizard
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
             {
-                CustomMessageBox.Show("Error you are not connected.\n\nExiting wizard, please check your board, and try again", "Error");
+                CustomMessageBox.Show(Strings.ErrorNotConnected, Strings.ERROR);
                 Wizard.instance.Close();
             }
         }
@@ -78,11 +81,8 @@ namespace MissionPlanner.Wizard
             {
                 // no airspeed - keep going
                 updateosd();
-                Wizard.instance.BeginInvoke((MethodInvoker)delegate
-                {
-                    Wizard.instance.GoNext(1,false);
-                });
-            } 
+                Wizard.instance.BeginInvoke((MethodInvoker) delegate { Wizard.instance.GoNext(1, false); });
+            }
         }
 
         public void Deactivate()
@@ -107,6 +107,7 @@ namespace MissionPlanner.Wizard
         {
             return false;
         }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             LBL_airspeed.Text = MainV2.comPort.MAV.cs.airspeed.ToString("0.00") + " m/s";

@@ -19,14 +19,13 @@ namespace MissionPlanner.Utilities
     class Update
     {
         private static readonly ILog log =
-      LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-       static bool MONO = false;
-       public static bool dobeta = false;
+        static bool MONO = false;
+        public static bool dobeta = false;
 
         public static void updateCheckMain(ProgressReporterDialogue frmProgressReporter)
         {
-
             var t = Type.GetType("Mono.Runtime");
             MONO = (t != null);
 
@@ -46,7 +45,8 @@ namespace MissionPlanner.Utilities
                 if (MONO)
                 {
                     process.StartInfo.FileName = "mono";
-                    process.StartInfo.Arguments = " \"" + exePath + Path.DirectorySeparatorChar + "Updater.exe\"" + "  \"" + Application.ExecutablePath + "\"";
+                    process.StartInfo.Arguments = " \"" + exePath + Path.DirectorySeparatorChar + "Updater.exe\"" +
+                                                  "  \"" + Application.ExecutablePath + "\"";
                 }
                 else
                 {
@@ -72,9 +72,7 @@ namespace MissionPlanner.Utilities
                 process.Start();
                 log.Info("Quitting existing process");
 
-                frmProgressReporter.BeginInvoke((Action) delegate {
-                Application.Exit();
-                });
+                frmProgressReporter.BeginInvoke((Action) delegate { Application.Exit(); });
             }
             catch (Exception ex)
             {
@@ -83,19 +81,23 @@ namespace MissionPlanner.Utilities
             }
         }
 
-        public static void CheckForUpdate()
+        public static void CheckForUpdate(bool NotifyNoUpdate = false)
         {
             var baseurl = ConfigurationManager.AppSettings["UpdateLocationVersion"];
 
             if (dobeta)
                 baseurl = ConfigurationManager.AppSettings["BetaUpdateLocationVersion"];
 
+            if (baseurl == "")
+                return;
+
             string path = Path.GetDirectoryName(Application.ExecutablePath);
 
             path = path + Path.DirectorySeparatorChar + "version.txt";
 
             ServicePointManager.ServerCertificateValidationCallback =
-new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate, chain, policyErrors) => { return true; });
+                new System.Net.Security.RemoteCertificateValidationCallback(
+                    (sender, certificate, chain, policyErrors) => { return true; });
 
             log.Debug(path);
 
@@ -116,7 +118,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             using (var response = webRequest.GetResponse())
             {
                 // Display the status.
-                log.Debug("Response status: " + ((HttpWebResponse)response).StatusDescription);
+                log.Debug("Response status: " + ((HttpWebResponse) response).StatusDescription);
                 // Get the stream containing content returned by the server.
 
                 if (File.Exists(path))
@@ -160,7 +162,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             if (updateFound)
             {
                 // do the update in the main thread
-                MainV2.instance.Invoke((MethodInvoker)delegate
+                MainV2.instance.Invoke((MethodInvoker) delegate
                 {
                     string extra = "";
 
@@ -170,7 +172,8 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                     DialogResult dr = DialogResult.Cancel;
 
 
-                    dr = CustomMessageBox.Show(extra + "Update Found\n\nDo you wish to update now? [link;" + baseurl + "/ChangeLog.txt;ChangeLog]", "Update Now", MessageBoxButtons.YesNo);
+                    dr = CustomMessageBox.Show(extra + Strings.UpdateFound + baseurl + "/ChangeLog.txt;ChangeLog]",
+                        Strings.UpdateNow, MessageBoxButtons.YesNo);
 
                     if (dr == DialogResult.Yes)
                     {
@@ -181,6 +184,10 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                         return;
                     }
                 });
+            }
+            else if (NotifyNoUpdate)
+            {
+                CustomMessageBox.Show(Strings.UpdateNotFound);
             }
         }
 
@@ -199,6 +206,8 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             frmProgressReporter.UpdateProgressAndStatus(-1, "Checking for Updates");
 
             frmProgressReporter.RunBackgroundOperationAsync();
+
+            frmProgressReporter.Dispose();
         }
 
         static void CheckMD5(ProgressReporterDialogue frmProgressReporter, string url)
@@ -210,6 +219,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                 baseurl = ConfigurationManager.AppSettings["BetaUpdateLocation"];
             }
 
+            L10N.ReplaceMirrorUrl(ref baseurl);
 
             WebRequest request = WebRequest.Create(url);
             request.Timeout = 10000;
@@ -220,7 +230,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             // Get the response.
             WebResponse response = request.GetResponse();
             // Display the status.
-            log.Info(((HttpWebResponse)response).StatusDescription);
+            log.Info(((HttpWebResponse) response).StatusDescription);
             // Get the stream containing content returned by the server.
             dataStream = response.GetResponseStream();
             // Open the stream using a StreamReader for easy access.
@@ -245,7 +255,9 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                             // remove all etags
                             File.Delete(file);
                         }
-                        catch { }
+                        catch
+                        {
+                        }
                         continue;
                     }
 
@@ -258,27 +270,30 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                         if (!MD5File(file + ".new", hash))
                         {
                             if (frmProgressReporter != null)
-                                frmProgressReporter.UpdateProgressAndStatus(-1, "Getting " + file);
+                                frmProgressReporter.UpdateProgressAndStatus(-1, Strings.Getting + file);
 
                             string subdir = Path.GetDirectoryName(file) + Path.DirectorySeparatorChar;
 
-                            GetNewFile(frmProgressReporter, baseurl + subdir.Replace('\\', '/'), subdir, Path.GetFileName(file));
+                            GetNewFile(frmProgressReporter, baseurl + subdir.Replace('\\', '/'), subdir,
+                                Path.GetFileName(file));
 
                             // check the new downloaded file matchs hash
                             if (!MD5File(file + ".new", hash))
                             {
                                 throw new Exception("File downloaded does not match hash: " + file);
                             }
-                        } else {
-							log.Info("already got new File " + file);
-						}
+                        }
+                        else
+                        {
+                            log.Info("already got new File " + file);
+                        }
                     }
                     else
                     {
                         log.Info("Same File " + file);
 
                         if (frmProgressReporter != null)
-                            frmProgressReporter.UpdateProgressAndStatus(-1, "Checking " + file);
+                            frmProgressReporter.UpdateProgressAndStatus(-1, Strings.Checking + file);
                     }
                 }
             }
@@ -299,7 +314,10 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                     }
                 }
             }
-            catch (Exception ex) { log.Info("md5 fail " + ex.ToString()); }
+            catch (Exception ex)
+            {
+                log.Info("md5 fail " + ex.ToString());
+            }
 
             return false;
         }
@@ -312,7 +330,8 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                 Directory.CreateDirectory(dir);
 
             // get dest path
-            string path = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + subdir + file;
+            string path = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + subdir +
+                          file;
 
             Exception fail = null;
             int attempt = 0;
@@ -329,7 +348,6 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
 
                 try
                 {
-
                     string url = baseurl + file + "?" + new Random().Next();
                     // Create a request using a URL that can receive a post. 
                     WebRequest request = WebRequest.Create(url);
@@ -337,20 +355,21 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                     // Set the Method property of the request to GET.
                     request.Method = "GET";
                     // Allow compressed content
-                    ((HttpWebRequest)request).AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                    ((HttpWebRequest) request).AutomaticDecompression = DecompressionMethods.GZip |
+                                                                        DecompressionMethods.Deflate;
                     // tell server we allow compress content
                     request.Headers.Add("Accept-Encoding", "gzip,deflate");
                     // Get the response.
                     using (WebResponse response = request.GetResponse())
                     {
                         // Display the status.
-                        log.Info(((HttpWebResponse)response).StatusDescription);
+                        log.Info(((HttpWebResponse) response).StatusDescription);
                         // Get the stream containing content returned by the server.
                         Stream dataStream = response.GetResponseStream();
 
                         // update status
                         if (frmProgressReporter != null)
-                            frmProgressReporter.UpdateProgressAndStatus(-1, "Getting " + file);
+                            frmProgressReporter.UpdateProgressAndStatus(-1, Strings.Getting + file);
 
                         // from head
                         long bytes = response.ContentLength;
@@ -364,7 +383,6 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
 
                         using (FileStream fs = new FileStream(fn, FileMode.Create))
                         {
-
                             DateTime dt = DateTime.Now;
 
                             while (dataStream.CanRead)
@@ -374,11 +392,17 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                                     if (dt.Second != DateTime.Now.Second)
                                     {
                                         if (frmProgressReporter != null)
-                                            frmProgressReporter.UpdateProgressAndStatus((int)(((double)(contlen - bytes) / (double)contlen) * 100), "Getting " + file + ": " + (((double)(contlen - bytes) / (double)contlen) * 100).ToString("0.0") + "%"); //+ Math.Abs(bytes) + " bytes");
+                                            frmProgressReporter.UpdateProgressAndStatus(
+                                                (int) (((double) (contlen - bytes)/(double) contlen)*100),
+                                                Strings.Getting + file + ": " +
+                                                (((double) (contlen - bytes)/(double) contlen)*100).ToString("0.0") +
+                                                "%"); //+ Math.Abs(bytes) + " bytes");
                                         dt = DateTime.Now;
                                     }
                                 }
-                                catch { }
+                                catch
+                                {
+                                }
                                 log.Debug(file + " " + bytes);
                                 int len = dataStream.Read(buf1, 0, buf1.Length);
                                 if (len == 0)
@@ -389,7 +413,12 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                         }
                     }
                 }
-                catch (Exception ex) { fail = ex; attempt++; continue; }
+                catch (Exception ex)
+                {
+                    fail = ex;
+                    attempt++;
+                    continue;
+                }
 
                 // break if we have no exception
                 break;
@@ -404,17 +433,21 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
         static void DoUpdateWorker_DoWork(object sender, ProgressWorkerEventArgs e, object passdata = null)
         {
             // TODO: Is this the right place?
+
             #region Fetch Parameter Meta Data
 
-            var progressReporterDialogue = ((ProgressReporterDialogue)sender);
+            var progressReporterDialogue = ((ProgressReporterDialogue) sender);
             progressReporterDialogue.UpdateProgressAndStatus(-1, "Getting Updated Parameters");
 
             try
             {
-
                 ParameterMetaDataParser.GetParameterInformation();
             }
-            catch (Exception ex) { log.Error(ex.ToString()); CustomMessageBox.Show("Error getting Parameter Information"); }
+            catch (Exception ex)
+            {
+                log.Error(ex.ToString());
+                CustomMessageBox.Show("Error getting Parameter Information");
+            }
 
             #endregion Fetch Parameter Meta Data
 
@@ -447,7 +480,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             using (WebResponse response = request.GetResponse())
             {
                 // Display the status.
-                log.Info(((HttpWebResponse)response).StatusDescription);
+                log.Info(((HttpWebResponse) response).StatusDescription);
                 // Get the stream containing content returned by the server.
                 using (dataStream = response.GetResponseStream())
                 {
@@ -486,17 +519,18 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                                 // dirs
                                 if (matchs[i].Groups[1].Value.ToString().Contains("tree/master/"))
                                 {
-                                    string url = System.Web.HttpUtility.UrlDecode(matchs[i].Groups[1].Value.ToString()) + "/";
+                                    string url =
+                                        System.Web.HttpUtility.UrlDecode(matchs[i].Groups[1].Value.ToString()) + "/";
                                     Uri newuri = new Uri(baseuri, url);
                                     files.Add(baseuri.MakeRelativeUri(newuri).ToString());
-
                                 }
                                 // files
                                 if (matchs[i].Groups[1].Value.ToString().Contains("blob/master/"))
                                 {
                                     string url = System.Web.HttpUtility.UrlDecode(matchs[i].Groups[1].Value.ToString());
                                     Uri newuri = new Uri(baseuri, url);
-                                    files.Add(System.Web.HttpUtility.UrlDecode(newuri.Segments[newuri.Segments.Length - 1]));
+                                    files.Add(
+                                        System.Web.HttpUtility.UrlDecode(newuri.Segments[newuri.Segments.Length - 1]));
                                 }
                             }
                         }
@@ -525,13 +559,16 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                 }
                 if (file.EndsWith("/"))
                 {
-                    update = updateCheck(frmProgressReporter, baseurl + file, subdir.Replace('/', Path.DirectorySeparatorChar) + file) && update;
+                    update =
+                        updateCheck(frmProgressReporter, baseurl + file,
+                            subdir.Replace('/', Path.DirectorySeparatorChar) + file) && update;
                     continue;
                 }
                 if (frmProgressReporter != null)
                     frmProgressReporter.UpdateProgressAndStatus(-1, "Checking " + file);
 
-                string path = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + subdir + file;
+                string path = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + subdir +
+                              file;
 
                 //   baseurl = baseurl.Replace("//github.com", "//raw.github.com");
                 //   baseurl = baseurl.Replace("/tree/", "/");
@@ -541,17 +578,16 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
 
                 while (attempt < 2)
                 {
-
                     try
                     {
-
                         // Create a request using a URL that can receive a post. 
                         request = WebRequest.Create(baseurl + file);
                         log.Info(baseurl + file + " ");
                         // Set the Method property of the request to POST.
                         request.Method = "GET";
 
-                        ((HttpWebRequest)request).AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                        ((HttpWebRequest) request).AutomaticDecompression = DecompressionMethods.GZip |
+                                                                            DecompressionMethods.Deflate;
 
                         request.Headers.Add("Accept-Encoding", "gzip,deflate");
 
@@ -559,7 +595,7 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                         using (WebResponse response = request.GetResponse())
                         {
                             // Display the status.
-                            log.Info(((HttpWebResponse)response).StatusDescription);
+                            log.Info(((HttpWebResponse) response).StatusDescription);
                             // Get the stream containing content returned by the server.
                             using (dataStream = response.GetResponseStream())
                             {
@@ -585,9 +621,11 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                                         }
                                     }
 
-                                    log.Debug("New file Check: " + fi.Length + " vs " + response.ContentLength + " " + response.Headers[HttpResponseHeader.ETag] + " vs " + CurrentEtag);
+                                    log.Debug("New file Check: " + fi.Length + " vs " + response.ContentLength + " " +
+                                              response.Headers[HttpResponseHeader.ETag] + " vs " + CurrentEtag);
 
-                                    if (fi.Length != response.ContentLength || response.Headers[HttpResponseHeader.ETag] != CurrentEtag)
+                                    if (fi.Length != response.ContentLength ||
+                                        response.Headers[HttpResponseHeader.ETag] != CurrentEtag)
                                     {
                                         using (StreamWriter sw = new StreamWriter(path + ".etag.new"))
                                         {
@@ -634,7 +672,6 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
 
                                     using (FileStream fs = new FileStream(path + ".new", FileMode.Create))
                                     {
-
                                         DateTime dt = DateTime.Now;
 
                                         //dataStream.ReadTimeout = 30000;
@@ -646,11 +683,17 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                                                 if (dt.Second != DateTime.Now.Second)
                                                 {
                                                     if (frmProgressReporter != null)
-                                                        frmProgressReporter.UpdateProgressAndStatus((int)(((double)(contlen - bytes) / (double)contlen) * 100), "Getting " + file + ": " + (((double)(contlen - bytes) / (double)contlen) * 100).ToString("0.0") + "%"); //+ Math.Abs(bytes) + " bytes");
+                                                        frmProgressReporter.UpdateProgressAndStatus(
+                                                            (int) (((double) (contlen - bytes)/(double) contlen)*100),
+                                                            "Getting " + file + ": " +
+                                                            (((double) (contlen - bytes)/(double) contlen)*100).ToString
+                                                                ("0.0") + "%"); //+ Math.Abs(bytes) + " bytes");
                                                     dt = DateTime.Now;
                                                 }
                                             }
-                                            catch { }
+                                            catch
+                                            {
+                                            }
                                             log.Debug(file + " " + bytes);
                                             int len = dataStream.Read(buf1, 0, buf1.Length);
                                             if (len == 0)
@@ -663,7 +706,13 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
                             }
                         }
                     }
-                    catch (Exception ex) { fail = ex; attempt++; update = false; continue; }
+                    catch (Exception ex)
+                    {
+                        fail = ex;
+                        attempt++;
+                        update = false;
+                        continue;
+                    }
 
                     // break if we have no exception
                     break;
@@ -679,8 +728,6 @@ new System.Net.Security.RemoteCertificateValidationCallback((sender, certificate
             //P.StartInfo.CreateNoWindow = true;
             //P.StartInfo.RedirectStandardOutput = true;
             return update;
-
-
         }
     }
 }

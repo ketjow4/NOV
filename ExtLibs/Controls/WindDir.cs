@@ -16,12 +16,15 @@ namespace MissionPlanner.Controls
             InitializeComponent();
             this.BackColor = Color.Transparent;
             this.DoubleBuffered = true;
+
         }
 
         const float rad2deg = (float)(180 / Math.PI);
         const float deg2rad = (float)(1.0 / rad2deg);
         double _direction = 0;
         double _speed = 0;
+
+        double maxspeed = 10;
 
         [System.ComponentModel.Browsable(true), System.ComponentModel.Category("Options")]
         public double Direction { get { return _direction; } set { if (_direction == (value + 180)) return; _direction = (value + 180); this.Invalidate(); } }
@@ -56,7 +59,6 @@ namespace MissionPlanner.Controls
 
             base.OnPaint(e);
 
-            
             Rectangle outside = new Rectangle(1,1,this.Width - 3, this.Height -3);
 
             e.Graphics.DrawArc(blackpen, outside, 0, 360);
@@ -71,8 +73,10 @@ namespace MissionPlanner.Controls
 
             // full scale is 10ms
 
-            x = x/10 * Speed;
-            y = y/10 * Speed;
+            double scale = Math.Max(maxspeed, Speed);
+
+            x = x / scale * Speed;
+            y = y / scale * Speed;
 
             if (x != 0 || y != 0)
             {

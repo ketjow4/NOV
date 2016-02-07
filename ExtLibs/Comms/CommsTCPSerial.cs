@@ -21,6 +21,8 @@ namespace MissionPlanner.Comms
 
         int retrys = 3;
 
+        bool reconnectnoprompt = false;
+
         public int WriteBufferSize { get; set; }
         public int WriteTimeout { get; set; }
         public bool RtsEnable { get; set; }
@@ -111,12 +113,14 @@ namespace MissionPlanner.Comms
 
             VerifyConnected();
 
+            reconnectnoprompt = true;
+
             return;
         }
 
         void VerifyConnected()
         {
-            if (client == null || !IsOpen)
+            if (!IsOpen)
             {
                 try
                 {

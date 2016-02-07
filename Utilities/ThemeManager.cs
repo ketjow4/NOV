@@ -6,6 +6,7 @@ using log4net;
 using MissionPlanner.Controls;
 using System.IO;
 using System.Collections.Generic;
+using BrightIdeasSoftware;
 
 namespace MissionPlanner.Utilities
 {
@@ -18,8 +19,12 @@ namespace MissionPlanner.Utilities
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static Themes _currentTheme = Themes.Custom; //Themes.BurntKermit;
-        public static Themes CurrentTheme { get { return _currentTheme; } }
+        private static Themes _currentTheme = Themes.Custom;
+
+        public static Themes CurrentTheme
+        {
+            get { return _currentTheme; }
+        }
 
         public enum Themes
         {
@@ -27,7 +32,7 @@ namespace MissionPlanner.Utilities
             /// no theme - standard Winforms appearance
             /// </summary>
             None,
-   
+
             /// <summary>
             /// Standard Planner Charcoal & Green colours
             /// </summary>
@@ -37,13 +42,20 @@ namespace MissionPlanner.Utilities
             Custom,
         }
 
+        // Initialize to the default theme (BurntKermit)
+        public static Color BGColor = Color.FromArgb(0x26, 0x27, 0x28);
+        public static Color ControlBGColor = Color.FromArgb(0x43, 0x44, 0x45);
+        public static Color TextColor = Color.White;
+        public static Color ButBG;
+        public static Color ButBorder;
+
         /// <summary>
         /// Change the current theme. Existing controls are not affected
         /// </summary>
         /// <param name="theme"></param>
         public static void SetTheme(Themes theme)
         {
-            log.Debug("Theme set to " +  Enum.GetName(typeof(Themes), theme));
+            log.Debug("Theme set to " + Enum.GetName(typeof (Themes), theme));
             _currentTheme = theme;
         }
 
@@ -60,11 +72,11 @@ namespace MissionPlanner.Utilities
         {
             switch (_currentTheme)
             {
-                case Themes.BurntKermit: 
+                case Themes.BurntKermit:
                     ApplyBurntKermitTheme(control, 0);
                     break;
 
-                case Themes.HighContrast: 
+                case Themes.HighContrast:
                     ApplyHighContrast(control, 0);
                     break;
 
@@ -140,7 +152,6 @@ namespace MissionPlanner.Utilities
             temp.Add(new MissionPlanner.Controls.VerticalProgressBar2());
 
 
-
             temp.Add(new Wizard._1Intro());
             temp.Add(new Wizard._2FrameFW());
             temp.Add(new Wizard._3ConnectAP());
@@ -157,8 +168,6 @@ namespace MissionPlanner.Utilities
             temp.Add(new Wizard._98DontForget());
 
             temp.Add(new GCSViews.ConfigurationView.ConfigAC_Fence());
-            temp.Add(new GCSViews.ConfigurationView.ConfigAccelerometerCalibrationPlane());
-            temp.Add(new GCSViews.ConfigurationView.ConfigAccelerometerCalibrationQuad());
             temp.Add(new GCSViews.ConfigurationView.ConfigAP_Limits());
             temp.Add(new GCSViews.ConfigurationView.ConfigArducopter());
             temp.Add(new GCSViews.ConfigurationView.ConfigArduplane());
@@ -176,7 +185,7 @@ namespace MissionPlanner.Utilities
             temp.Add(new GCSViews.ConfigurationView.ConfigHWCompass());
             temp.Add(new GCSViews.ConfigurationView.ConfigHWOptFlow());
             temp.Add(new GCSViews.ConfigurationView.ConfigHWOSD());
-            temp.Add(new GCSViews.ConfigurationView.ConfigHWSonar());
+            temp.Add(new GCSViews.ConfigurationView.ConfigHWRangeFinder());
             temp.Add(new GCSViews.ConfigurationView.ConfigMandatory());
             temp.Add(new GCSViews.ConfigurationView.ConfigMount());
             temp.Add(new GCSViews.ConfigurationView.ConfigOptional());
@@ -187,12 +196,10 @@ namespace MissionPlanner.Utilities
             temp.Add(new GCSViews.ConfigurationView.ConfigSimplePids());
             temp.Add(new GCSViews.ConfigurationView.ConfigTradHeli());
 
-
             foreach (var ctl in temp)
             {
                 xaml(ctl);
             }
-
         }
 
         static object locker = new object();
@@ -205,9 +212,10 @@ namespace MissionPlanner.Utilities
                 {
                     Type ty = control.GetType();
 
-                    StreamWriter st = new StreamWriter(File.Open(ty.FullName + ".xaml",FileMode.Create));
+                    StreamWriter st = new StreamWriter(File.Open(ty.FullName + ".xaml", FileMode.Create));
 
-                    string header = @"<UserControl x:Class=""" + ty.FullName + @""" d:DesignHeight=""" + control.Height + @""" d:DesignWidth=""" + control.Width + @"""
+                    string header = @"<UserControl x:Class=""" + ty.FullName + @""" d:DesignHeight=""" + control.Height +
+                                    @""" d:DesignWidth=""" + control.Width + @"""
 xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
 xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml""
 xmlns:mc=""http://schemas.openxmlformats.org/markup-compatibility/2006"" 
@@ -233,92 +241,146 @@ mc:Ignorable=""d""
                     st.Close();
                 }
             }
-            catch { }
+            catch
+            {
+            }
         }
 
         private static void doxamlctls(Control control, StreamWriter st)
         {
             foreach (Control ctl in control.Controls)
             {
-                if (ctl is QuickView || ctl is ServoOptions || ctl is ModifyandSet 
-                    || ctl is Coords /*|| ctl is AGaugeApp.AGauge*/ || ctl is MissionPlanner.Controls.HUD) 
+                if (ctl is QuickView || ctl is ServoOptions || ctl is ModifyandSet
+                    || ctl is Coords /*|| ctl is AGaugeApp.AGauge*/|| ctl is MissionPlanner.Controls.HUD)
                 {
-                 //   st.WriteLine(@"<WindowsFormsHost HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    //   st.WriteLine(@"<WindowsFormsHost HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
 
                     string[] names = ctl.GetType().FullName.Split(new char[] {'.'});
 
                     string name = names[names.Length - 2] + ":" + names[names.Length - 1];
 
-                    st.WriteLine(@"<" + name + @" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @"""></" + name + ">");
+                    st.WriteLine(@"<" + name + @" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" +
+                                 ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width +
+                                 @""" Height=""" + ctl.Height + @"""></" + name + ">");
 
                     //st.WriteLine(@"</WindowsFormsHost>");
                 }
                 else if (ctl is Label)
                 {
-                    st.WriteLine(@"<Label Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + (ctl.Location.Y-10) + @",0,0"" FontFamily=""Microsoft Sans Serif"" >" + ctl.Text + "</Label>");
+                    st.WriteLine(@"<Label Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + (ctl.Location.Y - 10) + @",0,0"" FontFamily=""Microsoft Sans Serif"" >" +
+                                 ctl.Text + "</Label>");
                 }
                 else if (ctl is MyLabel)
                 {
-                    st.WriteLine(@"<Label Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + (ctl.Location.Y-10)+ @",0,0"" FontFamily=""Microsoft Sans Serif"" >" + ctl.Text + "</Label>");
+                    st.WriteLine(@"<Label Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + (ctl.Location.Y - 10) + @",0,0"" FontFamily=""Microsoft Sans Serif"" >" +
+                                 ctl.Text + "</Label>");
                 }
                 else if (ctl is ComboBox)
                 {
-                    st.WriteLine(@"<ComboBox Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</ComboBox>");
+                    st.WriteLine(@"<ComboBox Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text +
+                                 "</ComboBox>");
                 }
                 else if (ctl is TextBox)
                 {
-                    st.WriteLine(@"<TextBox Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</TextBox>");
+                    st.WriteLine(@"<TextBox Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text +
+                                 "</TextBox>");
                 }
                 else if (ctl is NumericUpDown)
                 {
-                    st.WriteLine(@"<xctk:DecimalUpDown Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @"""></xctk:DecimalUpDown>");
+                    st.WriteLine(@"<xctk:DecimalUpDown Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @"""></xctk:DecimalUpDown>");
                 }
                 else if (ctl is RichTextBox)
                 {
-                    st.WriteLine(@"<TextBlock Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">" + ctl.Text + "</TextBlock>");
+                    st.WriteLine(@"<TextBlock Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">" + ctl.Text + "</TextBlock>");
                 }
                 else if (ctl is MyButton)
                 {
-                    st.WriteLine(@"<Button Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text.Replace("&", "") + "</Button>");
+                    st.WriteLine(@"<Button Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" +
+                                 ctl.Text.Replace("&", "") + "</Button>");
                 }
                 else if (ctl is Button)
                 {
-                    st.WriteLine(@"<Button Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</Button>");
+                    st.WriteLine(@"<Button Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</Button>");
                 }
                 else if (ctl is CheckBox)
                 {
-                    st.WriteLine(@"<CheckBox Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</CheckBox>");
+                    st.WriteLine(@"<CheckBox Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text +
+                                 "</CheckBox>");
                 }
                 else if (ctl is RadioButton)
                 {
-                    st.WriteLine(@"<RadioButton Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</RadioButton>");
+                    st.WriteLine(@"<RadioButton Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text +
+                                 "</RadioButton>");
                 }
                 else if (ctl is PictureBox)
                 {
-                    st.WriteLine(@"<Image Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">" + ctl.Text + "</Image>");
+                    st.WriteLine(@"<Image Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">" + ctl.Text + "</Image>");
                 }
                 else if (ctl is TrackBar)
                 {
-                    if (((TrackBar)ctl).Orientation == Orientation.Horizontal)
-                        st.WriteLine(@"<Slider Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">" + ctl.Text + "</Slider>");
+                    if (((TrackBar) ctl).Orientation == Orientation.Horizontal)
+                        st.WriteLine(@"<Slider Name=""" + ctl.Name +
+                                     @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" +
+                                     ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width +
+                                     @""" Height=""" + ctl.Height + @""">" + ctl.Text + "</Slider>");
                     else
-                        st.WriteLine(@"<Slider Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""" Orientation=""Vertical"">" + ctl.Text + "</Slider>");
+                        st.WriteLine(@"<Slider Name=""" + ctl.Name +
+                                     @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" +
+                                     ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width +
+                                     @""" Height=""" + ctl.Height + @""" Orientation=""Vertical"">" + ctl.Text +
+                                     "</Slider>");
                 }
                 else if (ctl is VerticalProgressBar || ctl is VerticalProgressBar2)
                 {
-                    st.WriteLine(@"<ProgressBar Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""" Orientation=""Vertical"">" + ctl.Text + "</ProgressBar>");
+                    st.WriteLine(@"<ProgressBar Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""" Orientation=""Vertical"">" + ctl.Text + "</ProgressBar>");
                 }
                 else if (ctl is ProgressBar || ctl is HorizontalProgressBar2 || ctl is HorizontalProgressBar)
                 {
-                    st.WriteLine(@"<ProgressBar Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">" + ctl.Text + "</ProgressBar>");
+                    st.WriteLine(@"<ProgressBar Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">" + ctl.Text + "</ProgressBar>");
                 }
                 else if (ctl is DataGridView)
                 {
-                    st.WriteLine(@"<Custom:DataGrid Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text + "</Custom:DataGrid>");
+                    st.WriteLine(@"<Custom:DataGrid Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""">" + ctl.Text +
+                                 "</Custom:DataGrid>");
                 }
                 else if (ctl is GroupBox)
                 {
-                    st.WriteLine(@"<Grid Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<Grid Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -327,7 +389,10 @@ mc:Ignorable=""d""
                 }
                 else if (ctl is TabControl)
                 {
-                    st.WriteLine(@"<TabControl Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<TabControl Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -337,7 +402,9 @@ mc:Ignorable=""d""
                 else if (ctl is TabPage)
                 {
                     // Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0""
-                    st.WriteLine(@"<TabItem Name=""" + ctl.Name + @""" Header=""" + ctl.Text + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" ><Grid Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<TabItem Name=""" + ctl.Name + @""" Header=""" + ctl.Text +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" ><Grid Width=""" +
+                                 ctl.Width + @""" Height=""" + ctl.Height + @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -346,7 +413,10 @@ mc:Ignorable=""d""
                 }
                 else if (ctl is SplitContainer)
                 {
-                    st.WriteLine(@"<Grid Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<Grid Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -355,7 +425,9 @@ mc:Ignorable=""d""
                 }
                 else if (ctl is SplitterPanel)
                 {
-                    st.WriteLine(@"<Grid HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<Grid HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" +
+                                 ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width +
+                                 @""" Height=""" + ctl.Height + @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -364,7 +436,10 @@ mc:Ignorable=""d""
                 }
                 else if (ctl is Panel || ctl is BSE.Windows.Forms.Panel)
                 {
-                    st.WriteLine(@"<Grid Name=""" + ctl.Name + @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X + "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height + @""">");
+                    st.WriteLine(@"<Grid Name=""" + ctl.Name +
+                                 @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
+                                 "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
+                                 @""">");
 
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
@@ -394,36 +469,36 @@ mc:Ignorable=""d""
 
             foreach (Control ctl in temp.Controls)
             {
-                if (ctl.GetType() == typeof(Panel))
+                if (ctl.GetType() == typeof (Panel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(GroupBox))
+                else if (ctl.GetType() == typeof (GroupBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(TreeView))
+                else if (ctl.GetType() == typeof (TreeView))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    TreeView txtr = (TreeView)ctl;
+                    TreeView txtr = (TreeView) ctl;
                     txtr.LineColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(MyLabel))
+                else if (ctl.GetType() == typeof (MyLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(Button))
+                else if (ctl.GetType() == typeof (Button))
                 {
                     ctl.ForeColor = TextColor;
                     ctl.BackColor = ButBG;
                 }
-                else if (ctl.GetType() == typeof(MyButton))
+                else if (ctl.GetType() == typeof (MyButton))
                 {
-                    Controls.MyButton but = (MyButton)ctl;
+                    Controls.MyButton but = (MyButton) ctl;
                     but.BGGradTop = ButBG;
                     but.BGGradBot = Color.FromArgb(12, 67, 90);
                     try
@@ -434,28 +509,28 @@ mc:Ignorable=""d""
                     but.TextColor = TextColor;
                     but.Outline = ButBorder;
                 }
-                else if (ctl.GetType() == typeof(TextBox))
+                else if (ctl.GetType() == typeof (TextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    TextBox txt = (TextBox)ctl;
+                    TextBox txt = (TextBox) ctl;
                     txt.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(DomainUpDown))
+                else if (ctl.GetType() == typeof (DomainUpDown))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    DomainUpDown txt = (DomainUpDown)ctl;
+                    DomainUpDown txt = (DomainUpDown) ctl;
                     txt.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(GroupBox) || ctl.GetType() == typeof(UserControl))
+                else if (ctl.GetType() == typeof (GroupBox) || ctl.GetType() == typeof (UserControl))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(ZedGraph.ZedGraphControl))
+                else if (ctl.GetType() == typeof (ZedGraph.ZedGraphControl))
                 {
-                    var zg1 = (ZedGraph.ZedGraphControl)ctl;
+                    var zg1 = (ZedGraph.ZedGraphControl) ctl;
                     zg1.GraphPane.Chart.Fill = new ZedGraph.Fill(ControlBGColor);
                     zg1.GraphPane.Fill = new ZedGraph.Fill(BGColor);
 
@@ -486,48 +561,47 @@ mc:Ignorable=""d""
                     zg1.GraphPane.Legend.Fill = new ZedGraph.Fill(ControlBGColor);
                     zg1.GraphPane.Legend.FontSpec.FontColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(BSE.Windows.Forms.Panel) || ctl.GetType() == typeof(SplitterPanel))
+                else if (ctl.GetType() == typeof (BSE.Windows.Forms.Panel) || ctl.GetType() == typeof (SplitterPanel))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(Form))
+                else if (ctl.GetType() == typeof (Form))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(RichTextBox))
+                else if (ctl.GetType() == typeof (RichTextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    RichTextBox txtr = (RichTextBox)ctl;
+                    RichTextBox txtr = (RichTextBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(CheckedListBox))
+                else if (ctl.GetType() == typeof (CheckedListBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    CheckedListBox txtr = (CheckedListBox)ctl;
+                    CheckedListBox txtr = (CheckedListBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabPage))
+                else if (ctl.GetType() == typeof (TabPage))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabPage txtr = (TabPage)ctl;
+                    TabPage txtr = (TabPage) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabControl))
+                else if (ctl.GetType() == typeof (TabControl))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabControl txtr = (TabControl)ctl;
-
+                    TabControl txtr = (TabControl) ctl;
                 }
-                else if (ctl.GetType() == typeof(DataGridView))
+                else if (ctl.GetType() == typeof (DataGridView))
                 {
                     ctl.ForeColor = TextColor;
-                    DataGridView dgv = (DataGridView)ctl;
+                    DataGridView dgv = (DataGridView) ctl;
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.BorderStyle = BorderStyle.None;
                     dgv.BackgroundColor = BGColor;
@@ -543,41 +617,40 @@ mc:Ignorable=""d""
                     dgv.ColumnHeadersDefaultCellStyle = hs;
                     dgv.RowHeadersDefaultCellStyle = hs;
                 }
-                else if (ctl.GetType() == typeof(CheckBox) || ctl.GetType() == typeof(MavlinkCheckBox))
+                else if (ctl.GetType() == typeof (CheckBox) || ctl.GetType() == typeof (MavlinkCheckBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    CheckBox CHK = (CheckBox)ctl;
+                    CheckBox CHK = (CheckBox) ctl;
                     // CHK.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(ComboBox) || ctl.GetType() == typeof(MavlinkComboBox))
+                else if (ctl.GetType() == typeof (ComboBox) || ctl.GetType() == typeof (MavlinkComboBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    ComboBox CMB = (ComboBox)ctl;
+                    ComboBox CMB = (ComboBox) ctl;
                     CMB.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(NumericUpDown) || ctl.GetType() == typeof(MavlinkNumericUpDown))
+                else if (ctl.GetType() == typeof (NumericUpDown) || ctl.GetType() == typeof (MavlinkNumericUpDown))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(TrackBar))
+                else if (ctl.GetType() == typeof (TrackBar))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(LinkLabel))
+                else if (ctl.GetType() == typeof (LinkLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    LinkLabel LNK = (LinkLabel)ctl;
+                    LinkLabel LNK = (LinkLabel) ctl;
                     LNK.ActiveLinkColor = TextColor;
                     LNK.LinkColor = TextColor;
                     LNK.VisitedLinkColor = TextColor;
-
                 }
-                else if (ctl.GetType() == typeof(BackstageView))
+                else if (ctl.GetType() == typeof (BackstageView))
                 {
                     var bsv = ctl as BackstageView;
 
@@ -589,9 +662,10 @@ mc:Ignorable=""d""
                     bsv.UnSelectedTextColor = Color.Gray;
                     bsv.ButtonsAreaPencilColor = Color.DarkGray;
                 }
-                else if (ctl.GetType() == typeof(HorizontalProgressBar2) || ctl.GetType() == typeof(VerticalProgressBar2))
+                else if (ctl.GetType() == typeof (HorizontalProgressBar2) ||
+                         ctl.GetType() == typeof (VerticalProgressBar2))
                 {
-                    ((HorizontalProgressBar2)ctl).BackgroundColor = ControlBGColor;
+                    ((HorizontalProgressBar2) ctl).BackgroundColor = ControlBGColor;
                     ((HorizontalProgressBar2)ctl).ValueColor = Color.FromArgb(41, 171, 226);
                 }
 
@@ -602,17 +676,15 @@ mc:Ignorable=""d""
 
         private static void ApplyTestTheme(Control temp, int level)
         {
-
             foreach (Control ctl in temp.Controls)
             {
-                if (ctl.GetType() == typeof(MyButton))
+                if (ctl.GetType() == typeof (MyButton))
                 {
-                    Controls.MyButton but = (MyButton)ctl;
+                    Controls.MyButton but = (MyButton) ctl;
                     but.BGGradTop = SystemColors.ControlLight;
                     but.BGGradBot = SystemColors.ControlDark;
                     but.TextColor = SystemColors.ControlText;
                     but.Outline = SystemColors.ControlDark;
-                    
                 }
 
                 if (ctl.Controls.Count > 0)
@@ -626,10 +698,10 @@ mc:Ignorable=""d""
         {
             unchecked
             {
-                BGColor = Color.FromArgb((int)0xffeeeeee); // background
-                ControlBGColor = Color.FromArgb((int)0xffe2e2e2); // editable bg color
+                BGColor = Color.FromArgb((int) 0xffeeeeee); // background
+                ControlBGColor = Color.FromArgb((int) 0xffe2e2e2); // editable bg color
                 TextColor = Color.Black;
-                ButBG = Color.FromArgb((int)0xffffff99);
+                ButBG = Color.FromArgb((int) 0xffffff99);
             }
 
             if (level == 0)
@@ -640,56 +712,56 @@ mc:Ignorable=""d""
 
             foreach (Control ctl in temp.Controls)
             {
-                if (ctl.GetType() == typeof(Panel))
+                if (ctl.GetType() == typeof (Panel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(GroupBox))
+                else if (ctl.GetType() == typeof (GroupBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(MyLabel))
+                else if (ctl.GetType() == typeof (MyLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(Button))
+                else if (ctl.GetType() == typeof (Button))
                 {
                     ctl.ForeColor = TextColor;
                     ctl.BackColor = ButBG;
                 }
-                else if (ctl.GetType() == typeof(MyButton))
+                else if (ctl.GetType() == typeof (MyButton))
                 {
-                    Controls.MyButton but = (MyButton)ctl;
+                    Controls.MyButton but = (MyButton) ctl;
                     but.BGGradTop = ButBG;
                     but.BGGradBot = Color.FromArgb(ButBG.ToArgb() - 0x333333);
                     but.TextColor = TextColor;
                     but.Outline = ButBorder;
                 }
-                else if (ctl.GetType() == typeof(TextBox))
+                else if (ctl.GetType() == typeof (TextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    TextBox txt = (TextBox)ctl;
+                    TextBox txt = (TextBox) ctl;
                     txt.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(DomainUpDown))
+                else if (ctl.GetType() == typeof (DomainUpDown))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    DomainUpDown txt = (DomainUpDown)ctl;
+                    DomainUpDown txt = (DomainUpDown) ctl;
                     txt.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(GroupBox) || ctl.GetType() == typeof(UserControl))
+                else if (ctl.GetType() == typeof (GroupBox) || ctl.GetType() == typeof (UserControl) || ctl.GetType() == typeof(DataTreeListView))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(ZedGraph.ZedGraphControl))
+                else if (ctl.GetType() == typeof (ZedGraph.ZedGraphControl))
                 {
-                    var zg1 = (ZedGraph.ZedGraphControl)ctl;
+                    var zg1 = (ZedGraph.ZedGraphControl) ctl;
                     zg1.GraphPane.Chart.Fill = new ZedGraph.Fill(ControlBGColor);
                     zg1.GraphPane.Fill = new ZedGraph.Fill(BGColor);
 
@@ -720,48 +792,47 @@ mc:Ignorable=""d""
                     zg1.GraphPane.Legend.Fill = new ZedGraph.Fill(ControlBGColor);
                     zg1.GraphPane.Legend.FontSpec.FontColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(BSE.Windows.Forms.Panel) || ctl.GetType() == typeof(SplitterPanel))
+                else if (ctl.GetType() == typeof (BSE.Windows.Forms.Panel) || ctl.GetType() == typeof (SplitterPanel))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(Form))
+                else if (ctl.GetType() == typeof (Form))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(RichTextBox))
+                else if (ctl.GetType() == typeof (RichTextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    RichTextBox txtr = (RichTextBox)ctl;
+                    RichTextBox txtr = (RichTextBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(CheckedListBox))
+                else if (ctl.GetType() == typeof (CheckedListBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    CheckedListBox txtr = (CheckedListBox)ctl;
+                    CheckedListBox txtr = (CheckedListBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabPage))
+                else if (ctl.GetType() == typeof (TabPage))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabPage txtr = (TabPage)ctl;
+                    TabPage txtr = (TabPage) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabControl))
+                else if (ctl.GetType() == typeof (TabControl))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabControl txtr = (TabControl)ctl;
-
+                    TabControl txtr = (TabControl) ctl;
                 }
-                else if (ctl.GetType() == typeof(DataGridView))
+                else if (ctl.GetType() == typeof (DataGridView))
                 {
                     ctl.ForeColor = TextColor;
-                    DataGridView dgv = (DataGridView)ctl;
+                    DataGridView dgv = (DataGridView) ctl;
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.BorderStyle = BorderStyle.None;
                     dgv.BackgroundColor = BGColor;
@@ -770,6 +841,8 @@ mc:Ignorable=""d""
                     rs.ForeColor = TextColor;
                     dgv.RowsDefaultCellStyle = rs;
 
+                    dgv.AlternatingRowsDefaultCellStyle = rs;
+
                     DataGridViewCellStyle hs = new DataGridViewCellStyle(dgv.ColumnHeadersDefaultCellStyle);
                     hs.BackColor = BGColor;
                     hs.ForeColor = TextColor;
@@ -777,41 +850,40 @@ mc:Ignorable=""d""
                     dgv.ColumnHeadersDefaultCellStyle = hs;
                     dgv.RowHeadersDefaultCellStyle = hs;
                 }
-                else if (ctl.GetType() == typeof(CheckBox) || ctl.GetType() == typeof(MavlinkCheckBox))
+                else if (ctl.GetType() == typeof (CheckBox) || ctl.GetType() == typeof (MavlinkCheckBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    CheckBox CHK = (CheckBox)ctl;
+                    CheckBox CHK = (CheckBox) ctl;
                     // CHK.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(ComboBox) || ctl.GetType() == typeof(MavlinkComboBox))
+                else if (ctl.GetType() == typeof (ComboBox) || ctl.GetType() == typeof (MavlinkComboBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    ComboBox CMB = (ComboBox)ctl;
+                    ComboBox CMB = (ComboBox) ctl;
                     CMB.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(NumericUpDown) || ctl.GetType() == typeof(MavlinkNumericUpDown))
+                else if (ctl.GetType() == typeof (NumericUpDown) || ctl.GetType() == typeof (MavlinkNumericUpDown))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(TrackBar))
+                else if (ctl.GetType() == typeof (TrackBar))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(LinkLabel))
+                else if (ctl.GetType() == typeof (LinkLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    LinkLabel LNK = (LinkLabel)ctl;
+                    LinkLabel LNK = (LinkLabel) ctl;
                     LNK.ActiveLinkColor = TextColor;
                     LNK.LinkColor = TextColor;
                     LNK.VisitedLinkColor = TextColor;
-
                 }
-                else if (ctl.GetType() == typeof(BackstageView))
+                else if (ctl.GetType() == typeof (BackstageView))
                 {
                     var bsv = ctl as BackstageView;
 
@@ -823,10 +895,11 @@ mc:Ignorable=""d""
                     bsv.UnSelectedTextColor = Color.Gray;
                     bsv.ButtonsAreaPencilColor = Color.DarkGray;
                 }
-                else if (ctl.GetType() == typeof(HorizontalProgressBar2) || ctl.GetType() == typeof(VerticalProgressBar2))
+                else if (ctl.GetType() == typeof (HorizontalProgressBar2) ||
+                         ctl.GetType() == typeof (VerticalProgressBar2))
                 {
-                    ((HorizontalProgressBar2)ctl).BackgroundColor = ControlBGColor;
-                    ((HorizontalProgressBar2)ctl).ValueColor = Color.FromArgb(148, 193, 31);
+                    ((HorizontalProgressBar2) ctl).BackgroundColor = ControlBGColor;
+                    ((HorizontalProgressBar2) ctl).ValueColor = Color.FromArgb(148, 193, 31);
                 }
 
                 if (ctl.Controls.Count > 0)
@@ -848,58 +921,58 @@ mc:Ignorable=""d""
 
             foreach (Control ctl in temp.Controls)
             {
-                if (ctl.GetType() == typeof(TreeView))
+                if (ctl.GetType() == typeof (TreeView))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    TreeView txtr = (TreeView)ctl;
+                    TreeView txtr = (TreeView) ctl;
                     txtr.LineColor = TextColor;
-                } 
-                else if (ctl.GetType() == typeof(Panel))
+                }
+                else if (ctl.GetType() == typeof (Panel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(GroupBox))
+                else if (ctl.GetType() == typeof (GroupBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(MyLabel))
+                else if (ctl.GetType() == typeof (MyLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                } 
-                else if (ctl.GetType() == typeof(Button))
+                }
+                else if (ctl.GetType() == typeof (Button))
                 {
                     ctl.ForeColor = Color.Black;
                 }
-                else if (ctl.GetType() == typeof(MyButton))
+                else if (ctl.GetType() == typeof (MyButton))
                 {
-                    Controls.MyButton but = (MyButton)ctl;
+                    Controls.MyButton but = (MyButton) ctl;
                 }
-                else if (ctl.GetType() == typeof(TextBox))
-                {
-                    ctl.BackColor = ControlBGColor;
-                    ctl.ForeColor = TextColor;
-                    TextBox txt = (TextBox)ctl;
-                    txt.BorderStyle = BorderStyle.None;
-                }
-                else if (ctl.GetType() == typeof(DomainUpDown))
+                else if (ctl.GetType() == typeof (TextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    DomainUpDown txt = (DomainUpDown)ctl;
+                    TextBox txt = (TextBox) ctl;
                     txt.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(GroupBox) || ctl.GetType() == typeof(UserControl))
+                else if (ctl.GetType() == typeof (DomainUpDown))
+                {
+                    ctl.BackColor = ControlBGColor;
+                    ctl.ForeColor = TextColor;
+                    DomainUpDown txt = (DomainUpDown) ctl;
+                    txt.BorderStyle = BorderStyle.None;
+                }
+                else if (ctl.GetType() == typeof (GroupBox) || ctl.GetType() == typeof (UserControl))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(ZedGraph.ZedGraphControl))
+                else if (ctl.GetType() == typeof (ZedGraph.ZedGraphControl))
                 {
-                    var zg1 = (ZedGraph.ZedGraphControl)ctl;
+                    var zg1 = (ZedGraph.ZedGraphControl) ctl;
                     zg1.GraphPane.Chart.Fill = new ZedGraph.Fill(Color.FromArgb(0x1f, 0x1f, 0x20));
                     zg1.GraphPane.Fill = new ZedGraph.Fill(Color.FromArgb(0x37, 0x37, 0x38));
 
@@ -908,7 +981,9 @@ mc:Ignorable=""d""
                         foreach (ZedGraph.LineItem li in zg1.GraphPane.CurveList)
                             li.Line.Width = 2;
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
                     zg1.GraphPane.Title.FontSpec.FontColor = TextColor;
 
@@ -934,48 +1009,47 @@ mc:Ignorable=""d""
                     zg1.GraphPane.Legend.Fill = new ZedGraph.Fill(Color.FromArgb(0x85, 0x84, 0x83));
                     zg1.GraphPane.Legend.FontSpec.FontColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(BSE.Windows.Forms.Panel) || ctl.GetType() == typeof(SplitterPanel))
+                else if (ctl.GetType() == typeof (BSE.Windows.Forms.Panel) || ctl.GetType() == typeof (SplitterPanel))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(Form))
+                else if (ctl.GetType() == typeof (Form))
                 {
                     ctl.BackColor = BGColor;
-                    ctl.ForeColor = TextColor;// Color.FromArgb(0xe6, 0xe8, 0xea);
+                    ctl.ForeColor = TextColor; // Color.FromArgb(0xe6, 0xe8, 0xea);
                 }
-                else if (ctl.GetType() == typeof(RichTextBox))
+                else if (ctl.GetType() == typeof (RichTextBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    RichTextBox txtr = (RichTextBox)ctl;
+                    RichTextBox txtr = (RichTextBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(CheckedListBox))
+                else if (ctl.GetType() == typeof (CheckedListBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    CheckedListBox txtr = (CheckedListBox)ctl;
+                    CheckedListBox txtr = (CheckedListBox) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabPage))
+                else if (ctl.GetType() == typeof (TabPage))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabPage txtr = (TabPage)ctl;
+                    TabPage txtr = (TabPage) ctl;
                     txtr.BorderStyle = BorderStyle.None;
                 }
-                else if (ctl.GetType() == typeof(TabControl))
+                else if (ctl.GetType() == typeof (TabControl))
                 {
-                    ctl.BackColor = BGColor;  //ControlBGColor
+                    ctl.BackColor = BGColor; //ControlBGColor
                     ctl.ForeColor = TextColor;
-                    TabControl txtr = (TabControl)ctl;
-
+                    TabControl txtr = (TabControl) ctl;
                 }
-                else if (ctl.GetType() == typeof(DataGridView))
+                else if (ctl.GetType() == typeof (DataGridView))
                 {
                     ctl.ForeColor = TextColor;
-                    DataGridView dgv = (DataGridView)ctl;
+                    DataGridView dgv = (DataGridView) ctl;
                     dgv.EnableHeadersVisualStyles = false;
                     dgv.BorderStyle = BorderStyle.None;
                     dgv.BackgroundColor = BGColor;
@@ -993,62 +1067,61 @@ mc:Ignorable=""d""
                     dgv.ColumnHeadersDefaultCellStyle = hs;
                     dgv.RowHeadersDefaultCellStyle = hs;
                 }
-                else if (ctl.GetType() == typeof(CheckBox) || ctl.GetType() == typeof(MavlinkCheckBox))
+                else if (ctl.GetType() == typeof (CheckBox) || ctl.GetType() == typeof (MavlinkCheckBox))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    CheckBox CHK = (CheckBox)ctl;
-                   // CHK.FlatStyle = FlatStyle.Flat;
+                    CheckBox CHK = (CheckBox) ctl;
+                    // CHK.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(ComboBox) || ctl.GetType() == typeof(MavlinkComboBox))
+                else if (ctl.GetType() == typeof (ComboBox) || ctl.GetType() == typeof (MavlinkComboBox))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
-                    ComboBox CMB = (ComboBox)ctl;
+                    ComboBox CMB = (ComboBox) ctl;
                     CMB.FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctl.GetType() == typeof(NumericUpDown) || ctl.GetType() == typeof(MavlinkNumericUpDown))
+                else if (ctl.GetType() == typeof (NumericUpDown) || ctl.GetType() == typeof (MavlinkNumericUpDown))
                 {
                     ctl.BackColor = ControlBGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(TrackBar))
+                else if (ctl.GetType() == typeof (TrackBar))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
                 }
-                else if (ctl.GetType() == typeof(LinkLabel))
+                else if (ctl.GetType() == typeof (LinkLabel))
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
-                    LinkLabel LNK = (LinkLabel)ctl;
+                    LinkLabel LNK = (LinkLabel) ctl;
                     LNK.ActiveLinkColor = TextColor;
                     LNK.LinkColor = TextColor;
                     LNK.VisitedLinkColor = TextColor;
-
                 }
-                else if (ctl.GetType() == typeof(BackstageView))
+                else if (ctl.GetType() == typeof (BackstageView))
                 {
                     var bsv = ctl as BackstageView;
 
                     bsv.BackColor = BGColor;
-                    bsv.ButtonsAreaBgColor = Color.Black;// ControlBGColor;
+                    bsv.ButtonsAreaBgColor = Color.Black; // ControlBGColor;
                     bsv.HighlightColor2 = Color.FromArgb(0x94, 0xc1, 0x1f);
                     bsv.HighlightColor1 = Color.FromArgb(0x40, 0x57, 0x04);
                     bsv.SelectedTextColor = Color.White;
                     bsv.UnSelectedTextColor = Color.WhiteSmoke;
                     bsv.ButtonsAreaPencilColor = Color.DarkGray;
                 }
-                else if (ctl.GetType() == typeof(HorizontalProgressBar2) || ctl.GetType() == typeof(VerticalProgressBar2))
+                else if (ctl.GetType() == typeof (HorizontalProgressBar2) ||
+                         ctl.GetType() == typeof (VerticalProgressBar2))
                 {
-                    ((HorizontalProgressBar2)ctl).BackgroundColor = ControlBGColor;
-                    ((HorizontalProgressBar2)ctl).ValueColor = Color.FromArgb(148, 193, 31);
+                    ((HorizontalProgressBar2) ctl).BackgroundColor = ControlBGColor;
+                    ((HorizontalProgressBar2) ctl).ValueColor = Color.FromArgb(148, 193, 31);
                 }
 
                 if (ctl.Controls.Count > 0)
                     ApplyBurntKermitTheme(ctl, 1);
             }
         }
-
     }
 }

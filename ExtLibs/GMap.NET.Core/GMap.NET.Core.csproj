@@ -122,6 +122,8 @@
     <Compile Include="GMap.NET.Internals\SocksProxySocket\Socks5Handler.cs" />
     <Compile Include="GMap.NET.Internals\SocksProxySocket\SocksHandler.cs" />
     <Compile Include="GMap.NET.Internals\TileHttpHost.cs" />
+    <Compile Include="GMap.NET.MapProviders\AMap\AMapProvider.cs" />
+    <Compile Include="GMap.NET.MapProviders\AMap\AMapSateliteProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\ArcGIS\ArcGIS_DarbAE_Q2_2011_NAVTQ_Eng_V5_MapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Bing\BingMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\Bing\BingSatelliteMapProvider.cs" />
@@ -190,6 +192,7 @@
     <Compile Include="GMap.NET.MapProviders\OpenStreetMap\OpenStreetOsmProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\OpenStreetMap\OpenStreetMapProvider.cs" />
     <Compile Include="GMap.NET.MapProviders\GMapProvider.cs" />
+    <Compile Include="GMap.NET.Projections\MercatorProjectionGCJ.cs" />
     <Compile Include="GMap.NET.Projections\PlateCarreeProjectionDarbAe.cs" />
     <Compile Include="GMap.NET\GDirections.cs" />
     <Compile Include="GMap.NET\DirectionsProvider.cs" />
@@ -226,6 +229,11 @@
     <Compile Include="GMap.NET\Delegates.cs" />
     <Compile Include="GMap.NET\MapRoute.cs" />
     <None Include="app.config" />
+    <Compile Include="Resources\Strings1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <None Include="GMap.NET\MapType.cs" />
     <Compile Include="GMap.NET.CacheProviders\MsSQLPureImageCache.cs" />
     <Compile Include="GMap.NET\GPoint.cs" />
@@ -259,6 +267,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Strings.zh-Hans.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

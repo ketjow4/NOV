@@ -1,4 +1,920 @@
-﻿* Mission Planner 1.3.15
+﻿* Mission Planner 1.3.35 - 4-2-2016
+* GeoRef: add gps2 support
+* Add translation: indonesian
+* Ardupilot loader cleanup
+* SikRadio: Code Cleanup
+* Rename Solution
+* MainV2: prevent cross thread call
+* Firmware: change http timeout
+* PX4Uploader: update bootloader support levels
+* Firmware: fix px4v4 upload
+* GCSViews: add abort land button for Plane
+* Mavlink: add abort landing method
+* Add angle (degrees) column in flight planner mission chart
+* temp: vlc exception handle
+* SITL: handle no home point
+* MainSwitcher: update to accept Type
+* ConfigMotorTest: add error message on command timeout
+* Program: add opengl exception message
+* ConfigMount: add param check
+* ConfigHWCompass: add param check
+* MavLinkParamList: make threadsafe
+* Rename Sik Radio
+* ConfigESCCalibration: hide screen
+* InitialSetup: relabel radio from 3DR to Sik
+* MissionPlanner: change project to preserve newest
+* MainV2: reload on mav change.
+* MissionPlanner: Copy files only if newer
+* Only copy resources if newer
+* Reduce memory allocation and speed up HUD drawing
+* Avoid allocations by using EventArgs.Empty
+* HUD: Fix grey diagonal line rendering artifact when playing video
+* HUD: Reuse the texture on every draw call
+* HUD: Use a TriangleStrip instead of a Quad
+* Firmware: initial add for px4v4
+* Disable joystick functionality when joystick is not plugged in
+* Check for npot texture support
+* vlcrender: Use the default stream width/height but allow overrides
+* Hud: Reduce CPU usage and use the original background image
+* MapBox: map update
+* LogSort: favour non antenna tracker first
+* MatLab: update param table, better handle bad data
+* Coords: improve performance
+* ConfigHWRangeFinder: add TeraRanger One support
+* MainV2: remove alm download
+* QuickView: improve performance
+* DFLog: fix bad data exception #1103
+* FlightData: Add the ability to swap the map and HUD
+* Make URLs clickable in param description
+* Simulation: tidyup
+* Initialize theme colors to match the default theme 'BurntKermit'
+* Generic: warning updates
+* ConfigTradHeli: updates #1072
+* MavlinkInterface: fix stream type #1094
+* FlightPlanner: use verify height when inserting loiter_unlimited command #1095
+* mavcmd: update to add do_parachute #1096
+* CurrentState: change voltage smoothing
+* LogDownloadMavlink: switch to file backed io, instead of memory (prevent out of memory errors)
+* DistanceBar: remove transparency
+* FlightData: make tuning graph visible by default
+* Firmware: remove double board type prompt
+* FlightPlanner: prevent home set loop
+* FlightData: resize controls
+* Generic: fix warnings
+* FlightData: add trigger camera now to actions
+* CheckListControl: add visibility check for timer
+* FlightData: make PREFLIGHT_REBOOT_SHUTDOWN work.
+* BoardDetect: add support for new usb pid
+* ZedGraph: handle bad line input data
+* CommsSerialPort: trace "element not found" with bluetooth devices
+* ConfigHWBT: add further error message
+
+* Mission Planner 1.3.34 - 24-12-2015
+temp: make gps passthrough static
+LogBrowse: add full path to xml
+add null exception checks
+drivers: fix eol
+fitCurve: add
+CurrentState: add servo_output port checking #1090
+Translation es-ES
+VRBRAIN: change description of some USB drivers and added missing drivers
+VRBRAIN: added firmware management for new board VR Brain Core 1.0 and deleted unnecessary boards
+VRBRAIN: added detection for new board VR Brain Core 1.0 and deleted unnecessary boards
+add camera Sony Alpha NEX-7
+mavcmd: remove engine cut off reference #1070
+GridUI: add missing field to save/load #1071
+FlightPlanner: make fields public #1074
+Joystick: update buttonaxis min range #1080
+MAVLinkParam: add explicit double conversion #1085
+BinaryLog: add more detection rules #1089
+vlcrender: add custom url support
+MAVLink: upstream update
+CollectionBuffer: fix null exception #1075
+vlc intergration
+LibVLC.Net
+ElevationProfile: fix null exception #1084
+Tracking: add exception fix
+FlightData: check zoom level on startup
+ElevationGraph: add null check #1084
+FlightData: fix conversion exception
+ADSB: accept from and sysid/compid
+CurrentState: add adsb
+MAVLink: update
+MagCalib: fix compass 3 calib
+ConfigBattery: update for mono exit
+ConfigTradHeli: update buttons
+ConfigTradHeli: update
+
+* Mission Planner 1.3.33 - 8-12-2015
+ThemeManager: fix tree view under high contrast
+LogBrowse: handle currupt log better
+SBP: add inject gps sbp detection
+MAVLinkParam: implement all casts
+FirmwareHistory: update
+CheckList: add to flightdata view
+SimpleExample: request datastreams
+FlightPlanner: fix dragging group bug, and speed improvement
+MAVList: fix 3dr radio case
+px4uploader: remove otp check
+SimpleExample: update
+MAVList: update 3dr radio special case
+GMapMarker: Make Position virtual
+Georefimage: calc average offset #1057
+FlightPlanner: use units for wp circle #1068
+ConfigPlanner: add method to get to testing screen.
+Allow a plugin to insert waypoints anywhere in the list
+Autosized an input box vertically instead of horizontally.
+Display layer title in the WMS input box instead of layer name.
+Modified GetCapabilities URL to work even if the wms server URL includes query strings.
+MAVLinkInterface: keep track of wps read from mav #1062
+FlightPlanner: add text autowp
+MAVlinkInterface: change getwp timeout to 3500 ms
+MAVLinkInterface: update mav severity info
+MAVLinkinterface: increase log timeouts and retrys #1061
+LogDownloadMavlink: fix posible bad time exception #1061
+FlightPlanner: fix load and append file types
+FlightPlanner: revert/tidy wp file format #1050
+Preflight control
+GeoRef: cleanup and exception check
+InjectGPS: add rtcm indicator
+CommsUDPSerialConnect: fix udp circle buffer issue
+MainV2: fix posible null exception
+FlightData: log MavChanged events
+FlightPlanner: fix prefetch max zoom level #1054
+Plugin: expose map control to plugins #1056
+MAVLink: update from upstream
+FlightData: Set preflight to not visible
+ConfigMotorTest: update url
+Switch over to using .waypoints for mission lists.
+FlightData: fix language on button
+LogBrowse: fix remove from graph
+CommsUdpSerial: fix circle buffer #1049
+FlightData: reverse message list #1046
+Common: change ms to meters_per_second
+RangeFinder: rename from sonar
+LogBrowse: do full name check on add/remove #1025
+Bug fix out of range in GetGPSFromRow when dbl-click far right on the graph
+Bug fix out of range when looking for position in GetGPSFromRow
+FlightPlanner: adjust alt when WP move... #736
+Kindex: fix could be reset after have got #750
+L10N: update zh-Hans translation
+ConnectionControl: make sysid dropdown wider.
+MainSwitcher: add 2nd retry, and soft fail
+Grid: add ability to start/stop cam trig dist
+srtm: increase tile download zoom level
+ConnectionControl: add sysid selection
+GridUI: fix do_digicam_control from grid
+LogAnalyzer: update
+LogIndex: add some more fields #1039
+LogIndex: make less verbose during read
+FlightPlanner: accept floats in wp_rad #1037
+CollectionBuffer: fix type scope max # 1040
+DFLog: add missing events #1031
+Currentstate: add rpm #1038
+ConfigArduCopter: IMAX Scaling #1034
+Firmware: remove OTP check
+Show position on the map when clicking on the graph.
+ConfigRawParams: fix compile issue
+ConfigHWCompass: fix buttons
+New compass UI
+ConfigRawParams: add search box
+temp: add QNH setting (use with caution)
+FlightPlanner: allow terrain type for AC 3.4+ #1022
+Common: add timeinair to speech options
+Gmaps: map url update
+ConfigMount: restore trigg_type on load #1017
+ConfigRawParams: add incremental search/search on type #1020
+CommsSerialPort: add back abortonerror dcb
+Tab order on Extended Tuning
+LogBrowser : added min, max and mean to graph legend
+LogBrowse: add right axis support from mavgraphs.xml
+mavgraphs: add ekfgraphs.xml
+LogBrowse: add simple mavgraphs.xml support
+LogDownloadMavlink: add debug loginfo
+Terminal: prevent outofrange in terminal
+ConfigRawParams: add are you sure to write dialogs.
+FlightData: add exception check to takeoff command
+GMapControl: add exception check to graphicspath
+FlightData: add exception check to set home
+ElevationGraph: remove roi points from path.
+MagCalib: add 3rd compass
+FlightData: support param rename #981
+LogOutput: fix globalization issue on .obs
+MavlinkInterface: make hud text less verbose
+ConfigHWCompass: add fitness values for onboard mag cal
+GridUI: add simple wpno based split
+FlightData: modify resume mission to work for plane
+georefimage: fix relalt, credit to #jmachuca77
+GimbalPoint: formatting
+Program: add typeloadexception handle
+SerialInjectGPS: fix requirement for baud on network protocols
+SITL: add error handling
+GMapControl: prevent exception on list change
+GMaps: update g versions
+CurrentState: set default telemrates
+FlightData: fix cross thread ui call
+GridUI: fix runaway
+LogBrowse: fix gps status check
+Grid: update load/save options
+LogBrowse: performance improvements
+ConfigHWCompass: add calibrate history buffer
+Grid: decrease min distance bwteen lines #1007
+Mavlink: update
+ConfigHWCompass: add onboard compass cal (WIP)
+PreFlightChecklist: move
+CurrentState: add imu3 values
+GeoTiff: fix start coords center pixel
+PreFlightChecklist: initial version
+L10N: fixs
+GCSViews: add ESC Calibration #926
+L10N: read config in advance
+L10N: rename and support CurrentState
+mavcmd: add abort alt #1002
+onfigBatteryMonitor2: add
+FlightPlanner: defaults for do_digicam_control
+urrentState: tweak stream rate defaults
+urrentState: add terrain text
+MAVList: add compid support
+
+* Mission Planner 1.3.32 - 15-9-2015
+BinaryLog: add convert progress dialog
+LogBrowse: add null check
+Wizard: add invalid bat monitor check
+SITL: add invalid home check
+GeoTiff: add directory exists check
+FlightData: update "change speed" when no airspeed precent #1001
+add ironpython lib dll's
+DFLog: make threadsafe
+LogBrowse: memory performance change
+BinaryLog: make threadsafe
+LogBrowse: enable virtualmode for all logs
+FlightData/Planner: fix background exceptions
+ParamMetaData: fix loading primary metadata
+FlightPlanner: fix param cast
+ParamMetaData: fix param info get
+LogBrowse: add presaved log entries
+BinaryLog: make convertbin less verbose
+LogOutput: fix waypoint at 0,0
+LogIndex:  add tlog duration
+FirmwareHistory: update
+MainV2: exclude gimbals from getting home point #986
+MainV2: add sysid to home point error message #986
+mavcmd: update do_mount_control for all types #988
+ConfigMount: add mnt_type #987
+parammetadata: update backup data
+mavcmd: update headers #988
+remove requirement for unsafe
+GeoTiff: add geotiff support #985
+temp: add reset pixhawk option (no warning)
+MagCalib: dont accept 0,0 data
+3DRRadio: increase multiline responce time
+MavlinkInterface: add getVersion and fix severity display
+HUD: show ekf red at 0.8
+MAVLinkInterface: fix mp log message
+LogOutput: add POS distance filter
+EKFStatus: add color to flags
+EKFStatus: fix transposed values
+MAVLinkInterface: add mp version to tlogs
+MAVLink: update to master
+px4uploader: add another forged key
+Georef: add missing files
+EKFStatus: fix scale and flags
+GeoRef update
+HUD: always display ekf and vibe
+BaseClasses: revert .net version
+LogBrowse: increase type scan limit #972
+LogBrowse: add Vibe message preselection #971
+LogOutput: add pos message output to kml
+LogBrowse: Add POS message output
+PointLatLngAlt: add another contructor
+Common: add more speech entries
+Driver eol fix
+ImageOverFilter: remove from compile
+BaseClasses: change target framework
+EKFStatus: add #949
+Hud: add vibration and ekf #948
+simpleexample: fix example #922
+px4uploader: add forged cert check
+NoFly: add nofly support. (kmz loader from nofly dir)
+paramcompare: fix double vs float #963
+srtm: add 0,0 check
+CommsNTRIP: modify user agent.
+CommsNTRIP: tweak keepalive
+commNTRIP: add tcp keepalive
+Vibration: update to display lines
+NGEN: add ngen at startup if posible
+DFLog: improve performance on bad gps message
+CommsNTRIP: fix reconnect logic
+logbrowse: support gps fix >=3
+SerialInjectGPS: fix ntrip baud issue
+wix: fix path
+LogOutput: fix df kml with all gps lock types
+
+* Mission Planner 1.3.31 - 9-8-2015
+georefimage: update offsets #946
+FlightPlanner: fix waypoint panel size
+currentstate: fix x/y issue on optical flow #959
+MainV2: change dtr logic, default to off
+ConfigArducopter: update FF params to VFF #950
+configarducopter: add new param names #951
+configmount: rename combobox
+FlightData: make useritem/quickview selection scrolable
+configplanner: make JP language selectable
+add JP translation by Jiro Hattori & Co
+CurrentState: adjust default stream rates, to increase idle bandwidth
+GCSViews: add Parachute #906
+Localizations: update zh-Hans translations
+MavlinkCheckBoxBitMask: fix refresh chkboxes #912
+ParameterMetaDataRepository: remove zh-Hans support
+DistanceBar: fix paint issues
+Startup speed tweaks
+Vibration: Add initial moc
+Terminal: prevent command clearing on update #945
+ParamFile: fix float/double compare
+AP_GPS_SBF: update
+FlightData: add script usage
+px4uploader: clear input buffer on identify
+GridUI: fix ft/m issue
+FlightData: update resume mission to replace old mission
+CurrentState: add vibeclip0avg
+MAVlinkInterface: add force disarm #891
+UTMWGS: fix equator bug
+ParameterMetaData: remove zh-Hans ver.
+ Localizations: update urls
+Localizations: update Firmware zh-Hans
+MainV2: disable font size change of Chinese
+ConfigRadioInput: update binding zh-Hans trans
+Mavlink: heartbeat is mispelled
+CurrentState: support negative current From kozinalexey
+SerialInjectGPS: update baud rate box
+MainV2: move kindex to background thread
+flightdata: fix hidden exception
+GoogleMap: speed up init, and modify url
+CommsUDPSerial: make dialog generic
+MAVLinkParam: set type before value.
+Update internal Param system
+Terminal: change nsh timing
+Tidy Warning
+python example
+app.config: update urls so xp update still works
+LogOutput: add more rinex support
+MavlinkCheckBoxBitmask: fix masking
+SerialOutputPass: add udp options
+Terminal: nsh over mavlink tweaks
+GoogleSatelliteMap: update version no
+NoFly: update loader and callback
+ConfigAccelerometerCalibration: move to 1 accel calib screen
+
+* Mission Planner 1.3.30 - 19-6-2015
+ConfigRadioInput: fix yaw/thro swap
+Terminal: add nsh over mavlink
+MAVLink update
+
+* Mission Planner 1.3.29 - 17-6-2015
+DroneShare update
+fftui: add hz/rpm to point values for easy diag
+fftui: modify freq detection for single imu
+fftui: modify to detect sample rate based on a larger sample set
+Code Cleanup
+switch back to .net 3.5 to prevent designer crash on hud
+DistanceBar: catch draw exceptions
+LogBrowse: add extra null check
+Program: add user field in error report
+configradioinput: use default input positions if no rcmap params
+Mavlineinterface: fix default fallthrough
+Add simple gymbal support
+tweak mav type display
+remove simple gui
+mavlinkinterface: modify injectgps
+SerialInjectGPS: fix buffer size
+Currentstate: add vibration message
+ConfigRawParams: speed up
+Common: fix config curruption issue
+MAVLinkInterface: add unknown packet message
+LogBrowse: change line number to time
+MAVLink: update
+ConfigFriendlyParam: speedup screen draw time
+Static analysis fixs
+Update Solution
+LocationWP: add implicit conversion
+ConfigRawParamTree: fix typo
+Mainv2: adjust font size based on screen dpi
+flightplanner: remove duplicate code
+currentstate: rearrange fields
+GridUI: fix turn radius and do change speed for non meters
+ProgressReporterDialogue: dispose form after use
+Update openfile/savefile dialog to prevent leak
+FlightPlanner: add measure distance notification
+MainV2: fix auto connect
+update default form language
+wizard: connect add firmware note
+ParamMetaDataRepo: scan multiple elements for valid paramname
+ParamMetaData: update to fix dup xml entrys
+SITL: add joystick as direct rc input.
+LogOutput: fix rinex creation
+MainSwitcher: add exception handle for invalid controls
+wizard: accelcalib update to exclude init message #38
+px4uploader: add new vender cert
+FlightPlanner: hide clear roi
+fftui: add null check
+LogBrowse: use time as default
+currentstate: add pid feedback
+MAVLink: update library
+CollectionBuffer: fix index init
+srtm: fix file move
+Fix Rel vs AMSL Altitude Logic
+srtm: remove 1 arc seconds data
+Currentstate: fix cast on sonar range
+currentstate: update sonarerange units #878
+Mavlinkinterface: send storage write 10 seconds after setparam #882
+AP_Terrain: add lib #573
+CurrentState: add terrain active flag #573
+CollectionBuffer: add bin support
+FlightData: only allow one async updateBindingSource
+currentstate:  add distfrommovingbase
+script: update example to include photo trigger
+SITL: add vs redist notice
+FlightData: Fix min windows size
+Localizations: update zh-Hans
+Localizations: let FW change to ConfigLang
+airports.csv: update
+Aitports: add seaplane base filter
+MainV2: prevent system sleep while MP open
+CurrentState: add imu2 to status tab
+MAVlinkCheckboxBitMask: add description and name
+MavlinkBitmask: add support
+Mainv2: update portname when started from place other than button press
+sysidselector: apply theme
+SITL: User interface
+DFLog: add clear function, and reset on each log load
+FlightData: fix mnt param name
+GimbalPoint: allow to run when not connected
+MAVLinkinterface: add params from stream
+FlightData: add resume mission button
+Currentstate: add prev wpno saving
+DFLog: add timeus to other messages
+DFLog: add timeUS to base time calc
+DFLog: update for new gps time field names
+LogBrowse: add timeus support to drawtime
+CollectionBuffer: implement Clear()
+BinaryLog: dont decode data we dont know about
+BinaryLog: add uint64 and int64
+Flightdata: add storm32 to gymbalpoint filter
+LogBrowse: add DrawTime to startup
+LogBrowser: speedup DrawMap creation
+MavlinkNumericUpDown: add ability to set out of range value
+LogBrowse: add simple progress to df log graph (console)
+CollectionBuffer: improve performance
+
+* Mission Planner 1.3.28
+fftui: change to higher data rate data
+currentstate: remove ekf error flags
+fft: auto detect sample rate
+ConfigRadioInput: fix min/max lines and loading settings #883 #884
+temp: add fft button
+FFT Gui and update
+FFT library
+currentstate: ekf status update
+Plugins: cleanup
+LogAnalyzer: add to MP git
+
+* Mission Planner 1.3.27
+ParameterMetaDataParse: patch for pde to cpp rename that prevents update from working
+ParameterMetaData: update backup data
+ConfigArducopter: update FF param names #876
+update .gitignore
+temp: remove vlctotexture
+ConfigAccelPlane: remove 1d accel calib
+CommsSerialScan: update to allow cancel/exit
+
+* Mission Planner 1.3.26
+logbrowse: add time base to log browser #872
+georefimage: fix coloum label order #873
+Localization: update ConfigFM zh-Hans translation
+Localization: update ConfigMotorTest zh-Hans
+Localization: update ConfigFS/3DRradio zh-Hans
+FlightData: fix zh-Hans text place
+FlightData: add auto scroll and scrollbar for Messages
+Strings: add AutoWP
+logoutput: add sbas obs header
+currentstate: add ekfstatus
+LogOutput: dont create rinex file if no obs
+LogOutput: create rinex file if obs data present
+Scripts: add another python example
+DFLog: improve time calc, and gps msg filter
+mavlinkinterface: add cmd line on connect
+SerialInjectGPS: add ntrip
+LogBrowse: update message type scanning to scan the first 500000, from 30000
+FlightPlanner: fix freeze on add bellow
+Script: update example 2
+Log: fixed bug when offset is added before scalar
+update solution to remove old projects
+CurrentState: add csCallBack
+ParameterMetaData: add rebootrequired
+BinaryLog: add double support
+MainV2: add connection options
+currentstate: ignore date exception
+Capture: allow fall back to default capture options
+MavlinkParse: fix offset start on split read
+MavlinParse: fix runaway read
+mavlinparse: fix timeout issue
+StreamCombiner: update to use mavlinkparse
+Mainv2: make doConnect more generic
+TerrainFollow: make interface specific
+Currentstate: change requestdatastreams to 30 sec interval
+Mainv2: fix mavlinkversion in hb
+streamcombiner: use packetreader to prevent bad packets
+MAvlininterface: add infinity check to hzratecheck
+MavlinkParse: add reader function
+script: add rc - heli. arm and takeoff script
+SerialInjectGPS: update to allow more input sources
+temp: modify arm and takeoff button
+MainV2: cleanup read code
+Currentstate: specify sysid when requesting datastream
+StreamCombiner: modify to set sysid's
+MavlinkInterface: move requestDatastream packet stats to per MAV
+Mainv2: get all params on connect
+mavlinkinterface: add sysid to param list dialog
+flightdata: fix bintolog conversions directory #854
+MultiMav: update
+temp: give fresh look
+mainv2: make sysidselector always topmost, and non modal
+currentstate: add sitl speedup value
+mavlinkinterface: fix bad packet count bug (when multi mav)
+GMapMarkerQuad: add sysid and display
+flightdata: add do-set-home support on flightdata #846
+flightdata: make status tab text wider #860
+temp: add arm and takeoff button
+droneshare: change to private as default
+CommsFile: add read exception when not connected
+mavlinklog: fixup custom log items
+Flightdata: add takeoff connected check, and capture traveled path when screen not active
+Spline2: change to use dt
+SITL: fix quad home alt
+googlesatallitemaps: version update
+georefimage: add image time offset for each image when using cam sync #856
+SerialInjectGPS: add new form to inject data
+droneshare: upload change
+Strings: move strings to resource
+Mavlinkinterface: add InjectGPSData
+georefimage: add bin support #855
+Flightdata: add ability to convert multiple bins to logs in one hit #854
+CurrentState: add voltage flags
+HIL: update for sitl quad lockstep
+Common: add target heading to AT icon
+Grid: add leadin and cleanup
+Common: add AT servo_test mode
+Common: fix antenna tracker heading
+Simulation: change timing structure
+Simulation: get sitl working with jsbsim
+Mavlinklog: add ability to offset a log from its home alt (shift key on kml button)
+Simulation: add sitl timestep (no realtime)
+FlightPlanner: add modifyalt exception handle
+GMapControl: allow int overflow on polygon draw
+DistanceBar: add resize 0 checks
+MainSwitcher: invoke creation on gui thread
+LogMap: add log open file share
+MainSwitcher: add null control check
+mavcmd: add loiter to alt
+Mavlink: lib update
+georef: add relative basealt option
+mavlinklog: update kml creation to use home alt + rel alt
+Localization: optimize HUD translations
+ConfigMount: fix wiki link and zh-Hans translation
+Log: DoubleClick log item to apply user-defined offset and scalar
+Log: Optimize constructor for faster graphing
+mybutton: add colour change invalidate
+
+* Mission Planner 1.3.25
+configframetype: update
+configrawparam: modify load/save button text
+hud video: add vlc test
+HUD: fix bgimage whiteout
+mainv2: add plugin load skip (shift key)
+Mainv2: make menu panel public
+Coords: add ability to change unit test
+firmware: change url null to blank check
+flightplanner: autoresize Columns on panel expand
+SoftwareConfig: make sure theme applys to children
+Missionplanner: remove old defines
+firmware: add url null check
+simulation: add default init of sitl quad to home location
+configarducopter: fix tune high and low scale #839
+mainv2: add error logging
+joysticksetup: fix warnings
+utils: update speech lib
+mavlinkcombobox: add subcontrol support
+simulation: add jsbsim step
+Uploader: segmented enum values and moved others to consts due to improper enum use.
+flightplanner: better handle land command display
+Distancebar: fix double buffer
+jsbsim: update config to match sitl
+firmware: fix <= board version
+jsbsim: update
+mavcmd: add DO_DIGICAM_CONTROL and DO_DIGICAM_CONFIGURE #841
+scripts: add more sample python scripts
+firmware: update firmware version no is pulled from, and add arducopter on apm2 retired board message
+confighwsonar: cleanup unused var
+distancebar: enable double buffer
+mavlink: update library
+georefimage: add null check
+configmotortest: add exception message
+firmware: fix extra ;
+Mainv2: fix light/dark icons
+configplanner: fix startup flag
+mainv2: change logsort/maps order
+logsort: cleanup and move by filename filter
+Missionplanner: fix version.txt creation
+
+* Mission Planner 1.3.24
+MainV2: change plugin load order
+update: do a blank string check on update
+flightplanner: fix wp upload issue when 2 wp's have the same values #829 *IMPORTANT*
+HUD: create more turn off options
+Mainv2: rearrange startup
+missionplanner: update post build event
+quickview: modify docking to prevent flicker
+Grid: add turn dia
+Gimbalpoint: new geopoint calc using srtm alt
+rangecontrol: width tweaks
+resources: make public
+HUD: cleanup and option parts
+GimbalPoint: update code
+flightplanner: fix no display of some mav_cmds based on recent 0 check change
+flightplanner: show 0 lats and 0 longs on map
+gmaproute: add better stroke handleing
+mavlinkinerface: add connected check to param fetch
+airports: update airports
+GMappolygon: fix null reference
+
+* Mission Planner 1.3.23
+Add satcount and GPS HDOP to 3O second interval speech synthesis.
+flightplanner: fix posible missed wp on lossy link #823
+
+* Mission Planner 1.3.22
+GMapPolyon: fix exception
+flightplanner: fix reading saved wp file with more than 255 wp's
+opengltest: update
+joystick: do repeat servo, fix pwm max #822
+mavlinkinterface: cleanup debug
+mavlinkinterface: workaround for 3dr radio dup seqnos
+droneshare: update
+configarducopter: fix ch7/ch8 and tune combobox
+mainswitcher: fix for crossthread screenchange
+commsserialport: add null exception check
+gmapcontrol: add resize exception handle
+configbatterymonitor: give more text space
+configmotortest: add another button for tricopters
+simulation: fix sitl/hil
+flightplanner: fix terrain wp readback
+
+* Mission Planner 1.3.21
+joystick: add button axis #815
+configarducopter: mod min max #818
+flightplanner: tweak multi point move (control+click wp, or control+drag box)
+flightplanner: initial multi move (use control key)
+flightplanner: add undo (control-z)
+3drradio: fix string reference
+mavlinkinterface: factor out setwp
+flightplanner: function out datagrid population
+Joystick, Radio, add exception handling.
+
+* Mission Planner 1.3.20
+currentstate: add ch9-16 in
+firmwarehistory: update
+flightplanner: fix dragging home exception
+wizard:optionalhw update pram name
+confighwsonar: update to new param name
+currentstate: arrange gps info together
+Uploader: add get_chip command
+configmotortest: add duration option #796
+mavlinkinterface: fix getwpcount bug #805
+Optimize checked BackColor
+forms "Display this"
+Localization: update HUD translation
+Locallization: update Params zh-Hans translation
+Config: add UTF-8 support
+Localization: fix Wizard zh-Hans translation
+Localization: update Wizard zh-Hans translation
+mavlinkinterface: add setparam debug logging
+configarducopter: update to use new controls, and paramnames
+mavlinknumericupdown: add post value update, auto min,max, and multiple paramnames
+gmapmarkerairport: disable at low zoom levels
+flightplanner: fix wms layer request
+3drradio: fix max transmit power for new radios
+common: modify get file from net to check last modified and file size
+mavlinkutil: implement more efficent bytetostruct method. (50% faster)
+pluginloader: fix path to all lower case
+common: add new gmapmarkerwp
+flightplanner: use new wpmarker and homename
+gridui: use new wpmarkers
+gmapmarkerairport: fix scale on zoomout
+configantennatrakcer: remove proxymode
+configantennatracker: remove proxy mode #799
+parammetadatebackup: update baseline param set
+flightplanner: use new dashstyle
+flightdata: use new dashstyle
+gridui: use new dashstyle
+gmaproute: add custom dashstyle
+kindex: add daily cache
+tfr: add daily cache
+georefimage: add a few estimates
+georefimage: add option to use offsets on just cam messages
+georefimage: fix GE kml networkload issue
+httpserver: tweak output
+sharpkml: fix folder
+WarningEngine: only alert when connected.
+mainv2: change adsb lock
+joystick: add raw input line. (no expo)
+horizontalprogressbar: seperate min max line draw
+flightdata: change adsb lock
+configreadioinput: prevent config if radio off #793
+DistanceBar: tweaks
+firmware: add bad dependancy error message on firmware upload
+configplanner: change excpetion to error message
+loganalyzer: handle malformed data better
+confighwbt: handle comport open exception
+gridui: fix error on 359 + start angle
+GMap: add MercatorProjectionGCJ
+Localization: move Update strings
+Localization: update InitalSetup zh-Hans translation
+Localization: update ConfigAC zh-Hans translation
+ConfigHWBT: add a Bluetooth module picture
+Multiple: update zh-Hans translation
+MagCalib: add zh-Hans translation
+GMap: fix GoogleChinaSatelliteMap
+RawParamsTree: fix diydrones/MissionPlanner#769
+3drradio: update mavlinkserialport #785
+mavlinklog: fix remove from graph #790
+ExtGuided: new test plugin
+joysticksetup: preselect last joystick used
+configplanner: restore last video resolution
+flightdata: add autotune button
+mavlinkinterface: remove old arming method
+python example: upload mission
+gitignore: add ignore
+flightdata: default mode dropdown to auto
+
+* Mission Planner 1.3.19
+grid: fix exception #784
+
+* Mission Planner 1.3.18
+hud: reduce spin time and tweak image resize
+capturemjpeg: tweak object lifetime
+droneshare: fix messagebox type
+logdownloadmavlink: add droneshare exception
+logbrowse: add better cleanup on load/reload #782
+dflog: add line end trimming.
+mavcmd.xml: add MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT #776
+Update: add Chinese CDN Mirror
+ConfigFirmware: some warnings zh-Hans translation
+Survey Grid generation improvement. Alternating Lanes
+configraparamtree: cleanup
+mavlink: update from master mavlink repo
+mavlink: update
+mainv2: refresh screen on usb unplug #778
+tlogthumbnailhandler: remove console grab
+ConfigBatVoltage: bypass low pass #779
+MainV2: add rally point warning
+LogMap: create image for mavlink 0.9 logs
+MainSwitcher: update cleanup method
+wix: update installer for com registration
+httpserver: fix tracking value
+ConfigArducopter: remove hld_lon_p
+logindex: add .bin and .log
+Tracking: fix event value
+LogMap: add .log and .bin support
+tlogThumbnailHandler: first commit
+logbrowse: add more predefined graphs
+Drivers
+srtm: allow http exception to requestRunner
+distancebar: fix posible overflow error
+3drradio: update urls for rfd900s
+srtm: return new altresponce on alt query
+configfirmware: add motor setup url
+RallyPoints: fetch on connect to AP
+Grid: fix time calc #774
+configarducopter: increase imax min/max #655
+flightplanner: remove snap zooming #690
+configarducopter: fix french translation #683
+mavcmd: add guided_limits #676
+flightdata: add colors to graph this dialog. #735
+configrawparamtreeview: turn off autocomplete #714
+grid: add delay to total time taken #716
+configaccelplane: add more warnings. #718
+mavlinklog: fix kml cdata close tag #733
+wizard: fix tri frame selection #738
+mainv2: make sure usb unplug is seen #744
+mavcmd: remove do_Set_home for copter #747
+currentstate: add optflow info #745
+confighwcompass: tweak posible bad error on mag dec input.
+mavcmd: add do_set_roi for plane. #763
+currentstate: fix posible bad home location #768
+configmotortest: update url #770
+FlightData: fix time based slowdown.
+mavlinkinterface: fix logplayback wp reading (gcs side)
+logdownloadmavlink: add scrollbar
+Firmware: update CN mirror url
+Multiple: update zh-Hans translation
+GMAP: add AMap and localization for maps' names
+Hud: update to fail to gdi on first opengl command
+logdownloadmavlink: add scrollbar to log list
+px4uploader: add new public key
+comms: updserialconnect
+Solution: fix build dependancys
+comms: udpserialconnect force initial connection
+Mainv2: add new udpserialconnect
+Comms: add udpserialconnect
+3drradio: update note
+configfirmware: default back to ENG
+Strings: re-add some of Firmware
+bin2log: fix chinese appear at log's mode name
+mavlinkinterface: fix statustext bug
+flightplanner: add loaded wp filename
+logdownloadmavlink: add droneshare intergration
+mavlinkinterface: fix mav type detection on getheartbeat
+flightdata: fix distance bar
+logbrowse: use common map provider
+wizard accel: fix exception
+
+* Mission Planner 1.3.17
+confighwbt: fix retry on invalid baud
+airport: update list from ourairports.com
+mavlinkinterface: update to use new strings
+Strings: move more strings
+mavlinkinterface: implement both arm methods
+Kindex: update to use new url
+MainV2: move strings
+Terminal: update terminal note
+confighwbt: fix order of commands
+confighwbt: program a hc-06
+Firmware.cs: Added VRBRAIN 5.2 and corrected conflicts after rebase.
+Added new board VR Brain 5.2: detection, driver and upload firmware
+cleanup unused vars
+DistanceBar: add trial
+GStreamerHud: Testing
+Firmware: add failure logging
+SimpleExample: add simple example
+Mavlinparse: add parser
+ConfigHWBT: wip.
+Translation: move some strings, cleanup
+FlightData: update to use dotted line on flightdata
+MAVLinkinterface: change arm/disarm to use current target id
+LogBrowse: add ability to open very large logfiles (300mb bins)
+CollectionBuffer: improve performance
+Firmware: add chinese CDM Mirror by SkiTiSu
+PluginLoader: add plugin fail logging
+csproj: cleanup dependancys
+MAVLink Log - add tlog fn to title bar
+CollectionBuffer: make work for strings
+ConfigFirmware: add licence details
+configrawparamtree: add exception check on reset
+LogBrowse: exception handle on no data on rowpaint
+FlightData: add avi close exception handle
+ConfigRawParam: exception check values on save
+Joystick: add exception check to rcoverrideclear
+Mainv2: fix log map create exception
+joystick: fix load config path
+TFR: change fill color
+
+* Mission Planner 1.3.16
+KIndex: implement kindex
+Multiple: Exception checks
+mavlinkinterface: reinstate request param list
+MAVLinkInterface: modify parameter get when packets are lost
+3drradio standalone: changelog dates
+FlightPlanner: remove unused code
+tfr: add exception handle
+3drradio standalone: update changelog
+3drradio: switch back to static strings
+paramcompare: fix typo
+3DRRadio: update for 900u
+Strings: add some localization
+ElevationGraph: add terrain follow
+MeasureString: add null check
+tfr: fix crossthread call on load
+mavcmd: update loiter_turns
+thememanager: fix alternate row colour on other themes
+flightplanner: turn on autosize on all coloums
+winddir: autoscale max speed
+configaccelplace: add warning about only doing 1 of the 2 calibs
+georef: fix field reverse #727
+mavcmd: update to display do_land_start
+TFR: allow enable/disable of tfrs
+Support for TetraCAM Time offset Geotagging
+VRBRAIN: added and updated drivers for all VRX boards
+VRBRAIN: inhibited the message of waiting of musical tones after firmware's upload for all VRX boards
+VRBRAIN: added recognition and management of boards VR Micro Brain 5.2, VR Gimbal 2.0 and VR Micro Gimbal 1.1
+FirmwareUpload: VRBRAIN added board detection for VRBRAIN 4.
+ConfigBatteryMonitoring: Added VRBRAIN4 board pins and corrected VRBRAIN 5 and VR Micro drop down auto-select
+update Simplified Chinese translation
+flightdata: move tfr to its own layer
+firmwarehistory: update
+mavlinkinterface: trigger camera only once. #731
+Added DefaultWebProxy to WebRequest to use IE default settings.
+flightdata: preflight_calib, only set gyro calib on copter
+
+* Mission Planner 1.3.15
 MainV2: add null check on threads on exit
 wizard: compasscalib, add exception handle
 Currentstate: add laser positon health message

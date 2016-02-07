@@ -9,7 +9,7 @@ ClassGuid={4D36E978-E325-11CE-BFC1-08002BE10318}
 Provider=%MFGNAME%
 LayoutFile=layout.inf
 CatalogFile=vrbrain.cat
-DriverVer=04/11/2013,2.0.0.4
+DriverVer=01/01/2015,2.0.0.9
 
 [Manufacturer]
 %MFGNAME%=DeviceList, NTamd64
@@ -85,10 +85,10 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 [SourceDisksFiles]
 [SourceDisksNames]
 [DeviceList]
-%DESCRIPTION%=DriverInstall, USB\VID_27AC&PID_1140, USB\VID_27AC&PID_1145, USB\VID_27AC&PID_1150, USB\VID_27AC&PID_1151
+%DESCRIPTION%=DriverInstall, USB\VID_27AC&PID_1140, USB\VID_27AC&PID_1145, USB\VID_27AC&PID_1150, USB\VID_27AC&PID_1151, USB\VID_27AC&PID_1152
 
 [DeviceList.NTamd64]
-%DESCRIPTION%=DriverInstall, USB\VID_27AC&PID_1140, USB\VID_27AC&PID_1145, USB\VID_27AC&PID_1150, USB\VID_27AC&PID_1151
+%DESCRIPTION%=DriverInstall, USB\VID_27AC&PID_1140, USB\VID_27AC&PID_1145, USB\VID_27AC&PID_1150, USB\VID_27AC&PID_1151, USB\VID_27AC&PID_1152
 
 
 ;------------------------------------------------------------------------------
@@ -100,6 +100,6 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 MFGFILENAME="CDC_vista"
 DRIVERFILENAME ="usbser"
 MFGNAME="Laser Navigation"
-INSTDISK="Laser Navigation VRBRAIN Installer"
-DESCRIPTION="VRBrain"
+INSTDISK="Laser Navigation VR BRAIN Installer"
+DESCRIPTION="VR Brain"
 SERVICE="USB RS-232 Emulation Driver"

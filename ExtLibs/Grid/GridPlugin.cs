@@ -51,7 +51,7 @@ namespace MissionPlanner
             int index = col.Count;
             foreach (ToolStripItem item in col)
             {
-                if (item.Text.Equals("Auto WP"))
+                if (item.Text.Equals(Strings.AutoWP))
                 {
                     index = col.IndexOf(item);
                     ((ToolStripMenuItem)item).DropDownItems.Add(but);
@@ -65,8 +65,6 @@ namespace MissionPlanner
 
             return true;
         }
-
-       
 
         void but_Click(object sender, EventArgs e)
         {

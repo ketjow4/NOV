@@ -36,9 +36,9 @@ namespace MissionPlanner.Plugin
             try
             {
                 Type[] types = asm.GetTypes();
-                Type type = typeof(MissionPlanner.Plugin.Plugin);
+                Type type = typeof (MissionPlanner.Plugin.Plugin);
                 foreach (var t in types)
-                    if (type.IsAssignableFrom((Type)t))
+                    if (type.IsAssignableFrom((Type) t))
                     {
                         pluginInfo = t;
                         break;
@@ -46,8 +46,10 @@ namespace MissionPlanner.Plugin
 
                 if (pluginInfo != null)
                 {
+                    log.Info("Plugin Load " + file);
+
                     Object o = Activator.CreateInstance(pluginInfo);
-                    Plugin plugin = (Plugin)o;
+                    Plugin plugin = (Plugin) o;
 
                     plugin.Assembly = asm;
 
@@ -55,7 +57,7 @@ namespace MissionPlanner.Plugin
 
                     if (plugin.Init())
                     {
-                        log.InfoFormat("Plugin Init {0} {1} by {2}", plugin.Name,plugin.Version,plugin.Author );
+                        log.InfoFormat("Plugin Init {0} {1} by {2}", plugin.Name, plugin.Version, plugin.Author);
                         lock (Plugins)
                         {
                             Plugins.Add(plugin);
@@ -66,12 +68,12 @@ namespace MissionPlanner.Plugin
             catch (Exception)
             {
             }
-
         }
 
         public static void LoadAll()
         {
-            string path = Application.StartupPath +  Path.DirectorySeparatorChar+ "Plugins" +  Path.DirectorySeparatorChar;
+            string path = Application.StartupPath + Path.DirectorySeparatorChar + "plugins" +
+                          Path.DirectorySeparatorChar;
 
             if (!Directory.Exists(path))
                 return;
@@ -93,8 +95,9 @@ namespace MissionPlanner.Plugin
                             --i;
                         }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        log.Error(ex);
                         Plugins.RemoveAt(i);
                         --i;
                     }

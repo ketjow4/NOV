@@ -39,21 +39,22 @@ namespace MissionPlanner.Wizard
 
             selected = true;
 
-            switch (option) {
+            switch (option)
+            {
                 case "x":
-                    MainV2.comPort.setParam("FRAME", (int)ConfigFrameType.Frame.X);
+                    MainV2.comPort.setParam("FRAME", (int) ConfigFrameType.Frame.X);
                     break;
                 case "+":
-                    MainV2.comPort.setParam("FRAME", (int)ConfigFrameType.Frame.Plus);
+                    MainV2.comPort.setParam("FRAME", (int) ConfigFrameType.Frame.Plus);
                     break;
                 case "trap":
-                    MainV2.comPort.setParam("FRAME", (int)ConfigFrameType.Frame.V);
+                    MainV2.comPort.setParam("FRAME", (int) ConfigFrameType.Frame.V);
                     break;
                 case "h":
-                    MainV2.comPort.setParam("FRAME", (int)ConfigFrameType.Frame.H);
+                    MainV2.comPort.setParam("FRAME", (int) ConfigFrameType.Frame.H);
                     break;
                 case "y6b":
-                    MainV2.comPort.setParam("FRAME", (int)ConfigFrameType.Frame.Y);
+                    MainV2.comPort.setParam("FRAME", (int) ConfigFrameType.Frame.Y);
                     break;
             }
         }
@@ -66,8 +67,9 @@ namespace MissionPlanner.Wizard
             {
                 setframeType(sender);
             }
-            catch { 
-                CustomMessageBox.Show("Error setting frame type, ensure your autopilot is still connected. Exiting wizard","Error");
+            catch
+            {
+                CustomMessageBox.Show(Strings.ErrorNotConnected, Strings.ERROR);
                 Wizard.instance.Close();
             }
         }
@@ -76,7 +78,7 @@ namespace MissionPlanner.Wizard
         {
             foreach (var ctl in this.panel1.Controls)
             {
-                if (ctl.GetType() == typeof(PictureBoxMouseOver))
+                if (ctl.GetType() == typeof (PictureBoxMouseOver))
                 {
                     (ctl as PictureBoxMouseOver).selected = false;
                 }
@@ -87,31 +89,31 @@ namespace MissionPlanner.Wizard
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
             {
-                CustomMessageBox.Show("You are no longer connected to the board\n the wizard will now exit", "Error");
+                CustomMessageBox.Show(Strings.ErrorNotConnected, Strings.ERROR);
                 Wizard.instance.Close();
                 return;
             }
 
-            if (MainV2.comPort.MAV.param.ContainsKey("FRAME")) 
+            if (MainV2.comPort.MAV.param.ContainsKey("FRAME"))
             {
-                ConfigFrameType.Frame frame = (ConfigFrameType.Frame)(int)(float)MainV2.comPort.MAV.param["FRAME"];
+                ConfigFrameType.Frame frame = (ConfigFrameType.Frame) (int) (float) MainV2.comPort.MAV.param["FRAME"];
 
                 switch (frame)
                 {
                     case ConfigFrameType.Frame.X:
-                        pictureBox_Click(pictureBoxMouseOverX, new EventArgs());
+                        pictureBox_Click(pictureBoxMouseOverX, EventArgs.Empty);
                         break;
                     case ConfigFrameType.Frame.Plus:
-                        pictureBox_Click(pictureBoxMouseOverplus, new EventArgs());
+                        pictureBox_Click(pictureBoxMouseOverplus, EventArgs.Empty);
                         break;
                     case ConfigFrameType.Frame.V:
-                        pictureBox_Click(pictureBoxMouseOvertrap, new EventArgs());
+                        pictureBox_Click(pictureBoxMouseOvertrap, EventArgs.Empty);
                         break;
                     case ConfigFrameType.Frame.H:
-                        pictureBox_Click(pictureBoxMouseOverH, new EventArgs());
+                        pictureBox_Click(pictureBoxMouseOverH, EventArgs.Empty);
                         break;
                     case ConfigFrameType.Frame.Y:
-                        pictureBox_Click(pictureBoxMouseOverY, new EventArgs());
+                        pictureBox_Click(pictureBoxMouseOverY, EventArgs.Empty);
                         break;
                 }
             }

@@ -1,7 +1,8 @@
 ﻿
 namespace GMap.NET.MapProviders
 {
-   using System;
+    using GMap.NET.Projections;
+    using System;
 
    /// <summary>
    /// GoogleChinaSatelliteMap provider
@@ -20,7 +21,15 @@ namespace GMap.NET.MapProviders
          Instance = new GoogleChinaSatelliteMapProvider();
       }
 
-      public string Version = "s@130";
+      public override PureProjection Projection
+      {
+          get
+          {
+              return MercatorProjectionGCJ.Instance;
+          }
+      }
+
+      public string Version = "s@165";
 
       #region GMapProvider Members
 
@@ -33,7 +42,7 @@ namespace GMap.NET.MapProviders
          }
       }
 
-      readonly string name = "GoogleChinaSatelliteMap";
+      readonly string name = Resources.Strings.GoogleChinaSatelliteMap;
       public override string Name
       {
          get

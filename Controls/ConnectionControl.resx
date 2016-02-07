@@ -174,13 +174,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmb_Baud.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="cmb_ConnectionType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 28</value>
+    <value>206, 4</value>
   </data>
   <data name="cmb_ConnectionType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 21</value>
+    <value>21, 21</value>
   </data>
   <data name="cmb_ConnectionType.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -198,7 +198,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmb_ConnectionType.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="cmb_Connection.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 4</value>
@@ -219,22 +219,22 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cmb_Connection.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="linkLabel1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="linkLabel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
+    <value>3, 33</value>
   </data>
   <data name="linkLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 13</value>
+    <value>40, 13</value>
   </data>
   <data name="linkLabel1.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="linkLabel1.Text" xml:space="preserve">
-    <value>Link Stats...</value>
+    <value>Stats...</value>
   </data>
   <data name="linkLabel1.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -249,6 +249,30 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;linkLabel1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cmb_sysid.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cmb_sysid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>49, 31</value>
+  </data>
+  <data name="cmb_sysid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 21</value>
+  </data>
+  <data name="cmb_sysid.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;cmb_sysid.Name" xml:space="preserve">
+    <value>cmb_sysid</value>
+  </data>
+  <data name="&gt;&gt;cmb_sysid.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmb_sysid.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;cmb_sysid.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

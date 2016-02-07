@@ -265,7 +265,7 @@ namespace MissionPlanner.Controls
 
             Console.WriteLine(Math.Atan2(eye.Y, eye.X));
 
-            float newyaw = 0 * deg2rad;
+            //float newyaw = 0 * deg2rad;
 
             //DrawCircle(CenterPoint.X, CenterPoint.Y, CenterPoint.Z, newyaw, (float)(max), 60);
 
@@ -285,7 +285,7 @@ namespace MissionPlanner.Controls
 
                 //x = x * Math.Cos(yaw) - y * Math.Sin(yaw);
                 y = x * Math.Sin(yaw) + y * Math.Cos(yaw);
-                z = z;
+                //z = z;
 
                 GL.Vertex3(x + cx, y + cy, z + cz);//output vertex 
 

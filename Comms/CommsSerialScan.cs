@@ -11,18 +11,22 @@ namespace MissionPlanner.Comms
         static public bool foundport = false;
         static public ICommsSerial portinterface;
 
+        static object runlock = new object();
         public static int run = 0;
         public static int running = 0;
         static bool connect = false;
 
-       static  int[] bauds = new int[] { 115200, 57600, 38400, 19200, 9600 };
+        static int[] bauds = new int[] {115200, 57600, 38400, 19200, 9600};
 
         static public void Scan(bool connect = false)
         {
             foundport = false;
             portinterface = null;
-            run = 0;
-            running = 0;
+            lock (runlock)
+            {
+                run = 0;
+                running = 0;
+            }
             CommsSerialScan.connect = connect;
 
             List<MAVLinkInterface> scanports = new List<MAVLinkInterface>();
@@ -31,7 +35,10 @@ namespace MissionPlanner.Comms
 
             foreach (string port in portlist)
             {
-                scanports.Add(new MAVLinkInterface() { BaseStream = new SerialPort() { PortName = port, BaudRate = bauds[0] } });
+                scanports.Add(new MAVLinkInterface()
+                {
+                    BaseStream = new SerialPort() {PortName = port, BaudRate = bauds[0]}
+                });
             }
 
             foreach (MAVLinkInterface inter in scanports)
@@ -42,10 +49,13 @@ namespace MissionPlanner.Comms
 
         static void doread(object o)
         {
-            run++;
-            running++;
+            lock (runlock)
+            {
+                run++;
+                running++;
+            }
 
-            MAVLinkInterface port = (MAVLinkInterface)o;
+            MAVLinkInterface port = (MAVLinkInterface) o;
 
             try
             {
@@ -53,7 +63,10 @@ namespace MissionPlanner.Comms
 
                 int baud = 0;
 
-            redo:
+                redo:
+
+                if (run == 0)
+                    return;
 
                 DateTime deadline = DateTime.Now.AddSeconds(5);
 
@@ -67,13 +80,16 @@ namespace MissionPlanner.Comms
                     {
                         packet = port.readPacket();
                     }
-                    catch { }
+                    catch
+                    {
+                    }
 
                     if (packet.Length > 0)
                     {
                         port.BaseStream.Close();
 
-                        Console.WriteLine("Found Mavlink on port {0} at {1}", port.BaseStream.PortName, port.BaseStream.BaudRate);
+                        Console.WriteLine("Found Mavlink on port {0} at {1}", port.BaseStream.PortName,
+                            port.BaseStream.BaudRate);
 
                         foundport = true;
                         portinterface = port.BaseStream;
@@ -85,7 +101,10 @@ namespace MissionPlanner.Comms
                             doconnect();
                         }
 
-                        running--;
+                        lock (runlock)
+                        {
+                            running--;
+                        }
 
                         return;
                     }
@@ -109,11 +128,21 @@ namespace MissionPlanner.Comms
                 {
                     port.BaseStream.Close();
                 }
-                catch { }
+                catch
+                {
+                }
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-
-            running--;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                lock (runlock)
+                {
+                    running--;
+                }
+            }
 
             Console.WriteLine("Scan port {0} Finished!!", port.BaseStream.PortName);
         }
@@ -126,13 +155,10 @@ namespace MissionPlanner.Comms
             }
             else
             {
-
                 if (MainV2.instance.InvokeRequired)
                 {
-                    MainV2.instance.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate()
-                    {
-                        MainV2.comPort.Open(true);
-                    });
+                    MainV2.instance.BeginInvoke(
+                        (System.Windows.Forms.MethodInvoker) delegate() { MainV2.comPort.Open(true); });
                 }
                 else
                 {

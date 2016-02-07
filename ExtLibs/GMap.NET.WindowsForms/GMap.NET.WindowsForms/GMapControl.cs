@@ -817,8 +817,9 @@ namespace GMap.NET.WindowsForms
       {
          route.LocalPoints.Clear();
 
-         foreach(GMap.NET.PointLatLng pg in route.Points)
+         for (int i = 0; i < route.Points.Count; i++)
          {
+            PointLatLng pg = route.Points[i]; 
             GPoint p = FromLatLngToLocal(pg);
 
 #if !PocketPC
@@ -847,45 +848,56 @@ namespace GMap.NET.WindowsForms
 #endif
       }
 
-      /// <summary>
-      /// updates polygons local position
-      /// </summary>
-      /// <param name="polygon"></param>
-      public void UpdatePolygonLocalPosition(GMapPolygon polygon)
-      {
-         polygon.LocalPoints.Clear();
+       /// <summary>
+       /// updates polygons local position
+       /// </summary>
+       /// <param name="polygon"></param>
+       public void UpdatePolygonLocalPosition(GMapPolygon polygon)
+       {
+           polygon.LocalPoints.Clear();
 
-         foreach(GMap.NET.PointLatLng pg in polygon.Points)
-         {
-            GPoint p = FromLatLngToLocal(pg);
+           for (int i = 0; i < polygon.Points.Count; i++) 
+           {
+               PointLatLng pg = polygon.Points[i]; 
+               GPoint p = FromLatLngToLocal(pg);
 
 #if !PocketPC
-            if(!MobileMode)
-            {
-               p.OffsetNegative(Core.renderOffset);
-            }
+               if (!MobileMode)
+               {
+                   p.OffsetNegative(Core.renderOffset);
+               }
 #endif
 
-            //            if(IsRotated)
-            //            {
-            //#if !PocketPC
-            //               System.Drawing.Point[] tt = new System.Drawing.Point[] { new System.Drawing.Point(p.X, p.Y) };
-            //               rotationMatrix.TransformPoints(tt);
-            //               var f = tt[0];
+               //            if(IsRotated)
+               //            {
+               //#if !PocketPC
+               //               System.Drawing.Point[] tt = new System.Drawing.Point[] { new System.Drawing.Point(p.X, p.Y) };
+               //               rotationMatrix.TransformPoints(tt);
+               //               var f = tt[0];
 
-            //               p.X = f.X;
-            //               p.Y = f.Y;
-            //#endif
-            //            }
+               //               p.X = f.X;
+               //               p.Y = f.Y;
+               //#endif
+               //            }
 
-            polygon.LocalPoints.Add(p);
-         }
+               polygon.LocalPoints.Add(p);
+           }
 #if !PocketPC
-         polygon.UpdateGraphicsPath();
+           unchecked
+           {
+               try
+               {
+                   polygon.UpdateGraphicsPath();
+               }
+               catch
+               {
+                   
+               }
+           }
 #endif
-      }
+       }
 
-      /// <summary>
+       /// <summary>
       /// sets zoom to max to fit rect
       /// </summary>
       /// <param name="rect"></param>
@@ -1756,7 +1768,11 @@ namespace GMap.NET.WindowsForms
                   UpdateRotationMatrix();
                }
 #endif
-               ForceUpdateOverlays();
+               try
+               {
+                   ForceUpdateOverlays();
+               }
+               catch (System.OverflowException ex) { System.Diagnostics.Debug.WriteLine(ex); }
             }
          }
       }

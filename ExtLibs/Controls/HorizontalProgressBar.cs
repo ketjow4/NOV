@@ -34,6 +34,31 @@ namespace MissionPlanner.Controls
         int _max = 0;
         int _value = 0;
         bool ctladded = false;
+        bool _drawlabel = true;
+
+        [System.ComponentModel.Browsable(true),
+System.ComponentModel.Category("Mine"),
+System.ComponentModel.Description("draw text under Bar")]
+        public bool DrawLabel
+        {
+            get
+            {
+                return _drawlabel;
+            }
+            set
+            {
+                _drawlabel = value;
+                if (_drawlabel == false)
+                {
+                    if (this.Parent != null && ctladded == true)
+                    {
+                        this.Parent.Controls.Remove(lbl);
+                        this.Parent.Controls.Remove(lbl1);
+                    }
+                    ctladded = true;
+                }
+            }
+        }
         System.Windows.Forms.Label lbl1 = new System.Windows.Forms.Label();
         System.Windows.Forms.Label lbl = new System.Windows.Forms.Label();
 
@@ -127,17 +152,20 @@ System.ComponentModel.Description("Text under Bar")]
 
         private void drawlbl()
         {
-            lbl.Location = new Point(this.Location.X, this.Location.Y + this.Height + 2);
-            lbl.ClientSize = new Size(this.Width, 13);
-            lbl.TextAlign = ContentAlignment.MiddleCenter;
-            lbl.Text = m_Text;
+            if (DrawLabel)
+            {
+                lbl.Location = new Point(this.Location.X, this.Location.Y + this.Height + 2);
+                lbl.ClientSize = new Size(this.Width, 13);
+                lbl.TextAlign = ContentAlignment.MiddleCenter;
+                lbl.Text = m_Text;
 
-            lbl1.Location = new Point(this.Location.X, this.Location.Y + this.Height + 15);
-            lbl1.ClientSize = new Size(this.Width, 13);
-            lbl1.TextAlign = ContentAlignment.MiddleCenter;
-            lbl1.Text = Value.ToString();
+                lbl1.Location = new Point(this.Location.X, this.Location.Y + this.Height + 15);
+                lbl1.ClientSize = new Size(this.Width, 13);
+                lbl1.TextAlign = ContentAlignment.MiddleCenter;
+                lbl1.Text = Value.ToString();
+            }
 
-            if (minline != 0 && maxline != 0)
+            if (minline != 0 || maxline != 0)
             {
                 float range = this.Maximum - this.Minimum;
                 float range2 = this.Width;
@@ -148,17 +176,25 @@ System.ComponentModel.Description("Text under Bar")]
                     if ((Type)this.GetType() == typeof(VerticalProgressBar))
                     {
                         range2 = this.Height;
-                        e.DrawLine(redPen, 0, (this.Maximum - minline) / range * range2 + 0, this.Width, (this.Maximum - minline) / range * range2 + 0);
-                        e.DrawLine(redPen, 0, (this.Maximum - maxline) / range * range2 + 0, this.Width, (this.Maximum - maxline) / range * range2 + 0);
-                        e.DrawString(minline.ToString(), SystemFonts.DefaultFont, Brushes.Black, 5, (this.Maximum - minline) / range * range2 + 2);
-                        e.DrawString(maxline.ToString(), SystemFonts.DefaultFont, Brushes.Black, 5, (this.Maximum - maxline) / range * range2 - 15);
+                        if (minline != 0)
+                            e.DrawLine(redPen, 0, (this.Maximum - minline) / range * range2 + 0, this.Width, (this.Maximum - minline) / range * range2 + 0);
+                        if (maxline != 0)
+                            e.DrawLine(redPen, 0, (this.Maximum - maxline) / range * range2 + 0, this.Width, (this.Maximum - maxline) / range * range2 + 0);
+                        if (minline != 0)
+                            e.DrawString(minline.ToString(), SystemFonts.DefaultFont, Brushes.Black, 5, (this.Maximum - minline) / range * range2 + 2);
+                        if (maxline != 0)
+                            e.DrawString(maxline.ToString(), SystemFonts.DefaultFont, Brushes.Black, 5, (this.Maximum - maxline) / range * range2 - 15);
                     }
                     else
                     {
-                        e.DrawLine(redPen, (minline - this.Minimum) / range * range2 - 3, 0, (minline - this.Minimum) / range * range2 - 3, this.Height);
-                        e.DrawLine(redPen, (maxline - this.Minimum) / range * range2 - 3, 0, (maxline - this.Minimum) / range * range2 - 3, this.Height);
-                        e.DrawString(minline.ToString(), SystemFonts.DefaultFont, Brushes.Black, (minline - this.Minimum) / range * range2 - 35, 5);
-                        e.DrawString(maxline.ToString(), SystemFonts.DefaultFont, Brushes.Black, (maxline - this.Minimum) / range * range2 - 3, 5);
+                        if (minline != 0)
+                            e.DrawLine(redPen, (minline - this.Minimum) / range * range2 - 3, 0, (minline - this.Minimum) / range * range2 - 3, this.Height);
+                        if (maxline != 0)
+                            e.DrawLine(redPen, (maxline - this.Minimum) / range * range2 - 3, 0, (maxline - this.Minimum) / range * range2 - 3, this.Height);
+                        if (minline != 0)
+                            e.DrawString(minline.ToString(), SystemFonts.DefaultFont, Brushes.Black, (minline - this.Minimum) / range * range2 - 35, 5);
+                        if (maxline != 0)
+                            e.DrawString(maxline.ToString(), SystemFonts.DefaultFont, Brushes.Black, (maxline - this.Minimum) / range * range2 - 3, 5);
                     }
                 }
             }

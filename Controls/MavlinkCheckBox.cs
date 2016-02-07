@@ -12,16 +12,14 @@ namespace MissionPlanner.Controls
         public new event EventHandler CheckedChanged;
 
         [System.ComponentModel.Browsable(true)]
-        public float OnValue { get; set; }
+        public double OnValue { get; set; }
 
         [System.ComponentModel.Browsable(true)]
-        public float OffValue { get; set; }
+        public double OffValue { get; set; }
 
         [System.ComponentModel.Browsable(true)]
         public string ParamName { get; set; }
 
-        [System.ComponentModel.Browsable(true)]
-        public Hashtable param { get; set; }
 
         Control _control;
 
@@ -33,14 +31,14 @@ namespace MissionPlanner.Controls
             this.Enabled = false;
         }
 
-        public void setup(float OnValue, float OffValue, string paramname, Hashtable paramlist, Control enabledisable = null)
+        public void setup(double OnValue, double OffValue, string paramname, MAVLink.MAVLinkParamList paramlist,
+            Control enabledisable = null)
         {
             base.CheckedChanged -= MavlinkCheckBox_CheckedChanged;
 
             this.OnValue = OnValue;
             this.OffValue = OffValue;
             this.ParamName = paramname;
-            this.param = paramlist;
             this._control = enabledisable;
 
             if (paramlist.ContainsKey(paramname))
@@ -48,12 +46,12 @@ namespace MissionPlanner.Controls
                 this.Enabled = true;
                 this.Visible = true;
 
-                if ((float)paramlist[paramname] == OnValue)
+                if (paramlist[paramname].Value == OnValue)
                 {
                     this.Checked = true;
                     enableControl(true);
                 }
-                else if ((float)paramlist[paramname] == OffValue)
+                else if (paramlist[paramname].Value == OffValue)
                 {
                     this.Checked = false;
                     enableControl(false);
@@ -90,9 +88,12 @@ namespace MissionPlanner.Controls
                 {
                     bool ans = MainV2.comPort.setParam(ParamName, OnValue);
                     if (ans == false)
-                        CustomMessageBox.Show("Set " + ParamName + " Failed 1!", "Error");
+                        CustomMessageBox.Show(String.Format(Strings.ErrorSetValueFailed, ParamName), Strings.ERROR);
                 }
-                catch { CustomMessageBox.Show("Set " + ParamName + " Failed 2!", "Error"); }
+                catch
+                {
+                    CustomMessageBox.Show(String.Format(Strings.ErrorSetValueFailed, ParamName), Strings.ERROR);
+                }
             }
             else
             {
@@ -101,12 +102,13 @@ namespace MissionPlanner.Controls
                 {
                     bool ans = MainV2.comPort.setParam(ParamName, OffValue);
                     if (ans == false)
-                        CustomMessageBox.Show("Set " + ParamName + " Failed 1!", "Error");
+                        CustomMessageBox.Show(String.Format(Strings.ErrorSetValueFailed, ParamName), Strings.ERROR);
                 }
-                catch { CustomMessageBox.Show("Set " + ParamName + " Failed 2!", "Error"); }
+                catch
+                {
+                    CustomMessageBox.Show(String.Format(Strings.ErrorSetValueFailed, ParamName), Strings.ERROR);
+                }
             }
         }
-
-        
     }
 }

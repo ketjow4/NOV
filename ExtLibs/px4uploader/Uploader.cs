@@ -34,6 +34,7 @@ namespace px4uploader
         public int board_rev;
         public int fw_maxsize;
         public int bl_rev;
+        public bool libre = false;
 
         public enum Code : byte
         {
@@ -42,32 +43,36 @@ namespace px4uploader
             OK = 0x10,
             FAILED = 0x11,
             INSYNC = 0x12,
-            INVALID		= 0x13,//	# rev3+
+            INVALID = 0x13,//	# rev3+
 
             // protocol commands
-            EOC         = 0x20,
-            GET_SYNC    = 0x21,
-            GET_DEVICE  = 0x22,	// returns DEVICE_ID and FREQ bytes
-            CHIP_ERASE  = 0x23,
+            EOC = 0x20,
+            GET_SYNC = 0x21,
+            GET_DEVICE = 0x22,	// returns DEVICE_ID and FREQ bytes
+            CHIP_ERASE = 0x23,
             CHIP_VERIFY = 0x24,//# rev2 only
-            PROG_MULTI  = 0x27,
-            READ_MULTI  = 0x28,//# rev2 only
-            GET_CRC		= 0x29,//	# rev3+
-            GET_OTP     = 0x2a, // read a byte from OTP at the given address 
-            GET_SN      = 0x2b,    // read a word from UDID area ( Serial)  at the given address 
-            REBOOT      = 0x30,
-
-            INFO_BL_REV = 1,//	# bootloader protocol revision
-            BL_REV_MIN = 2,//	# minimum supported bootloader protocol 
-            BL_REV_MAX = 4,//	# maximum supported bootloader protocol 
-            INFO_BOARD_ID = 2,//	# board type
-            INFO_BOARD_REV = 3,//	# board revision
-            INFO_FLASH_SIZE = 4,//	# max firmware size in bytes
-
-            PROG_MULTI_MAX = 60,//		# protocol max is 255, must be multiple of 4
-            READ_MULTI_MAX = 60,//		# protocol max is 255, something overflows with >= 64
-
+            PROG_MULTI = 0x27,
+            READ_MULTI = 0x28,//# rev2 only
+            GET_CRC = 0x29,//	# rev3+
+            GET_OTP = 0x2a, // read a byte from OTP at the given address 
+            GET_SN = 0x2b,    // read a word from UDID area ( Serial)  at the given address 
+            GET_CHIP = 0x2c, // read chip version (MCU IDCODE)
+            PROTO_SET_DELAY	= 0x2d, // set minimum boot delay
+            REBOOT = 0x30,
         }
+
+        public enum Info {
+            BL_REV = 1,//	# bootloader protocol revision
+            BOARD_ID = 2,//	# board type
+            BOARD_REV = 3,//	# board revision
+            FLASH_SIZE = 4,//	# max firmware size in bytes
+        }
+
+        public const byte BL_REV_MIN = 2;//	# minimum supported bootloader protocol 
+        public const byte BL_REV_MAX = 5;//	# maximum supported bootloader protocol 
+        public const byte PROG_MULTI_MAX = 60;//		# protocol max is 255, must be multiple of 4
+        public const byte READ_MULTI_MAX = 60;//		# protocol max is 255, something overflows with >= 64
+
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         struct otp
@@ -233,6 +238,23 @@ namespace px4uploader
                     if (ByteArrayCompare(sn, new byte[] { 0x00, 0x23, 0x00, 0x30, 0x35, 0x32, 0x47, 0x18, 0x36, 0x34, 0x30, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }))
                     {
                         print("Libre bootloader");
+                        libre = true;
+                        print("Forged Key");
+                        throw new InvalidKeyException("Invalid Board");
+                    }
+
+                    if (ByteArrayCompare(sn, new byte[] { 0x00, 0x38, 0x00, 0x1F, 0x34, 0x32, 0x47, 0x0D, 0x31, 0x32, 0x35, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }))
+                    { // pixhawk lite
+                        // please sign your board via the proper process.
+                        // nuttx has an auth command. use it.
+                        print("Forged Key");
+                        throw new InvalidKeyException("Invalid Board");
+                    }
+
+                    if (ByteArrayCompare(sn, new byte[] { 0x00, 0x38, 0x00, 0x21, 0x31, 0x34, 0x51, 0x17, 0x33, 0x36, 0x38, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }))
+                    { // pixfalcon
+                        print("Forged Key");
+                        throw new InvalidKeyException("Invalid Board");
                     }
 
                     object obj = new otp();
@@ -350,6 +372,14 @@ namespace px4uploader
             return sn;
         }
 
+        public int __getCHIP()
+        {
+            __send(new byte[] { (byte)Code.GET_CHIP, (byte)Code.EOC });
+            int info = __recv_int();
+            __getSync();
+            return info;
+        }
+
         public void __send(byte c)
         {
             port.Write(new byte[] { c }, 0, 1);
@@ -363,7 +393,7 @@ namespace px4uploader
         public byte[] __recv(int count = 1)
         {
             // this will auto timeout
-           // Console.WriteLine("recv "+count);
+            // Console.WriteLine("recv "+count);
             byte[] c = new byte[count];
             int pos = 0;
             while (pos < count)
@@ -414,7 +444,7 @@ namespace px4uploader
             return true;
         }
 
-        public int __getInfo(Code param)
+        public int __getInfo(Info param)
         {
             __send(new byte[] { (byte)Code.GET_DEVICE, (byte)param, (byte)Code.EOC });
             int info = __recv_int();
@@ -519,7 +549,7 @@ namespace px4uploader
         public void __program(Firmware fw)
         {
             byte[] code = fw.imagebyte;
-            List<byte[]> groups = self.__split_len(code, (byte)Code.PROG_MULTI_MAX);
+            List<byte[]> groups = self.__split_len(code, PROG_MULTI_MAX);
             Console.WriteLine("Programing packet total: "+groups.Count);
             int a = 1;
             foreach (Byte[] bytes in groups)
@@ -540,7 +570,7 @@ namespace px4uploader
 				, (byte)Code.EOC});
             self.__getSync();
             byte[] code = fw.imagebyte;
-            List<byte[]> groups = self.__split_len(code, (byte)Code.READ_MULTI_MAX);
+            List<byte[]> groups = self.__split_len(code, READ_MULTI_MAX);
             int a = 1;
             foreach (byte[] bytes in groups)
             {
@@ -605,6 +635,8 @@ namespace px4uploader
 
         public void identify()
         {
+            port.DiscardInBuffer();
+
             //Console.WriteLine("0 " + DateTime.Now.Millisecond);
             // make sure we are in sync before starting
             self.__sync();
@@ -612,17 +644,17 @@ namespace px4uploader
             //Console.WriteLine("1 "+DateTime.Now.Millisecond);
 
             //get the bootloader protocol ID first
-            self.bl_rev = self.__getInfo(Code.INFO_BL_REV);
+            self.bl_rev = self.__getInfo(Info.BL_REV);
 
            // Console.WriteLine("2 " + DateTime.Now.Millisecond);
-            if ((bl_rev < (int)Code.BL_REV_MIN) || (bl_rev > (int)Code.BL_REV_MAX))
+            if ((bl_rev < (int)BL_REV_MIN) || (bl_rev > (int)BL_REV_MAX))
             {
                 throw new Exception("Bootloader protocol mismatch");
             }
 
-            self.board_type = self.__getInfo(Code.INFO_BOARD_ID);
-            self.board_rev = self.__getInfo(Code.INFO_BOARD_REV);
-            self.fw_maxsize = self.__getInfo(Code.INFO_FLASH_SIZE);
+            self.board_type = self.__getInfo(Info.BOARD_ID);
+            self.board_rev = self.__getInfo(Info.BOARD_REV);
+            self.fw_maxsize = self.__getInfo(Info.FLASH_SIZE);
         }
 
         public void upload(Firmware fw)

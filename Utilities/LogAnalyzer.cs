@@ -12,7 +12,8 @@ namespace MissionPlanner.Utilities
 {
     public class LogAnalyzer
     {
-        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog log =
+            LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public static string CheckLogFile(string FileName)
         {
@@ -28,8 +29,11 @@ namespace MissionPlanner.Utilities
 
             paths.Add(Environment.CurrentDirectory);
 
-            paths.Add(Path.GetDirectoryName(Application.StartupPath + Path.DirectorySeparatorChar + "LogAnalyzer" + Path.DirectorySeparatorChar + "LogAnalyzer.py"));
-            paths.Add(Application.StartupPath + Path.DirectorySeparatorChar + "lib" + Path.DirectorySeparatorChar + "site-packages");
+            paths.Add(
+                Path.GetDirectoryName(Application.StartupPath + Path.DirectorySeparatorChar + "LogAnalyzer" +
+                                      Path.DirectorySeparatorChar + "LogAnalyzer.py"));
+            paths.Add(Application.StartupPath + Path.DirectorySeparatorChar + "lib" + Path.DirectorySeparatorChar +
+                      "site-packages");
 
             engine.SetSearchPaths(paths);
 
@@ -78,7 +82,12 @@ LogAnalyzer.main()
 
                 stringresult = Encoding.ASCII.GetString(memstream.GetBuffer());
             }
-            catch (Exception ex) { log.Error(ex); CustomMessageBox.Show(ex.Message, "Error"); return ""; }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                CustomMessageBox.Show(ex.Message, Strings.ERROR);
+                return "";
+            }
 
             engine = null;
 
@@ -102,38 +111,45 @@ LogAnalyzer.main()
                             subtree.MoveToElement();
                             if (subtree.IsStartElement())
                             {
-                                switch (subtree.Name.ToLower())
+                                try
                                 {
-                                    case "logfile":
-                                        answer.logfile = subtree.ReadString();
-                                        break;
-                                    case "sizekb":
-                                        answer.sizekb = subtree.ReadString();
-                                        break;
-                                    case "sizelines":
-                                        answer.sizelines = subtree.ReadString();
-                                        break;
-                                    case "duration":
-                                        answer.duration = subtree.ReadString();
-                                        break;
-                                    case "vehicletype":
-                                        answer.vehicletype = subtree.ReadString();
-                                        break;
-                                    case "firmwareversion":
-                                        answer.firmwareversion = subtree.ReadString();
-                                        break;
-                                    case "firmwarehash":
-                                        answer.firmwarehash = subtree.ReadString();
-                                        break;
-                                    case "hardwaretype":
-                                        answer.hardwaretype = subtree.ReadString();
-                                        break;
-                                    case "freemem":
-                                        answer.freemem = subtree.ReadString();
-                                        break;
-                                    case "skippedlines":
-                                        answer.skippedlines = subtree.ReadString();
-                                        break;
+                                    switch (subtree.Name.ToLower())
+                                    {
+                                        case "logfile":
+                                            answer.logfile = subtree.ReadString();
+                                            break;
+                                        case "sizekb":
+                                            answer.sizekb = subtree.ReadString();
+                                            break;
+                                        case "sizelines":
+                                            answer.sizelines = subtree.ReadString();
+                                            break;
+                                        case "duration":
+                                            answer.duration = subtree.ReadString();
+                                            break;
+                                        case "vehicletype":
+                                            answer.vehicletype = subtree.ReadString();
+                                            break;
+                                        case "firmwareversion":
+                                            answer.firmwareversion = subtree.ReadString();
+                                            break;
+                                        case "firmwarehash":
+                                            answer.firmwarehash = subtree.ReadString();
+                                            break;
+                                        case "hardwaretype":
+                                            answer.hardwaretype = subtree.ReadString();
+                                            break;
+                                        case "freemem":
+                                            answer.freemem = subtree.ReadString();
+                                            break;
+                                        case "skippedlines":
+                                            answer.skippedlines = subtree.ReadString();
+                                            break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    log.Error(ex);
                                 }
                             }
                         }
@@ -163,7 +179,7 @@ LogAnalyzer.main()
                                     case "status":
                                         res.status = subtree.ReadString();
                                         break;
-                                    case "message": 
+                                    case "message":
                                         res.message = subtree.ReadString();
                                         break;
                                     case "data":
