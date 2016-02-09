@@ -289,7 +289,17 @@ namespace MissionPlanner.GCSViews
                 while (true)
                 {
                     FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
-                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate { FlightData.instance.transparent.Text = text; }));
+                    text = "ARMED";
+                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate 
+                    {
+                        if (text == "")
+                            FlightData.instance.transparent.Visible = false;
+                        else
+                        {
+                            FlightData.instance.transparent.Visible = true;
+                            FlightData.instance.transparent.Text = text;
+                        }
+                    }));
 
                     ArmButton.Label.Invoke(new MethodInvoker(delegate
                     {
