@@ -183,8 +183,8 @@ namespace MissionPlanner
             this.BaseStream = new SerialPort();
             this.packetcount = 0;
 
-            this.packetspersecond = new double[0x100];
-            this.packetspersecondbuild = new DateTime[0x100];
+            //this.packetspersecond = new double[0x100];
+            //this.packetspersecondbuild = new DateTime[0x100];
             this._bytesReceivedSubj = new Subject<int>();
             this._bytesSentSubj = new Subject<int>();
             this.WhenPacketLost = new Subject<int>();

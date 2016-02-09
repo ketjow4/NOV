@@ -278,7 +278,6 @@ namespace MissionPlanner
 
         static string GetStackTrace(Exception e)
         {
-            StackTrace st = new System.Diagnostics.StackTrace(e);
             string stackTrace = "";
             try
             {

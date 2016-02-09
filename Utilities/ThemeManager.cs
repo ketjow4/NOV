@@ -692,7 +692,7 @@ mc:Ignorable=""d""
             }
         }
 
-        public static Color BGColor, ControlBGColor, TextColor, ButBG, ButBorder;
+        //public static Color BGColor, ControlBGColor, TextColor, ButBG, ButBorder;
 
         private static void ApplyHighContrast(Control temp, int level)
         {

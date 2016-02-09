@@ -237,7 +237,8 @@ namespace MissionPlanner.Controls
 
                 SITLSEND = new UdpClient("127.0.0.1", 5501);
 
-                MainV2.instance.doConnect(MainV2.comPort, "preset", "5760");
+                //MainV2.instance.doConnect(MainV2.comPort, "preset", "5760");
+                MainV2.instance.MenuConnect_Click(null,null);
             }
             catch
             {

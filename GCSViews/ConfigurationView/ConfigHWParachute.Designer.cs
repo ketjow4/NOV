@@ -66,7 +66,7 @@
             this.pictureBox3.BackColor = System.Drawing.Color.White;
             this.pictureBox3.BackgroundImage = global::MissionPlanner.Properties.Resources.sonar;
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox3.Image = global::MissionPlanner.Properties.Resources.Parachute;
+            this.pictureBox3.Image = null;//global::MissionPlanner.Properties.Resources.Parachute;
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.TabStop = false;
             // 

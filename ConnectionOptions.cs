@@ -38,7 +38,8 @@ namespace MissionPlanner
 
             try
             {
-                MainV2.instance.doConnect(mav, CMB_serialport.Text, CMB_baudrate.Text);
+                //MainV2.instance.doConnect(mav, CMB_serialport.Text, CMB_baudrate.Text);
+                MainV2.instance.MenuConnect_Click(sender, e);
 
                 MainV2.Comports.Add(mav);
             }

@@ -14,7 +14,6 @@
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
     <PublishUrl>C:\Users\T430\Desktop\Novelty\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -33,9 +32,7 @@
     <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>8c4aca6f</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -113,7 +110,6 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup>
-    <ManifestTimestampUrl>http://timestamp.verisign.com/scripts/timestamp.dll</ManifestTimestampUrl>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -159,6 +155,9 @@
     <Reference Include="lapack_lite, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\lapack_lite.dll</HintPath>
+    </Reference>
+    <Reference Include="LibVLC.NET">
+      <HintPath>ExtLibs\LibVLC.NET\bin\x86\Debug\LibVLC.NET.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -212,6 +211,9 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="tlogThumbnailHandler">
+      <HintPath>ExtLibs\tlogThumbnailHandler\bin\Debug\tlogThumbnailHandler.dll</HintPath>
+    </Reference>
     <Reference Include="Transitions">
       <HintPath>extLibs\Transitions.dll</HintPath>
     </Reference>
@@ -378,13 +380,13 @@
     </Compile>
     <Compile Include="Controls\Waypoints\Command.cs">
       <SubType>UserControl</SubType>
-      </Compile>
+    </Compile>
     <Compile Include="Controls\EKFStatus.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controls\Waypoints\Command.Designer.cs">
       <DependentUpon>Command.cs</DependentUpon>
-      </Compile>
+    </Compile>
     <Compile Include="Controls\EKFStatus.Designer.cs">
       <DependentUpon>EKFStatus.cs</DependentUpon>
     </Compile>
@@ -396,7 +398,6 @@
     </Compile>
     <Compile Include="Controls\Waypoints\Spline2.cs" />
     <Compile Include="Controls\Waypoints\Spline.cs" />
-    <Compile Include="GCSViews\ConfigurationView\ConfigAccelerometerCalibrationTracker.cs">
     <Compile Include="GCSViews\ConfigurationView\ConfigAccelerometerCalibration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -470,7 +471,7 @@
     </Compile>
     <Compile Include="GCSViews\PreFlightCheck.Designer.cs">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
-      </Compile>
+    </Compile>
     <Compile Include="GeoRef\Georefimage.Designer.cs">
       <DependentUpon>georefimage.cs</DependentUpon>
     </Compile>
@@ -859,9 +860,6 @@
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigArduplane.ja-JP.resx">
       <DependentUpon>ConfigArduplane.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigArduplane.zh-Hans.resx">
-      <DependentUpon>ConfigArduplane.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigArduplane.zh-Hant.resx">
       <DependentUpon>ConfigArduplane.cs</DependentUpon>
     </EmbeddedResource>
@@ -1042,7 +1040,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigHWSonar.zh-Hant.resx">
       <DependentUpon>ConfigHWSonar.cs</DependentUpon>
-      </EmbeddedResource>
+    </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigHWParachute.zh-Hans.resx">
       <DependentUpon>ConfigHWParachute.cs</DependentUpon>
     </EmbeddedResource>
@@ -1201,9 +1199,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\Simple.zh-TW.resx">
       <DependentUpon>Simple.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\Simulation.ja-JP.resx">
       <DependentUpon>Simulation.cs</DependentUpon>
-      </EmbeddedResource>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\Simulation.zh-Hant.resx">
       <DependentUpon>Simulation.cs</DependentUpon>
@@ -2310,7 +2308,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="HIL\Aircraft.cs" />
-    <Compile Include="HIL\QuadCopter.cs" />
     <Compile Include="Log\MavlinkLog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2729,12 +2726,6 @@
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigHWCompass.pl.resx">
       <DependentUpon>ConfigHWCompass.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigHWCompass.resx">
-      <DependentUpon>ConfigHWCompass.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigHWCompass.zh-Hans.resx">
-      <DependentUpon>ConfigHWCompass.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigPlanner.resx">
       <DependentUpon>ConfigPlanner.cs</DependentUpon>
     </EmbeddedResource>
@@ -3009,10 +3000,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Log\MavlinkLog.resx">
       <DependentUpon>MavlinkLog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GCSViews\ConfigurationView\ConfigFirmware.zh-Hans.resx">
-      <DependentUpon>ConfigFirmware.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\FlightData.zh-Hans.resx">
@@ -7100,10 +7087,6 @@
       <Project>{29976BA4-A04D-4A80-A866-098C879C2FDE}</Project>
       <Name>KMLib</Name>
     </ProjectReference>
-    <ProjectReference Include="ExtLibs\LibVLC.NET\LibVLC.NET.csproj">
-      <Project>{bb06dff7-4f41-4b9d-a3c3-3b6d2b8702b6}</Project>
-      <Name>LibVLC.NET</Name>
-    </ProjectReference>
     <ProjectReference Include="ExtLibs\Mavlink\MAVLink.csproj">
       <Project>{20296734-5F3C-4593-A0D5-DD20B440B13A}</Project>
       <Name>MAVLink</Name>
@@ -7119,10 +7102,6 @@
     <ProjectReference Include="ExtLibs\SharpKml\SharpKml.csproj">
       <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
       <Name>SharpKml</Name>
-    </ProjectReference>
-    <ProjectReference Include="ExtLibs\tlogThumbnailHandler\tlogThumbnailHandler.csproj">
-      <Project>{aba78b2e-77c3-4377-8568-9542ac227971}</Project>
-      <Name>tlogThumbnailHandler</Name>
     </ProjectReference>
     <ProjectReference Include="ExtLibs\Utilities\MissionPlanner.Utilities.csproj">
       <Project>{1378A66C-38E4-46F5-A05F-DC04EF7D4D16}</Project>
