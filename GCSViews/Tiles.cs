@@ -289,7 +289,6 @@ namespace MissionPlanner.GCSViews
                 while (true)
                 {
                     FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
-                    text = "ARMED";
                     FlightData.instance.transparent.Invoke(new MethodInvoker(delegate 
                     {
                         if (text == "")
@@ -601,6 +600,7 @@ namespace MissionPlanner.GCSViews
                                 .OfType<ToolStripMenuItem>())
                     {
                         toolStripItem.PerformClick();
+                        break;
                     }
                 }
             ),
