@@ -15,6 +15,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
 using System.Globalization; // language
 using GMap.NET.WindowsForms.Markers;
+using System.Diagnostics;
 using Ionic.Zip;
 using System.Resources;
 using System.Reflection;
@@ -29,7 +30,6 @@ using MissionPlanner.Utilities;
 using MissionPlanner.Controls.BackstageView;
 using ProjNet.CoordinateSystems.Transformations;
 using ProjNet.CoordinateSystems;
-using ProjNet.CoordinateSystems.Transformations;
 using SharpKml.Base;
 using SharpKml.Dom;
 using Feature = SharpKml.Dom.Feature;
@@ -40,10 +40,13 @@ using ProjNet.Converters;
 using System.Xml.XPath;
 using com.codec.jpeg;
 using MissionPlanner;
-using GMap.NET.MapProviders;
-using MissionPlanner.Maps;
 using System.Data;
 using DotSpatial.Projections;
+using System.Runtime.Serialization.Formatters.Binary;
+using GeoUtility.GeoSystem;
+using GeoUtility.GeoSystem.Base;
+using DotSpatial.Data;
+using System.Drawing.Drawing2D;
 
 namespace MissionPlanner.GCSViews
 {
@@ -571,7 +574,7 @@ namespace MissionPlanner.GCSViews
             panelWaypoints.Visible = false;
             panelAction.Visible = false;
             Tiles.SetTiles(panelBASE, false);
-        }
+        
 
             // hide the map to prevent redraws when its loaded
             panelMap.Visible = false;
@@ -1118,7 +1121,7 @@ namespace MissionPlanner.GCSViews
             pointlist = new List<PointLatLngAlt>();
 
             fullpointlist.Clear();
-
+          
             Debug.WriteLine(DateTime.Now);
             try
             {
@@ -1564,12 +1567,12 @@ namespace MissionPlanner.GCSViews
                 homeroute.Stroke = new Pen(Color.Yellow, 2);
                 // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                 if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                    homeroute.Stroke.DashStyle = DashStyle.Dash;
+                    homeroute.Stroke.DashStyle =  System.Drawing.Drawing2D.DashStyle.Dash;
 
                 polygonsoverlay.Routes.Add(homeroute);
 
                 route.Stroke = new Pen(Color.Yellow, 4);
-                route.Stroke.DashStyle = DashStyle.Custom;
+                route.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Custom;
                 polygonsoverlay.Routes.Add(route);
             }
         }
@@ -1607,7 +1610,7 @@ namespace MissionPlanner.GCSViews
                 wppolygon.Points.AddRange(polygonPoints);
 
                 wppolygon.Stroke = new Pen(Color.Yellow, 4);
-                wppolygon.Stroke.DashStyle = DashStyle.Custom;
+                wppolygon.Stroke.DashStyle = System.Drawing.Drawing2D.DashStyle.Custom;
                 wppolygon.Fill = Brushes.Transparent;
 
                 if (polygonsoverlay.Polygons.Count == 0)
@@ -1879,7 +1882,7 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BUT_write_Click(object sender, EventArgs e)
+        public void BUT_write_Click(object sender, EventArgs e)
         {
             if ((altmode) CMB_altmode.SelectedValue == altmode.Absolute)
             {
@@ -5594,7 +5597,7 @@ namespace MissionPlanner.GCSViews
                 area.WidthLng = right - left;
 
 
-                int todo;
+                //int todo;
                 // todo
                 // split up pull area to smaller chunks
 

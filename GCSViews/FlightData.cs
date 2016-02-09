@@ -3,46 +3,27 @@ using System.Collections.Generic; // Lists
 using System.Text; // stringbuilder
 using System.Drawing; // pens etc
 using System.IO; // file io
-using System.IO.Ports; // serial
 using System.Windows.Forms; // Forms
-using System.Collections; // hashs
-using System.Text.RegularExpressions; // regex
-using System.Xml; // GE xml alt reader
 using System.Net; // dns, ip address
-using System.Net.Sockets; // tcplistner
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
-using System.IO;
-using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Windows.Forms;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsForms;
-using System.Globalization; // language
 using GMap.NET.WindowsForms.Markers;
 using ZedGraph; // Graphs
-using System.Drawing.Drawing2D;
 using MissionPlanner.Controls;
 using MissionPlanner.Utilities;
-using MissionPlanner.Controls.BackstageView;
 //using Crom.Controls.Docking;
 using log4net;
-using MissionPlanner.Controls;
 using MissionPlanner.Joystick;
-using System.Reflection;
 using MissionPlanner.Log;
-using GMap.NET.MapProviders;
 using System.Linq;
-using MissionPlanner.Utilities;
 using MissionPlanner.Warnings;
 using OpenTK;
-using ZedGraph;
 using LogAnalyzer = MissionPlanner.Utilities.LogAnalyzer;
 
 // written by michael oborne
@@ -407,7 +388,7 @@ namespace MissionPlanner.GCSViews
                     if (label != null && label.Name == "TIME_IN_THE_AIR")
                     {
                         Binding b = new Binding("Text", bindingSource1, "timeInAir", true);
-                        b.Format += delegate(object sentFrom, ConvertEventArgs convertEventArgs)
+                        b.Format += delegate (object sentFrom, ConvertEventArgs convertEventArgs)
                         {
                             string temp;
                             int timeInSeconds = Convert.ToInt32(convertEventArgs.Value);
@@ -422,20 +403,21 @@ namespace MissionPlanner.GCSViews
                         break;
                     }
                     if (label != null && label.Name == name)
-        {
-                        Binding b = new Binding("Text", bindingSource1, binder,true);
+                    {
+                        Binding b = new Binding("Text", bindingSource1, binder, true);
                         if (label.Name != "MODE")
-            {
-                            b.Format += delegate(object sentFrom, ConvertEventArgs eventargs)
+                        {
+                            b.Format += delegate (object sentFrom, ConvertEventArgs eventargs)
                 {
-                                double value = Convert.ToDouble(eventargs.Value);
-                                eventargs.Value = value.ToString("0.##");
-                            };
-                }
+                    double value = Convert.ToDouble(eventargs.Value);
+                    eventargs.Value = value.ToString("0.##");
+                };
+                        }
                         label.DataBindings.Add(b);
                         break;
-        }
                     }
+                }
+            }
         }
         
          void NoFly_NoFlyEvent(object sender, NoFly.NoFly.NoFlyEventArgs e)

@@ -123,7 +123,7 @@ namespace MissionPlanner
 
             InitializeComponent();
 
-            map = plugin.Host.GetFPMap();
+            map = (MissionPlanner.Controls.myGMAP)plugin.Host.FPGMapControl;
             map.MapProvider = plugin.Host.FDMapType;
 
             routesOverlay = new GMapOverlay("routes_grid");
@@ -608,7 +608,8 @@ namespace MissionPlanner
                 doCalc();
 
             // new grid system test
-            grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
+            grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
+            //CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
             //grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
 
             List<PointLatLng> list2 = new List<PointLatLng>();
@@ -1483,24 +1484,36 @@ namespace MissionPlanner
                 {
                 MainV2.instance.FlightPlanner.quickadd = true;
 
+                if (NUM_split.Value > 1 && CHK_toandland.Checked != true)
+                {
+                    CustomMessageBox.Show("You must use Land/RTL to split a mission", Strings.ERROR);
+                    return;
+                }
+
+                int wpsplit = (int)Math.Round(grid.Count / NUM_split.Value, MidpointRounding.AwayFromZero);
+
+                for (int splitno = 0; splitno < NUM_split.Value; splitno++)
+                {
+                    int wpstart = wpsplit * splitno;
+
                     if (CHK_toandland.Checked)
                     {
                         if (plugin.Host.cs.firmware == MainV2.Firmwares.ArduCopter2)
                         {
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.TAKEOFF, 20, 0, 0, 0, 0, 0,
-                                (int) (30*CurrentState.multiplierdist));
+                                (int)(30 * CurrentState.multiplierdist));
                         }
                         else
                         {
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.TAKEOFF, 20, 0, 0, 0, 0, 0,
-                                (int) (30*CurrentState.multiplierdist));
+                                (int)(30 * CurrentState.multiplierdist));
                         }
                     }
 
                     if (CHK_usespeed.Checked)
                     {
                         plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0,
-                            (int) ((float) NUM_UpDownFlySpeed.Value/CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
+                            (int)((float)NUM_UpDownFlySpeed.Value / CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
                     }
 
 
@@ -1523,8 +1536,8 @@ namespace MissionPlanner
                                 if (rad_repeatservo.Checked)
                                 {
                                     AddWP(plla.Lng, plla.Lat, plla.Alt);
-                                    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_REPEAT_SERVO, (float) NUM_reptservo.Value,
-                                        (float) num_reptpwm.Value, 999, (float) NUM_repttime.Value, 0, 0, 0);
+                                    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_REPEAT_SERVO, (float)NUM_reptservo.Value,
+                                        (float)num_reptpwm.Value, 999, (float)NUM_repttime.Value, 0, 0, 0);
                                 }
                                 if (rad_digicam.Checked)
                                 {
@@ -1542,7 +1555,7 @@ namespace MissionPlanner
                                         if (plla.Tag == "S")
                                         {
                                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST,
-                                                (float) NUM_spacing.Value,
+                                                (float)NUM_spacing.Value,
                                                 0, 0, 0, 0, 0, 0);
                                         }
                                         else if (plla.Tag == "E")
@@ -1559,7 +1572,7 @@ namespace MissionPlanner
                             AddWP(plla.Lng, plla.Lat, plla.Alt);
                             if (rad_trigdist.Checked)
                             {
-                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (float) NUM_spacing.Value,
+                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (float)NUM_spacing.Value,
                                     0, 0, 0, 0, 0, 0);
                             }
                         }
@@ -1577,7 +1590,7 @@ namespace MissionPlanner
                         if (MainV2.comPort.MAV.param["WPNAV_SPEED"] != null)
                         {
                             double speed = MainV2.comPort.MAV.param["WPNAV_SPEED"].Value;
-                            speed = speed/100;
+                            speed = speed / 100;
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0, speed, 0, 0, 0, 0, 0);
                         }
                     }

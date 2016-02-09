@@ -1652,8 +1652,7 @@ namespace MissionPlanner.GCSViews
             this.pointCameraHereToolStripMenuItem,
             this.triggerCameraToolStripMenuItem,
             this.flightPlannerToolStripMenuItem,
-            this.setHomeHereToolStripMenuItem,
-            this.takeOffToolStripMenuItem});
+            this.setHomeHereToolStripMenuItem});
             this.contextMenuStripMap.Name = "contextMenuStrip1";
             resources.ApplyResources(this.contextMenuStripMap, "contextMenuStripMap");
             // 
@@ -1716,9 +1715,9 @@ namespace MissionPlanner.GCSViews
             // 
             // takeOffToolStripMenuItem
             // 
-            this.takeOffToolStripMenuItem.Name = "takeOffToolStripMenuItem";
-            resources.ApplyResources(this.takeOffToolStripMenuItem, "takeOffToolStripMenuItem");
-            this.takeOffToolStripMenuItem.Click += new System.EventHandler(this.takeOffToolStripMenuItem_Click);
+            //this.takeOffToolStripMenuItem.Name = "takeOffToolStripMenuItem";
+            //resources.ApplyResources(this.takeOffToolStripMenuItem, "takeOffToolStripMenuItem");
+            //this.takeOffToolStripMenuItem.Click += new System.EventHandler(this.takeOffToolStripMenuItem_Click);
             // 
             // windDir1
             // 

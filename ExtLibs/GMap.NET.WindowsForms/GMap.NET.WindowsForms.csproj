@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>System.Windows.Forms</RootNamespace>
     <AssemblyName>GMap.NET.WindowsForms</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -51,6 +52,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\GMap.NET.Core\bin\Debug\GMap.NET.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -93,12 +97,6 @@
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GMap.NET.Core\GMap.NET.Core.csproj">
-      <Project>{D0C39D9D-BED0-418B-9A5E-713176CAF40C}</Project>
-      <Name>GMap.NET.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="GMap.NET.WindowsForms\TilePrefetcher.resx">
       <DependentUpon>TilePrefetcher.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -109,7 +107,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\arrow.png" />
     <Content Include="Resources\arrowshadow.png" />
