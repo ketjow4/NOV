@@ -139,7 +139,7 @@ namespace MissionPlanner.GCSViews
             this.lbl_sats = new MissionPlanner.Controls.MyLabel();
             this.gMapControl1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
-            this.panel1 = new System.Windows.Forms.Panel();
+            //this.panel1 = new System.Windows.Forms.Panel();
             this.coords1 = new MissionPlanner.Controls.Coords();
             this.Zoomlevel = new System.Windows.Forms.NumericUpDown();
             this.label1 = new MissionPlanner.Controls.MyLabel();
@@ -207,7 +207,7 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.SuspendLayout();
             this.contextMenuStripMap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).BeginInit();
-            this.panel1.SuspendLayout();
+            //this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Zoomlevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceHud)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceQuickTab)).BeginInit();
@@ -1583,8 +1583,9 @@ namespace MissionPlanner.GCSViews
             // 
             resources.ApplyResources(this.tableMap, "tableMap");
             this.tableMap.Controls.Add(this.splitContainer1, 0, 0);
-            this.tableMap.Controls.Add(this.panel1, 0, 1);
+            //this.tableMap.Controls.Add(this.panel1, 0, 1);
             this.tableMap.Name = "tableMap";
+            this.tableMap.RowCount = 1;
             // 
             // splitContainer1
             // 
@@ -1593,7 +1594,7 @@ namespace MissionPlanner.GCSViews
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.zg1);
+            //this.splitContainer1.Panel1.Controls.Add(this.zg1);
             this.splitContainer1.Panel1Collapsed = true;
             // 
             // splitContainer1.Panel2
@@ -1818,13 +1819,15 @@ namespace MissionPlanner.GCSViews
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.coords1);
-            this.panel1.Controls.Add(this.Zoomlevel);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.CHK_autopan);
-            this.panel1.Controls.Add(this.CB_tuning);
-            resources.ApplyResources(this.panel1, "panel1");
-            this.panel1.Name = "panel1";
+            //this.panel1.Controls.Add(this.coords1);
+            //this.panel1.Controls.Add(this.Zoomlevel);
+            //this.panel1.Controls.Add(this.label1);
+            //this.panel1.Controls.Add(this.CHK_autopan);
+            //this.panel1.Controls.Add(this.CB_tuning);
+            //resources.ApplyResources(this.panel1, "panel1");
+            //this.panel1.Name = "panel1";
+            //this.panel1.Visible = false;
+            //this.panel1.Height = 0;
             // 
             // coords1
             // 
@@ -1890,6 +1893,7 @@ namespace MissionPlanner.GCSViews
             this.toolTip1.SetToolTip(this.CB_tuning, resources.GetString("CB_tuning.ToolTip"));
             this.CB_tuning.UseVisualStyleBackColor = true;
             this.CB_tuning.CheckedChanged += new System.EventHandler(this.CB_tuning_CheckedChanged);
+            this.CB_tuning.Text = "jakis moj tekst";
             // 
             // ZedGraphTimer
             // 
@@ -2099,8 +2103,8 @@ namespace MissionPlanner.GCSViews
             this.contextMenuStripMap.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            //this.panel1.ResumeLayout(false);
+            //this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Zoomlevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceHud)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceQuickTab)).EndInit();
@@ -2135,7 +2139,7 @@ namespace MissionPlanner.GCSViews
         private AGaugeApp.AGauge Gspeed;
         private AGaugeApp.AGauge Gvspeed;
         private System.Windows.Forms.TableLayoutPanel tableMap;
-        private System.Windows.Forms.Panel panel1;
+        //private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.NumericUpDown Zoomlevel;
         private Controls.MyLabel label1;
         private System.Windows.Forms.CheckBox CHK_autopan;

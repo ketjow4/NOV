@@ -462,8 +462,8 @@ namespace MissionPlanner
                     Font.GdiVerticalFont);
 
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.Fixed3D;
+            //this.WindowState = FormWindowState.Maximized;
 
             MyView = new MainSwitcher(this);
 
@@ -476,8 +476,8 @@ namespace MissionPlanner
 
             // full screen
             //this.TopMost = true;
-            //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            //this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+           // this.WindowState = FormWindowState.Maximized;
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
