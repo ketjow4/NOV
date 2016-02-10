@@ -121,8 +121,6 @@ namespace MissionPlanner.GCSViews
         public static void SetCommonTiles()
         {
             commonTiles = new List<TileInfo>();
-
-            //commonTiles.Add(groundResInfo);
             commonTiles.Add(new TileButton("AUTO", 1, 7, (sender, e) =>
             {
                 try
@@ -233,10 +231,6 @@ namespace MissionPlanner.GCSViews
                 //TODO: transparent
                 var panel = new Panel
                 {
-                    //Size = new Size(168, 64),
-                    //Location = new Point(tile.Column * 170, tile.Row * 66),
-                    //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
-                    //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
                     Size = new Size(130, 55),
                     Location = new Point((int)tile.Column * 132, (int)tile.Row * 57),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
@@ -429,15 +423,27 @@ namespace MissionPlanner.GCSViews
             //------------------------------------------------------------Flight Mode tiles
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
-               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}},
-                    Color.FromArgb(255, 255, 51, 0)),
+               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => 
+               {
+                   MainV2.View.ShowScreen("FlightData");
+                   foreach (var pan in common)
+                   {
+                       pan.Parent = FlightData.instance.splitContainer1.Panel2;
+                       FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
+                       pan.BringToFront();
+                   }
+               },
+                    Color.FromArgb(255, 255, 51, 0)),       //WTF
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),   
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                
                 new TileButton("DISARM", 0, 7),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>{ MainV2.View.ShowScreen("FlightPlanner"); foreach(var pan in common) {/*pan.Parent = FlightPlanner.instance.panelBASE; FlightPlanner.instance.panelBASE.Controls.Add(pan); pan.BringToFront();*/}}),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>
+                {
+                    MainV2.View.ShowScreen("FlightPlanner");
+                }),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
                 new TileData("DISTANCE TO HOME", 1, 2, "m"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
@@ -478,9 +484,6 @@ namespace MissionPlanner.GCSViews
                 var x = !cameras_buttons.ElementAt(0).Visible;
                 dropdownHideList.ForEach(tile => tile.Visible = false);
                 cameras_buttons.ForEach(cam => cam.Visible = x);
-                //altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
-                //angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = false;
-                //fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
             });
 
             obsHeadBtn.ValueLabel.Width = 120;
@@ -521,8 +524,6 @@ namespace MissionPlanner.GCSViews
                 var x = !angleBtnUp.Visible;
                 dropdownHideList.ForEach(tile => tile.Visible = false);
                 angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
-                //altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = false;
-                //fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = false;
                 cameras_buttons.ForEach(cam => cam.Visible = false);
             });
 
@@ -626,8 +627,6 @@ namespace MissionPlanner.GCSViews
 
             foreach (var pan in common) { pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront(); }
 
-            // (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)));     
-
             var sideValue = MainV2.config["grid_sidelap"];
             var overValue = MainV2.config["grid_overlap"];
 
@@ -640,10 +639,6 @@ namespace MissionPlanner.GCSViews
                 //TODO: transparent
                 var panel = new Panel
                 {
-                    //Size = new Size(168, 64),
-                    //Location = new Point(tile.Column * 170, tile.Row * 66),
-                    //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
-                    //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
                     Size = new Size(130, 55),
                     Location = new Point((int)(tile.Column * 132), (int)(tile.Row * 57)),
                     BackColor = Color.FromArgb(220, 0, 0, 0),

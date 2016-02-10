@@ -42,20 +42,13 @@ namespace MissionPlanner.GCSViews.Modification
         {
             this.unit = unit;
             ClickMethod = handler;
-            //panel = new Panel { Size = new Size(163, 64) };
-            //panel = new Panel { Size = new Size((int)(MainV2.View.Width * 0.1019), (int)(MainV2.View.Height * 0.072)) };
             panel = new Panel { Size = new Size(127, 55) };
-            // panel.Dock = DockStyle.Fill;
             ;
             var headLabel = new Label()
             {
                 Text = text,
                 ForeColor = Color.FromArgb(255, 41, 171, 226),
-                //Font = new Font("Century Gothic", 10, FontStyle.Italic),
                 Font = new Font("Century Gothic", 8, FontStyle.Italic),
-                //Top = 10,
-                //Left = 10,
-                //Width = 168,
                 Top = 7,
                 Left = 2,
                 Width = 130,
@@ -66,30 +59,22 @@ namespace MissionPlanner.GCSViews.Modification
             {
                 Text = unit,
                 ForeColor = Color.White,
-                //Font = new Font("Century Gothic", 12),
                 Font = new Font("Century Gothic", 10),
                 TextAlign = ContentAlignment.BottomRight,
             };
-            //unitLabel.Top = 64 - unitLabel.Height - 12;
-            //unitLabel.Left = 168 - unitLabel.Width - 10;
             unitLabel.Top = 55 - unitLabel.Height - 8;
             unitLabel.Left = 130 - unitLabel.Width - 0;
 
             valueLabel = new Label()
             {
                 ForeColor = Color.White,
-                //Font = new Font("Century Gothic", 18),
                 Font = new Font("Century Gothic", 15),
-                //Left = 10,
-                //Text = "0",
-                //Height = 25,
                 Left = 4,
                 Text = "0",
                 Height = 20,
                 Width = 80,         //new for 1280x800 design
                 Name = text.Replace(' ', '_').Replace('\n', '_')
             };
-            //valueLabel.Top = 64 - valueLabel.Height - 12;
             valueLabel.Top = 55 - valueLabel.Height - 8;
             panel.Controls.Add(unitLabel);
             panel.Controls.Add(valueLabel);
@@ -149,7 +134,6 @@ namespace MissionPlanner.GCSViews.Modification
                 AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-                //Font = new Font("Century Gothic", 14)
                 Font = new Font("Century Gothic", 11)
             };
             label.Click += ClickMethod;
