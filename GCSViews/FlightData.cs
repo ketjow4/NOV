@@ -407,11 +407,23 @@ namespace MissionPlanner.GCSViews
                         Binding b = new Binding("Text", bindingSource1, binder, true);
                         if (label.Name != "MODE")
                         {
-                            b.Format += delegate (object sentFrom, ConvertEventArgs eventargs)
-                {
-                    double value = Convert.ToDouble(eventargs.Value);
-                    eventargs.Value = value.ToString("0.##");
-                };
+                            if(label.Name == "GPSHDOP" || label.Name == "BATTERY_VOLTAGE")
+                            {
+                                b.Format += delegate (object sentFrom, ConvertEventArgs eventargs)
+                                {
+                                    double value = Convert.ToDouble(eventargs.Value);
+                                    eventargs.Value = value.ToString("0.##");
+                                };
+                            }
+                            else
+                            {
+                                b.Format += delegate (object sentFrom, ConvertEventArgs eventargs)
+                                {
+                                    double value = Convert.ToDouble(eventargs.Value);
+                                    eventargs.Value = value.ToString("0.#");
+                                };
+                            }
+                            
                         }
                         label.DataBindings.Add(b);
                         break;

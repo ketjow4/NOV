@@ -51,6 +51,7 @@ namespace MissionPlanner.GCSViews
         private static TileData Images = null;
         private static TileButton SideLapOK = null;
         private static TileButton OverLapOK = null;
+        private static TileButton writeWaypoints = null;
 
         private static TileData windSpeed = null;
 
@@ -237,7 +238,7 @@ namespace MissionPlanner.GCSViews
                     //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
                     //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
                     Size = new Size(130, 55),
-                    Location = new Point(tile.Column * 132, tile.Row * 57),
+                    Location = new Point((int)tile.Column * 132, (int)tile.Row * 57),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
                 };
                 panel.Controls.Add(tile.Label);
@@ -436,7 +437,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                
                 new TileButton("DISARM", 0, 7),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>{ MainV2.View.ShowScreen("FlightPlanner"); foreach(var pan in common) {pan.Parent = FlightPlanner.instance.panelBASE; FlightPlanner.instance.panelBASE.Controls.Add(pan); pan.BringToFront();}}),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>{ MainV2.View.ShowScreen("FlightPlanner"); foreach(var pan in common) {/*pan.Parent = FlightPlanner.instance.panelBASE; FlightPlanner.instance.panelBASE.Controls.Add(pan); pan.BringToFront();*/}}),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
                 new TileData("DISTANCE TO HOME", 1, 2, "m"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
@@ -485,16 +486,15 @@ namespace MissionPlanner.GCSViews
             obsHeadBtn.ValueLabel.Width = 120;
             obsHeadBtn.Value = "GEOSCANNER";
 
+            
+
             accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => 
             { 
                 pathAccepted = true; accept.Visible = false; calcGrid = null;
-                foreach (var t in commonTiles)
-                {
-                    (t as TileButton).Visible = true;
-                }
                 SaveWPFile.Visible = true;
                 LoadWPFile.Visible = true;
                 LoadWPPlatform.Visible = true;
+                writeWaypoints.Visible = true;
                 sideLap.Visible = false;
                 overLap.Visible = false;
                 Images.Visible = false;
@@ -539,7 +539,7 @@ namespace MissionPlanner.GCSViews
                 SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
                 OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
 
-                new TileButton("COMPASS\nCALIBRATION",4,0,(sender,e) => 
+                new TileButton("COMPASS\nCALIBRATION",12.4,0,(sender,e) => 
                 {
                     if(CustomMessageBox.Show("Do you want to do compass calibration","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -568,23 +568,21 @@ namespace MissionPlanner.GCSViews
                     (sender, args) => FlightPlanner.instance.takeoffToolStripMenuItem_Click(null, null)),
                 new TileButton("CLEAR", 0, 3, (sender, args) =>
                 {
+                    GroundRes = 0.0;
                     FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
                     FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
                 }), 
                 flightTime = new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
-                new TileButton("WRITE WAYPOINTS", 2, 0, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
+                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
                     
                 new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
                 {
-                    foreach (var t in commonTiles)
-                    {
-                        (t as TileButton).Visible = false;
-                    }
                     SaveWPFile.Visible = false;
                     LoadWPFile.Visible = false;
                     LoadWPPlatform.Visible = false;
+                    writeWaypoints.Visible = false;
                     sideLap.Visible = true;
                     overLap.Visible = true;
                     Images.Visible = true;
@@ -609,11 +607,11 @@ namespace MissionPlanner.GCSViews
                angleInfo,
                altInfo,
 
-               SaveWPFile = new TileButton("SAVE WP FILE", 3,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
-               LoadWPFile = new TileButton("LOAD WP FILE", 3,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
-               LoadWPPlatform = new TileButton("LOAD WP PLATFORM",4,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
+               SaveWPFile = new TileButton("SAVE WP FILE", 0,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
+               LoadWPFile = new TileButton("LOAD WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
+               LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
 
-               new TileButton("SHOW WP",3,0,(sender,args) => 
+               new TileButton("SHOW WP",11.4,0,(sender,args) => 
                {
                    FlightPlannerWaypointsForm.Show();
                }),
@@ -647,7 +645,7 @@ namespace MissionPlanner.GCSViews
                     //Size = new Size((int)(MainV2.View.Width * 0.105), (int)(MainV2.View.Height * 0.072)),
                     //Location = new Point(tile.Column * (int)(MainV2.View.Width * 0.105) + 2, tile.Row * (int)(MainV2.View.Height * 0.072) + 2),
                     Size = new Size(130, 55),
-                    Location = new Point(tile.Column * 132, tile.Row * 57),
+                    Location = new Point((int)(tile.Column * 132), (int)(tile.Row * 57)),
                     BackColor = Color.FromArgb(220, 0, 0, 0),
                     Parent = p
                 };
@@ -658,6 +656,10 @@ namespace MissionPlanner.GCSViews
                 panel.BringToFront();
                 if (hidelist2.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
+
+                sideLap.Visible = false;
+                overLap.Visible = false;
+                Images.Visible = false;
             }
         }
     }

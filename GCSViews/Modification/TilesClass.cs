@@ -13,10 +13,10 @@ namespace MissionPlanner.GCSViews.Modification
     {
         protected readonly string text;
 
-        public int Row { get; private set; }
-        public int Column { get; private set; }
+        public double Row { get; private set; }
+        public double Column { get; private set; }
 
-        protected TileInfo(string text, int row, int column)
+        protected TileInfo(string text, double row, double column)
         {
             this.text = text;
             Row = row;
@@ -37,7 +37,7 @@ namespace MissionPlanner.GCSViews.Modification
         private readonly Panel panel;
         private readonly Label valueLabel;
         private readonly Label unitLabel;
-        public TileData(string text, int row, int column, string unit = "", EventHandler handler = null)
+        public TileData(string text, double row, double column, string unit = "", EventHandler handler = null)
             : base(text, row, column)
         {
             this.unit = unit;
@@ -137,7 +137,7 @@ namespace MissionPlanner.GCSViews.Modification
         private readonly Color color;
         private Label label;
 
-        public TileButton(string text, int row, int column, EventHandler handler = null, Color? color = null)
+        public TileButton(string text, double row, double column, EventHandler handler = null, Color? color = null)
             : base(text, row, column)
         {
             this.color = color == null ? Color.White : color.GetValueOrDefault();
