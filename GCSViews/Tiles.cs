@@ -63,7 +63,9 @@ namespace MissionPlanner.GCSViews
 
         private static double groundRes;
 
-       
+        private static string polygonmodestring = "POLYGON\nMODE";
+
+        private static List<TileButton> dropdownHideList;
 
         public static void ChangeAlt(int v)
         {
@@ -167,64 +169,9 @@ namespace MissionPlanner.GCSViews
             }));
 
 
-            ArmButton = new TileButton("ARM", 0, 8,
-                (sender, args) =>
-                {
-                    if (!MainV2.comPort.MAV.cs.armed)         //jeśli rozbrajamy to nie robimy preflightcheck
-                    {
-                        if (!connected)
-                        {
-                            CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                            return;
-                        }
-
-                        PreFlightCheck window = new PreFlightCheck();
-
-                        if (window.ShowDialog() == DialogResult.OK)
-                        {
-                            //zapis do logów jest w środku klasy PreFlightCheck
-                        }
-                        else
-                            return;     //jeśli nie zaakceptowano to powrót i brak arm
-                    }
-                    FlightData.instance.BUT_ARM_Click(sender, args);
-                    if (armed && connected)
-                    {
-                        ArmButton.Label.Text = "DISARM";
-                        ThreadSafeMapZoomToHome();
-                    }
-                    else
-                        ArmButton.Label.Text = "ARM";
-                    
-                });
-
+            ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent);
             commonTiles.Add(ArmButton);
-
-            commonTiles.Add(new TileButton("CONNECT", 0, 7, (sender, args) =>
-            {
-                var conBut = sender as Label;
-                if (connected == false)  //connect
-                {
-                    MainV2.instance.MenuConnect_Click(null, null);
-                    armed = MainV2.comPort.MAV.cs.armed;
-                    if (armed)
-                        commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
-                    if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
-                    {
-                        windSpeed.Visible = false;
-                        FlightData.instance.windDir1.Visible = false;
-                    }
-                }
-                else                    //disconnect
-                {
-                    if (MainV2.comPort.MAV.cs.armed)
-                        ArmButton.ClickMethod(ArmButton, null);     //disarm before disconnect
-                    FlightData.instance.hud1.warning = "";
-                    MainV2.instance.MenuConnect_Click(null, null);
-                    windSpeed.Visible = true;
-                    FlightData.instance.windDir1.Visible = true;
-                } 
-            }));
+            commonTiles.Add(new TileButton("CONNECT", 0, 7, ConnectEvent));
 
             foreach (var tile in commonTiles)
             {
@@ -247,7 +194,7 @@ namespace MissionPlanner.GCSViews
         private static volatile bool firstTime = true;
 
 
-        
+
         private static void ThreadSafeMapZoomToHome()
         {
             if (MainV2.comPort.MAV.cs.HomeLocation.Lat != 0)
@@ -276,15 +223,15 @@ namespace MissionPlanner.GCSViews
         {
             try
             {
-                while(!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
+                while (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
                     System.Threading.Thread.Sleep(1000);
 
-                
+
                 string text = "";
                 while (true)
                 {
                     FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
-                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate 
+                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate
                     {
                         if (text == "")
                             FlightData.instance.transparent.Visible = false;
@@ -343,6 +290,63 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTiles(Panel p, bool isFlightMode)
         {
+            //------------------------------------------------------------Flight Mode tiles---------------------------------------------------------------//
+            if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
+                altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
+
+            windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
+            TileData mode;
+
+            var tilesFlightMode = new List<TileInfo>(new TileInfo[]
+            {
+               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) =>
+               {
+                   MainV2.View.ShowScreen("FlightData");
+                   foreach (var pan in common)
+                   {
+                       pan.Parent = FlightData.instance.splitContainer1.Panel2;
+                       FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
+                       pan.BringToFront();
+                   }
+               },
+                    Color.FromArgb(255, 255, 51, 0)),       //WTF
+                new TileData("GROUND SPEED", 0, 1, "km/h"),
+                new TileData("ALTITUDE", 0, 2, "m"),
+                new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),
+                new TileData("BATTERY REMAINING", 0, 4, "%"),
+
+                new TileButton("DISARM", 0, 7),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>
+                {
+                    MainV2.View.ShowScreen("FlightPlanner");
+                }),
+                new TileData("AIR SPEED", 1, 1, "km/h"),
+                new TileData("DISTANCE TO HOME", 1, 2, "m"),
+                new TileData("BATTERY VOLTAGE", 1, 3, "V"),
+                new TileData("CURRENT", 1, 4, "A"),
+                new TileData("GPSHDOP", 1, 5, ""),
+                new TileData("GPS SAT COUNT", 1, 6, ""),
+                new TileData("RADIO SIGNAL", 0, 5, "%"),
+                new TileButton("EXIT",2,0, (sender,e) =>
+                {
+                    MissionPlanner.LogReporter.LogReporter.stopThread = true;
+                    MainV2.config["grid_sidelap"] = SideLap.ToString();
+                    MainV2.config["grid_overlap"] = OverLap.ToString();
+                    MainV2.instance.Close();
+                }),
+                mode = new TileData("MODE",0,6,""),
+                windSpeed,
+            });
+            mode.ValueLabel.Width = 120;
+
+
+
+
+
+
+
+
+            //-------------------------------------------------------FLIGHT PLANNER----------------------------------------------//
             List<TileButton> cameras_buttons = new List<TileButton>();
 
             var angleBtnUp = new TileButton("+5", 2, 4, (sender, args) => { ChangeAngle(5); });
@@ -358,8 +362,8 @@ namespace MissionPlanner.GCSViews
 
             var SideLapUp1 = new TileButton("+1", 2, 7, (sender, args) => { ChangeSideLap(1); });
             var SideLapUp5 = new TileButton("+5", 4, 7, (sender, args) => { ChangeSideLap(5); });
-            var SideLapDown1 = new TileButton("-1", 3, 7, (sender, args) => { ChangeSideLap(-1);});
-            var SideLapDown5 = new TileButton("-5", 5, 7, (sender, args) => { ChangeSideLap(-5);});
+            var SideLapDown1 = new TileButton("-1", 3, 7, (sender, args) => { ChangeSideLap(-1); });
+            var SideLapDown5 = new TileButton("-5", 5, 7, (sender, args) => { ChangeSideLap(-5); });
             SideLapOK = new TileButton("OK", 6, 7, (sender, args) => { SideLapUp1.Visible = SideLapUp5.Visible = SideLapDown5.Visible = SideLapDown1.Visible = SideLapOK.Visible = false; });
 
 
@@ -370,113 +374,41 @@ namespace MissionPlanner.GCSViews
             OverLapOK = new TileButton("OK", 5, 8, (sender, args) => { OverLapDown1.Visible = OverLapDown5.Visible = OverLapUp1.Visible = OverLapUp5.Visible = OverLapOK.Visible = false; });
 
 
-            Images = new TileData("IMAGES NUBMER", 0, 7, "");
-            Images.Value = "0";
+
 
             var fsBtnUp = new TileButton("+1", 2, 6, (sender, args) => ChangeSpeed(1));
             var fsBtnDown = new TileButton("-1", 3, 6, (sender, args) => ChangeSpeed(-1));
             TileButton fsBtnOk = null;
             fsBtnOk = new TileButton("OK", 4, 6, (sender, args) => fsBtnDown.Visible = fsBtnUp.Visible = fsBtnOk.Visible = false);
 
-            List<TileButton> dropdownHideList = new TileButton[] { SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
-                                                                   OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
-                                                                   angleBtnDown, angleBtnDown1, angleBtnUp, angleBtnUp1, angleBtnOk,
-                                                                   altBtnDown, altBtnUp,  altBtnOk, fsBtnDown, fsBtnUp, fsBtnOk}.ToList();
+            dropdownHideList = new TileButton[] { SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK,
+                                                OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
+                                                angleBtnDown, angleBtnDown1, angleBtnUp, angleBtnUp1, angleBtnOk,
+                                                altBtnDown, altBtnUp,  altBtnOk, fsBtnDown, fsBtnUp, fsBtnOk}.ToList();
 
-            sideLap = new TileData("SIDELAP", 1, 7, "%", (sender, args) =>
-            {
-                var x = !SideLapUp1.Visible;
-                dropdownHideList.ForEach(tile => tile.Visible = false);
-                SideLapDown1.Visible = SideLapDown5.Visible = SideLapUp1.Visible = SideLapUp5.Visible = SideLapOK.Visible = x;
-                cameras_buttons.ForEach(cam => cam.Visible = false);
-            });
-
-            overLap = new TileData("OVERLAP", 0, 8, "%", (sender, args) =>
-            {
-                var x = !OverLapUp1.Visible;
-                dropdownHideList.ForEach(tile => tile.Visible = false);
-                OverLapDown1.Visible = OverLapDown5.Visible = OverLapUp1.Visible = OverLapUp5.Visible = OverLapOK.Visible = x;
-                cameras_buttons.ForEach(cam => cam.Visible = false);
-            });
-
-            flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", (sender, args) =>
-            {
-                var x = !fsBtnUp.Visible;
-                dropdownHideList.ForEach(tile => tile.Visible = false);
-                fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
-                cameras_buttons.ForEach(cam => cam.Visible = false);
-            });
+            sideLap = new TileData("SIDELAP", 1, 7, "%", SidelapSettingEvent);
+            overLap = new TileData("OVERLAP", 0, 8, "%", OverlapSettingEvent);
+            flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", FlyingSettingEvent);
             flyingSpeed.Value = "3";
-            altInfo = new TileData("ALTITUDE ", 1, 5, "m", (sender, args) =>
-            {
-                var x = !altBtnUp.Visible;
-                dropdownHideList.ForEach(tile => tile.Visible = false);
-                altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = x;
-                cameras_buttons.ForEach(cam => cam.Visible = false);
-            });
-            if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
-                altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
-
-            windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
-            TileData mode;
-
-            //------------------------------------------------------------Flight Mode tiles
-            var tilesFlightMode = new List<TileInfo>(new TileInfo[]
-            {
-               new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => 
-               {
-                   MainV2.View.ShowScreen("FlightData");
-                   foreach (var pan in common)
-                   {
-                       pan.Parent = FlightData.instance.splitContainer1.Panel2;
-                       FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
-                       pan.BringToFront();
-                   }
-               },
-                    Color.FromArgb(255, 255, 51, 0)),       //WTF
-                new TileData("GROUND SPEED", 0, 1, "km/h"),
-                new TileData("ALTITUDE", 0, 2, "m"),
-                new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),   
-                new TileData("BATTERY REMAINING", 0, 4, "%"),
-               
-                new TileButton("DISARM", 0, 7),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>
-                {
-                    MainV2.View.ShowScreen("FlightPlanner");
-                }),
-                new TileData("AIR SPEED", 1, 1, "km/h"),
-                new TileData("DISTANCE TO HOME", 1, 2, "m"),
-                new TileData("BATTERY VOLTAGE", 1, 3, "V"),
-                new TileData("CURRENT", 1, 4, "A"),
-                new TileData("GPSHDOP", 1, 5, ""),              
-                new TileData("GPS SAT COUNT", 1, 6, ""),          
-                new TileData("RADIO SIGNAL", 0, 5, "%"),
-                new TileButton("EXIT",2,0, (sender,e) => 
-                { 
-                    MissionPlanner.LogReporter.LogReporter.stopThread = true;
-                    MainV2.config["grid_sidelap"] = SideLap.ToString();
-                    MainV2.config["grid_overlap"] = OverLap.ToString();
-                    MainV2.instance.Close();
-                }),
-                mode = new TileData("MODE",0,6,""),
-                windSpeed,
-            });
-            mode.ValueLabel.Width = 120;
+            altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent);
 
             XmlHelper.ReadCameraName("noveltyCam.xml");
-
             TileData obsHeadBtn = null;
-
-
-
 
             int i = 0;
             foreach (var camera in XmlHelper.cameras)
             {
-                cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, (sender, args) => { cameras_buttons.ForEach(cam => cam.Visible = false); /*cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false;*/  camName = (sender as Label).Text; if (!pathAccepted) calcGrid(null, null); obsHeadBtn.Value = camName; }));
+                cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, (sender, args) =>
+                {
+                    cameras_buttons.ForEach(cam => cam.Visible = false);
+                    /*cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false;*/
+                    camName = (sender as Label).Text;
+                    if (!pathAccepted)
+                        calcGrid(null, null);
+                    obsHeadBtn.Value = camName;
+                }));
                 i++;
             }
-
 
 
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", (sender, args) =>
@@ -486,138 +418,72 @@ namespace MissionPlanner.GCSViews
                 cameras_buttons.ForEach(cam => cam.Visible = x);
             });
 
-            obsHeadBtn.ValueLabel.Width = 120;
+            obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
             obsHeadBtn.Value = "GEOSCANNER";
 
-            
 
-            accept = new TileButton("ACCEPT\nPATH", 2, 1, (sender, e) => 
-            { 
-                pathAccepted = true; accept.Visible = false; calcGrid = null;
-                SaveWPFile.Visible = true;
-                LoadWPFile.Visible = true;
-                LoadWPPlatform.Visible = true;
-                writeWaypoints.Visible = true;
-                sideLap.Visible = false;
-                overLap.Visible = false;
-                Images.Visible = false;
-                dropdownHideList.ForEach(t => t.Visible = false);
-            });
 
             var list = (TileInfo[])cameras_buttons.ToArray();
 
             List<TileInfo> hidelist2 = new List<TileInfo>();
 
+            accept = new TileButton("ACCEPT\nPATH", 2, 1, AcceptPathEvent);
+            Images = new TileData("IMAGES NUBMER", 12.4, 7, "");
+            Images.Value = "0";
 
-            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1, angleBtnDown1, angleBtnOk, accept, fsBtnUp, fsBtnOk, fsBtnDown, sideLap, overLap, Images,
-                                            SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
+
+
+            var hideList = new TileInfo[] { altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnUp1,
+                                            angleBtnDown1, angleBtnOk, accept, fsBtnUp, fsBtnOk, fsBtnDown, sideLap,
+                                            overLap, Images, SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK,
                                             OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK};
 
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(list);
-
             obsHeadBtn.ClickMethod(null, null);
 
 
-            angleInfo = new TileData("ANGLE", 1, 4, "deg", (sender, args) =>
-            {
-                var x = !angleBtnUp.Visible;
-                dropdownHideList.ForEach(tile => tile.Visible = false);
-                angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
-                cameras_buttons.ForEach(cam => cam.Visible = false);
-            });
-
-            const string polygonmodestring = "POLYGON\nMODE";
+            angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent);
 
             // todo copy paste code ;/
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
-                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, angleBtnUp1, angleBtnDown1, 
+                altBtnUp, altBtnDown, altBtnOk, angleBtnDown, angleBtnUp, angleBtnOk, angleBtnUp1, angleBtnDown1,
                 accept,
                 fsBtnDown,fsBtnOk,fsBtnUp,flyingSpeed,
                 sideLap,overLap,Images,
-                SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK, 
+                SideLapDown1, SideLapDown5, SideLapUp1, SideLapUp5, SideLapOK,
                 OverLapDown1, OverLapDown5, OverLapUp1, OverLapUp5, OverLapOK,
 
-                new TileButton("COMPASS\nCALIBRATION",12.4,0,(sender,e) => 
-                {
-                    if(CustomMessageBox.Show("Do you want to do compass calibration","Question",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        MagCalib.DoGUIMagCalib(); 
-                    }
-                }),
+                new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
 
-                groundResInfo = new TileData("GROUND RESOLUTION", 0, 5, "cm/p"),
-                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {MainV2.View.ShowScreen("FlightData"); foreach(var pan in common) {pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront();}}),
-                new TileButton(polygonmodestring, 0, 1, (sender, e) =>
-                {
-                    var s = sender as Label;
-                    // todo YEAH HACKING EVERYWHERE!
-                    if (s.Text == polygonmodestring)
-                    {
-                        s.Text = "WAYPOINT\nMODE";
-                        FlightPlanner.instance.PolygonGridMode = false;
-                    }
-                    else
-                    {
-                        s.Text = polygonmodestring;
-                        FlightPlanner.instance.PolygonGridMode = true;
-                    }
-                }),
-               new TileButton("ADD START\nPOINT", 0, 2,
+
+                new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
+                new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
+                new TileButton("ADD START\nPOINT", 0, 2,
                     (sender, args) => FlightPlanner.instance.takeoffToolStripMenuItem_Click(null, null)),
-                new TileButton("CLEAR", 0, 3, (sender, args) =>
-                {
-                    GroundRes = 0.0;
-                    FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
-                    FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
-                }), 
-                flightTime = new TileData("FLIGHT TIME", 0, 4, "h:m:s"),
-                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)), 
+                new TileButton("CLEAR", 0, 3, ClearEvent),
+                flightTime = new TileData("FLIGHT TIME", 12.4, 4, "h:m:s"),
+                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"),
                     Color.FromArgb(255, 255, 51, 0)),
-                    
-                new TileButton("PATH\nGENERATION", 1, 1, (sender, e)  =>
-                {
-                    SaveWPFile.Visible = false;
-                    LoadWPFile.Visible = false;
-                    LoadWPPlatform.Visible = false;
-                    writeWaypoints.Visible = false;
-                    sideLap.Visible = true;
-                    overLap.Visible = true;
-                    Images.Visible = true;
 
-                    pathAccepted = false;
-                    var Host = new Plugin.PluginHost();
-                    ToolStripItemCollection col = Host.FPMenuMap.Items;
-                    int index = col.Count;
-                    foreach (
-                        var toolStripItem in
-                            col.Cast<ToolStripItem>()
-                                .Where(item => item.Text.Equals("Survey (Grid)"))
-                                .OfType<ToolStripMenuItem>())
-                    {
-                        toolStripItem.PerformClick();
-                        break;
-                    }
-                }
-            ),
-                new TileButton("ADD LANDING POINT", 1, 2,
-                    (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)),
+                new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
+                new TileButton("ADD LANDING POINT", 1, 2, (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)),
                angleInfo,
                altInfo,
-
+               groundResInfo = new TileData("GROUND RESOLUTION", 12.4, 5, "cm/p"),
                SaveWPFile = new TileButton("SAVE WP FILE", 0,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
                LoadWPFile = new TileButton("LOAD WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
                LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
 
-               new TileButton("SHOW WP",11.4,0,(sender,args) => 
+               new TileButton("SHOW WP",11.4,0,(sender,args) =>
                {
                    FlightPlannerWaypointsForm.Show();
                }),
 
-               distanceTile = new TileData("Distance",0,6,"km"),
+               distanceTile = new TileData("Distance",12.4,6,"km"),
 
 
             });
@@ -630,9 +496,9 @@ namespace MissionPlanner.GCSViews
             var sideValue = MainV2.config["grid_sidelap"];
             var overValue = MainV2.config["grid_overlap"];
 
-            ChangeSideLap( Convert.ToInt32(sideValue) );
+            ChangeSideLap(Convert.ToInt32(sideValue));
             ChangeOverLap(Convert.ToInt32(overValue));
-           
+
 
             foreach (var tile in tilesArray)
             {
@@ -654,9 +520,197 @@ namespace MissionPlanner.GCSViews
 
                 sideLap.Visible = false;
                 overLap.Visible = false;
-                Images.Visible = false;
             }
         }
+
+
+
+        #region EventsFlightPlanner
+
+        private static void PathGenerationEvent(object sender, EventArgs args)
+        {
+            SaveWPFile.Visible = false;
+            LoadWPFile.Visible = false;
+            LoadWPPlatform.Visible = false;
+            writeWaypoints.Visible = false;
+            sideLap.Visible = true;
+            overLap.Visible = true;
+
+            pathAccepted = false;
+            var Host = new Plugin.PluginHost();
+            ToolStripItemCollection col = Host.FPMenuMap.Items;
+            int index = col.Count;
+            foreach (
+                var toolStripItem in
+                    col.Cast<ToolStripItem>()
+                        .Where(item => item.Text.Equals("Survey (Grid)"))
+                        .OfType<ToolStripMenuItem>())
+            {
+                toolStripItem.PerformClick();
+                break;
+            }
+        }
+
+        private static void ClearEvent(object sender, EventArgs args)
+        {
+            GroundRes = 0.0;
+            FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
+            FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
+        }
+
+        private static void PolygonModeEvent(object sender, EventArgs args)
+        {
+            var s = sender as Label;
+            // todo YEAH HACKING EVERYWHERE!
+            if (s.Text == polygonmodestring)
+            {
+                s.Text = "WAYPOINT\nMODE";
+                FlightPlanner.instance.PolygonGridMode = false;
+            }
+            else
+            {
+                s.Text = polygonmodestring;
+                FlightPlanner.instance.PolygonGridMode = true;
+            }
+        }
+
+
+        private static void AcceptPathEvent(object sender, EventArgs args)
+        {
+            pathAccepted = true; accept.Visible = false; calcGrid = null;
+            SaveWPFile.Visible = true;
+            LoadWPFile.Visible = true;
+            LoadWPPlatform.Visible = true;
+            writeWaypoints.Visible = true;
+            sideLap.Visible = false;
+            overLap.Visible = false;
+            Images.Visible = false;
+            dropdownHideList.ForEach(t => t.Visible = false);
+        }
+
+        private static void CompassCalibrationEvent(object sender, EventArgs args)
+        {
+            if (CustomMessageBox.Show("Do you want to do compass calibration", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                MagCalib.DoGUIMagCalib();
+            }
+        }
+
+        private static void FlightInfoEvent(object sender, EventArgs args)
+        {
+            MainV2.View.ShowScreen("FlightData");
+            foreach (var pan in common)
+            {
+                pan.Parent = FlightData.instance.splitContainer1.Panel2;
+                FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
+                pan.BringToFront();
+            }
+        }
+
+        private static void AngelSettingEvent(object sender, EventArgs args)
+        {
+            //var x = !angleBtnUp.Visible;
+            //dropdownHideList.ForEach(tile => tile.Visible = false);
+            //angleBtnUp.Visible = angleBtnDown.Visible = angleBtnUp1.Visible = angleBtnDown1.Visible = angleBtnOk.Visible = x;
+            //cameras_buttons.ForEach(cam => cam.Visible = false);
+        }
+
+        private static void AltitudeSettingEvent(object sender, EventArgs args)
+        {
+            //var x = !altBtnUp.Visible;
+            //dropdownHideList.ForEach(tile => tile.Visible = false);
+            //altBtnUp.Visible = altBtnDown.Visible = altBtnOk.Visible = x;
+            //cameras_buttons.ForEach(cam => cam.Visible = false);
+        }
+
+        private static void FlyingSettingEvent(object sender, EventArgs args)
+        {
+            //var x = !fsBtnUp.Visible;
+            //dropdownHideList.ForEach(tile => tile.Visible = false);
+            //fsBtnUp.Visible = fsBtnDown.Visible = fsBtnOk.Visible = x;
+            //cameras_buttons.ForEach(cam => cam.Visible = false);
+        }
+
+        private static void SidelapSettingEvent(object sender, EventArgs args)
+        {
+            //var x = !SideLapUp1.Visible;
+            //dropdownHideList.ForEach(tile => tile.Visible = false);
+            //SideLapDown1.Visible = SideLapDown5.Visible = SideLapUp1.Visible = SideLapUp5.Visible = SideLapOK.Visible = x;
+            //cameras_buttons.ForEach(cam => cam.Visible = false);
+        }
+
+        private static void OverlapSettingEvent(object sender, EventArgs args)
+        {
+            //var x = !OverLapUp1.Visible;
+            //dropdownHideList.ForEach(tile => tile.Visible = false);
+            //OverLapDown1.Visible = OverLapDown5.Visible = OverLapUp1.Visible = OverLapUp5.Visible = OverLapOK.Visible = x;
+            //cameras_buttons.ForEach(cam => cam.Visible = false);
+        }
+        #endregion
+
+
+        #region EventsFlightData
+
+        private static void ConnectEvent(object sender, EventArgs args)
+        {
+            var conBut = sender as Label;
+            if (connected == false)  //connect
+            {
+                MainV2.instance.MenuConnect_Click(null, null);
+                armed = MainV2.comPort.MAV.cs.armed;
+                if (armed)
+                    commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
+                if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+                {
+                    windSpeed.Visible = false;
+                    FlightData.instance.windDir1.Visible = false;
+                }
+            }
+            else                    //disconnect
+            {
+                if (MainV2.comPort.MAV.cs.armed)
+                    ArmButton.ClickMethod(ArmButton, null);     //disarm before disconnect
+                FlightData.instance.hud1.warning = "";
+                MainV2.instance.MenuConnect_Click(null, null);
+                windSpeed.Visible = true;
+                FlightData.instance.windDir1.Visible = true;
+            }
+        }
+
+
+        private static void ArmDisarmEvent(object sender, EventArgs args)
+        {
+            if (!MainV2.comPort.MAV.cs.armed)         //jeśli rozbrajamy to nie robimy preflightcheck
+            {
+                if (!connected)
+                {
+                    CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    return;
+                }
+
+                PreFlightCheck window = new PreFlightCheck();
+
+                if (window.ShowDialog() == DialogResult.OK)
+                {
+                    //zapis do logów jest w środku klasy PreFlightCheck
+                }
+                else
+                    return;     //jeśli nie zaakceptowano to powrót i brak arm
+            }
+            FlightData.instance.BUT_ARM_Click(sender, args);
+            if (armed && connected)
+            {
+                ArmButton.Label.Text = "DISARM";
+                ThreadSafeMapZoomToHome();
+            }
+            else
+                ArmButton.Label.Text = "ARM";
+        }
+
+
+        #endregion
+
+
     }
 
 
