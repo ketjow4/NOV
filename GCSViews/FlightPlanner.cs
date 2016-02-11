@@ -3644,7 +3644,6 @@ namespace MissionPlanner.GCSViews
         private void Planner_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = trackBar1.Value;
-			//MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -3669,7 +3668,6 @@ namespace MissionPlanner.GCSViews
         private void MainMap_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = MainMap.Zoom + 0.01;
-			//MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
 		}
 
         private void trackBar1_Scroll(object sender, EventArgs e)
