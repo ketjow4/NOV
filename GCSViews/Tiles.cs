@@ -28,6 +28,10 @@ namespace MissionPlanner.GCSViews
         public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
         public static String EstimatedFlightTime { set { flightTime.Value = value; } get { return flightTime.Value; } }
 
+        public static String Area { set { area.Value = value; } get { return area.Value; } }
+        public static String DistanceBeteweenLines { set { distanceBetweenLines.Value = value; } get { return distanceBetweenLines.Value; } }
+        public static String NumberOfStripes { set { numberofStripes.Value = value; } get { return numberofStripes.Value; } }
+
         public static int SideLap { get { return Convert.ToInt32(sideLap.Value); } }
         public static int OverLap { get { return Convert.ToInt32(overLap.Value); } }
         public static int ImagesCount { set { Images.Value = value.ToString(); } }
@@ -51,6 +55,9 @@ namespace MissionPlanner.GCSViews
         private static TileData Images = null;
         private static TileButton writeWaypoints = null;
         private static TileData obsHeadBtn = null;
+        private static TileData area = null;
+        private static TileData distanceBetweenLines = null;
+        private static TileData  numberofStripes = null;
 
         private static TileData windSpeed = null;
 
@@ -325,9 +332,9 @@ namespace MissionPlanner.GCSViews
                 sideLap,overLap,Images,
 
                 new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
-                new TileData("AREA",12.4,8,"km^2"),
-                new TileData("DIST BETWEEN IMAGES",11.4,7,"m"),
-                new TileData("NUMBER OF STRIPS",11.4,8,"m"),
+                area = new TileData("AREA",12.4,8,"km^2"),             
+                distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",11.4,7,"m"), 
+                numberofStripes = new TileData("NUMBER OF STRIPS",11.4,8,""),   
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
                 new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
                 new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
@@ -336,6 +343,10 @@ namespace MissionPlanner.GCSViews
                 new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
+                new TileButton("FOOTPRINT",0,4),        //TODO implement event
+                new TileButton("CAMERA FACING FORWARD",0,5), //TODO implement event
+                new TileData("SPLIT INTO SEGMENTS",0,6), //TODO implement event
+                new TileData("START FROM",2,4), //TODO implement event
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
@@ -529,7 +540,11 @@ namespace MissionPlanner.GCSViews
         private static void AngelSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException();
+            InputFlightPlanning inputWindow = new InputFlightPlanning();
+            inputWindow.ShowDialog();
+
+            ChangeAngle(60);
+            //throw new NotImplementedException();
         }
 
         private static void AltitudeSettingEvent(object sender, EventArgs args)
