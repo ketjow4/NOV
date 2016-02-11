@@ -132,6 +132,12 @@ namespace MissionPlanner
 		private Form connectionStatsForm;
 		private ConnectionStats _connectionStats;
 
+		// map sync handlers and events
+		public delegate void MapPositionChangedEventHandler(int sourceMapControlId, GMap.NET.PointLatLng newPosition); 
+		public delegate void MapZoomChangedEventHandler(int sourceMapControlId, double newZoom);
+		public static event MapPositionChangedEventHandler MapPositionChangedEvent;
+		public static event MapZoomChangedEventHandler MapZoomChangedEvent;
+
 		/// <summary>
 		/// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
 		/// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
@@ -139,6 +145,7 @@ namespace MissionPlanner
 		/// </summary>
 		static internal ConnectionControl _connectionControl;
 
+		#region nested classes
 		private static class NativeMethods
         {
             // used to hide/show console window
@@ -165,7 +172,6 @@ namespace MissionPlanner
             static public int SW_SHOWNORMAL = 1;
             static public int SW_HIDE = 0;
         }
-		
 		public abstract class menuicons
         {
             public abstract Image fd { get; }
@@ -180,7 +186,6 @@ namespace MissionPlanner
             public abstract Image disconnect { get; }
             public abstract Image bg { get; }
         }
-
         public class menuicons1 : menuicons
         {
             public override Image fd
@@ -238,7 +243,6 @@ namespace MissionPlanner
                 get { return global::MissionPlanner.Properties.Resources.bgdark; }
             }
         }
-
         public class menuicons2 : menuicons
         {
             public override Image fd
@@ -296,11 +300,12 @@ namespace MissionPlanner
                 get { return null; }
             }
         }
-		
-        /// <summary>
-        /// Control what is displayed
-        /// </summary>
-        public static Boolean Advanced
+		#endregion
+
+		/// <summary>
+		/// Control what is displayed
+		/// </summary>
+		public static Boolean Advanced
         {
             get { return _advanced; }
             set
@@ -416,12 +421,17 @@ namespace MissionPlanner
 
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.Fixed3D;
-            //this.WindowState = FormWindowState.Maximized;
+			//this.WindowState = FormWindowState.Maximized;
 
-            MyView = new MainSwitcher(this);
-
+			MyView = new MainSwitcher(this);
             View = MyView;
-
+			MapPositionChangedEventHandler mapPositionChangedEventHandler
+				= new MapPositionChangedEventHandler(syncMapPositions);
+			MapZoomChangedEventHandler mapZoomChangedEventHandler
+				= new MapZoomChangedEventHandler(syncMapZooms);
+			MapPositionChangedEvent += mapPositionChangedEventHandler;
+			MapZoomChangedEvent += mapZoomChangedEventHandler;
+			
             AdvancedChanged += updateAdvanced;
 
             //startup console
@@ -807,8 +817,57 @@ namespace MissionPlanner
             // save config to test we have write access
             xmlconfig(true);
         }
+		public static void onMapPositionChanged(int sourceMapControlId, GMap.NET.PointLatLng newPosition)
+		{
+			if(MapPositionChangedEvent != null)
+			{
+				MapPositionChangedEvent(sourceMapControlId, newPosition);
+			}
+		}
+		public static void onMapZoomChanged(int sourceMapControlId, double newZoom)
+		{
+			if(MapZoomChangedEvent != null)
+			{
+				MapZoomChangedEvent(sourceMapControlId, newZoom);
+			}
+		}
+		public void syncMapPositions(int sourceMapControlId, GMap.NET.PointLatLng newPosition)
+		{
+			if(FlightPlanner.MainMap.Id != sourceMapControlId)
+			{
+				if(FlightPlanner.MainMap.Position != newPosition)
+				{
+					FlightPlanner.MainMap.Position = newPosition;
+				}
+			}
+			if(FlightData.gMapControl1.Id != sourceMapControlId)
+			{
+				if(FlightData.gMapControl1.Position != newPosition)
+				{
+					FlightData.gMapControl1.Position = newPosition;
+				}
+			}
+		}
+		public void syncMapZooms(int sourceMapControlId, double newZoom)
+		{
+			if (FlightPlanner.MainMap.Id != sourceMapControlId)
+			{
+				if(FlightPlanner.MainMap.Zoom != newZoom)
+				{
+					FlightPlanner.MainMap.Zoom = newZoom;
+				}
+			}
+			if (FlightData.gMapControl1.Id != sourceMapControlId)
+			{
+				if (FlightData.gMapControl1.Zoom != newZoom)
+				{
+					FlightData.gMapControl1.Zoom = newZoom;
+				}
+			}
+		}
+		
 
-        void comPort_MavChanged(object sender, EventArgs e)
+		void comPort_MavChanged(object sender, EventArgs e)
         {
             if (this.InvokeRequired)
             {
@@ -917,8 +976,7 @@ namespace MissionPlanner
                 adsbPlaneAge[((MissionPlanner.Utilities.adsb.PointLatLngAltHdg) sender).Tag] = DateTime.Now;
             }
         }
-
-
+		
         private void ResetConnectionStats()
         {
             log.Info("Reset connection stats");
@@ -1527,8 +1585,7 @@ namespace MissionPlanner
             {
             }
         }
-
-
+		
         /// <summary>
         /// overriding the OnCLosing is a bit cleaner than handling the event, since it 
         /// is this object.
@@ -1691,8 +1748,7 @@ namespace MissionPlanner
                 joystick.Dispose(); //proper clean up of joystick.
             }
         }
-
-
+		
         void xmlconfig(bool write)
         {
             if (write ||

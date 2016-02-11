@@ -10,13 +10,17 @@ namespace MissionPlanner.Controls
     /// </summary>
     public class myGMAP : GMap.NET.WindowsForms.GMapControl
     {
+		private static int maxId = 0;
+		private int id;
         public bool inOnPaint = false;
         string otherthread = "";
         int lastx = 0;
         int lasty = 0;
-        public myGMAP()
+
+		public myGMAP()
             : base()
         {
+			id = maxId++;
             this.Text = "Map";
         }
 
@@ -63,28 +67,11 @@ namespace MissionPlanner.Controls
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
 
-		// public properties. their setters will fire a map synchronization event...
-		public GMap.NET.PointLatLng position
+		public int Id
 		{
 			get
 			{
-				return Position;
-			}
-			set
-			{
-
-			}
-		}
-
-		public double zoom
-		{
-			get
-			{
-				return Zoom;
-			}
-			set
-			{
-
+				return id;
 			}
 		}
     }

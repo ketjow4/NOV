@@ -516,7 +516,9 @@ namespace MissionPlanner.GCSViews
         private static void FlightInfoEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightData");
-            foreach (var pan in common)
+			MainV2.onMapPositionChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Position);
+			MainV2.onMapZoomChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Zoom);
+			foreach (var pan in common)
             {
                 pan.Parent = FlightData.instance.splitContainer1.Panel2;
                 FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
@@ -570,7 +572,9 @@ namespace MissionPlanner.GCSViews
         private static void FlighPlanningShowEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightPlanner");
-        }
+			MainV2.onMapPositionChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Position);
+			MainV2.onMapZoomChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Zoom);
+		}
 
 
         private static void ConnectEvent(object sender, EventArgs args)

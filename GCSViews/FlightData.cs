@@ -183,6 +183,8 @@ namespace MissionPlanner.GCSViews
             MainHcopy = MainH;
 
             mymap.Paint += mymap_Paint;
+			gMapControl1.OnPositionChanged += GMapControl1_OnPositionChanged;
+			gMapControl1.OnMapZoomChanged += GMapControl1_OnMapZoomChanged;
 
             //  mymap.Manager.UseMemoryCache = false;
 
@@ -356,10 +358,20 @@ namespace MissionPlanner.GCSViews
             BindLabels();
         }
 
-        void gMapControl1_MouseWheel(object sender, MouseEventArgs e)
+		private void GMapControl1_OnMapZoomChanged()
+		{
+			MainV2.onMapZoomChanged(gMapControl1.Id, gMapControl1.Zoom);
+		}
+
+		private void GMapControl1_OnPositionChanged(PointLatLng point)
+		{
+			MainV2.onMapPositionChanged(gMapControl1.Id, point);
+		}
+
+		void gMapControl1_MouseWheel(object sender, MouseEventArgs e)
         {
-            FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
-            FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
+            //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+            //FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
         }
 
 
@@ -1693,7 +1705,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     gMapControl1.Zoom = zoom;
-                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+                    //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 catch
                 {
@@ -2109,12 +2121,12 @@ namespace MissionPlanner.GCSViews
                 if (gMapControl1.MaxZoom + 1 == (double) Zoomlevel.Value)
                 {
                     gMapControl1.Zoom = (double) Zoomlevel.Value - .1;
-                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+                    //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 else
                 {
                     gMapControl1.Zoom = (double) Zoomlevel.Value;
-                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+                    //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
             }
             catch
@@ -2134,7 +2146,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     gMapControl1.Position = new PointLatLng(gMapControl1.Position.Lat + latdif, gMapControl1.Position.Lng + lngdif);
-                    FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
+                    //FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
                 }
                 catch { }
             }
@@ -2175,7 +2187,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     gMapControl1.Position = new PointLatLng(gMapControl1.Position.Lat + latdif, gMapControl1.Position.Lng + lngdif);
-                    FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
+                    //FlightPlanner.instance.MainMap.Position = gMapControl1.Position;
                 }
                 catch { }
             }
@@ -2255,7 +2267,7 @@ namespace MissionPlanner.GCSViews
         private void gMapControl1_Resize(object sender, EventArgs e)
         {
             gMapControl1.Zoom = gMapControl1.Zoom + 0.01;
-            FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+            //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
         }
 
         internal void BUT_loadtelem_Click(object sender, EventArgs e)
@@ -3542,12 +3554,12 @@ namespace MissionPlanner.GCSViews
                 if (gMapControl1.MaxZoom + 1 == (double) TRK_zoom.Value)
                 {
                     gMapControl1.Zoom = (double)TRK_zoom.Value - .1;
-                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+                    //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
                 else
                 {
                     gMapControl1.Zoom = (double)TRK_zoom.Value;
-                    FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
+                    //FlightPlanner.instance.MainMap.Zoom = gMapControl1.Zoom;
                 }
             }
             catch

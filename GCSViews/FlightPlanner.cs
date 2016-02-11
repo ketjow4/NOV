@@ -582,8 +582,8 @@ namespace MissionPlanner.GCSViews
 
         void MainMap_MouseWheel(object sender, MouseEventArgs e)
         {
-            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
-            FlightData.instance.gMapControl1.Position = MainMap.Position;
+            //FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
+            //FlightData.instance.gMapControl1.Position = MainMap.Position;
         }
         
         
@@ -2685,7 +2685,7 @@ namespace MissionPlanner.GCSViews
                 lock (thisLock)
                 {
                     MainMap.Zoom = trackBar1.Value;
-                    FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
+                    //FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
                 }
             }
             catch
@@ -3399,7 +3399,7 @@ namespace MissionPlanner.GCSViews
                         lock (thisLock)
                         {
                             MainMap.Position = new PointLatLng(center.Position.Lat + latdif, center.Position.Lng + lngdif);
-                            FlightData.instance.gMapControl1.Position = MainMap.Position;
+                            //FlightData.instance.gMapControl1.Position = MainMap.Position;
                         }
                     }
                     catch
@@ -3421,8 +3421,12 @@ namespace MissionPlanner.GCSViews
                 catch
                 {
                 }
-                //textBoxZoomCurrent.Text = MainMap.Zoom.ToString();
-                center.Position = MainMap.Position;
+				//textBoxZoomCurrent.Text = MainMap.Zoom.ToString();
+
+				// sync maps
+				MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
+
+				center.Position = MainMap.Position;
             }
         }
 
@@ -3486,6 +3490,9 @@ namespace MissionPlanner.GCSViews
 
             coords1.Lat = point.Lat;
             coords1.Lng = point.Lng;
+
+			// sync maps
+			MainV2.onMapPositionChanged(MainMap.Id, point);
 
             // always show on planner view
             //if (MainV2.ShowAirports)
@@ -3636,7 +3643,7 @@ namespace MissionPlanner.GCSViews
         private void Planner_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = trackBar1.Value;
-            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
+			//MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -3661,8 +3668,8 @@ namespace MissionPlanner.GCSViews
         private void MainMap_Resize(object sender, EventArgs e)
         {
             MainMap.Zoom = MainMap.Zoom + 0.01;
-            FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
-        }
+			//MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
+		}
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
@@ -3671,7 +3678,7 @@ namespace MissionPlanner.GCSViews
                 lock (thisLock)
                 {
                     MainMap.Zoom = trackBar1.Value;
-                    FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
+                    //FlightData.instance.gMapControl1.Zoom = MainMap.Zoom;
                 }
             }
             catch
