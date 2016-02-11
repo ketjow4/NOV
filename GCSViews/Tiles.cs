@@ -253,16 +253,13 @@ namespace MissionPlanner.GCSViews
 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
-                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {}, Color.FromArgb(255, 255, 51, 0)),      
+                new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {}, Color.FromArgb(255, 255, 51, 0)),
                 new TileData("GROUND SPEED", 0, 1, "km/h"),
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                 new TileButton("DISARM", 0, 7),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) =>
-                {
-                    MainV2.View.ShowScreen("FlightPlanner");
-                }),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, FlighPlanningShowEvent),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
                 new TileData("DISTANCE TO HOME", 1, 2, "m"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
@@ -290,7 +287,7 @@ namespace MissionPlanner.GCSViews
             overLap = new TileData("OVERLAP", 0, 8, "%", OverlapSettingEvent);
             flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", FlyingSettingEvent);
             flyingSpeed.Value = "3";
-            
+
 
             XmlHelper.ReadCameraName("noveltyCam.xml");
 
@@ -300,7 +297,6 @@ namespace MissionPlanner.GCSViews
                 cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, CameraButtonListEvent));
                 i++;
             }
-
 
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
             obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
@@ -312,7 +308,7 @@ namespace MissionPlanner.GCSViews
 
 
 
-            var hideList = new TileInfo[] { accept, sideLap, overLap};
+            var hideList = new TileInfo[] { accept, sideLap, overLap };
             var list = (TileInfo[])cameras_buttons.ToArray();
 
             List<TileInfo> hidelist2 = new List<TileInfo>();
@@ -334,34 +330,33 @@ namespace MissionPlanner.GCSViews
                 new TileData("NUMBER OF STRIPS",11.4,8,"m"),
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
                 new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
-                new TileButton("ADD START\nPOINT", 0, 2,(sender, args) => FlightPlanner.instance.takeoffToolStripMenuItem_Click(null, null)),
+                new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
                 new TileButton("CLEAR", 0, 3, ClearEvent),
-                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => MainV2.View.ShowScreen("FlightPlanner"), Color.FromArgb(255, 255, 51, 0)),
+                new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => { }, Color.FromArgb(255, 255, 51, 0)),
                 new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
-                new TileButton("ADD LANDING POINT", 1, 2, (sender, args) => FlightPlanner.instance.landToolStripMenuItem_Click(null, null)),
-                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, (sender, args) => FlightPlanner.instance.BUT_write_Click(sender, args)),
+                new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
+                new TileButton("SHOW WP",11.4,0,ShowWPEvent),
+
+                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
                 altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent),
                 groundResInfo = new TileData("GROUND RESOLUTION", 12.4, 5, "cm/p"),
                 flightTime = new TileData("FLIGHT TIME", 11.4, 6, "h:m:s"),
-                SaveWPFile = new TileButton("SAVE WP FILE", 0,7, (sender, args) => FlightPlanner.instance.BUT_saveWPFile_Click(null, null)),
-                LoadWPFile = new TileButton("LOAD WP FILE", 0,8, (sender, args) => FlightPlanner.instance.BUT_loadwpfile_Click(null, null)),
-                LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,(sender, args) => FlightPlanner.instance.BUT_read_Click(null,null)),
-
-               new TileButton("SHOW WP",11.4,0,(sender,args) =>
-               {
-                   FlightPlannerWaypointsForm.Show();
-               }),
-
-               distanceTile = new TileData("Distance",12.4,6,"km"),
-
-
+                SaveWPFile = new TileButton("SAVE WP FILE", 0,7, SaveWPFileEvent),
+                LoadWPFile = new TileButton("LOAD WP FILE", 0,8, LoadWPFileEvent),
+                LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,LoadWPPlatformEvent),
+                distanceTile = new TileData("Distance",12.4,6,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
 
-            foreach (var pan in common) { pan.Parent = FlightData.instance.splitContainer1.Panel2; FlightData.instance.splitContainer1.Panel2.Controls.Add(pan); pan.BringToFront(); }
+            foreach (var pan in common)
+            {
+                pan.Parent = FlightData.instance.splitContainer1.Panel2;
+                FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
+                pan.BringToFront();
+            }
 
             var sideValue = MainV2.config["grid_sidelap"];
             var overValue = MainV2.config["grid_overlap"];
@@ -396,6 +391,43 @@ namespace MissionPlanner.GCSViews
 
 
         #region EventsFlightPlanner
+
+
+        private static void ShowWPEvent(object sender, EventArgs e)
+        {
+            FlightPlannerWaypointsForm.Show();
+        }
+
+        private static void LoadWPPlatformEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.BUT_read_Click(null, null);
+        }
+
+        private static void SaveWPPlatformEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.BUT_write_Click(sender, e);
+        }
+
+        private static void LoadWPFileEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.BUT_loadwpfile_Click(null, null);
+        }
+
+        private static void SaveWPFileEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.BUT_saveWPFile_Click(null, null);
+        }
+
+
+        private static void AddStartPointEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.takeoffToolStripMenuItem_Click(null, null);
+        }
+
+        private static void AddLandingPointEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.landToolStripMenuItem_Click(null, null);
+        }
 
         private static void CameraButtonListEvent(object sender, EventArgs e)
         {
@@ -502,13 +534,13 @@ namespace MissionPlanner.GCSViews
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
             throw new NotImplementedException();
-            
+
         }
 
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException(); 
+            throw new NotImplementedException();
         }
 
         private static void SidelapSettingEvent(object sender, EventArgs args)
@@ -533,6 +565,11 @@ namespace MissionPlanner.GCSViews
             MainV2.config["grid_sidelap"] = SideLap.ToString();
             MainV2.config["grid_overlap"] = OverLap.ToString();
             MainV2.instance.Close();
+        }
+
+        private static void FlighPlanningShowEvent(object sender, EventArgs args)
+        {
+            MainV2.View.ShowScreen("FlightPlanner");
         }
 
 
@@ -640,9 +677,5 @@ namespace MissionPlanner.GCSViews
             }
         }
         #endregion
-
-
     }
-
-
 }
