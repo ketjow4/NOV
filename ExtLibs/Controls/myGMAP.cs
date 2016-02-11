@@ -62,5 +62,30 @@ namespace MissionPlanner.Controls
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
+
+		// public properties. their setters will fire a map synchronization event...
+		public GMap.NET.PointLatLng position
+		{
+			get
+			{
+				return Position;
+			}
+			set
+			{
+
+			}
+		}
+
+		public double zoom
+		{
+			get
+			{
+				return Zoom;
+			}
+			set
+			{
+
+			}
+		}
     }
 }

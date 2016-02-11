@@ -36,7 +36,110 @@ namespace MissionPlanner
         private static readonly ILog log =
             LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private static class NativeMethods
+		static menuicons displayicons = new menuicons1();
+		Controls.MainSwitcher MyView;
+		static bool _advanced = false;
+		public static bool ShowAirports { get; set; }
+		public static bool ShowTFR { get; set; }
+		private Utilities.adsb _adsb;
+		public static event EventHandler AdvancedChanged;
+
+		/// <summary>
+		/// Active Comport interface
+		/// </summary>
+		public static MAVLinkInterface comPort = new MAVLinkInterface();
+		/// <summary>
+		/// passive comports
+		/// </summary>
+		public static List<MAVLinkInterface> Comports = new List<MAVLinkInterface>();
+		public static string comPortName = "";
+		/// <summary>
+		/// other planes in the area from adsb
+		/// </summary>
+		internal object adsblock = new object();
+		public Hashtable adsbPlanes = new Hashtable();
+		public Hashtable adsbPlaneAge = new Hashtable();
+		public delegate void WMDeviceChangeEventHandler(WM_DEVICECHANGE_enum cause);
+		public event WMDeviceChangeEventHandler DeviceChanged;
+		string titlebar;
+		/// <summary>
+		/// use to store all internal config
+		/// </summary>
+		public static Hashtable config = new Hashtable();
+		public static bool MONO = false;
+		public static bool speechEnable = false;
+		public static Speech speechEngine = null;
+		public static Joystick.Joystick joystick = null;
+		DateTime lastjoystick = DateTime.Now;
+
+		/// <summary>
+		/// hud background image grabber from a video stream - not realy that efficent. ie no hardware overlays etc.
+		/// </summary>
+		public static WebCamService.Capture cam = null;
+
+		/// <summary>
+		/// controls the main serial reader thread
+		/// </summary>
+		bool serialThread = false;
+		bool pluginthreadrun = false;
+		bool joystickthreadrun = false;
+		/// <summary>
+		/// needs to be true by default so that exits properly if no joystick used.
+		/// </summary>
+		volatile private bool joysendThreadExited = true;
+
+		Thread httpthread;
+		Thread joystickthread;
+		Thread serialreaderthread;
+		Thread pluginthread;
+		public static Thread report;
+		ManualResetEvent PluginThreadrunner = new ManualResetEvent(false);
+
+		private DateTime heatbeatSend = DateTime.Now;
+
+		/// <summary>
+		/// used to call anything as needed.
+		/// </summary>
+		public static MainV2 instance = null;
+
+		static string _logdir = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + @"logs";
+
+		public static MainSwitcher View;
+
+		DateTime connecttime = DateTime.Now;
+		DateTime nodatawarning = DateTime.Now;
+		DateTime OpenTime = DateTime.Now;
+
+		public enum Firmwares
+		{
+			ArduPlane,
+			ArduCopter2,
+			ArduRover,
+			Ateryx,
+			ArduTracker,
+			Gymbal
+		}
+
+		DateTime connectButtonUpdate = DateTime.Now;
+
+		/// <summary>
+		/// declared here if i want a "single" instance of the form
+		/// ie configuration gets reloaded on every click
+		/// </summary>
+		public GCSViews.FlightData FlightData;
+		public GCSViews.FlightPlanner FlightPlanner;
+		GCSViews.Simulation Simulation;
+		private Form connectionStatsForm;
+		private ConnectionStats _connectionStats;
+
+		/// <summary>
+		/// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
+		/// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
+		/// control for layout reasons.
+		/// </summary>
+		static internal ConnectionControl _connectionControl;
+
+		private static class NativeMethods
         {
             // used to hide/show console window
             [DllImport("user32.dll")]
@@ -62,10 +165,8 @@ namespace MissionPlanner
             static public int SW_SHOWNORMAL = 1;
             static public int SW_HIDE = 0;
         }
-
-        static menuicons displayicons = new menuicons1();
-
-        public abstract class menuicons
+		
+		public abstract class menuicons
         {
             public abstract Image fd { get; }
             public abstract Image fp { get; }
@@ -195,11 +296,7 @@ namespace MissionPlanner
                 get { return null; }
             }
         }
-
-        Controls.MainSwitcher MyView;
-
-        static bool _advanced = false;
-
+		
         /// <summary>
         /// Control what is displayed
         /// </summary>
@@ -215,11 +312,6 @@ namespace MissionPlanner
                     AdvancedChanged(null, EventArgs.Empty);
             }
         }
-
-        public static bool ShowAirports { get; set; }
-        public static bool ShowTFR { get; set; }
-
-        private Utilities.adsb _adsb;
 
         public bool EnableADSB
         {
@@ -243,67 +335,6 @@ namespace MissionPlanner
             }
         }
 
-        public static event EventHandler AdvancedChanged;
-
-        /// <summary>
-        /// Active Comport interface
-        /// </summary>
-        public static MAVLinkInterface comPort = new MAVLinkInterface();
-
-        /// <summary>
-        /// passive comports
-        /// </summary>
-        public static List<MAVLinkInterface> Comports = new List<MAVLinkInterface>();
-
-        public delegate void WMDeviceChangeEventHandler(WM_DEVICECHANGE_enum cause);
-
-        public event WMDeviceChangeEventHandler DeviceChanged;
-
-        /// <summary>
-        /// other planes in the area from adsb
-        /// </summary>
-        internal object adsblock = new object();
-
-        public Hashtable adsbPlanes = new Hashtable();
-        public Hashtable adsbPlaneAge = new Hashtable();
-
-        string titlebar;
-
-        /// <summary>
-        /// Comport name
-        /// </summary>
-        public static string comPortName = "";
-
-        /// <summary>
-        /// use to store all internal config
-        /// </summary>
-        public static Hashtable config = new Hashtable();
-
-        /// <summary>
-        /// mono detection
-        /// </summary>
-        public static bool MONO = false;
-
-        /// <summary>
-        /// speech engine enable
-        /// </summary>
-        public static bool speechEnable = false;
-
-        /// <summary>
-        /// spech engine static class
-        /// </summary>
-        public static Speech speechEngine = null;
-
-        /// <summary>
-        /// joystick static class
-        /// </summary>
-        public static Joystick.Joystick joystick = null;
-
-        /// <summary>
-        /// track last joystick packet sent. used to control rate
-        /// </summary>
-        DateTime lastjoystick = DateTime.Now;
-
         /// <summary>
         /// determine if we are running sitl
         /// </summary>
@@ -316,36 +347,7 @@ namespace MissionPlanner
                 return false;
             }
         }
-
-        /// <summary>
-        /// hud background image grabber from a video stream - not realy that efficent. ie no hardware overlays etc.
-        /// </summary>
-        public static WebCamService.Capture cam = null;
-
-        /// <summary>
-        /// controls the main serial reader thread
-        /// </summary>
-        bool serialThread = false;
-
-        bool pluginthreadrun = false;
-
-        bool joystickthreadrun = false;
-
-        Thread httpthread;
-        Thread joystickthread;
-        Thread serialreaderthread;
-        Thread pluginthread;
-
-        /// <summary>
-        /// track the last heartbeat sent
-        /// </summary>
-        private DateTime heatbeatSend = DateTime.Now;
-
-        /// <summary>
-        /// used to call anything as needed.
-        /// </summary>
-        public static MainV2 instance = null;
-
+		
         public static string LogDir
         {
             get
@@ -360,54 +362,7 @@ namespace MissionPlanner
                 config["logdirectory"] = value;
             }
         }
-
-        static string _logdir = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar +
-                                @"logs";
-
-        public static MainSwitcher View;
-
-        /// <summary>
-        /// store the time we first connect
-        /// </summary>
-        DateTime connecttime = DateTime.Now;
-
-        DateTime nodatawarning = DateTime.Now;
-        DateTime OpenTime = DateTime.Now;
-
-        /// <summary>
-        /// enum of firmwares
-        /// </summary>
-        public enum Firmwares
-        {
-            ArduPlane,
-            ArduCopter2,
-            ArduRover,
-            Ateryx,
-            ArduTracker,
-            Gymbal
-        }
-
-        DateTime connectButtonUpdate = DateTime.Now;
-
-        /// <summary>
-        /// declared here if i want a "single" instance of the form
-        /// ie configuration gets reloaded on every click
-        /// </summary>
-        public GCSViews.FlightData FlightData;
-
-        public GCSViews.FlightPlanner FlightPlanner;
-        GCSViews.Simulation Simulation;
-
-        private Form connectionStatsForm;
-        private ConnectionStats _connectionStats;
-
-        /// <summary>
-        /// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
-        /// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
-        /// control for layout reasons.
-        /// </summary>
-        static internal ConnectionControl _connectionControl;
-
+		
         public void updateAdvanced(object sender, EventArgs e)
         {
             if (Advanced == false)
@@ -421,9 +376,7 @@ namespace MissionPlanner
                 MenuSimulation.Visible = true;
             }
         }
-
-        public static Thread report;
-
+		
         public MainV2()
         {
             MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
@@ -1862,12 +1815,7 @@ namespace MissionPlanner
                 }
             }
         }
-
-        /// <summary>
-        /// needs to be true by default so that exits properly if no joystick used.
-        /// </summary>
-        volatile private bool joysendThreadExited = true;
-
+		
         /// <summary>
         /// thread used to send joystick packets to the MAV
         /// </summary>
@@ -2026,9 +1974,7 @@ namespace MissionPlanner
                 connectButtonUpdate = DateTime.Now;
             }
         }
-
-        ManualResetEvent PluginThreadrunner = new ManualResetEvent(false);
-
+		
         private void PluginThread()
         {
             Hashtable nextrun = new Hashtable();
@@ -2856,8 +2802,7 @@ namespace MissionPlanner
         {
             //MyView.ShowScreen("Help");
         }
-
-
+		
         /// <summary>
         /// keyboard shortcuts override
         /// </summary>
@@ -3019,8 +2964,7 @@ namespace MissionPlanner
                 }
             }
         }
-
-
+		
         public static string getConfig(string paramname)
         {
             if (config[paramname] != null)
@@ -3225,7 +3169,6 @@ namespace MissionPlanner
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 255)] internal Byte[] dbcc_name;
         }
 
-
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -3339,8 +3282,7 @@ namespace MissionPlanner
         const Int32 DIGCF_DEVICEINTERFACE = 0X10;
         const Int32 WM_DEVICECHANGE = 0X219;
         public static Guid GUID_DEVINTERFACE_USB_DEVICE = new Guid("A5DCBF10-6530-11D2-901F-00C04FB951ED");
-
-
+		
         public enum WM_DEVICECHANGE_enum
         {
             DBT_CONFIGCHANGECANCELED = 0x19,
