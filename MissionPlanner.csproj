@@ -465,6 +465,12 @@
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
+    <Compile Include="GCSViews\InputFlightPlanning.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\InputFlightPlanning.Designer.cs">
+      <DependentUpon>InputFlightPlanning.cs</DependentUpon>
+    </Compile>
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
@@ -1190,6 +1196,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\InitialSetup.zh-TW.resx">
       <DependentUpon>InitialSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\InputFlightPlanning.resx">
+      <DependentUpon>InputFlightPlanning.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\PreFlightCheck.resx">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>

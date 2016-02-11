@@ -251,9 +251,6 @@ namespace MissionPlanner
             
             CMB_startfrom.Text = griddata.startfrom;
 
-            CHK_toandland.Checked = griddata.autotakeoff;
-            CHK_toandland_RTL.Checked = griddata.autotakeoff_RTL;
-
             CHK_internals.Checked = griddata.internals;
             CHK_footprints.Checked = griddata.footprints;
             CHK_advanced.Checked = griddata.advanced;
@@ -766,11 +763,13 @@ namespace MissionPlanner
             else
             {
                 // Meters
-                lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
+                Tiles.Area =  ((double)(calcpolygonarea(list) / 1000000)).ToString();      //km^2
+                //lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
                 lbl_distance.Text = routetotal.ToString("0.##"); // +" km";
                 //lbl_spacing.Text = NUM_spacing.Value.ToString("#") + " m";
                 lbl_grndres.Text = TXT_cmpixel.Text;
                 lbl_distbetweenlines.Text = NUM_Distance.Value.ToString("0.##") + " m";
+                Tiles.DistanceBeteweenLines = NUM_Distance.Value.ToString("0.##");
                 lbl_footprint.Text = TXT_fovH.Text + " x " + TXT_fovV.Text + " m";
                 lbl_turnrad.Text = (turnrad * 2).ToString("0") + " m";
             }
@@ -800,6 +799,7 @@ namespace MissionPlanner
             Tiles.ImagesCount = images;
 
             lbl_strips.Text = ((int)(strips / 2)).ToString();
+            Tiles.NumberOfStripes = lbl_strips.Text;
             double seconds = ((routetotal * 1000.0) / ((flyspeedms) * 0.8));
             // reduce flying speed by 20 %
             double secs = seconds % 60;
