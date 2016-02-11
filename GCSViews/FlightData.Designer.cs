@@ -1811,27 +1811,31 @@ namespace MissionPlanner.GCSViews
             this.TRK_zoom.Maximum = 24F;
             this.TRK_zoom.Minimum = 1F;
             this.TRK_zoom.Name = "TRK_zoom";
-            this.TRK_zoom.SmallChange = 1F;
+            this.TRK_zoom.SmallChange = 0.001F;
             this.TRK_zoom.TickFrequency = 1F;
-            this.TRK_zoom.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.TRK_zoom.Value = 1F;
+            this.TRK_zoom.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.TRK_zoom.Value = 2F;
             this.TRK_zoom.Scroll += new System.EventHandler(this.TRK_zoom_Scroll);
-            // 
-            // panel1
-            // 
-            //this.panel1.Controls.Add(this.coords1);
-            //this.panel1.Controls.Add(this.Zoomlevel);
-            //this.panel1.Controls.Add(this.label1);
-            //this.panel1.Controls.Add(this.CHK_autopan);
-            //this.panel1.Controls.Add(this.CB_tuning);
-            //resources.ApplyResources(this.panel1, "panel1");
-            //this.panel1.Name = "panel1";
-            //this.panel1.Visible = false;
-            //this.panel1.Height = 0;
-            // 
-            // coords1
-            // 
-            this.coords1.Alt = 0D;
+			this.TRK_zoom.Width = 45;
+			this.TRK_zoom.Height = 319;
+			this.TRK_zoom.Margin = new Padding(3, 3, 3, 3);
+
+			// 
+			// panel1
+			// 
+			//this.panel1.Controls.Add(this.coords1);
+			//this.panel1.Controls.Add(this.Zoomlevel);
+			//this.panel1.Controls.Add(this.label1);
+			//this.panel1.Controls.Add(this.CHK_autopan);
+			//this.panel1.Controls.Add(this.CB_tuning);
+			//resources.ApplyResources(this.panel1, "panel1");
+			//this.panel1.Name = "panel1";
+			//this.panel1.Visible = false;
+			//this.panel1.Height = 0;
+			// 
+			// coords1
+			// 
+			this.coords1.Alt = 0D;
             this.coords1.AltUnit = "m";
             this.coords1.DataBindings.Add(new System.Windows.Forms.Binding("Alt", this.bindingSource1, "alt", true));
             this.coords1.DataBindings.Add(new System.Windows.Forms.Binding("Lat", this.bindingSource1, "lat", true));

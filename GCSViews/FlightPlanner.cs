@@ -529,8 +529,6 @@ namespace MissionPlanner.GCSViews
             center = new GMarkerGoogle(MainMap.Position, GMarkerGoogleType.none);
             top.Markers.Add(center);
 
-            MainMap.Zoom = 3;
-
             CMB_altmode.DisplayMember = "Value";
             CMB_altmode.ValueMember = "Key";
             CMB_altmode.DataSource = EnumTranslator.EnumToList<altmode>();
@@ -728,7 +726,7 @@ namespace MissionPlanner.GCSViews
             if (MainV2.config["WMSserver"] != null)
                 WMSProvider.CustomWMSURL = MainV2.config["WMSserver"].ToString();
 
-            trackBar1.Value = (int) MainMap.Zoom;
+			trackBar1.Value = (float)MainMap.Zoom;
 
             // check for net and set offline if needed
             try
@@ -3412,7 +3410,8 @@ namespace MissionPlanner.GCSViews
             {
                 try
                 {
-                    trackBar1.Value = (int) (MainMap.Zoom);
+					trackBar1.Value = (float)MainMap.Zoom;
+					//trackBar1.Value = (int) (MainMap.Zoom);
                 }
                 catch
                 {
@@ -3518,7 +3517,7 @@ namespace MissionPlanner.GCSViews
             {
                 MainMap.ZoomAndCenterMarkers(null);
             }
-            trackBar1.Value = (int) MainMap.Zoom;
+            trackBar1.Value = (float) MainMap.Zoom;
         }
 
         // ensure focus on map, trackbar can have it too
@@ -4081,7 +4080,6 @@ namespace MissionPlanner.GCSViews
             MainMap.Size = new Size(panelMap.Size.Width - 50, panelMap.Size.Height);
             trackBar1.Location = new Point(panelMap.Size.Width - 50, trackBar1.Location.Y);
             trackBar1.Size = new Size(trackBar1.Size.Width, panelMap.Size.Height - trackBar1.Location.Y);
-            label11.Location = new Point(panelMap.Size.Width - 50, label11.Location.Y);
         }
 
         DateTime mapupdate = DateTime.MinValue;

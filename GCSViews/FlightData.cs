@@ -284,9 +284,7 @@ namespace MissionPlanner.GCSViews
                                          "gmapcache" + Path.DirectorySeparatorChar;
             gMapControl1.MinZoom = 0;
             gMapControl1.MaxZoom = 24;
-            gMapControl1.Zoom = 3;
-
-            gMapControl1.OnMapZoomChanged += new MapZoomChanged(gMapControl1_OnMapZoomChanged);
+            gMapControl1.Zoom = 2;
 
             gMapControl1.MouseWheel += gMapControl1_MouseWheel;
 
@@ -360,6 +358,13 @@ namespace MissionPlanner.GCSViews
 
 		private void GMapControl1_OnMapZoomChanged()
 		{
+			try
+			{
+				// Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+				TRK_zoom.Value = (float)gMapControl1.Zoom;
+				Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
+			}
+			catch { }
 			if (Visible)
 			{
 				MainV2.onMapZoomChanged(gMapControl1.Id, gMapControl1.Zoom);
@@ -769,18 +774,6 @@ namespace MissionPlanner.GCSViews
             e.DrawFocusRectangle();
         }
 
-        void gMapControl1_OnMapZoomChanged()
-        {
-            try
-            {
-                // Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
-                TRK_zoom.Value = (float) gMapControl1.Zoom;
-                Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
-            }
-            catch { }
-        }
-
-
         void gMapControl1_ZoomTransparentLabel(object sender, MouseEventArgs e)
         {
             try
@@ -808,7 +801,7 @@ namespace MissionPlanner.GCSViews
 
             NoFly.NoFly.NoFlyEvent += NoFly_NoFlyEvent;
 
-            TRK_zoom.Minimum = gMapControl1.MapProvider.MinZoom;
+            //TRK_zoom.Minimum = gMapControl1.MapProvider.MinZoom;
             TRK_zoom.Maximum = 24;
             TRK_zoom.Value = (float) gMapControl1.Zoom;
 
@@ -3550,14 +3543,15 @@ namespace MissionPlanner.GCSViews
         {
             try
             {
-                if (gMapControl1.MaxZoom + 1 == (double) TRK_zoom.Value)
-                {
-                    gMapControl1.Zoom = (double)TRK_zoom.Value - .1;
-                }
-                else
-                {
-                    gMapControl1.Zoom = (double)TRK_zoom.Value;
-                }
+				gMapControl1.Zoom = (float)TRK_zoom.Value;
+				//if (gMapControl1.MaxZoom + 1 == (double) TRK_zoom.Value)
+				//{
+				//	gMapControl1.Zoom = (double)TRK_zoom.Value - .1;
+				//}
+				//else
+				//{
+				//	gMapControl1.Zoom = (double)TRK_zoom.Value;
+				//}
             }
             catch
             {
