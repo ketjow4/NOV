@@ -540,36 +540,41 @@ namespace MissionPlanner.GCSViews
         private static void AngelSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning();
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGEL",false, AngleVal.ToString(), 0, 360);
             inputWindow.ShowDialog();
-
-            ChangeAngle(60);
-            //throw new NotImplementedException();
+            ChangeAngle(inputWindow.Result);
         }
 
         private static void AltitudeSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException();
-
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ALTITUDE", false, AltitudeVal.ToString(), altMin, altMax);
+            inputWindow.ShowDialog();
+            ChangeAlt(inputWindow.Result);
         }
 
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException();
+            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false,  FlyingSpeed.ToString(), fsMin, fsMax);
+            inputWindow.ShowDialog();
+            ChangeSpeed(inputWindow.Result);
         }
 
         private static void SidelapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException();
+            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 100);
+            inputWindow.ShowDialog();
+            ChangeSideLap(inputWindow.Result);
         }
 
         private static void OverlapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            throw new NotImplementedException();
+            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 100);
+            inputWindow.ShowDialog();
+            ChangeOverLap(inputWindow.Result);
         }
         #endregion
 
