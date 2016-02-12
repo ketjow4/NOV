@@ -36,6 +36,7 @@ namespace MissionPlanner.GCSViews
             MinValue = min;
             MinMaxLabel.Text = "MIN " + MinValue.ToString() + " - MAX " + MaxValue.ToString();
             InfoLabel.Text = infoLabelText;
+            ValidateInput();
         }
 
         private void OkButton_Click(object sender, EventArgs e)

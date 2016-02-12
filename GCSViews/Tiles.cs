@@ -11,18 +11,30 @@ using MissionPlanner.GCSViews.Modification; //classes for tiles
 
 namespace MissionPlanner.GCSViews
 {
+    //ugly copy-paste from GridUI
+    public enum StartPosition
+    {
+        HOME = 0,
+        BOTLEFT = 1,
+        TOPLEFT = 2,
+        BOTRIGHT = 3,
+        TOPRIGHT = 4
+    }
+
+
     public class Tiles
     {
         public static bool armed = false;
         public static bool connected = false;
         public static bool pathAccepted = true;
         public static string camName = "GEOSCANNER";
-
+        public static string startFrom = "HOME";
+        public static StartPosition begin = 0;
 
         public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
-        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } } // duup so ugly!
+        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); }  set { altInfo.Value = value.ToString(); } } // duup so ugly!
         public static int FlyingSpeed { get { return Convert.ToInt32(flyingSpeed.Value); } }
         public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } }
         public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
@@ -58,6 +70,7 @@ namespace MissionPlanner.GCSViews
         private static TileData area = null;
         private static TileData distanceBetweenLines = null;
         private static TileData  numberofStripes = null;
+        private static TileData startFromBut = null;
 
         private static TileData windSpeed = null;
 
@@ -72,6 +85,7 @@ namespace MissionPlanner.GCSViews
         private static string polygonmodestring = "POLYGON\nMODE";
 
         private static List<TileButton> cameras_buttons;
+        private static List<TileButton> startFromButtons;
 
         public static void ChangeAlt(int v)
         {
@@ -290,7 +304,7 @@ namespace MissionPlanner.GCSViews
             //-------------------------------------------------------FLIGHT PLANNER----------------------------------------------//
             cameras_buttons = new List<TileButton>();
 
-            sideLap = new TileData("SIDELAP", 1, 7, "%", SidelapSettingEvent);
+            sideLap = new TileData("SIDELAP", 0, 7, "%", SidelapSettingEvent);
             overLap = new TileData("OVERLAP", 0, 8, "%", OverlapSettingEvent);
             flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", FlyingSettingEvent);
             flyingSpeed.Value = "3";
@@ -304,23 +318,33 @@ namespace MissionPlanner.GCSViews
                 cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, CameraButtonListEvent));
                 i++;
             }
-
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
             obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
-            obsHeadBtn.Value = "GEOSCANNER";
+            obsHeadBtn.Value = camName;
 
+
+            startFromButtons = new List<TileButton>();
+            var names = Enum.GetNames(typeof(StartPosition));
+            i = 0;
+            foreach(var name in names)
+            {
+                startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7,StartFromButtonListEvent));
+                i++;
+            }
+            startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
+            startFromBut.ValueLabel.Width = 120;
+            startFromBut.Value = startFrom;
+            
             accept = new TileButton("ACCEPT\nPATH", 2, 1, AcceptPathEvent);
             Images = new TileData("IMAGES NUBMER", 12.4, 7, "");
             Images.Value = "0";
 
-
-
             var hideList = new TileInfo[] { accept, sideLap, overLap };
-            var list = (TileInfo[])cameras_buttons.ToArray();
-
+            
             List<TileInfo> hidelist2 = new List<TileInfo>();
             hidelist2.AddRange(hideList);
-            hidelist2.AddRange(list);
+            hidelist2.AddRange(cameras_buttons.ToArray());
+            hidelist2.AddRange(startFromButtons.ToArray());
             obsHeadBtn.ClickMethod(null, null);
 
             // todo copy paste code ;/
@@ -329,7 +353,7 @@ namespace MissionPlanner.GCSViews
                 obsHeadBtn,
                 accept,
                 flyingSpeed,
-                sideLap,overLap,Images,
+                sideLap,overLap,Images,startFromBut,
 
                 new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
                 area = new TileData("AREA",12.4,8,"km\u00B2"),             
@@ -346,7 +370,6 @@ namespace MissionPlanner.GCSViews
                 new TileButton("FOOTPRINT",0,4),        //TODO implement event
                 new TileButton("CAMERA FACING FORWARD",0,5), //TODO implement event
                 new TileData("SPLIT INTO SEGMENTS",0,6), //TODO implement event
-                new TileData("START FROM",2,4), //TODO implement event
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
@@ -359,6 +382,7 @@ namespace MissionPlanner.GCSViews
                 distanceTile = new TileData("Distance",12.4,6,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
+            tilesFlightPlanning.AddRange(startFromButtons);
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
 
@@ -374,7 +398,7 @@ namespace MissionPlanner.GCSViews
 
             ChangeSideLap(Convert.ToInt32(sideValue));
             ChangeOverLap(Convert.ToInt32(overValue));
-
+            AltitudeVal = altMin;
 
             foreach (var tile in tilesArray)
             {
@@ -440,10 +464,29 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.landToolStripMenuItem_Click(null, null);
         }
 
+
+        private static void StartFromButtonListEvent(object sender, EventArgs e)
+        {
+            cameras_buttons.ForEach(cam => cam.Visible = false);
+            startFromButtons.ForEach(cam => cam.Visible = false);
+            startFrom = (sender as Label).Text;
+            if (!pathAccepted)
+                calcGrid(null, null);
+            startFromBut.Value = startFrom;
+            StartPosition temp = (StartPosition)Enum.Parse(typeof(StartPosition), startFrom);
+            begin = temp;
+        }
+
+        private static void StartFromHeadEvent(object sender, EventArgs e)
+        {
+            var x = !startFromButtons.ElementAt(0).Visible;
+            startFromButtons.ForEach(but => but.Visible = x);
+        }
+
         private static void CameraButtonListEvent(object sender, EventArgs e)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            /*cam1Head.Visible = cam2Head.Visible = defaultHead.Visible = false;*/
+            startFromButtons.ForEach(cam => cam.Visible = false);
             camName = (sender as Label).Text;
             if (!pathAccepted)
                 calcGrid(null, null);
@@ -513,7 +556,6 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = true;
             sideLap.Visible = false;
             overLap.Visible = false;
-            Images.Visible = false;
         }
 
         private static void CompassCalibrationEvent(object sender, EventArgs args)
