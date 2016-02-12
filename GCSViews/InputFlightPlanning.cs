@@ -11,12 +11,20 @@ namespace MissionPlanner.GCSViews
 {
     public partial class InputFlightPlanning : Form
     {
+        public Size WindowSize { get; set; }
+
+
         public InputFlightPlanning()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void CancelButton_Click(object sender, EventArgs e)
         {
             this.Close();
         }

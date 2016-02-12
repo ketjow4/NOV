@@ -332,7 +332,7 @@ namespace MissionPlanner.GCSViews
                 sideLap,overLap,Images,
 
                 new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
-                area = new TileData("AREA",12.4,8,"km^2"),             
+                area = new TileData("AREA",12.4,8,"km\u00B2"),             
                 distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",11.4,7,"m"), 
                 numberofStripes = new TileData("NUMBER OF STRIPS",11.4,8,""),   
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
