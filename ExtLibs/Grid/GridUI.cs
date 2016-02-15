@@ -132,41 +132,26 @@ namespace MissionPlanner
             Tiles.calcGrid = this.domainUpDown1_ValueChanged;
 
 
-            // Map Events
-            //map.OnMapZoomChanged += new MapZoomChanged(map_OnMapZoomChanged);
-            //map.OnMarkerEnter += new MarkerEnter(map_OnMarkerEnter);
-            //map.OnMarkerLeave += new MarkerLeave(map_OnMarkerLeave);
-            //map.MouseUp += new MouseEventHandler(map_MouseUp);
-
-            //map.OnRouteEnter += new RouteEnter(map_OnRouteEnter);
-            //map.OnRouteLeave += new RouteLeave(map_OnRouteLeave);
-
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
             if (plugin.Host.config["distunits"] != null)
                 DistUnits = plugin.Host.config["distunits"].ToString();
 
             CMB_startfrom.DataSource = Enum.GetNames(typeof(Grid.StartPosition));
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
-            
-            // set and angle that is good
-            NUM_angle.Value = (decimal)((getAngleOfLongestSide(list) + 360) % 360);
-            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
 
+            // set and angle that is good
             NUM_angle.Value = Tiles.AngleVal;
+            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString(); 
         }
 
         private void GridUI_Load(object sender, EventArgs e)
         {
-            //xmlcamera(false, "camerasBuiltin.xml");
-
             xmlcamera(false);
 
             // setup state before settings load
             CHK_advanced_CheckedChanged(null, null);
 
             loadsettings();
-
-            //CHK_advanced_CheckedChanged(null, null);
 
             TRK_zoom.Value = (float)map.Zoom;
 
@@ -606,10 +591,9 @@ namespace MissionPlanner
 
             // new grid system test
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
-            grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
-            //CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
-            //grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
-
+            grid = Grid.CreateGrid(list, (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, Tiles.AngleVal, (double)NUM_overshoot.Value, 
+                                   (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
+         
             List<PointLatLng> list2 = new List<PointLatLng>();
 
             grid.ForEach(x => { list2.Add(x); });

@@ -470,11 +470,11 @@ namespace MissionPlanner.GCSViews
             cameras_buttons.ForEach(cam => cam.Visible = false);
             startFromButtons.ForEach(cam => cam.Visible = false);
             startFrom = (sender as Label).Text;
-            if (!pathAccepted)
-                calcGrid(null, null);
             startFromBut.Value = startFrom;
             StartPosition temp = (StartPosition)Enum.Parse(typeof(StartPosition), startFrom);
             begin = temp;
+            if (!pathAccepted)
+                calcGrid(null, null);
         }
 
         private static void StartFromHeadEvent(object sender, EventArgs e)
