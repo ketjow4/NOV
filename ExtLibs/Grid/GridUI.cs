@@ -1481,6 +1481,7 @@ namespace MissionPlanner
                 {
                     int wpstart = wpsplit * splitno;
 
+                    CHK_toandland.Checked = false;
                     if (CHK_toandland.Checked)
                     {
                         if (plugin.Host.cs.firmware == MainV2.Firmwares.ArduCopter2)
@@ -1579,7 +1580,8 @@ namespace MissionPlanner
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0, speed, 0, 0, 0, 0, 0);
                         }
                     }
-
+                    CHK_toandland.Checked = false;
+                    CHK_toandland_RTL.Checked = false;
                     if (CHK_toandland.Checked)
                     {
                         if (CHK_toandland_RTL.Checked)

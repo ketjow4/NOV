@@ -370,8 +370,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
                 new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),        
-                new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent), //TODO implement event
-                new TileData("SPLIT INTO SEGMENTS",0,6), //TODO implement event
+                new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent),
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
