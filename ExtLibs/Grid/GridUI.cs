@@ -643,7 +643,7 @@ namespace MissionPlanner
 
                             double startangle = 0;
 
-                            if (!CHK_camdirection.Checked)
+                            if (!Tiles.cameraFacingForward)
                             {
                                 startangle = 90;
                             }
@@ -662,7 +662,7 @@ namespace MissionPlanner
                             GMapPolygon poly = new GMapPolygon(footprint, a.ToString());
                             poly.Stroke = new Pen(Color.FromArgb(250 - ((a * 5) % 240), 250 - ((a * 3) % 240), 250 - ((a * 9) % 240)), 1);
                             poly.Fill = new SolidBrush(Color.FromArgb(40, Color.Purple));
-                            if (CHK_footprints.Checked)
+                            if (Tiles.showFootprint)
                                 routesOverlay.Polygons.Add(poly);
                         }
                     }
@@ -971,7 +971,7 @@ namespace MissionPlanner
                 // Imperial
                 inchpixel = (((viewheight / imageheight) * 100) * 0.393701).ToString("0.00 inches");
 
-                if (CHK_camdirection.Checked)
+                if (Tiles.cameraFacingForward)
                 {
                     NUM_spacing.Value = (decimal)((1 - (overlap / 100.0f)) * viewheight);
                     NUM_Distance.Value = (decimal)((1 - (sidelap / 100.0f)) * viewwidth);

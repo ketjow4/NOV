@@ -30,6 +30,8 @@ namespace MissionPlanner.GCSViews
         public static string camName = "GEOSCANNER";
         public static string startFrom = "HOME";
         public static StartPosition begin = 0;
+        public static bool showFootprint = false;
+        public static bool cameraFacingForward = false;
 
         public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
@@ -367,8 +369,8 @@ namespace MissionPlanner.GCSViews
                 new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
-                new TileButton("FOOTPRINT",0,4),        //TODO implement event
-                new TileButton("CAMERA FACING FORWARD",0,5), //TODO implement event
+                new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),        
+                new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent), //TODO implement event
                 new TileData("SPLIT INTO SEGMENTS",0,6), //TODO implement event
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
@@ -464,6 +466,39 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.landToolStripMenuItem_Click(null, null);
         }
 
+
+        private static void FootprintEvent(object sender, EventArgs e)
+        {
+            if(showFootprint)
+            {
+                (sender as Label).Text = "\u2610 FOOTPRINT";       //unchecked
+                showFootprint = !showFootprint;
+            }
+            else
+            {
+                (sender as Label).Text = "\u2612 FOOTPRINT";       //checked
+                showFootprint = !showFootprint;
+            }
+            if (calcGrid != null)
+                calcGrid(null, null);
+        }
+
+        private static void CameraFacingForwardEvent(object sender, EventArgs e)
+        {
+            if (cameraFacingForward)
+            {
+                (sender as Label).Text = "\u2610   CAM\nFORWARD";       //unchecked
+                cameraFacingForward = !cameraFacingForward;
+            }
+            else
+            {
+                (sender as Label).Text = "\u2612   CAM\nFORWARD";       //checked
+                cameraFacingForward = !cameraFacingForward;
+            }
+            if (calcGrid != null)
+                calcGrid(null, null);
+            
+        }
 
         private static void StartFromButtonListEvent(object sender, EventArgs e)
         {
