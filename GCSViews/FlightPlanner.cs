@@ -5801,7 +5801,7 @@ namespace MissionPlanner.GCSViews
 
             if (TXT_homelat.Text == "" || TXT_homelng.Text == "")       //if there is no home set land at current map  position
             {
-            setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, 1);
+                setfromMap(MouseDownEnd.Lat, MouseDownEnd.Lng, 1);
             }
             else
             {
@@ -5888,10 +5888,13 @@ namespace MissionPlanner.GCSViews
         public void takeoffToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // altitude
-            string alt = "30";
+            string alt = Tiles.AltitudeVal.ToString();
 
-            if (System.Windows.Forms.DialogResult.Cancel == InputBox2.Show("Altitude", "Please enter your takeoff altitude", ref alt))
-                return;
+            InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, new Size(460,380));
+            altitudeInput.ShowDialog();
+            alt = altitudeInput.ResultString;
+
+            
 
             int alti = -1;
 
@@ -5900,6 +5903,7 @@ namespace MissionPlanner.GCSViews
                 MessageBox.Show("Bad Alt");
                 return;
             }
+            Tiles.AltitudeVal = alti;
             //if (alti < 30) alti = 30;
 
             // take off pitch
@@ -5910,8 +5914,11 @@ namespace MissionPlanner.GCSViews
             {
                 string top = "15";
 
-                //if (System.Windows.Forms.DialogResult.Cancel == InputBox.Show("Takeoff Pitch", "Please enter your takeoff pitch", ref top))
-                //    return;
+                //TODO Spytać Krzyśka o to jak to ma działać
+
+                //InputFlightPlanning pitchInput = new InputFlightPlanning("Please enter your takeoff pitch", false, alt, 15, 90, new Size(460, 380));
+                //altitudeInput.ShowDialog();
+                //alt = altitudeInput.ResultString;
 
                 if (!int.TryParse(top, out topi))
                 {
