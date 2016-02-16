@@ -94,7 +94,7 @@
             // MinMaxLabel
             // 
             this.MinMaxLabel.AutoSize = true;
-            this.MinMaxLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.MinMaxLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.tableLayoutPanel1.SetColumnSpan(this.MinMaxLabel, 3);
             this.MinMaxLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MinMaxLabel.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -109,7 +109,7 @@
             // 
             // NineButton
             // 
-            this.NineButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.NineButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.NineButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.NineButton.FlatAppearance.BorderSize = 0;
             this.NineButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -126,7 +126,7 @@
             // 
             // EightButton
             // 
-            this.EightButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.EightButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.EightButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.EightButton.FlatAppearance.BorderSize = 0;
             this.EightButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -143,7 +143,7 @@
             // 
             // SevenButton
             // 
-            this.SevenButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.SevenButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.SevenButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SevenButton.FlatAppearance.BorderSize = 0;
             this.SevenButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -160,7 +160,7 @@
             // 
             // SixButton
             // 
-            this.SixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.SixButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.SixButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SixButton.FlatAppearance.BorderSize = 0;
             this.SixButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -177,7 +177,7 @@
             // 
             // FiveButton
             // 
-            this.FiveButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.FiveButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.FiveButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FiveButton.FlatAppearance.BorderSize = 0;
             this.FiveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -194,7 +194,7 @@
             // 
             // FourButton
             // 
-            this.FourButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.FourButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.FourButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FourButton.FlatAppearance.BorderSize = 0;
             this.FourButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -211,7 +211,7 @@
             // 
             // ThreeButton
             // 
-            this.ThreeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.ThreeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.ThreeButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ThreeButton.FlatAppearance.BorderSize = 0;
             this.ThreeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -228,7 +228,7 @@
             // 
             // TwoButton
             // 
-            this.TwoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.TwoButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.TwoButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TwoButton.FlatAppearance.BorderSize = 0;
             this.TwoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -245,7 +245,7 @@
             // 
             // OneButton
             // 
-            this.OneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.OneButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.OneButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OneButton.FlatAppearance.BorderSize = 0;
             this.OneButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -262,7 +262,7 @@
             // 
             // BackspaceButton
             // 
-            this.BackspaceButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.BackspaceButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.BackspaceButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BackspaceButton.FlatAppearance.BorderSize = 0;
             this.BackspaceButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -279,7 +279,7 @@
             // 
             // DotButton
             // 
-            this.DotButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.DotButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.DotButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DotButton.FlatAppearance.BorderSize = 0;
             this.DotButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -296,7 +296,7 @@
             // 
             // ZeroButton
             // 
-            this.ZeroButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.ZeroButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.ZeroButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ZeroButton.FlatAppearance.BorderSize = 0;
             this.ZeroButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -324,13 +324,13 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(394, 42);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // CancelButton
             // 
-            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.CancelButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.CancelButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CancelButton.FlatAppearance.BorderSize = 0;
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -347,7 +347,7 @@
             // 
             // OkButton
             // 
-            this.OkButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.OkButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.OkButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OkButton.FlatAppearance.BorderSize = 0;
             this.OkButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -380,11 +380,11 @@
             // InfoLabel
             // 
             this.InfoLabel.AutoSize = true;
-            this.InfoLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
+            this.InfoLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
             this.tableLayoutPanel1.SetColumnSpan(this.InfoLabel, 3);
             this.InfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.InfoLabel.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.InfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(171)))), ((int)(((byte)(226)))));
+            this.InfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
             this.InfoLabel.Location = new System.Drawing.Point(2, 2);
             this.InfoLabel.Margin = new System.Windows.Forms.Padding(2);
             this.InfoLabel.Name = "InfoLabel";
