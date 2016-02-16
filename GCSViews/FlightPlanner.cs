@@ -3928,6 +3928,11 @@ namespace MissionPlanner.GCSViews
             writeKML();
         }
 
+		public static int missionWaypointCount()
+		{
+			return instance.Commands.RowCount;
+		}
+
         private void loiterForeverToolStripMenuItem_Click(object sender, EventArgs e)
         {
             selectedrow = Commands.Rows.Add();

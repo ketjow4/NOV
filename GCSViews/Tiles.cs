@@ -483,8 +483,14 @@ namespace MissionPlanner.GCSViews
         private static void ClearEvent(object sender, EventArgs args)
         {
             GroundRes = 0.0;
-            FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
-            FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
+			if(FlightPlanner.missionWaypointCount() > 0)
+			{
+				FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
+			}
+			else
+			{
+				FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
+			}
         }
 
         private static void PolygonModeEvent(object sender, EventArgs args)
