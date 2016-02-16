@@ -63,6 +63,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton SaveWPFile = null;
         private static TileButton LoadWPFile = null;
         private static TileButton LoadWPPlatform = null;
+        private static TileButton panicButton = null;
 
         private static TileData sideLap = null;
         private static TileData overLap = null;
@@ -292,6 +293,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
                 new TileButton("EXIT",2,0, ExitEvent),
                 mode = new TileData("MODE",0,6,""),
+                panicButton = new TileButton("BRAKE",12.3,4, PanicButtonEvent),
                 windSpeed,
             });
             mode.ValueLabel.Width = 120;
@@ -408,8 +410,8 @@ namespace MissionPlanner.GCSViews
                 {
                     Size = new Size(130, 55),
                     Location = new Point((int)(tile.Column * 132), (int)(tile.Row * 57)),
-                    BackColor = Color.FromArgb(220, 0, 0, 0),
-                    Parent = p
+                    Parent = p,
+                    Name = tile.Label.Text,
                 };
 
                 panel.Controls.Add(tile.Label);
@@ -418,12 +420,10 @@ namespace MissionPlanner.GCSViews
                 panel.BringToFront();
                 if (hidelist2.Contains(tile) && tile is TileButton)
                     (tile as TileButton).Visible = false;
-
-                sideLap.Visible = false;
-                overLap.Visible = false;
             }
+            sideLap.Visible = false;
+            overLap.Visible = false;
         }
-
 
 
         #region EventsFlightPlanner
@@ -656,6 +656,18 @@ namespace MissionPlanner.GCSViews
 
 
         #region EventsFlightData
+
+        private static void PanicButtonEvent(object sender, EventArgs args)
+        {
+            try
+            {
+                MainV2.comPort.setMode("BRAKE");
+            }
+            catch
+            {
+                CustomMessageBox.Show("The Command failed to execute", "Error");
+            }
+        }
 
         private static void ExitEvent(object sender, EventArgs args)
         {
