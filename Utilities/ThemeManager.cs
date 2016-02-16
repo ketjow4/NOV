@@ -473,6 +473,11 @@ mc:Ignorable=""d""
                 {
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
+
+                    if (ctl.Name == "BRAKE")        //Custom color for one tile
+                    {
+                        ctl.BackColor = Color.Red;
+                    }
                 }
                 else if (ctl.GetType() == typeof (GroupBox))
                 {

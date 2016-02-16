@@ -132,41 +132,26 @@ namespace MissionPlanner
             Tiles.calcGrid = this.domainUpDown1_ValueChanged;
 
 
-            // Map Events
-            //map.OnMapZoomChanged += new MapZoomChanged(map_OnMapZoomChanged);
-            //map.OnMarkerEnter += new MarkerEnter(map_OnMarkerEnter);
-            //map.OnMarkerLeave += new MarkerLeave(map_OnMarkerLeave);
-            //map.MouseUp += new MouseEventHandler(map_MouseUp);
-
-            //map.OnRouteEnter += new RouteEnter(map_OnRouteEnter);
-            //map.OnRouteLeave += new RouteLeave(map_OnRouteLeave);
-
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
             if (plugin.Host.config["distunits"] != null)
                 DistUnits = plugin.Host.config["distunits"].ToString();
 
             CMB_startfrom.DataSource = Enum.GetNames(typeof(Grid.StartPosition));
-            CMB_startfrom.SelectedIndex = 0;
+            CMB_startfrom.SelectedIndex = (int)Tiles.begin;
 
             // set and angle that is good
-            NUM_angle.Value = (decimal)((getAngleOfLongestSide(list) + 360) % 360);
-            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
-
             NUM_angle.Value = Tiles.AngleVal;
+            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString(); 
         }
 
         private void GridUI_Load(object sender, EventArgs e)
         {
-            //xmlcamera(false, "camerasBuiltin.xml");
-
             xmlcamera(false);
 
             // setup state before settings load
             CHK_advanced_CheckedChanged(null, null);
 
             loadsettings();
-
-            //CHK_advanced_CheckedChanged(null, null);
 
             TRK_zoom.Value = (float)map.Zoom;
 
@@ -605,10 +590,10 @@ namespace MissionPlanner
                 doCalc();
 
             // new grid system test
-            grid = Grid.CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
-            //CreateGrid(list, /*CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value)*/ (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, /*(double)NUM_angle.Value*/ Tiles.AngleVal, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
-            //grid = Grid.CreateGrid(list, CurrentState.fromDistDisplayUnit((double)NUM_altitude.Value), (double)NUM_Distance.Value, (double)NUM_spacing.Value, (double)NUM_angle.Value, (double)NUM_overshoot.Value, (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false);
-
+            CMB_startfrom.SelectedIndex = (int)Tiles.begin;
+            grid = Grid.CreateGrid(list, (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, Tiles.AngleVal, (double)NUM_overshoot.Value, 
+                                   (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
+         
             List<PointLatLng> list2 = new List<PointLatLng>();
 
             grid.ForEach(x => { list2.Add(x); });
@@ -658,7 +643,7 @@ namespace MissionPlanner
 
                             double startangle = 0;
 
-                            if (!CHK_camdirection.Checked)
+                            if (!Tiles.cameraFacingForward)
                             {
                                 startangle = 90;
                             }
@@ -677,7 +662,7 @@ namespace MissionPlanner
                             GMapPolygon poly = new GMapPolygon(footprint, a.ToString());
                             poly.Stroke = new Pen(Color.FromArgb(250 - ((a * 5) % 240), 250 - ((a * 3) % 240), 250 - ((a * 9) % 240)), 1);
                             poly.Fill = new SolidBrush(Color.FromArgb(40, Color.Purple));
-                            if (CHK_footprints.Checked)
+                            if (Tiles.showFootprint)
                                 routesOverlay.Polygons.Add(poly);
                         }
                     }
@@ -986,7 +971,7 @@ namespace MissionPlanner
                 // Imperial
                 inchpixel = (((viewheight / imageheight) * 100) * 0.393701).ToString("0.00 inches");
 
-                if (CHK_camdirection.Checked)
+                if (Tiles.cameraFacingForward)
                 {
                     NUM_spacing.Value = (decimal)((1 - (overlap / 100.0f)) * viewheight);
                     NUM_Distance.Value = (decimal)((1 - (sidelap / 100.0f)) * viewwidth);
@@ -1496,6 +1481,7 @@ namespace MissionPlanner
                 {
                     int wpstart = wpsplit * splitno;
 
+                    CHK_toandland.Checked = false;
                     if (CHK_toandland.Checked)
                     {
                         if (plugin.Host.cs.firmware == MainV2.Firmwares.ArduCopter2)
@@ -1594,7 +1580,8 @@ namespace MissionPlanner
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0, speed, 0, 0, 0, 0, 0);
                         }
                     }
-
+                    CHK_toandland.Checked = false;
+                    CHK_toandland_RTL.Checked = false;
                     if (CHK_toandland.Checked)
                     {
                         if (CHK_toandland_RTL.Checked)
