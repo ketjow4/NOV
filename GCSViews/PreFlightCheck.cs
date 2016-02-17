@@ -223,5 +223,17 @@ namespace MissionPlanner.GCSViews
                 MagCalib.DoGUIMagCalib();
             }
         }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void PreFlightCheck_Load(object sender, EventArgs e)
+        {
+            Location = new Point(Location.X, Location.Y + 50);
+        }
+
+        //Location = new Point(Location.X, Location.Y + 50);
     }
 }

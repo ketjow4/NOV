@@ -504,7 +504,7 @@ mc:Ignorable=""d""
                 else if (ctl.GetType() == typeof (MyButton))
                 {
                     Controls.MyButton but = (MyButton) ctl;
-                    but.BGGradTop = ButBG;
+                    but.BGGradTop = Color.FromArgb(12, 67, 90); //ButBG;
                     but.BGGradBot = Color.FromArgb(12, 67, 90);
                     try
                     {
