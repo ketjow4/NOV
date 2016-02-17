@@ -169,7 +169,7 @@ namespace MissionPlanner.GCSViews
         private void CanBeArmed(object sender, EventArgs e)
         {
             Boolean enabled = true;
-            foreach (var checkbox in this.tableLayoutPanel1.Controls)
+            foreach (var checkbox in this.CheckBoxTableLayout.Controls)
             {
                 if ((checkbox as CheckBox).Checked == false)
                 {
@@ -216,7 +216,7 @@ namespace MissionPlanner.GCSViews
             return enabled;
         }
 
-        private void myButton1_Click(object sender, EventArgs e)
+        private void CompassCalibrationButton_Click(object sender, EventArgs e)
         {
             if (CustomMessageBox.Show("Do you want to do compass calibration", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -233,7 +233,5 @@ namespace MissionPlanner.GCSViews
         {
             Location = new Point(Location.X, Location.Y + 50);
         }
-
-        //Location = new Point(Location.X, Location.Y + 50);
     }
 }
