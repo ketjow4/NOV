@@ -48,20 +48,20 @@ namespace MissionPlanner.GCSViews
 
                 if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
                 {
-                    Gps_fix.Invoke(new MethodInvoker(delegate{ Gps_fix.BackColor = Color.Green;}));
+                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFix.BackColor = Color.Green;}));
                 }
                 else
                 {
                     enabled = false;
-                    Gps_fix.Invoke(new MethodInvoker(delegate{ Gps_fix.BackColor = Color.Red;}));
+                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFix.BackColor = Color.Red;}));
                 }
                 if (FlightData.instance.hud1.lowvoltagealert)
                 {
                     enabled = false;
-                    batteryVoltage.Invoke(new MethodInvoker(delegate { batteryVoltage.BackColor = Color.Red;}));
+                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVol.BackColor = Color.Red;}));
                 }
                 else
-                    batteryVoltage.Invoke(new MethodInvoker(delegate { batteryVoltage.BackColor = Color.Green;}));
+                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVol.BackColor = Color.Green;}));
                 
                 warning_label.Invoke(new MethodInvoker(delegate { warning_label.Text = FlightData.instance.hud1.warning;
                                                               text   = warning_label.Text;}));
@@ -195,20 +195,20 @@ namespace MissionPlanner.GCSViews
             Boolean enabled = true;
             if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2.21)
             {
-                Gps_fix.BackColor = Color.Green;
+                GPSFix.BackColor = Color.Green;
             }
             else
             {
                 enabled = false;
-                Gps_fix.BackColor = Color.Red;
+                GPSFix.BackColor = Color.Red;
             }
             if (FlightData.instance.hud1.lowvoltagealert)
             {
                 enabled = false;
-                batteryVoltage.BackColor = Color.Red;
+                BatteryVol.BackColor = Color.Red;
             }
             else
-                batteryVoltage.BackColor = Color.Green;
+                BatteryVol.BackColor = Color.Green;
             warning_label.Text = FlightData.instance.hud1.warning;
 
             if (warning_label.Text != "")
