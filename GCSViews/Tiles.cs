@@ -622,7 +622,7 @@ namespace MissionPlanner.GCSViews
         private static void AngelSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGEL",false, AngleVal.ToString(), 0, 360);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE",false, AngleVal.ToString(), 0, 360);
             inputWindow.ShowDialog();
             ChangeAngle(inputWindow.Result);
         }

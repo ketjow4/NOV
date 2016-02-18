@@ -1541,7 +1541,7 @@ namespace MissionPlanner
                                         if (plla.Tag == "S")
                                         {
                                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST,
-                                                (float)NUM_spacing.Value,
+                                                (double)Math.Round( NUM_spacing.Value,3,MidpointRounding.ToEven) ,
                                                 0, 0, 0, 0, 0, 0);
                                         }
                                         else if (plla.Tag == "E")
@@ -1558,7 +1558,7 @@ namespace MissionPlanner
                             AddWP(plla.Lng, plla.Lat, plla.Alt);
                             if (rad_trigdist.Checked)
                             {
-                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (float)NUM_spacing.Value,
+                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (double)Math.Round(NUM_spacing.Value, 3, MidpointRounding.ToEven),
                                     0, 0, 0, 0, 0, 0);
                             }
                         }

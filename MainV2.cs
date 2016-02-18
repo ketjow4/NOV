@@ -577,10 +577,10 @@ namespace MissionPlanner
                         //ThemeManager.ButBG = Color.FromArgb(int.Parse(MainV2.config["theme_butbg"].ToString()));
                         //ThemeManager.ButBorder = Color.FromArgb(int.Parse(MainV2.config["theme_butbord"].ToString()));
 
-                        ThemeManager.BGColor = Color.FromArgb(0x26, 0x27, 0x28);
+                        ThemeManager.BGColor = Color.FromArgb(0x16, 0x17, 0x18);
                         ThemeManager.ControlBGColor = Color.FromArgb(0x43, 0x44, 0x45);
                         ThemeManager.TextColor = Color.White;
-                        ThemeManager.ButBG = Color.FromArgb(41, 171, 226); 
+                        ThemeManager.ButBG = Color.FromArgb(108, 206, 252); 
 
 
                     }
