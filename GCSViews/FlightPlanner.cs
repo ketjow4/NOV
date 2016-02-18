@@ -3218,9 +3218,10 @@ namespace MissionPlanner.GCSViews
                             callMeDrag(CurentRectMarker.InnerMarker.Tag.ToString(), currentMarker.Position.Lat,
                                 currentMarker.Position.Lng, -2);
                         }
-                        CurentRectMarker = null;
-                    }
-                }
+						//null is assigned in MainMap_OnMarkerLeave anyway!
+						//CurentRectMarker = null;
+					}
+				}
             }
 
             isMouseDraging = false;
