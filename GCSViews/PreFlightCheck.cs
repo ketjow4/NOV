@@ -33,6 +33,7 @@ namespace MissionPlanner.GCSViews
             thread.Start();
         }
 
+        //Need to refactor
         public void Do_AutoCheck()
         {
             try
@@ -48,20 +49,20 @@ namespace MissionPlanner.GCSViews
 
                 if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
                 {
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFix.BackColor = Color.Green;}));
+                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToGreen();  }));
                 }
                 else
                 {
                     enabled = false;
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFix.BackColor = Color.Red;}));
+                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToRed(); }));
                 }
                 if (FlightData.instance.hud1.lowvoltagealert)
                 {
                     enabled = false;
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVol.BackColor = Color.Red;}));
+                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToRed(); }));
                 }
                 else
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVol.BackColor = Color.Green;}));
+                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToGreen(); }));
                 
                 warning_label.Invoke(new MethodInvoker(delegate { warning_label.Text = FlightData.instance.hud1.warning;
                                                               text   = warning_label.Text;}));
@@ -195,20 +196,20 @@ namespace MissionPlanner.GCSViews
             Boolean enabled = true;
             if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2.21)
             {
-                GPSFix.BackColor = Color.Green;
+                GPSFixToGreen();
             }
             else
             {
                 enabled = false;
-                GPSFix.BackColor = Color.Red;
+                GPSFixToRed();
             }
             if (FlightData.instance.hud1.lowvoltagealert)
             {
                 enabled = false;
-                BatteryVol.BackColor = Color.Red;
+                BatteryVolToRed();
             }
             else
-                BatteryVol.BackColor = Color.Green;
+                BatteryVolToGreen();
             warning_label.Text = FlightData.instance.hud1.warning;
 
             if (warning_label.Text != "")
@@ -232,6 +233,37 @@ namespace MissionPlanner.GCSViews
         private void PreFlightCheck_Load(object sender, EventArgs e)
         {
             Location = new Point(Location.X, Location.Y + 50);
+
+            BatteryVolToRed();
+            GPSFixToRed();
+        }
+
+        private void GPSFixToRed()
+        {
+            GPSFix.BGGradBot = Color.Red;
+            GPSFix.BGGradTop = Color.Red;
+            GPSFix.Outline = Color.Red;
+        }
+
+        private void GPSFixToGreen()
+        {
+            GPSFix.BGGradBot = Color.Green;
+            GPSFix.BGGradTop = Color.Green;
+            GPSFix.Outline = Color.Green;
+        }
+
+        private void BatteryVolToRed()
+        {
+            BatteryVol.BGGradBot = Color.Red;
+            BatteryVol.BGGradTop = Color.Red;
+            BatteryVol.Outline = Color.Red;
+        }
+
+        private void BatteryVolToGreen()
+        {
+            BatteryVol.BGGradBot = Color.Green;
+            BatteryVol.BGGradTop = Color.Green;
+            BatteryVol.Outline = Color.Green;
         }
     }
 }
