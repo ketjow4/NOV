@@ -2779,13 +2779,18 @@ namespace MissionPlanner.GCSViews
 
         void MainMap_OnMarkerLeave(GMapMarker item)
         {
-            if (!isMouseDown)
+			if (!canInteractWithMarker(item))
+			{
+				return;
+			}
+			if (!isMouseDown)
             {
                 if (item is GMapMarkerRect)
                 {
                     CurentRectMarker = null;
                     GMapMarkerRect rc = item as GMapMarkerRect;
-                    rc.ResetColor();
+					
+					rc.ResetColor();
                     MainMap.Invalidate(false);
                 }
                 if (item is GMapMarkerRallyPt)
@@ -2800,13 +2805,47 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+		bool canInteractWithMarker(GMapMarker item)
+		{
+			GMapMarkerRect rect = item as GMapMarkerRect;
+			if (rect != null)
+			{
+				if (rect.InnerMarker.Overlay.Id == "objects" && PolygonGridMode)
+				{
+					return false;
+				}
+				if (rect.InnerMarker.Overlay.Id == "drawnpolygons" && !PolygonGridMode)
+				{
+					return false;
+				}
+			}
+			GMapMarker marker = item as GMapMarker;
+			if (marker != null)
+			{
+				if (marker.Overlay.Id == "objects" && PolygonGridMode)
+				{
+					return false;
+				}
+				if (marker.Overlay.Id == "drawnpolygons" && !PolygonGridMode)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
         void MainMap_OnMarkerEnter(GMapMarker item)
         {
+			if (!canInteractWithMarker(item))
+			{
+				return;
+			}
             if (!isMouseDown)
             {
                 if (item is GMapMarkerRect)
                 {
                     GMapMarkerRect rc = item as GMapMarkerRect;
+					
                     rc.Pen.Color = Color.Red;
                     MainMap.Invalidate(false);
 
@@ -2846,7 +2885,11 @@ namespace MissionPlanner.GCSViews
         // click on some marker
         void MainMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
         {
-            int answer;
+			if (!canInteractWithMarker(item))
+			{
+				return;
+			}
+			int answer;
             try // when dragging item can sometimes be null
             {
                 if (item.Tag == null)
