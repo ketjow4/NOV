@@ -136,6 +136,7 @@ namespace MissionPlanner
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
             if (plugin.Host.config["distunits"] != null)
                 DistUnits = plugin.Host.config["distunits"].ToString();
+			plugin.Host.FPDrawnPolygon.Points.Clear();
 
             CMB_startfrom.DataSource = Enum.GetNames(typeof(Grid.StartPosition));
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
@@ -149,6 +150,7 @@ namespace MissionPlanner
 		{
 			list.Clear();
 			plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
+			plugin.Host.FPDrawnPolygon.Points.Clear();
 			domainUpDown1_ValueChanged(null, null);
 		}
 
@@ -633,6 +635,7 @@ namespace MissionPlanner
                 {
                     images++;
 
+					if(false)
                     if (CHK_internals.Checked)
                     {
                         routesOverlay.Markers.Add(new GMarkerGoogle(item, GMarkerGoogleType.green) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver });

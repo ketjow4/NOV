@@ -3160,7 +3160,11 @@ namespace MissionPlanner.GCSViews
                     else
                     {
                         AddWPToMap(currentMarker.Position.Lat, currentMarker.Position.Lng, 0);
-                    }
+						if (polygonMarkerMovedEvent != null)
+						{
+							polygonMarkerMovedEvent(null, null);
+						}
+					}
                 }
                 else
                 {
@@ -3221,6 +3225,10 @@ namespace MissionPlanner.GCSViews
                         }
 						//null is assigned in MainMap_OnMarkerLeave anyway!
 						//CurentRectMarker = null;
+					}
+					if (polygonMarkerMovedEvent != null)
+					{
+						polygonMarkerMovedEvent(null, null);
 					}
 				}
             }
