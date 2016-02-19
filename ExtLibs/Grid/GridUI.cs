@@ -123,7 +123,8 @@ namespace MissionPlanner
 
             InitializeComponent();
 
-            map = (MissionPlanner.Controls.myGMAP)plugin.Host.FPGMapControl;
+			GCSViews.FlightPlanner.polygonMarkerMovedEvent += FlightPlanner_polygonMarkerMovedEvent;
+			map = (MissionPlanner.Controls.myGMAP)plugin.Host.FPGMapControl;
             map.MapProvider = plugin.Host.FDMapType;
 
             routesOverlay = new GMapOverlay("routes_grid");
@@ -144,7 +145,14 @@ namespace MissionPlanner
             TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString(); 
         }
 
-        private void GridUI_Load(object sender, EventArgs e)
+		private void FlightPlanner_polygonMarkerMovedEvent(object sender, EventArgs e)
+		{
+			list.Clear();
+			plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
+			domainUpDown1_ValueChanged(null, null);
+		}
+
+		private void GridUI_Load(object sender, EventArgs e)
         {
             xmlcamera(false);
 
@@ -671,6 +679,7 @@ namespace MissionPlanner
                 else
                 {
                     strips++;
+					if(false)
                     if (CHK_markers.Checked)
                     {
                         var marker = new GMapMarkerWP(item, a.ToString()) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver };
@@ -1457,7 +1466,9 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
-            routesOverlay.Clear();
+			GCSViews.FlightPlanner.polygonMarkerMovedEvent -= FlightPlanner_polygonMarkerMovedEvent;
+
+			routesOverlay.Clear();
 
             for (int i = 0; i < map.Overlays.Count; i++)
                 {

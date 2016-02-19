@@ -74,11 +74,7 @@ namespace MissionPlanner
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
                 GCSViews.Tiles.PathAcceptButtonVisible = true;
-				GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;
-                //BackgroundWorker bw = new BackgroundWorker();
-                //bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-                //bw.RunWorkerCompleted += backgroundWorkerCompleted;
-                //bw.RunWorkerAsync();         
+				GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;       
             }
             else
             {
@@ -94,11 +90,6 @@ namespace MissionPlanner
                 }
             }
         }
-
-        //private void bw_DoWork(object sender, DoWorkEventArgs e)
-        //{
-        //    while (!GCSViews.Tiles.pathAccepted) System.Threading.Thread.Sleep(500);    
-        //}
 
         private void pathAcceptedEventHandler(
             object sender,

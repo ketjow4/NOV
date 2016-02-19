@@ -63,6 +63,7 @@ namespace MissionPlanner.GCSViews
         altmode currentaltmode = altmode.Relative;
 
         bool grid;
+		public static event EventHandler polygonMarkerMovedEvent;
 
         public static FlightPlanner instance;
 
@@ -3327,6 +3328,10 @@ namespace MissionPlanner.GCSViews
                                 new PointLatLng(point.Lat, point.Lng);
                             MainMap.UpdatePolygonLocalPosition(drawnpolygon);
                             MainMap.Invalidate();
+							if(polygonMarkerMovedEvent != null)
+							{
+								polygonMarkerMovedEvent(null, null);
+							}
                         }
                     }
                     catch
@@ -3352,7 +3357,11 @@ namespace MissionPlanner.GCSViews
                                     }
                                 }
                             }
-                        }
+							if (polygonMarkerMovedEvent != null)
+							{
+								polygonMarkerMovedEvent(null, null);
+							}
+						}
                     }
                     catch
                     {
@@ -3375,7 +3384,11 @@ namespace MissionPlanner.GCSViews
                     PointLatLng pnew = MainMap.FromLocalToLatLng(e.X, e.Y);
 
                     CurrentGMapMarker.Position = pnew;
-                }
+					if (polygonMarkerMovedEvent != null)
+					{
+						polygonMarkerMovedEvent(null, null);
+					}
+				}
                 else if (ModifierKeys == Keys.Control)
                 {
                     // draw selection box

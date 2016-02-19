@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GMap.NET.Core">
-      <HintPath>..\GMap.NET.Core\bin\Debug\GMap.NET.Core.dll</HintPath>
+      <HintPath>..\..\bin\Debug\plugins\GMap.NET.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
