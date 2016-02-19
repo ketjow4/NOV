@@ -33,6 +33,8 @@ namespace MissionPlanner.GCSViews
         public static bool showFootprint = false;
         public static bool cameraFacingForward = false;
 
+		public static event EventHandler pathAcceptedEvent;
+
         public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
@@ -596,6 +598,10 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = true;
             sideLap.Visible = false;
             overLap.Visible = false;
+			if(pathAcceptedEvent != null)
+			{
+				pathAcceptedEvent(null, null);
+			}
         }
 
         private static void CompassCalibrationEvent(object sender, EventArgs args)
