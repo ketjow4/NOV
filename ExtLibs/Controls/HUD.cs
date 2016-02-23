@@ -1055,7 +1055,7 @@ namespace MissionPlanner.Controls
                     {
                         using (
                             LinearGradientBrush linearBrush = new LinearGradientBrush(
-                                bg, Color.FromArgb(0x9b, 0xb8, 0x24), Color.FromArgb(0x41, 0x4f, 0x07), LinearGradientMode.Vertical))
+                                bg, Color.FromArgb(0x99, 0x66, 0x00), Color.FromArgb(0x99, 0x66, 0x33), LinearGradientMode.Vertical))
                         {
                             graphicsObject.FillRectangle(linearBrush, bg);
                         }
@@ -1666,7 +1666,7 @@ namespace MissionPlanner.Controls
                     {
                         gps = (HUDT.GPS5);
                     }
-                    drawstring(graphicsObject, gps, font, fontsize + 2, col, this.Width - 13 * fontsize, this.Height - 30 - fontoffset);
+                    drawstring(graphicsObject, gps, font, fontsize + 2, col, this.Width - 15 * fontsize, this.Height - 30 - fontoffset);
                 }
 
                 //if (isNaN)            //WTF?? Another error message to display?
@@ -1774,6 +1774,7 @@ namespace MissionPlanner.Controls
 
                 if (vibex > 30 || vibey > 30 || vibez > 30)
                 {
+                    warning += "VIBRATION ERROR";
                     //drawstring(graphicsObject, "Vibe", font, fontsize + 2, (SolidBrush)Brushes.Red, vibehitzone.X,
                     //    vibehitzone.Y);
                 }
@@ -1787,6 +1788,7 @@ namespace MissionPlanner.Controls
 
                 if (ekfstatus > 0.5)
                 {
+                    warning += "EKF ERROR";
                     if (ekfstatus > 0.8)
                     {
                         //drawstring(graphicsObject, "EKF", font, fontsize + 2, (SolidBrush)Brushes.Red, ekfhitzone.X,
