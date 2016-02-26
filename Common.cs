@@ -290,68 +290,74 @@ namespace MissionPlanner
             g.RotateTransform(-Overlay.Control.Bearing);
 
             int length = 500;
-            // anti NaN
-            try
+
+            if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
             {
-                g.DrawLine(new Pen(Color.Red, 2), 0.0f, 0.0f, (float) Math.Cos((heading - 90)*deg2rad)*length,
-                    (float) Math.Sin((heading - 90)*deg2rad)*length);
-            }
-            catch
-            {
-            }
-            g.DrawLine(new Pen(Color.Green, 2), 0.0f, 0.0f, (float) Math.Cos((nav_bearing - 90)*deg2rad)*length,
-                (float) Math.Sin((nav_bearing - 90)*deg2rad)*length);
-            g.DrawLine(new Pen(Color.Black, 2), 0.0f, 0.0f, (float) Math.Cos((cog - 90)*deg2rad)*length,
-                (float) Math.Sin((cog - 90)*deg2rad)*length);
-            g.DrawLine(new Pen(Color.Orange, 2), 0.0f, 0.0f, (float) Math.Cos((target - 90)*deg2rad)*length,
-                (float) Math.Sin((target - 90)*deg2rad)*length);
-            // anti NaN
-            try
-            {
-                float desired_lead_dist = 100;
-
-
-                double width =
-                    (Overlay.Control.MapProvider.Projection.GetDistance(Overlay.Control.FromLocalToLatLng(0, 0),
-                        Overlay.Control.FromLocalToLatLng(Overlay.Control.Width, 0))*1000.0);
-                double m2pixelwidth = Overlay.Control.Width/width;
-
-                float alpha = ((desired_lead_dist*(float) m2pixelwidth)/MainV2.comPort.MAV.cs.radius)*rad2deg;
-
-                if (MainV2.comPort.MAV.cs.radius < -1)
+                g.DrawLine(new Pen(Color.Red, 2), 0.0f, 0.0f, (float)Math.Cos((heading - 90) * deg2rad) * length,
+                  (float)Math.Sin((heading - 90) * deg2rad) * length);
+                try
                 {
-                    // fixme 
+                    float desired_lead_dist = 100;
 
-                    float p1 = (float) Math.Cos((cog)*deg2rad)*MainV2.comPort.MAV.cs.radius +
-                               MainV2.comPort.MAV.cs.radius;
 
-                    float p2 = (float) Math.Sin((cog)*deg2rad)*MainV2.comPort.MAV.cs.radius +
-                               MainV2.comPort.MAV.cs.radius;
+                    double width =
+                        (Overlay.Control.MapProvider.Projection.GetDistance(Overlay.Control.FromLocalToLatLng(0, 0),
+                            Overlay.Control.FromLocalToLatLng(Overlay.Control.Width, 0)) * 1000.0);
+                    double m2pixelwidth = Overlay.Control.Width / width;
 
-                    g.DrawArc(new Pen(Color.HotPink, 2), p1, p2, Math.Abs(MainV2.comPort.MAV.cs.radius)*2,
-                        Math.Abs(MainV2.comPort.MAV.cs.radius)*2, cog, alpha);
+                    float alpha = ((desired_lead_dist * (float)m2pixelwidth) / MainV2.comPort.MAV.cs.radius) * rad2deg;
+
+                    if (MainV2.comPort.MAV.cs.radius < -1)
+                    {
+                        // fixme 
+
+                        float p1 = (float)Math.Cos((cog) * deg2rad) * MainV2.comPort.MAV.cs.radius +
+                                   MainV2.comPort.MAV.cs.radius;
+
+                        float p2 = (float)Math.Sin((cog) * deg2rad) * MainV2.comPort.MAV.cs.radius +
+                                   MainV2.comPort.MAV.cs.radius;
+
+                        g.DrawArc(new Pen(Color.HotPink, 2), p1, p2, Math.Abs(MainV2.comPort.MAV.cs.radius) * 2,
+                            Math.Abs(MainV2.comPort.MAV.cs.radius) * 2, cog, alpha);
+                    }
+
+                    else if (MainV2.comPort.MAV.cs.radius > 1)
+                    {
+                        // correct
+
+                        float p1 = (float)Math.Cos((cog - 180) * deg2rad) * MainV2.comPort.MAV.cs.radius +
+                                   MainV2.comPort.MAV.cs.radius;
+
+                        float p2 = (float)Math.Sin((cog - 180) * deg2rad) * MainV2.comPort.MAV.cs.radius +
+                                   MainV2.comPort.MAV.cs.radius;
+
+                        g.DrawArc(new Pen(Color.HotPink, 2), -p1, -p2, MainV2.comPort.MAV.cs.radius * 2,
+                            MainV2.comPort.MAV.cs.radius * 2, cog - 180, alpha);
+                    }
                 }
 
-                else if (MainV2.comPort.MAV.cs.radius > 1)
+                catch
                 {
-                    // correct
-
-                    float p1 = (float) Math.Cos((cog - 180)*deg2rad)*MainV2.comPort.MAV.cs.radius +
-                               MainV2.comPort.MAV.cs.radius;
-
-                    float p2 = (float) Math.Sin((cog - 180)*deg2rad)*MainV2.comPort.MAV.cs.radius +
-                               MainV2.comPort.MAV.cs.radius;
-
-                    g.DrawArc(new Pen(Color.HotPink, 2), -p1, -p2, MainV2.comPort.MAV.cs.radius*2,
-                        MainV2.comPort.MAV.cs.radius*2, cog - 180, alpha);
                 }
             }
-
-            catch
+            else if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
             {
+                try
+                {
+                    g.DrawLine(new Pen(Color.Red, 2), 0.0f, 0.0f, (float)Math.Cos((heading - 90) * deg2rad) * length,
+                        (float)Math.Sin((heading - 90) * deg2rad) * length);
+                }
+                catch
+                {
+                }
+                g.DrawLine(new Pen(Color.Green, 2), 0.0f, 0.0f, (float)Math.Cos((nav_bearing - 90) * deg2rad) * length,
+                    (float)Math.Sin((nav_bearing - 90) * deg2rad) * length);
+                g.DrawLine(new Pen(Color.Black, 2), 0.0f, 0.0f, (float)Math.Cos((cog - 90) * deg2rad) * length,
+                    (float)Math.Sin((cog - 90) * deg2rad) * length);
+                g.DrawLine(new Pen(Color.Orange, 2), 0.0f, 0.0f, (float)Math.Cos((target - 90) * deg2rad) * length,
+                    (float)Math.Sin((target - 90) * deg2rad) * length);
+                // anti NaN
             }
-
-
             try
             {
                 g.RotateTransform(heading);
