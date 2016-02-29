@@ -1129,20 +1129,20 @@ namespace MissionPlanner.Controls
                         this._redPen.Width = 4;
                     }
 
-                    //graphicsObject.DrawPolygon(this._redPen, pointlist);
+                    graphicsObject.DrawPolygon(this._redPen, pointlist);
 
                     this._redPen.Width = 2;
 
-                    int[] array = new int[] { -60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60 };
+                    int[] array = new int[] { -60, -40, -20, 0, 20, 40, 60 };
 
-                    //foreach (int a in array)
-                    //{
-                    //    graphicsObject.ResetTransform();
-                    //    graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
-                    //    graphicsObject.RotateTransform(a - _roll);
-                    //    drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, _whiteBrush, 0 - 6 - fontoffset, -lengthlong * 8 - extra);
-                    //    graphicsObject.DrawLine(this._whitePen, 0, -lengthlong * 3 - extra, 0, -lengthlong * 3 - extra - lengthlong);
-                    //}
+                    foreach (int a in array)
+                    {
+                        graphicsObject.ResetTransform();
+                        graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
+                        graphicsObject.RotateTransform(a - _roll);
+                        drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, _whiteBrush, 0 - 6 - fontoffset - 5, -lengthlong * 8 - extra - 3);
+                        graphicsObject.DrawLine(this._whitePen, 0, (-lengthlong * 3 - extra), 0, (-lengthlong * 3 - extra - lengthlong));
+                    }
 
                     graphicsObject.ResetTransform();
                     graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
