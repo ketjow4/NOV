@@ -289,12 +289,14 @@ namespace MissionPlanner
 
             g.RotateTransform(-Overlay.Control.Bearing);
 
+            //length of drawed lines
             int length = 500;
 
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
             {
-                g.DrawLine(new Pen(Color.Red, 2), 0.0f, 0.0f, (float)Math.Cos((heading - 90) * deg2rad) * length,
-                  (float)Math.Sin((heading - 90) * deg2rad) * length);
+                //read line with actual heading
+                //g.DrawLine(new Pen(Color.Red, 2), 0.0f, 0.0f, (float)Math.Cos((heading - 90) * deg2rad) * length,
+                //  (float)Math.Sin((heading - 90) * deg2rad) * length);
                 try
                 {
                     float desired_lead_dist = 100;
