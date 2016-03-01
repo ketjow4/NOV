@@ -69,7 +69,6 @@ namespace MissionPlanner
         void but_Click(object sender, EventArgs e)
         {
             gridui = new GridUI(this);
-            //MissionPlanner.Utilities.ThemeManager.ApplyThemeTo(gridui);
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
@@ -83,10 +82,13 @@ namespace MissionPlanner
                     gridui.LoadGrid();
                     gridui.BUT_Accept_Click(sender, e);
                     GCSViews.Tiles.PathAcceptButtonVisible = true;
+                    GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;
                 }
                 else
                 {
                     CustomMessageBox.Show("Please define a polygon.", "Error");
+                    GCSViews.Tiles.pathAcceptedEvent -= pathAcceptedEventHandler;
+                    GCSViews.Tiles.AcceptPathEvent(null, null);                         //change visibility of some buttons
                 }
             }
         }

@@ -384,7 +384,7 @@ namespace MissionPlanner.GCSViews
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,7, SaveWPFileEvent),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,8, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,LoadWPPlatformEvent),
-                distanceTile = new TileData("Distance",12.4,6,"km"),
+                distanceTile = new TileData("DISTANCE",12.4,6,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
             tilesFlightPlanning.AddRange(startFromButtons);
@@ -590,7 +590,7 @@ namespace MissionPlanner.GCSViews
         }
 
 
-        private static void AcceptPathEvent(object sender, EventArgs args)
+        public static void AcceptPathEvent(object sender, EventArgs args)
         {
             pathAccepted = true; accept.Visible = false; calcGrid = null;
             SaveWPFile.Visible = true;

@@ -401,17 +401,17 @@ namespace MissionPlanner.Controls
         {
             base.OnMouseClick(e);
 
-            if (ekfhitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
-            {
-                if (ekfclick != null)
-                    ekfclick(this, null);
-            }
+            //if (ekfhitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
+            //{
+            //    if (ekfclick != null)
+            //        ekfclick(this, null);
+            //}
 
-            if (vibehitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
-            {
-                if (vibeclick != null)
-                    vibeclick(this, null);
-            }
+            //if (vibehitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
+            //{
+            //    if (vibeclick != null)
+            //        vibeclick(this, null);
+            //}
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -420,11 +420,11 @@ namespace MissionPlanner.Controls
 
             if (ekfhitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
             {
-                Cursor.Current = Cursors.Hand;
+                //Cursor.Current = Cursors.Hand;
             }
             else if (vibehitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
             {
-                Cursor.Current = Cursors.Hand;
+                //Cursor.Current = Cursors.Hand;
             }
             else
             {
@@ -1055,7 +1055,7 @@ namespace MissionPlanner.Controls
                     {
                         using (
                             LinearGradientBrush linearBrush = new LinearGradientBrush(
-                                bg, Color.FromArgb(0x9b, 0xb8, 0x24), Color.FromArgb(0x41, 0x4f, 0x07), LinearGradientMode.Vertical))
+                                bg, Color.FromArgb(0x99, 0x66, 0x00), Color.FromArgb(0x99, 0x66, 0x33), LinearGradientMode.Vertical))
                         {
                             graphicsObject.FillRectangle(linearBrush, bg);
                         }
@@ -1129,28 +1129,26 @@ namespace MissionPlanner.Controls
                         this._redPen.Width = 4;
                     }
 
-                    //graphicsObject.DrawPolygon(this._redPen, pointlist);
+                    graphicsObject.DrawPolygon(this._redPen, pointlist);
 
                     this._redPen.Width = 2;
 
-                    int[] array = new int[] { -60, -45, -30, -20, -10, 0, 10, 20, 30, 45, 60 };
+                    int[] array = new int[] { -60, -40, -20, 0, 20, 40, 60 };
 
-                    //foreach (int a in array)
-                    //{
-                    //    graphicsObject.ResetTransform();
-                    //    graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
-                    //    graphicsObject.RotateTransform(a - _roll);
-                    //    drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, _whiteBrush, 0 - 6 - fontoffset, -lengthlong * 8 - extra);
-                    //    graphicsObject.DrawLine(this._whitePen, 0, -lengthlong * 3 - extra, 0, -lengthlong * 3 - extra - lengthlong);
-                    //}
+                    foreach (int a in array)
+                    {
+                        graphicsObject.ResetTransform();
+                        graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
+                        graphicsObject.RotateTransform(a - _roll);
+                        drawstring(graphicsObject, Math.Abs(a).ToString("0").PadLeft(2), font, fontsize, _whiteBrush, 0 - 6 - fontoffset - 5, -lengthlong * 8 - extra - 3);
+                        graphicsObject.DrawLine(this._whitePen, 0, (-lengthlong * 3 - extra), 0, (-lengthlong * 3 - extra - lengthlong));
+                    }
 
                     graphicsObject.ResetTransform();
                     graphicsObject.TranslateTransform(this.Width / 2, this.Height / 2);
 
                     // draw roll ind
                     RectangleF arcrect = new RectangleF(-lengthlong * 3 - extra, -lengthlong * 3 - extra, (extra + lengthlong * 3) * 2f, (extra + lengthlong * 3) * 2f);
-
-                    //DrawRectangle(Pens.Beige, arcrect);
 
                     //graphicsObject.DrawArc(this._whitePen, arcrect, 180 + 30 + -_roll, 120); // 120
 
@@ -1377,7 +1375,7 @@ namespace MissionPlanner.Controls
 
                 if (displayspeed)
                 {
-                    graphicsObject.DrawRectangle(this._whitePen, scrollbg);
+                    //graphicsObject.DrawRectangle(this._whitePen, scrollbg);
 
                     //graphicsObject.FillRectangle(SolidBrush, scrollbg);
 
@@ -1626,7 +1624,7 @@ namespace MissionPlanner.Controls
 
                 //  text = HUDT.Bat + _batterylevel.ToString("0.00v") + " " + _current.ToString("0.0 A") + " " + (_batteryremaining) + "%";
 
-                //TODO
+                //TODO  //WTF?? Another error message to display?
                 if (lowvoltagealert)
                 {
                     //drawstring(graphicsObject, text, font, fontsize + 2, (SolidBrush)Brushes.Red, fontsize, this.Height - 30 - fontoffset);
@@ -1668,14 +1666,14 @@ namespace MissionPlanner.Controls
                     {
                         gps = (HUDT.GPS5);
                     }
-                    drawstring(graphicsObject, gps, font, fontsize + 2, col, this.Width - 13 * fontsize, this.Height - 30 - fontoffset);
+                    drawstring(graphicsObject, gps, font, fontsize + 2, col, this.Width - 15 * fontsize, this.Height - 30 - fontoffset);
                 }
 
-                if (isNaN)
+                //if (isNaN)            //WTF?? Another error message to display?
                     //drawstring(graphicsObject, "NaN Error " + DateTime.Now, font, this.Height / 30 + 10, (SolidBrush)Brushes.Red, 50, 50);
 
-                    // custom user items
-                    graphicsObject.ResetTransform();
+                // custom user items
+                graphicsObject.ResetTransform();
                 int height = this.Height - 30 - fontoffset - fontsize - 8;
                 foreach (string key in CustomItems.Keys)
                 {
@@ -1767,42 +1765,44 @@ namespace MissionPlanner.Controls
                     //drawstring(graphicsObject, message, font, fontsize + 10, (SolidBrush)Brushes.Red, -halfwidth + 50, halfheight / 3);
                     warning += message;
                 }
-                else
+                //else
                     //warning = "";
 
-                    graphicsObject.ResetTransform();
+                graphicsObject.ResetTransform();
 
                 vibehitzone = new Rectangle(this.Width - 18 * fontsize, this.Height - 30 - fontoffset, 40, fontsize * 2);
 
                 if (vibex > 30 || vibey > 30 || vibez > 30)
                 {
-                    drawstring(graphicsObject, "Vibe", font, fontsize + 2, (SolidBrush)Brushes.Red, vibehitzone.X,
-                        vibehitzone.Y);
+                    warning += "VIBRATION ERROR";
+                    //drawstring(graphicsObject, "Vibe", font, fontsize + 2, (SolidBrush)Brushes.Red, vibehitzone.X,
+                    //    vibehitzone.Y);
                 }
                 else
                 {
-                    drawstring(graphicsObject, "Vibe", font, fontsize + 2, _whiteBrush, vibehitzone.X,
-                        vibehitzone.Y);
+                    //drawstring(graphicsObject, "Vibe", font, fontsize + 2, _whiteBrush, vibehitzone.X,
+                    //    vibehitzone.Y);
                 }
 
                 ekfhitzone = new Rectangle(this.Width - 23 * fontsize, this.Height - 30 - fontoffset, 40, fontsize * 2);
 
                 if (ekfstatus > 0.5)
                 {
+                    warning += "EKF ERROR";
                     if (ekfstatus > 0.8)
                     {
-                        drawstring(graphicsObject, "EKF", font, fontsize + 2, (SolidBrush)Brushes.Red, ekfhitzone.X,
-                            ekfhitzone.Y);
+                        //drawstring(graphicsObject, "EKF", font, fontsize + 2, (SolidBrush)Brushes.Red, ekfhitzone.X,
+                        //    ekfhitzone.Y);
                     }
                     else
                     {
-                        drawstring(graphicsObject, "EKF", font, fontsize + 2, (SolidBrush)Brushes.Orange, ekfhitzone.X,
-                            ekfhitzone.Y);
+                        //drawstring(graphicsObject, "EKF", font, fontsize + 2, (SolidBrush)Brushes.Orange, ekfhitzone.X,
+                        //    ekfhitzone.Y);
                     }
                 }
                 else
                 {
-                    drawstring(graphicsObject, "EKF", font, fontsize + 2, _whiteBrush, ekfhitzone.X, ekfhitzone.Y);
+                    //drawstring(graphicsObject, "EKF", font, fontsize + 2, _whiteBrush, ekfhitzone.X, ekfhitzone.Y);
                 }
 
                 if (!opengl)
