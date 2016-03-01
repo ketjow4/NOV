@@ -589,7 +589,7 @@ namespace MissionPlanner.GCSViews
         }
 
 
-        private static void AcceptPathEvent(object sender, EventArgs args)
+        public static void AcceptPathEvent(object sender, EventArgs args)
         {
             pathAccepted = true; accept.Visible = false; calcGrid = null;
             SaveWPFile.Visible = true;
