@@ -619,7 +619,7 @@ namespace MissionPlanner
                 return;
             }
 
-            if (CHK_boundary.Checked)
+            if (CHK_boundary.Checked && false)
                 AddDrawPolygon();
 
             int strips = 0;
@@ -634,8 +634,7 @@ namespace MissionPlanner
                 if (item.Tag == "M")
                 {
                     images++;
-
-					if(false)
+					
                     if (CHK_internals.Checked)
                     {
                         routesOverlay.Markers.Add(new GMarkerGoogle(item, GMarkerGoogleType.green) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver });
@@ -682,7 +681,6 @@ namespace MissionPlanner
                 else
                 {
                     strips++;
-					if(false)
                     if (CHK_markers.Checked)
                     {
                         var marker = new GMapMarkerWP(item, a.ToString()) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver };
