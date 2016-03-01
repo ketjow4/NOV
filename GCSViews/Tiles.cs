@@ -378,7 +378,7 @@ namespace MissionPlanner.GCSViews
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
-                altInfo = new TileData("ALTITUDE", 1, 5, "m", AltitudeSettingEvent),
+                altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent),
                 groundResInfo = new TileData("GROUND RESOLUTION", 12.4, 5, "cm/p"),
                 flightTime = new TileData("FLIGHT TIME", 11.4, 6, "h:m:s"),
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,7, SaveWPFileEvent),
