@@ -790,15 +790,41 @@ namespace MissionPlanner.GCSViews
 			this.trackBar1.Width = 45;
 			this.trackBar1.Height = 319;
 			this.trackBar1.Margin = new Padding(3, 3, 3, 3);
-			// 
-			// contextMenuStrip1
-			// 
-			this.contextMenuStrip1.Name = "contextMenuStrip1";
+            // 
+            // contextMenuStrip1
+            //
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteWPToolStripMenuItem,
+            this.insertWpToolStripMenuItem,
+            this.insertSplineWPToolStripMenuItem,
+            this.loiterToolStripMenuItem,
+            this.jumpToolStripMenuItem,
+            this.rTLToolStripMenuItem,
+            this.landToolStripMenuItem,
+            this.takeoffToolStripMenuItem,
+            this.setROIToolStripMenuItem,
+            this.clearMissionToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.polygonToolStripMenuItem,
+            this.rallyPointsToolStripMenuItem,
+            this.geoFenceToolStripMenuItem,
+            this.autoWPToolStripMenuItem,
+            this.mapToolToolStripMenuItem,
+            this.fileLoadSaveToolStripMenuItem,
+            this.pOIToolStripMenuItem,
+            this.trackerHomeToolStripMenuItem,
+            this.flyToHereToolStripMenuItem,
+            this.modifyAltToolStripMenuItem,
+            this.enterUTMCoordToolStripMenuItem,
+            this.switchDockingToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-			// 
-			// deleteWPToolStripMenuItem
-			// 
-			this.deleteWPToolStripMenuItem.Name = "deleteWPToolStripMenuItem";
+            this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // deleteWPToolStripMenuItem
+            // 
+            this.deleteWPToolStripMenuItem.Name = "deleteWPToolStripMenuItem";
 			resources.ApplyResources(this.deleteWPToolStripMenuItem, "deleteWPToolStripMenuItem");
 			this.deleteWPToolStripMenuItem.Click += new System.EventHandler(this.deleteWPToolStripMenuItem_Click);
 			// 
