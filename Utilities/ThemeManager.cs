@@ -474,7 +474,7 @@ mc:Ignorable=""d""
                     ctl.BackColor = BGColor;
                     ctl.ForeColor = TextColor;
 
-                    if (ctl.Name == "BRAKE")        //Custom color for one tile
+                    if (ctl.Name == "BRAKE" || ctl.Name == "ABORT\nLANDING")        //Custom color for one tile
                     {
                         ctl.BackColor = Color.Red;
                     }

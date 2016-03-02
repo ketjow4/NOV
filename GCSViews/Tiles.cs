@@ -66,8 +66,9 @@ namespace MissionPlanner.GCSViews
         private static TileButton LoadWPFile = null;
         private static TileButton LoadWPPlatform = null;
         private static TileButton panicButton = null;
+        private static TileButton abortLandButton = null;
 
-        private static TileData sideLap = null;
+		private static TileData sideLap = null;
         private static TileData overLap = null;
         private static TileData Images = null;
         private static TileButton writeWaypoints = null;
@@ -296,8 +297,10 @@ namespace MissionPlanner.GCSViews
                 new TileButton("EXIT",2,0, ExitEvent),
                 mode = new TileData("MODE",0,6,""),
                 panicButton = new TileButton("BRAKE",12.3,4, PanicButtonEvent),
-                windSpeed,
+                abortLandButton = new TileButton("ABORT\nLANDING",12.3,5, AbortLandEvent),
+				windSpeed,
             });
+			
             mode.ValueLabel.Width = 120;
 
 
@@ -425,7 +428,8 @@ namespace MissionPlanner.GCSViews
             }
             sideLap.Visible = false;
             overLap.Visible = false;
-        }
+			abortLandButton.Visible = false;
+		}
 
 
         #region EventsFlightPlanner
@@ -683,7 +687,19 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private static void ExitEvent(object sender, EventArgs args)
+		private static void AbortLandEvent(object sender, EventArgs args)
+		{
+			try
+			{
+				MainV2.comPort.doAbortLand();
+			}
+			catch
+			{
+				CustomMessageBox.Show("The Command failed to execute", "Error");
+			}
+		}
+
+		private static void ExitEvent(object sender, EventArgs args)
         {
             MissionPlanner.LogReporter.LogReporter.stopThread = true;
             MainV2.config["grid_sidelap"] = SideLap.ToString();
@@ -713,6 +729,10 @@ namespace MissionPlanner.GCSViews
                     windSpeed.Visible = false;
                     FlightData.instance.windDir1.Visible = false;
                 }
+				else if(MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
+				{
+					abortLandButton.Visible = true;
+				}
             }
             else                    //disconnect
             {
@@ -722,6 +742,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.instance.MenuConnect_Click(null, null);
                 windSpeed.Visible = true;
                 FlightData.instance.windDir1.Visible = true;
+				abortLandButton.Visible = false;
             }
         }
 
@@ -732,7 +753,7 @@ namespace MissionPlanner.GCSViews
             {
                 if (!connected)
                 {
-                    CustomMessageBox.Show("Fisrt connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    CustomMessageBox.Show("First connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     return;
                 }
 
