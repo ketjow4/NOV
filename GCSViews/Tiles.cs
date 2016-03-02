@@ -544,6 +544,7 @@ namespace MissionPlanner.GCSViews
             sideLap.Visible = true;
             overLap.Visible = true;
 
+			FlightPlanner.instance.pathGenerationMode = true;
             pathAccepted = false;
             var Host = new Plugin.PluginHost();
             ToolStripItemCollection col = Host.FPMenuMap.Items;
@@ -602,7 +603,8 @@ namespace MissionPlanner.GCSViews
 			{
 				pathAcceptedEvent(null, null);
 			}
-        }
+			FlightPlanner.instance.pathGenerationMode = false;
+		}
 
         private static void CompassCalibrationEvent(object sender, EventArgs args)
         {

@@ -937,7 +937,7 @@ namespace MissionPlanner.GCSViews
 			// 
 			this.addPolygonPointToolStripMenuItem.Name = "addPolygonPointToolStripMenuItem";
 			resources.ApplyResources(this.addPolygonPointToolStripMenuItem, "addPolygonPointToolStripMenuItem");
-			this.addPolygonPointToolStripMenuItem.Click += new System.EventHandler(this.addPolygonPointToolStripMenuItem_Click);
+			//this.addPolygonPointToolStripMenuItem.Click += new System.EventHandler(this.addPolygonPointToolStripMenuItem_Click);
 			// 
 			// clearPolygonToolStripMenuItem
 			// 
