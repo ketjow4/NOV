@@ -166,7 +166,9 @@ namespace MissionPlanner
 
             label1.Text += " (" + CurrentState.DistanceUnit+")";
             label24.Text += " (" + CurrentState.SpeedUnit + ")";
-        }
+
+			map.ZoomAndCenterMarkers("routes_grid");
+		}
 
         private void GridUI_Resize(object sender, EventArgs e)
         {
@@ -803,9 +805,7 @@ namespace MissionPlanner
             seconds = ((routetotal * 1000.0) / (flyspeedms));
             lbl_photoevery.Text = secondsToNice(((double)NUM_spacing.Value / flyspeedms));
             map.HoldInvalidation = false;
-            if (!isMouseDown)
-                map.ZoomAndCenterMarkers("routes_grid");
-
+            
             CalcHeadingHold();
         }
 
