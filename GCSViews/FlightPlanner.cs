@@ -6492,7 +6492,7 @@ namespace MissionPlanner.GCSViews
             MainV2.comPort.MAV.rallypoints.Clear();
         }
 
-        private void loadKMLFileToolStripMenuItem_Click(object sender, EventArgs e)
+        public void loadKMLFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog fd = new OpenFileDialog())
             {
@@ -6509,10 +6509,20 @@ namespace MissionPlanner.GCSViews
                         {
                             ZipFile input = new ZipFile(file);
 
-                            tempdir = Path.GetTempPath() + Path.DirectorySeparatorChar + Path.GetRandomFileName();
+                            tempdir = Path.GetTempPath() + Path.GetRandomFileName(); 
                             input.ExtractAll(tempdir, ExtractExistingFileAction.OverwriteSilently);
 
                             string[] kmls = Directory.GetFiles(tempdir, "*.kml");
+
+                            if (kmls.Length > 0)        ///bad hax
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                tempdir += @"\Google Earth\";
+                                kmls = Directory.GetFiles(tempdir, "*.kml");
+                            }
 
                             if (kmls.Length > 0)
                             {
@@ -6560,43 +6570,68 @@ namespace MissionPlanner.GCSViews
             catch
             {
             }
+            LinearRing lr = element as LinearRing;
+            //Document doc = element as Document;
+            //Placemark pm = element as Placemark;
+            //Folder folder = element as Folder;
+            //Polygon polygon = element as Polygon;
+            //LineString ls = element as LineString;
 
-            Document doc = element as Document;
-            Placemark pm = element as Placemark;
-            Folder folder = element as Folder;
-            Polygon polygon = element as Polygon;
-            LineString ls = element as LineString;
+            if(lr != null)
+            {
+                foreach(var coordinate in lr.Coordinates)
+                {
+                    drawnpolygon.Points.Add(new PointLatLng(coordinate.Latitude, coordinate.Longitude));
+                    addpolygonmarkergrid(drawnpolygon.Points.Count.ToString(), coordinate.Longitude, coordinate.Latitude, 0);
+                }
 
-            if (doc != null)
-            {
-                foreach (var feat in doc.Features)
+                // remove loop close
+                if (drawnpolygon.Points.Count > 1 &&
+                    drawnpolygon.Points[0] == drawnpolygon.Points[drawnpolygon.Points.Count - 1])
                 {
-                    //Console.WriteLine("feat " + feat.GetType());
-                    //processKML((Element)feat);
+                    drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1);
                 }
+
+                drawnpolygonsoverlay.Polygons.Add(drawnpolygon);
+
+                MainMap.UpdatePolygonLocalPosition(drawnpolygon);
+
+                MainMap.Invalidate();
+
+                MainMap.ZoomAndCenterMarkers(drawnpolygonsoverlay.Id);
             }
-            else if (folder != null)
-            {
-                foreach (Feature feat in folder.Features)
-                {
-                    //Console.WriteLine("feat "+feat.GetType());
-                    //processKML(feat);
-                }
-            }
-            else if (pm != null)
-            {
-            }
-            else if (polygon != null)
-            {
-            }
-            else if (ls != null)
-            {
-                foreach (var loc in ls.Coordinates)
-                {
-                    selectedrow = Commands.Rows.Add();
-                    setfromMap(loc.Latitude, loc.Longitude, (int) loc.Altitude);
-                }
-            }
+
+            //if (doc != null)
+            //{
+            //    foreach (var feat in doc.Features)
+            //    {
+            //        //Console.WriteLine("feat " + feat.GetType());
+            //        //processKML((Element)feat);
+            //    }
+            //}
+            //else if (folder != null)
+            //{
+            //    foreach (Feature feat in folder.Features)
+            //    {
+            //        //Console.WriteLine("feat "+feat.GetType());
+            //        //processKML(feat);
+            //    }
+            //}
+            //else if (pm != null)
+            //{
+            //}
+            //else if (polygon != null)
+            //{
+            //    int temp = 0;
+            //}
+            //else if (ls != null)
+            //{
+            //    //foreach (var loc in ls.Coordinates)
+            //    //{
+            //    //    selectedrow = Commands.Rows.Add();
+            //    //    setfromMap(loc.Latitude, loc.Longitude, (int) loc.Altitude);
+            //    //}
+            //}
         }
 
         private void lnk_kml_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

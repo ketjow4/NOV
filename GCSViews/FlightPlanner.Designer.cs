@@ -755,6 +755,7 @@ namespace MissionPlanner.GCSViews
 			this.MainMap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(39)))), ((int)(((byte)(40)))));
 			this.MainMap.Bearing = 0F;
 			this.MainMap.CanDragMap = true;
+            //this.MainMap.ContextMenu = this.contextMenuStrip1;
 			this.MainMap.Cursor = System.Windows.Forms.Cursors.Default;
 			this.MainMap.EmptyTileColor = System.Drawing.Color.Gray;
 			this.MainMap.GrayScaleMode = false;
@@ -793,34 +794,34 @@ namespace MissionPlanner.GCSViews
             // 
             // contextMenuStrip1
             //
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteWPToolStripMenuItem,
-            this.insertWpToolStripMenuItem,
-            this.insertSplineWPToolStripMenuItem,
-            this.loiterToolStripMenuItem,
-            this.jumpToolStripMenuItem,
-            this.rTLToolStripMenuItem,
-            this.landToolStripMenuItem,
-            this.takeoffToolStripMenuItem,
-            this.setROIToolStripMenuItem,
-            this.clearMissionToolStripMenuItem,
-            this.toolStripSeparator1,
-            this.polygonToolStripMenuItem,
-            this.rallyPointsToolStripMenuItem,
-            this.geoFenceToolStripMenuItem,
-            this.autoWPToolStripMenuItem,
-            this.mapToolToolStripMenuItem,
-            this.fileLoadSaveToolStripMenuItem,
-            this.pOIToolStripMenuItem,
-            this.trackerHomeToolStripMenuItem,
-            this.flyToHereToolStripMenuItem,
-            this.modifyAltToolStripMenuItem,
-            this.enterUTMCoordToolStripMenuItem,
-            this.switchDockingToolStripMenuItem});
+            //this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            //this.deleteWPToolStripMenuItem,
+            //this.insertWpToolStripMenuItem,
+            //this.insertSplineWPToolStripMenuItem,
+            //this.loiterToolStripMenuItem,
+            //this.jumpToolStripMenuItem,
+            //this.rTLToolStripMenuItem,
+            //this.landToolStripMenuItem,
+            //this.takeoffToolStripMenuItem,
+            //this.setROIToolStripMenuItem,
+            //this.clearMissionToolStripMenuItem,
+            //this.toolStripSeparator1,
+            //this.polygonToolStripMenuItem,
+            //this.rallyPointsToolStripMenuItem,
+            //this.geoFenceToolStripMenuItem,
+            //this.autoWPToolStripMenuItem,
+            //this.mapToolToolStripMenuItem,
+            //this.fileLoadSaveToolStripMenuItem,
+            //this.pOIToolStripMenuItem,
+            //this.trackerHomeToolStripMenuItem,
+            //this.flyToHereToolStripMenuItem,
+            //this.modifyAltToolStripMenuItem,
+            //this.enterUTMCoordToolStripMenuItem,
+            //this.switchDockingToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-            this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
-            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            //this.contextMenuStrip1.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
+            //this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // deleteWPToolStripMenuItem
             // 

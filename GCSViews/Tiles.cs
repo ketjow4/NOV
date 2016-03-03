@@ -378,6 +378,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
                 new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),        
                 new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent),
+                new TileButton("LOAD KML FILE",0,6,LoadKMLFileEvent),
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
@@ -433,6 +434,11 @@ namespace MissionPlanner.GCSViews
 
 
         #region EventsFlightPlanner
+
+        private static void LoadKMLFileEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.loadKMLFileToolStripMenuItem_Click(sender,e);
+        }
 
 
         private static void ShowWPEvent(object sender, EventArgs e)
@@ -606,7 +612,9 @@ namespace MissionPlanner.GCSViews
 			if(pathAcceptedEvent != null)
 			{
 				pathAcceptedEvent(null, null);
-			}
+                pathAcceptedEvent = null;
+
+            }
 			FlightPlanner.instance.pathGenerationMode = false;
 		}
 

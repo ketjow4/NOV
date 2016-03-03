@@ -3327,8 +3327,9 @@
     <Content Include="mavgraphs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ogar.bmp" />
-    <None Include="Resources\ogar.png" />
+    <None Include="Resources\ogar.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Scripts\example5 inject data.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
