@@ -3938,7 +3938,6 @@ namespace MissionPlanner.GCSViews
 					"You will remain in polygon mode until you clear the polygon or create a grid/upload a fence");
 			}
 			polygongridmode = true;
-			List<PointLatLng> polygonPoints = new List<PointLatLng>();
 			if (drawnpolygonsoverlay.Polygons.Count == 0)
 			{
 				drawnpolygon.Points.Clear();
@@ -6579,25 +6578,14 @@ namespace MissionPlanner.GCSViews
 
             if(lr != null)
             {
-                foreach(var coordinate in lr.Coordinates)
+				drawnpolygon.Points.Clear();
+				foreach (var coordinate in lr.Coordinates)
                 {
-                    drawnpolygon.Points.Add(new PointLatLng(coordinate.Latitude, coordinate.Longitude));
-                    addpolygonmarkergrid(drawnpolygon.Points.Count.ToString(), coordinate.Longitude, coordinate.Latitude, 0);
+					addPolygonPoint(coordinate.Latitude, coordinate.Longitude);
                 }
-
-                // remove loop close
-                if (drawnpolygon.Points.Count > 1 &&
-                    drawnpolygon.Points[0] == drawnpolygon.Points[drawnpolygon.Points.Count - 1])
-                {
-                    drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1);
-                }
-
-                drawnpolygonsoverlay.Polygons.Add(drawnpolygon);
-
+				
                 MainMap.UpdatePolygonLocalPosition(drawnpolygon);
-
                 MainMap.Invalidate();
-
                 MainMap.ZoomAndCenterMarkers(drawnpolygonsoverlay.Id);
             }
 
