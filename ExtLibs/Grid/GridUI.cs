@@ -166,8 +166,6 @@ namespace MissionPlanner
 
             label1.Text += " (" + CurrentState.DistanceUnit+")";
             label24.Text += " (" + CurrentState.SpeedUnit + ")";
-
-			map.ZoomAndCenterMarkers("routes_grid");
 		}
 
         private void GridUI_Resize(object sender, EventArgs e)

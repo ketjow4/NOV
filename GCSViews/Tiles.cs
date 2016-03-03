@@ -555,7 +555,8 @@ namespace MissionPlanner.GCSViews
             overLap.Visible = true;
 
 			FlightPlanner.instance.pathGenerationMode = true;
-            pathAccepted = false;
+			FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
+			pathAccepted = false;
             var Host = new Plugin.PluginHost();
             ToolStripItemCollection col = Host.FPMenuMap.Items;
             int index = col.Count;
