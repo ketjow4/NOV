@@ -3990,7 +3990,6 @@ namespace MissionPlanner.GCSViews
 			{
 				activeMarker = innerMarker;
 			}
-			CurrentGMapMarker = innerMarker;
 		}
 
 		private void addPolygonPointToolStripMenuItem_Click(object sender, EventArgs e)
