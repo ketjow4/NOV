@@ -150,7 +150,6 @@ namespace MissionPlanner
 		{
 			list.Clear();
 			plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
-			plugin.Host.FPDrawnPolygon.Points.Clear();
 			domainUpDown1_ValueChanged(null, null);
 		}
 
