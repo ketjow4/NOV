@@ -378,7 +378,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
                 new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),        
                 new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent),
-                new TileButton("LOAD KML FILE",0,6,LoadKMLFileEvent),
+                new TileButton("LOAD\nPOLYGON",0,6,LoadPolygonFileEvent),
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
@@ -435,9 +435,24 @@ namespace MissionPlanner.GCSViews
 
         #region EventsFlightPlanner
 
-        private static void LoadKMLFileEvent(object sender, EventArgs e)
+        private static void LoadPolygonFileEvent(object sender, EventArgs e)
         {
-            FlightPlanner.instance.loadKMLFileToolStripMenuItem_Click(sender,e);
+            using (OpenFileDialog fd = new OpenFileDialog())
+            {
+                fd.Filter = "All supported (*.kml *.kmz *.poly *.shp)| *.kml;*.kmz;*.poly;*.shp;|Google Earth KML |*.kml;*.kmz |Polygon|*.poly |Shape file|*.shp";
+                fd.Multiselect = false;
+                DialogResult result = fd.ShowDialog();
+                string file = fd.FileName;
+
+                string ext = System.IO.Path.GetExtension(fd.FileName);
+                if(ext == "kml" || ext == "kmz")
+                    FlightPlanner.instance.loadKMLFileToolStripMenuItem_Click(file, e);
+                else if(ext == "poly")
+                    FlightPlanner.instance.loadPolygonToolStripMenuItem_Click(file, e);
+                else
+                    FlightPlanner.instance.fromSHPToolStripMenuItem_Click(file, e); //NOT TESTED!!!
+            }
+                
         }
 
 
