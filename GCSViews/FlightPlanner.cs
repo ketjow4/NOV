@@ -5828,7 +5828,7 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
+        public void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RectLatLng area = MainMap.SelectedArea;
             if (area.IsEmpty)
