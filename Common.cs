@@ -155,11 +155,16 @@ namespace MissionPlanner
 
         string wpno = "";
         public bool selected = false;
+        SizeF txtsize = SizeF.Empty;
 
         public GMapMarkerWP(PointLatLng p, string wpno)
             : base(p, GMarkerGoogleType.green)
         {
             this.wpno = wpno;
+            using (var g = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                txtsize = g.MeasureString(wpno.ToString(), SystemFonts.DefaultFont);
+            }
         }
 
         public override void OnRender(Graphics g)
@@ -182,15 +187,6 @@ namespace MissionPlanner
 
             g.DrawString(wpno, SystemFonts.DefaultFont, Brushes.Black, new PointF(midw, midh));
 
-            //Matrix temp = g.Transform;
-            //g.TranslateTransform(LocalPosition.X, LocalPosition.Y);
-
-            //g.RotateTransform(-Overlay.Control.Bearing);
-
-            // do stuff
-
-
-            //g.Transform = temp;
         }
     }
 
