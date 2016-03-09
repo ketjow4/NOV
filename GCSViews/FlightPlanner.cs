@@ -5828,40 +5828,47 @@ namespace MissionPlanner.GCSViews
 
         public void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Tiles.offlineMaps.SetToHoverColor();
+            MainMap.DisableAltForSelection = true;
+            MainMap.MouseMove -= MainMap_MouseMove;
+            MainMap.MouseDown -= MainMap_MouseDown;
+            MainMap.MouseUp -= MainMap_MouseUp;
+        }
+
+        public void DownloadOfflineMap()
+        {
+            RestoreMainMapSettings();
+
             RectLatLng area = MainMap.SelectedArea;
-            if (area.IsEmpty)
-            {
-                DialogResult res = CustomMessageBox.Show("No ripp area defined, ripp displayed on screen?", "Rip",
-                    MessageBoxButtons.YesNo);
-                if (res == DialogResult.Yes)
-                {
-                    area = MainMap.ViewArea;
-                }
-            }
 
-            if (!area.IsEmpty)
-            {
-                DialogResult res = CustomMessageBox.Show("Ready ripp at Zoom = " + (int) MainMap.Zoom + " ?", "GMap.NET",
+            if (area.IsEmpty)       //cancel option
+                return;
+
+            //TODO Change below
+            DialogResult res = CustomMessageBox.Show("Ready ripp at Zoom = " + (int)MainMap.Zoom + " ?", "GMap.NET",
                     MessageBoxButtons.YesNo);
 
-                if (res == DialogResult.Yes)
+            if (res == DialogResult.Yes)
+            {
+                for (int i = (int)MainMap.Zoom; i <= MainMap.MaxZoom; i++)
                 {
-                    for (int i = 1; i <= MainMap.MaxZoom; i++)
-                    {
-                        TilePrefetcher obj = new TilePrefetcher();
-                        obj.ShowCompleteMessage = false;
-                        obj.Start(area, i, MainMap.MapProvider, 100, 0);
+                    TilePrefetcher obj = new TilePrefetcher();
+                    obj.ShowCompleteMessage = false;
+                    obj.Start(area, i, MainMap.MapProvider, 100, 0);
 
-                        if (obj.UserAborted)
-                            break;
-                    }
+                    if (obj.UserAborted)
+                        break;
                 }
             }
-            else
-            {
-                CustomMessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-            }
+        }
+
+        public void RestoreMainMapSettings()
+        {
+            MainMap.DisableAltForSelection = false;
+            Tiles.offlineMaps.SetToOriginal();
+            MainMap.MouseMove += MainMap_MouseMove;
+            MainMap.MouseDown += MainMap_MouseDown;
+            MainMap.MouseUp += MainMap_MouseUp;
         }
 
         private void kMLOverlayToolStripMenuItem_Click(object sender, EventArgs e)

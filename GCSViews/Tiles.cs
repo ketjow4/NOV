@@ -33,12 +33,12 @@ namespace MissionPlanner.GCSViews
         public static bool showFootprint = false;
         public static bool cameraFacingForward = false;
 
-		public static event EventHandler pathAcceptedEvent;
+        public static event EventHandler pathAcceptedEvent;
 
         public static Boolean PathAcceptButtonVisible { get { return accept.Visible; } set { accept.Visible = value; } }
         public static double GroundRes { set { groundRes = value; groundResInfo.Value = value.ToString(); } }
         public static int AngleVal { get { return Convert.ToInt32(angleInfo.Value); } } // duup so ugly!
-        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); }  set { altInfo.Value = value.ToString(); } } // duup so ugly!
+        public static int AltitudeVal { get { return Convert.ToInt32(altInfo.Value); } set { altInfo.Value = value.ToString(); } } // duup so ugly!
         public static int FlyingSpeed { get { return Convert.ToInt32(flyingSpeed.Value); } }
         public static String Distance { set { distanceTile.Value = value; } get { return distanceTile.Value; } }
         public static String DistanceUnit { set { distanceTile.UnitLabel.Text = value; } }
@@ -67,15 +67,17 @@ namespace MissionPlanner.GCSViews
         private static TileButton LoadWPPlatform = null;
         private static TileButton panicButton = null;
         private static TileButton abortLandButton = null;
+        public static TileButton offlineMaps = null;
+        public static TileButton cancelOfflineMaps = null;
 
-		private static TileData sideLap = null;
+        private static TileData sideLap = null;
         private static TileData overLap = null;
         private static TileData Images = null;
         private static TileButton writeWaypoints = null;
         private static TileData obsHeadBtn = null;
         private static TileData area = null;
         private static TileData distanceBetweenLines = null;
-        private static TileData  numberofStripes = null;
+        private static TileData numberofStripes = null;
         private static TileData startFromBut = null;
 
         private static TileData windSpeed = null;
@@ -176,6 +178,7 @@ namespace MissionPlanner.GCSViews
         }
 
         private static volatile bool firstTime = true;
+
 
         private static void ThreadSafeMapZoomToHome()
         {
@@ -298,9 +301,9 @@ namespace MissionPlanner.GCSViews
                 mode = new TileData("MODE",0,6,""),
                 panicButton = new TileButton("BRAKE",12.3,4, PanicButtonEvent),
                 abortLandButton = new TileButton("ABORT\nLANDING",12.3,5, AbortLandEvent),
-				windSpeed,
+                windSpeed,
             });
-			
+
             mode.ValueLabel.Width = 120;
 
 
@@ -335,21 +338,21 @@ namespace MissionPlanner.GCSViews
             startFromButtons = new List<TileButton>();
             var names = Enum.GetNames(typeof(StartPosition));
             i = 0;
-            foreach(var name in names)
+            foreach (var name in names)
             {
-                startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7,StartFromButtonListEvent));
+                startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7, StartFromButtonListEvent));
                 i++;
             }
             startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
             startFromBut.ValueLabel.Width = 120;
             startFromBut.Value = startFrom;
-            
+
             accept = new TileButton("ACCEPT\nPATH", 2, 1, AcceptPathEvent);
             Images = new TileData("IMAGES NUBMER", 12.4, 7, "");
             Images.Value = "0";
 
             var hideList = new TileInfo[] { accept, sideLap, overLap };
-            
+
             List<TileInfo> hidelist2 = new List<TileInfo>();
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(cameras_buttons.ToArray());
@@ -365,9 +368,9 @@ namespace MissionPlanner.GCSViews
                 sideLap,overLap,Images,startFromBut,
 
                 new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
-                area = new TileData("AREA",12.4,8,"km\u00B2"),             
-                distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",11.4,7,"m"), 
-                numberofStripes = new TileData("NUMBER OF STRIPS",11.4,8,""),   
+                area = new TileData("AREA",12.4,8,"km\u00B2"),
+                distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",11.4,7,"m"),
+                numberofStripes = new TileData("NUMBER OF STRIPS",11.4,8,""),
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
                 new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
                 new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
@@ -376,11 +379,12 @@ namespace MissionPlanner.GCSViews
                 new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
                 new TileButton("SHOW WP",11.4,0,ShowWPEvent),
-                new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),        
+                new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),
                 new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent),
                 new TileButton("LOAD\nPOLYGON",0,6,LoadPolygonFileEvent),
                 new TileButton("SAVE\nPOLYGON",9.4,0,SavePolygonEvent),
-                new TileButton("OFFLINE\nMAPS",10.4,0,OfflineMapsEvent),
+                offlineMaps = new TileButton("OFFLINE\nMAPS",10.4,0,OfflineMapsEvent),
+                cancelOfflineMaps = new TileButton("CANCEL",10.4,1,CancelOfflineMapsEvent),
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
@@ -431,8 +435,11 @@ namespace MissionPlanner.GCSViews
             }
             sideLap.Visible = false;
             overLap.Visible = false;
-			abortLandButton.Visible = false;
-		}
+            abortLandButton.Visible = false;
+            cancelOfflineMaps.Visible = false;
+        }
+
+
 
 
 
@@ -450,14 +457,14 @@ namespace MissionPlanner.GCSViews
                 string file = fd.FileName;
 
                 string ext = System.IO.Path.GetExtension(fd.FileName);
-                if(ext == ".kml" || ext == ".kmz")
+                if (ext == ".kml" || ext == ".kmz")
                     FlightPlanner.instance.loadKMLFileToolStripMenuItem_Click(file, e);
-                else if(ext == ".poly")
+                else if (ext == ".poly")
                     FlightPlanner.instance.loadPolygonToolStripMenuItem_Click(file, e);
                 else
                     FlightPlanner.instance.fromSHPToolStripMenuItem_Click(file, e); //NOT TESTED!!!
             }
-                
+
         }
 
         private static void SavePolygonEvent(object sender, EventArgs e)
@@ -465,12 +472,33 @@ namespace MissionPlanner.GCSViews
             throw new NotImplementedException();
         }
 
-
+        private static bool firstClick = true;
         private static void OfflineMapsEvent(object sender, EventArgs e)
         {
-            FlightPlanner.instance.prefetchToolStripMenuItem_Click(sender, e);
+            //first click action
+            if (firstClick)
+            {
+                FlightPlanner.instance.prefetchToolStripMenuItem_Click(sender, e);
+                offlineMaps.Label.Text = "DOWNLOAD";
+                cancelOfflineMaps.Visible = true;
+                firstClick = false;
+            }
+            else
+            {
+                //second click action
+                FlightPlanner.instance.DownloadOfflineMap();
+                offlineMaps.Label.Text = "OFFLINE\nMAPS";
+                firstClick = true;
+            }
         }
 
+        private static void CancelOfflineMapsEvent(object sender, EventArgs e)
+        {
+            FlightPlanner.instance.RestoreMainMapSettings();
+            cancelOfflineMaps.Visible = false;
+            offlineMaps.Label.Text = "OFFLINE\nMAPS";
+            firstClick = true;
+        }
 
         private static void ShowWPEvent(object sender, EventArgs e)
         {
@@ -511,7 +539,7 @@ namespace MissionPlanner.GCSViews
 
         private static void FootprintEvent(object sender, EventArgs e)
         {
-            if(showFootprint)
+            if (showFootprint)
             {
                 (sender as Label).Text = "\u2610 FOOTPRINT";       //unchecked
                 showFootprint = !showFootprint;
@@ -539,7 +567,7 @@ namespace MissionPlanner.GCSViews
             }
             if (calcGrid != null)
                 calcGrid(null, null);
-            
+
         }
 
         private static void StartFromButtonListEvent(object sender, EventArgs e)
@@ -585,9 +613,9 @@ namespace MissionPlanner.GCSViews
             sideLap.Visible = true;
             overLap.Visible = true;
 
-			FlightPlanner.instance.pathGenerationMode = true;
-			FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
-			pathAccepted = false;
+            FlightPlanner.instance.pathGenerationMode = true;
+            FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
+            pathAccepted = false;
             var Host = new Plugin.PluginHost();
             ToolStripItemCollection col = Host.FPMenuMap.Items;
             int index = col.Count;
@@ -605,14 +633,14 @@ namespace MissionPlanner.GCSViews
         private static void ClearEvent(object sender, EventArgs args)
         {
             GroundRes = 0.0;
-			if(FlightPlanner.missionWaypointCount() > 0)
-			{
-				FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
-			}
-			else
-			{
-				FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
-			}
+            if (FlightPlanner.missionWaypointCount() > 0)
+            {
+                FlightPlanner.instance.clearMissionToolStripMenuItem_Click(null, null);
+            }
+            else
+            {
+                FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
+            }
         }
 
         private static void PolygonModeEvent(object sender, EventArgs args)
@@ -641,14 +669,14 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = true;
             sideLap.Visible = false;
             overLap.Visible = false;
-			if(pathAcceptedEvent != null)
-			{
-				pathAcceptedEvent(null, null);
+            if (pathAcceptedEvent != null)
+            {
+                pathAcceptedEvent(null, null);
                 pathAcceptedEvent = null;
 
             }
-			FlightPlanner.instance.pathGenerationMode = false;
-		}
+            FlightPlanner.instance.pathGenerationMode = false;
+        }
 
         private static void CompassCalibrationEvent(object sender, EventArgs args)
         {
@@ -661,9 +689,9 @@ namespace MissionPlanner.GCSViews
         private static void FlightInfoEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightData");
-			MainV2.onMapPositionChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Position);
-			MainV2.onMapZoomChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Zoom);
-			foreach (var pan in common)
+            MainV2.onMapPositionChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Position);
+            MainV2.onMapZoomChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Zoom);
+            foreach (var pan in common)
             {
                 pan.Parent = FlightData.instance.splitContainer1.Panel2;
                 FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
@@ -674,7 +702,7 @@ namespace MissionPlanner.GCSViews
         private static void AngelSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE",false, AngleVal.ToString(), 0, 360);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE", false, AngleVal.ToString(), 0, 360);
             inputWindow.ShowDialog();
             ChangeAngle(inputWindow.Result);
         }
@@ -690,7 +718,7 @@ namespace MissionPlanner.GCSViews
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false,  FlyingSpeed.ToString(), fsMin, fsMax);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false, FlyingSpeed.ToString(), fsMin, fsMax);
             inputWindow.ShowDialog();
             ChangeSpeed(inputWindow.Result);
         }
@@ -727,19 +755,19 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-		private static void AbortLandEvent(object sender, EventArgs args)
-		{
-			try
-			{
-				MainV2.comPort.doAbortLand();
-			}
-			catch
-			{
-				CustomMessageBox.Show("The Command failed to execute", "Error");
-			}
-		}
+        private static void AbortLandEvent(object sender, EventArgs args)
+        {
+            try
+            {
+                MainV2.comPort.doAbortLand();
+            }
+            catch
+            {
+                CustomMessageBox.Show("The Command failed to execute", "Error");
+            }
+        }
 
-		private static void ExitEvent(object sender, EventArgs args)
+        private static void ExitEvent(object sender, EventArgs args)
         {
             MissionPlanner.LogReporter.LogReporter.stopThread = true;
             MainV2.config["grid_sidelap"] = SideLap.ToString();
@@ -750,9 +778,9 @@ namespace MissionPlanner.GCSViews
         private static void FlighPlanningShowEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightPlanner");
-			MainV2.onMapPositionChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Position);
-			MainV2.onMapZoomChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Zoom);
-		}
+            MainV2.onMapPositionChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Position);
+            MainV2.onMapZoomChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Zoom);
+        }
 
 
         private static void ConnectEvent(object sender, EventArgs args)
@@ -769,10 +797,10 @@ namespace MissionPlanner.GCSViews
                     windSpeed.Visible = false;
                     FlightData.instance.windDir1.Visible = false;
                 }
-				else if(MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
-				{
-					abortLandButton.Visible = true;
-				}
+                else if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
+                {
+                    abortLandButton.Visible = true;
+                }
             }
             else                    //disconnect
             {
@@ -782,7 +810,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.instance.MenuConnect_Click(null, null);
                 windSpeed.Visible = true;
                 FlightData.instance.windDir1.Visible = true;
-				abortLandButton.Visible = false;
+                abortLandButton.Visible = false;
             }
         }
 
