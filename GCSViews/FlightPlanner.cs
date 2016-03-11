@@ -1539,16 +1539,12 @@ namespace MissionPlanner.GCSViews
                     {
                         firstpoint = x;
                     }
-                    if (counter == count - 1)
-                    {
-                        lastpoint = x;
-                    }
                     if (counter == count)
                     {
-                        homeroute.Points.Add(lastpoint);
+						lastpoint = x;
+						homeroute.Points.Add(lastpoint);
                         homeroute.Points.Add(homepoint);
                         homeroute.Points.Add(firstpoint);
-                        return;
                     }
                     route.Points.Add(x);
                 });
