@@ -155,6 +155,7 @@ namespace MissionPlanner
 
         string wpno = "";
         public bool selected = false;
+        SizeF txtsize = SizeF.Empty;
 
         public GMapMarkerWP(PointLatLng p, string wpno)
             : base(p, GMarkerGoogleType.green)
@@ -175,22 +176,19 @@ namespace MissionPlanner
             var midw = LocalPosition.X + 10;
             var midh = LocalPosition.Y + 3;
 
-            var txtsize = TextRenderer.MeasureText(wpno, SystemFonts.DefaultFont);
+            SizeF txtsize = TextRenderer.MeasureText(wpno, SystemFonts.DefaultFont);
 
             if (txtsize.Width > 15)
                 midw -= 4;
 
-            g.DrawString(wpno, SystemFonts.DefaultFont, Brushes.Black, new PointF(midw, midh));
+            if (IsMouseOver)
+            {
+                if (txtsize == SizeF.Empty)
+                    txtsize = g.MeasureString(wpno, SystemFonts.DefaultFont);
+                
+                g.DrawString(wpno, SystemFonts.DefaultFont, Brushes.Black, new PointF(midw, midh));
+            }
 
-            //Matrix temp = g.Transform;
-            //g.TranslateTransform(LocalPosition.X, LocalPosition.Y);
-
-            //g.RotateTransform(-Overlay.Control.Bearing);
-
-            // do stuff
-
-
-            //g.Transform = temp;
         }
     }
 

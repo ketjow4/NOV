@@ -916,9 +916,7 @@ namespace MissionPlanner.GCSViews
                 }
                 //Console.WriteLine("editformat " + option + " value " + cmd);
                 ChangeColumnHeader(cmd);
-
-                setgradanddistandaz();
-
+                
                 if (cmd == "WAYPOINT")
                 {
                 }
@@ -1092,7 +1090,7 @@ namespace MissionPlanner.GCSViews
                         {
                             if (Commands.Rows[a].HeaderCell.Value == null)
                             {
-                                Commands.Rows[a].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                                //Commands.Rows[a].HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleLeft;
                                 Commands.Rows[a].HeaderCell.Value = (a + 1).ToString();
                             }
                             // skip rows with the correct number
@@ -5813,42 +5811,49 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
+        public void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Tiles.offlineMaps.SetToHoverColor();
+            MainMap.DisableAltForSelection = true;
+            MainMap.MouseMove -= MainMap_MouseMove;
+            MainMap.MouseDown -= MainMap_MouseDown;
+            MainMap.MouseUp -= MainMap_MouseUp;
+        }
+
+        public void DownloadOfflineMap()
+        {
+            RestoreMainMapSettings();
+
             RectLatLng area = MainMap.SelectedArea;
-            if (area.IsEmpty)
-            {
-                DialogResult res = CustomMessageBox.Show("No ripp area defined, ripp displayed on screen?", "Rip",
-                    MessageBoxButtons.YesNo);
-                if (res == DialogResult.Yes)
-                {
-                    area = MainMap.ViewArea;
-                }
-            }
 
-            if (!area.IsEmpty)
-            {
-                DialogResult res = CustomMessageBox.Show("Ready ripp at Zoom = " + (int) MainMap.Zoom + " ?", "GMap.NET",
+            if (area.IsEmpty)       //cancel option
+                return;
+
+            //TODO Change below
+            DialogResult res = CustomMessageBox.Show("Ready ripp at Zoom = " + (int)MainMap.Zoom + " ?", "GMap.NET",
                     MessageBoxButtons.YesNo);
 
-                if (res == DialogResult.Yes)
+            if (res == DialogResult.Yes)
+            {
+                for (int i = (int)MainMap.Zoom; i <= MainMap.MaxZoom; i++)
                 {
-                    for (int i = 1; i <= MainMap.MaxZoom; i++)
-                    {
-                        TilePrefetcher obj = new TilePrefetcher();
-                        obj.ShowCompleteMessage = false;
-                        obj.Start(area, i, MainMap.MapProvider, 100, 0);
+                    TilePrefetcher obj = new TilePrefetcher();
+                    obj.ShowCompleteMessage = false;
+                    obj.Start(area, i, MainMap.MapProvider, 100, 0);
 
-                        if (obj.UserAborted)
-                            break;
-                    }
+                    if (obj.UserAborted)
+                        break;
                 }
             }
-            else
-            {
-                CustomMessageBox.Show("Select map area holding ALT", "GMap.NET", MessageBoxButtons.OK,
-                    MessageBoxIcon.Exclamation);
-            }
+        }
+
+        public void RestoreMainMapSettings()
+        {
+            MainMap.DisableAltForSelection = false;
+            Tiles.offlineMaps.SetToOriginal();
+            MainMap.MouseMove += MainMap_MouseMove;
+            MainMap.MouseDown += MainMap_MouseDown;
+            MainMap.MouseUp += MainMap_MouseUp;
         }
 
         private void kMLOverlayToolStripMenuItem_Click(object sender, EventArgs e)
@@ -6208,21 +6213,23 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void loadPolygonToolStripMenuItem_Click(object sender, EventArgs e)
+        public void loadPolygonToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog fd = new OpenFileDialog())
+            string FileName = sender as string;
+            if(FileName != null)
             {
-                fd.Filter = "Polygon (*.poly)|*.poly";
-                fd.ShowDialog();
-                if (File.Exists(fd.FileName))
+                if (File.Exists(FileName))
                 {
-                    StreamReader sr = new StreamReader(fd.OpenFile());
+                    StreamReader sr = new StreamReader(FileName);
 
                     drawnpolygonsoverlay.Markers.Clear();
                     drawnpolygonsoverlay.Polygons.Clear();
                     drawnpolygon.Points.Clear();
 
                     int a = 0;
+
+                  
+
 
                     while (!sr.EndOfStream)
                     {
@@ -6234,10 +6241,7 @@ namespace MissionPlanner.GCSViews
                         {
                             string[] items = line.Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries);
 
-                            drawnpolygon.Points.Add(new PointLatLng(double.Parse(items[0]), double.Parse(items[1])));
-                            addpolygonmarkergrid(drawnpolygon.Points.Count.ToString(), double.Parse(items[1]),
-                                double.Parse(items[0]), 0);
-
+                            addPolygonPoint(double.Parse(items[0]), double.Parse(items[1]));
                             a++;
                         }
                     }
@@ -6249,12 +6253,8 @@ namespace MissionPlanner.GCSViews
                         drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1);
                     }
 
-                    drawnpolygonsoverlay.Polygons.Add(drawnpolygon);
-
                     MainMap.UpdatePolygonLocalPosition(drawnpolygon);
-
                     MainMap.Invalidate();
-
                     MainMap.ZoomAndCenterMarkers(drawnpolygonsoverlay.Id);
                 }
             }
@@ -6506,11 +6506,11 @@ namespace MissionPlanner.GCSViews
 
         public void loadKMLFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog fd = new OpenFileDialog())
-            {
-                fd.Filter = "Google Earth KML |*.kml;*.kmz";
-                DialogResult result = fd.ShowDialog();
-                string file = fd.FileName;
+            string filename = sender as string;
+
+            if(filename != null)
+            { 
+                string file = filename;
                 if (file != "")
                 {
                     try
@@ -6570,6 +6570,10 @@ namespace MissionPlanner.GCSViews
                     }
                 }
             }
+            else
+            {
+                CustomMessageBox.Show("Filename is not string!");
+            }
         }
 
         private void processKMLMission(object sender, ElementEventArgs e)
@@ -6596,7 +6600,13 @@ namespace MissionPlanner.GCSViews
                 {
 					addPolygonPoint(coordinate.Latitude, coordinate.Longitude);
                 }
-				
+                // remove loop close
+                if (drawnpolygon.Points.Count > 1 &&
+                    drawnpolygon.Points[0] == drawnpolygon.Points[drawnpolygon.Points.Count - 1])
+                {
+                    drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1);
+                }
+
                 MainMap.UpdatePolygonLocalPosition(drawnpolygon);
                 MainMap.Invalidate();
                 MainMap.ZoomAndCenterMarkers(drawnpolygonsoverlay.Id);
@@ -7129,13 +7139,13 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             }
         }
 
-        private void fromSHPToolStripMenuItem_Click(object sender, EventArgs e)
+        public void fromSHPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog fd = new OpenFileDialog())
+            CustomMessageBox.Show("This is experimental feature");
+            string filename = sender as string;
+            if (filename != null)
             {
-                fd.Filter = "Shape file|*.shp";
-                DialogResult result = fd.ShowDialog();
-                string file = fd.FileName;
+                string file = filename;
                 ProjectionInfo pStart = new ProjectionInfo();
                 ProjectionInfo pESRIEnd = KnownCoordinateSystems.Geographic.World.WGS1984;
                 bool reproject = false;
@@ -7182,8 +7192,8 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                                     point.Y = xyarray[1];
                                     point.Z = zarray[0];
                                 }
-                                drawnpolygon.Points.Add(new PointLatLng(point.Y, point.X));
-                                addpolygonmarkergrid(drawnpolygon.Points.Count.ToString(), point.X, point.Y, 0);
+                                addPolygonPoint(point.Y, point.X);
+                                //addpolygonmarkergrid(drawnpolygon.Points.Count.ToString(), point.X, point.Y, 0);
                             }
                             // remove loop close
                             if (drawnpolygon.Points.Count > 1 &&
@@ -7191,7 +7201,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                             {
                                 drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1);
                             }
-                            drawnpolygonsoverlay.Polygons.Add(drawnpolygon);
+                            //drawnpolygonsoverlay.Polygons.Add(drawnpolygon);
                             MainMap.UpdatePolygonLocalPosition(drawnpolygon);
                             MainMap.Invalidate();
                             MainMap.ZoomAndCenterMarkers(drawnpolygonsoverlay.Id);

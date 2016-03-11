@@ -157,6 +157,8 @@ namespace MissionPlanner.GCSViews.Modification
     {
         private readonly Color color;
         private Label label;
+        private readonly Color hoverColor = Color.FromArgb(85, 86, 88);
+        private readonly Color standardColor = Color.FromArgb(22, 23, 24);
 
         public TileButton(string text, double row, double column, EventHandler handler = null, Color? color = null)
             : base(text, row, column)
@@ -192,16 +194,31 @@ namespace MissionPlanner.GCSViews.Modification
 
         private void EnterHover(object sender, EventArgs args)
         {
-            if (this.label.BackColor != Color.FromArgb(22, 23, 24))     //when control have other color than dark grey don't change it
+            if (this.label.BackColor != standardColor)     //when control have other color than dark grey don't change it
                 return;
-            this.label.BackColor = Color.FromArgb(85, 86, 88);
+            this.label.BackColor = hoverColor;
         }
 
         private void LeaveHover(object sender, EventArgs args)
         {
-            if (this.label.BackColor != Color.FromArgb(85, 86, 88))
+            if (this.label.BackColor != hoverColor)
                 return;
-            this.label.BackColor = Color.FromArgb(22, 23, 24);
+            this.label.BackColor = standardColor;
+        }
+
+        public void ChangeButtonColor(Color color)
+        {
+            this.label.BackColor = color;
+        }
+
+        public void SetToOriginal()
+        {
+            this.label.BackColor = standardColor;
+        }
+
+        public void SetToHoverColor()
+        {
+            this.label.BackColor = hoverColor;
         }
     }
 }
