@@ -2899,10 +2899,12 @@ namespace MissionPlanner
 
             if (keyData == (Keys.Control | Keys.F)) // temp
             {
-                Form frm = new temp();
+#if DEBUG
+				Form frm = new temp();
                 ThemeManager.ApplyThemeTo(frm);
                 frm.Show();
-                return true;
+#endif
+				return true;
             }
             /*if (keyData == (Keys.Control | Keys.S)) // screenshot
             {
@@ -2911,18 +2913,21 @@ namespace MissionPlanner
             }*/
             if (keyData == (Keys.Control | Keys.G)) // nmea out
             {
-                Form frm = new SerialOutputNMEA();
+#if DEBUG
+				Form frm = new SerialOutputNMEA();
                 ThemeManager.ApplyThemeTo(frm);
                 frm.Show();
-                return true;
+#endif
+				return true;
             }
             if (keyData == (Keys.Control | Keys.X)) // select sysid
             {
-                MissionPlanner.Controls.SysidSelector id = new SysidSelector();
+#if DEBUG
+				MissionPlanner.Controls.SysidSelector id = new SysidSelector();
                 id.TopMost = true;
                 id.Show();
-
-                return true;
+#endif
+				return true;
             }
             if (keyData == (Keys.Control | Keys.L)) // limits
             {
@@ -2942,7 +2947,8 @@ namespace MissionPlanner
             }
             if (keyData == (Keys.Control | Keys.T)) // for override connect
             {
-                try
+#if DEBUG
+				try
                 {
                     MainV2.comPort.Open(false);
                 }
@@ -2950,7 +2956,8 @@ namespace MissionPlanner
                 {
                     CustomMessageBox.Show(ex.ToString());
                 }
-                return true;
+#endif
+				return true;
             }
             if (keyData == (Keys.Control | Keys.Y)) // for ryan beall and ollyw42
             {
