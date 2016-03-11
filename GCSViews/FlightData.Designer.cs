@@ -313,8 +313,8 @@ namespace MissionPlanner.GCSViews
 
             //responsive 
             
-            this.SubMainLeft.Size = new Size(270, 203);
-            this.SubMainLeft.Location = new Point(0, 570);
+            this.SubMainLeft.Size = new Size(319, 240);
+            this.SubMainLeft.Location = new Point(0, 533);
             this.SubMainLeft.Panel2Collapsed = true;
             this.SubMainLeft.SplitterDistance = this.SubMainLeft.Width;
             this.SubMainLeft.Name = "SubMainLeft";
@@ -1729,7 +1729,7 @@ namespace MissionPlanner.GCSViews
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
-            this.windDir1.Location = new Point(130, 513);       //change
+            this.windDir1.Location = new Point(130, 475);       //change
             // 
             // bindingSource1
             // 

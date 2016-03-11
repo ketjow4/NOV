@@ -2554,7 +2554,7 @@ namespace MissionPlanner.GCSViews
 
         private void hud1_DoubleClick(object sender, EventArgs e)
         {
-            if (huddropout)
+            if (huddropout || true)
                 return;
 
             SubMainLeft.Panel1Collapsed = true;

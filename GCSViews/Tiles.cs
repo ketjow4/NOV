@@ -278,7 +278,7 @@ namespace MissionPlanner.GCSViews
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
 
-            windSpeed = new TileData("WIND SPEED", 9, 0, "m/s");
+            windSpeed = new TileData("WIND SPEED", 8.35, 0, "m/s");
             TileData mode;
 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
