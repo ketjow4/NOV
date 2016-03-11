@@ -399,20 +399,22 @@ namespace MissionPlanner.Controls
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            base.OnMouseClick(e);
+#if DEBUG
+			base.OnMouseClick(e);
+#endif
 
-            //if (ekfhitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
-            //{
-            //    if (ekfclick != null)
-            //        ekfclick(this, null);
-            //}
+			//if (ekfhitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
+			//{
+			//    if (ekfclick != null)
+			//        ekfclick(this, null);
+			//}
 
-            //if (vibehitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
-            //{
-            //    if (vibeclick != null)
-            //        vibeclick(this, null);
-            //}
-        }
+			//if (vibehitzone.IntersectsWith(new Rectangle(e.X, e.Y, 5, 5)))
+			//{
+			//    if (vibeclick != null)
+			//        vibeclick(this, null);
+			//}
+		}
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
