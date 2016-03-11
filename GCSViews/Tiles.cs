@@ -553,8 +553,7 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = false;
             sideLap.Visible = true;
             overLap.Visible = true;
-
-			FlightPlanner.instance.pathGenerationMode = true;
+			
 			FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
 			pathAccepted = false;
             var Host = new Plugin.PluginHost();
@@ -582,6 +581,8 @@ namespace MissionPlanner.GCSViews
 			{
 				FlightPlanner.instance.clearPolygonToolStripMenuItem_Click(null, null);
 			}
+			FlightPlanner.instance.CurrentGMapMarker = null;
+			FlightPlanner.instance.CurentRectMarker = null;
         }
 
         private static void PolygonModeEvent(object sender, EventArgs args)

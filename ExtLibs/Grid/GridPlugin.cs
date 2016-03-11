@@ -68,25 +68,30 @@ namespace MissionPlanner
 
         void but_Click(object sender, EventArgs e)
         {
-            gridui = new GridUI(this);
+            
 
             if (Host.FPDrawnPolygon != null && Host.FPDrawnPolygon.Points.Count > 2)
             {
-                GCSViews.Tiles.PathAcceptButtonVisible = true;
+				gridui = new GridUI(this);
+				GCSViews.FlightPlanner.instance.pathGenerationMode = true;
+				GCSViews.Tiles.PathAcceptButtonVisible = true;
 				GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;       
             }
             else
             {
                 if (CustomMessageBox.Show("No polygon defined. Load a file?", "Load File", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    gridui.LoadGrid();
+					gridui = new GridUI(this);
+					GCSViews.FlightPlanner.instance.pathGenerationMode = true;
+					gridui.LoadGrid();
                     gridui.BUT_Accept_Click(sender, e);
                     GCSViews.Tiles.PathAcceptButtonVisible = true;
                     GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;
                 }
                 else
                 {
-                    CustomMessageBox.Show("Please define a polygon.", "Error");
+					GCSViews.FlightPlanner.instance.pathGenerationMode = false;
+					CustomMessageBox.Show("Please define a polygon.", "Error");
                     GCSViews.Tiles.pathAcceptedEvent -= pathAcceptedEventHandler;
                     GCSViews.Tiles.AcceptPathEvent(null, null);                         //change visibility of some buttons
                 }

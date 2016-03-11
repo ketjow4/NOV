@@ -1591,9 +1591,9 @@ namespace MissionPlanner
                     }
                     CHK_toandland.Checked = false;
                     CHK_toandland_RTL.Checked = false;
-                    if (CHK_toandland.Checked)
+                    if (CHK_toandland.Checked || true)
                     {
-                        if (CHK_toandland_RTL.Checked)
+                        if (CHK_toandland_RTL.Checked || true)
                         {
                             plugin.Host.AddWPtoList(MAVLink.MAV_CMD.RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0);
                         }

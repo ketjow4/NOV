@@ -560,8 +560,9 @@ namespace MissionPlanner
             }
 
             ChangeUnits();
+			config["theme"] = "Custom";
 
-            if (config["theme"] != null)
+			if (config["theme"] != null)
             {
                 
                 //change color here
