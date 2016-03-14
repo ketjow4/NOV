@@ -5825,22 +5825,38 @@ namespace MissionPlanner.GCSViews
             if (area.IsEmpty)       //cancel option
                 return;
 
-            //TODO Change below
-            DialogResult res = CustomMessageBox.Show("Ready ripp at Zoom = " + (int)MainMap.Zoom + " ?", "GMap.NET",
-                    MessageBoxButtons.YesNo);
 
-            if (res == DialogResult.Yes)
+            List<int> tilesCount = new List<int>();
+            tilesCount.Add(0);
+            tilesCount.Add(0);
+            tilesCount.Add(0);
+            for (int i = (int)3; i <= 20; i++)
             {
-                for (int i = (int)MainMap.Zoom; i <= MainMap.MaxZoom; i++)
-                {
-                    TilePrefetcher obj = new TilePrefetcher();
-                    obj.ShowCompleteMessage = false;
-                    obj.Start(area, i, MainMap.MapProvider, 100, 0);
-
-                    if (obj.UserAborted)
-                        break;
-                }
+                var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                tilesCount.Add(list.Count);
             }
+
+            OfflineMapsInput input = new OfflineMapsInput(tilesCount);
+            input.ShowDialog();
+
+            if(input.canceled)
+            {
+                MainMap.SelectedArea = RectLatLng.Empty;
+                Tiles.cancelOfflineMaps.Visible = false;
+                return ;
+            }
+
+            for (int i = (int)MainMap.Zoom; i <= 20; i++)
+            {
+                TilePrefetcher obj = new TilePrefetcher();
+                obj.ShowCompleteMessage = false;
+                obj.Start(area, i, MainMap.MapProvider, 100, 0);
+
+                if (obj.UserAborted)
+                    break;
+            }
+            
+            MainMap.SelectedArea = RectLatLng.Empty;
         }
 
         public void RestoreMainMapSettings()
@@ -5849,7 +5865,7 @@ namespace MissionPlanner.GCSViews
             Tiles.offlineMaps.SetToOriginal();
             MainMap.MouseMove += MainMap_MouseMove;
             MainMap.MouseDown += MainMap_MouseDown;
-            MainMap.MouseUp += MainMap_MouseUp;
+            MainMap.MouseUp += MainMap_MouseUp;    
         }
 
         private void kMLOverlayToolStripMenuItem_Click(object sender, EventArgs e)

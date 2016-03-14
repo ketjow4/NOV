@@ -146,6 +146,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\fftpack_lite.dll</HintPath>
     </Reference>
+    <Reference Include="gTrackBar">
+      <HintPath>ExtLibs\gTrackBar\gTrackBar.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
@@ -472,6 +475,12 @@
       <DependentUpon>InputFlightPlanning.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
+    <Compile Include="GCSViews\OfflineMapsInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\OfflineMapsInput.Designer.cs">
+      <DependentUpon>OfflineMapsInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1204,6 +1213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\InputFlightPlanning.resx">
       <DependentUpon>InputFlightPlanning.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\OfflineMapsInput.resx">
+      <DependentUpon>OfflineMapsInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\PreFlightCheck.resx">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
