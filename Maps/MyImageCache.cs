@@ -151,8 +151,12 @@ namespace MissionPlanner.Maps
             {
                 try
                 {
-                    File.Delete(filen);
-                    affectedRows++;
+					DateTime creationTime = File.GetCreationTime(filen);
+					if(creationTime.Date.CompareTo(date.Date) < 0)
+					{
+						File.Delete(filen);
+						affectedRows++;
+					}
                 }
                 catch
                 {
