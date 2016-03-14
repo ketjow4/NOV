@@ -152,7 +152,7 @@ namespace MissionPlanner.Maps
                 try
                 {
 					DateTime creationTime = File.GetCreationTime(filen);
-					if(creationTime.Date.CompareTo(date.Date) < 0)
+					if(creationTime.CompareTo(date) < 0)
 					{
 						File.Delete(filen);
 						affectedRows++;
