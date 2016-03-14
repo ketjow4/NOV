@@ -5835,10 +5835,7 @@ namespace MissionPlanner.GCSViews
 
 
             List<int> tilesCount = new List<int>();
-            tilesCount.Add(0);
-            tilesCount.Add(0);
-            tilesCount.Add(0);
-            for (int i = (int)3; i <= 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
                 var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
                 tilesCount.Add(list.Count);
