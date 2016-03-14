@@ -5816,14 +5816,22 @@ namespace MissionPlanner.GCSViews
             MainMap.MouseUp -= MainMap_MouseUp;
         }
 
-        public void DownloadOfflineMap()
+		private int MinZoom;
+		private int MaxZoom;
+		OfflineMapsInput input;
+
+		public void DownloadOfflineMap()
         {
             RestoreMainMapSettings();
 
             RectLatLng area = MainMap.SelectedArea;
 
-            if (area.IsEmpty)       //cancel option
-                return;
+            if (area.IsEmpty)
+			{
+				MessageBox.Show("Please, select an area.");
+				Tiles.cancelOfflineMaps.Visible = false;
+				return;
+			}
 
 
             List<int> tilesCount = new List<int>();
@@ -5836,17 +5844,18 @@ namespace MissionPlanner.GCSViews
                 tilesCount.Add(list.Count);
             }
 
-            OfflineMapsInput input = new OfflineMapsInput(tilesCount);
+            input = new OfflineMapsInput(tilesCount);
+			input.OkClicked += Input_OkClicked;
             input.ShowDialog();
 
             if(input.canceled)
             {
                 MainMap.SelectedArea = RectLatLng.Empty;
                 Tiles.cancelOfflineMaps.Visible = false;
-                return ;
+                return;
             }
 
-            for (int i = (int)MainMap.Zoom; i <= 20; i++)
+            for (int i = MinZoom; i <= MaxZoom; i++)
             {
                 TilePrefetcher obj = new TilePrefetcher();
                 obj.ShowCompleteMessage = false;
@@ -5855,11 +5864,18 @@ namespace MissionPlanner.GCSViews
                 if (obj.UserAborted)
                     break;
             }
-            
-            MainMap.SelectedArea = RectLatLng.Empty;
+
+			Tiles.cancelOfflineMaps.Visible = false;
+			MainMap.SelectedArea = RectLatLng.Empty;
         }
 
-        public void RestoreMainMapSettings()
+		private void Input_OkClicked(object sender, EventArgs e)
+		{
+			MinZoom = input.MinZoom;
+			MaxZoom = input.MaxZoom;
+		}
+
+		public void RestoreMainMapSettings()
         {
             MainMap.DisableAltForSelection = false;
             Tiles.offlineMaps.SetToOriginal();

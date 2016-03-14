@@ -11,8 +11,9 @@ namespace MissionPlanner.GCSViews
 {
     public partial class OfflineMapsInput : Form
     {
-        //private int tilesCount;
-        //private double estimatedSizeMB;
+		//private int tilesCount;
+		//private double estimatedSizeMB;
+		public event EventHandler OkClicked;
         private readonly double sizeOfTile = 0.054255525;
 
         public bool canceled = false;
@@ -32,6 +33,10 @@ namespace MissionPlanner.GCSViews
 
         private void OkButton_Click(object sender, EventArgs e)
         {
+			if(OkClicked != null)
+			{
+				OkClicked(null, null);
+			}
             this.Close();
         }
 
@@ -60,5 +65,21 @@ namespace MissionPlanner.GCSViews
             TilesCountLabel.Text = sum.ToString();
             EstimatedSizeMBLabel.Text = (sum * sizeOfTile).ToString("#.0");
         }
+
+		public int MinZoom
+		{
+			get
+			{
+				return MinZoomTrackBar.Value;
+			}
+		}
+
+		public int MaxZoom
+		{
+			get
+			{
+				return MaxZoomTrackBar.Value;
+			}
+		}
     }
 }

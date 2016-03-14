@@ -83,7 +83,7 @@ namespace GMap.NET
          {
             MethodInvoker m = delegate
             {
-               label2.Text = left + " tile to save...";
+               label2.Text = left + " tiles left.";
             };
             Invoke(m);
          }
@@ -131,7 +131,7 @@ namespace GMap.NET
          }
 
          GMaps.Instance.CancelTileCaching();
-
+			
          done.Close();
       }
 
@@ -150,6 +150,8 @@ namespace GMap.NET
                MessageBox.Show(this, "Prefetch Canceled! => " + ((int)e.Result).ToString() + " of " + all);
             }
          }
+
+		 
 
          list.Clear();
 
@@ -264,7 +266,14 @@ namespace GMap.NET
 
          if(!IsDisposed)
          {
-            done.WaitOne();
+			try
+			{
+				done.WaitOne();
+			}
+			catch (Exception)
+			{
+					
+			}
          }
       }
 
