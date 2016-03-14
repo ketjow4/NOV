@@ -13,6 +13,7 @@ using MissionPlanner.Utilities;
 using MissionPlanner;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using GMap.NET.MapProviders;
 
 namespace MissionPlanner
 {
@@ -79,13 +80,19 @@ namespace MissionPlanner
 
             // set the cache provider to my custom version
             GMap.NET.GMaps.Instance.PrimaryCache = new Maps.MyImageCache();
-            // add my custom map providers
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.WMSProvider.Instance);
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Custom.Instance);
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Earthbuilder.Instance);
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.Statkart_Topo2.Instance);
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.MapBox.Instance);
-            GMap.NET.MapProviders.GMapProviders.List.Add(Maps.MapboxNoFly.Instance);
+			// add my custom map providers
+			GMapProviders.List.Add(Maps.WMSProvider.Instance);
+			GMapProviders.List.Add(Maps.Custom.Instance);
+            GMapProviders.List.Add(Maps.Earthbuilder.Instance);
+            GMapProviders.List.Add(Maps.Statkart_Topo2.Instance);
+            GMapProviders.List.Add(Maps.MapBox.Instance);
+            GMapProviders.List.Add(Maps.MapboxNoFly.Instance);
+
+			foreach(GMapProvider provider in GMapProviders.List)
+			{
+				GMap.NET.GMaps.Instance.PrimaryCache.DeleteOlderThan(
+					DateTime.Now.AddDays(-14), provider.DbId);
+			}
 
             // add proxy settings
             GMap.NET.MapProviders.GMapProvider.WebProxy = WebRequest.GetSystemWebProxy();
