@@ -469,7 +469,7 @@ namespace MissionPlanner.GCSViews
 
         private static void SavePolygonEvent(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+			FlightPlanner.instance.savePolygonToolStripMenuItem_Click(null, null);
         }
 
         private static bool firstClick = true;

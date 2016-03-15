@@ -6196,14 +6196,14 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void savePolygonToolStripMenuItem_Click(object sender, EventArgs e)
+        public void savePolygonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (drawnpolygon.Points.Count == 0)
             {
+				MessageBox.Show("Please, draw a polygon first.");
                 return;
             }
-
-
+			
             using (SaveFileDialog sf = new SaveFileDialog())
             {
                 sf.Filter = "Polygon (*.poly)|*.poly";
