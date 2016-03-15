@@ -60,7 +60,7 @@ namespace MissionPlanner.GCSViews
             int sum = 0;
             for(int i = MinZoomTrackBar.Value; i <= MaxZoomTrackBar.Value; i++)
             {
-                sum += tilesOnZoomLevel[i];
+                sum += tilesOnZoomLevel[i-1];  //because zoom levels starts from 1 and list start index is 0
             }
             TilesCountLabel.Text = sum.ToString();
             EstimatedSizeMBLabel.Text = (sum * sizeOfTile).ToString("#.0");
