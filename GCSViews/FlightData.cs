@@ -2054,7 +2054,7 @@ namespace MissionPlanner.GCSViews
         {
             MouseDownStart = gMapControl1.FromLocalToLatLng(e.X, e.Y);
 
-            if (Control.ModifierKeys == Keys.Control)
+            if (Tiles.guidedMode)
             {
                 goHereToolStripMenuItem_Click(null, null);
             }
@@ -2065,14 +2065,22 @@ namespace MissionPlanner.GCSViews
             var label = sender as System.Windows.Forms.Label;
             MouseDownStart = gMapControl1.FromLocalToLatLng(e.X + label.Location.X, e.Y + label.Location.Y);
 
-            if (Control.ModifierKeys == Keys.Control)
+            if (Tiles.guidedMode)
             {
                 goHereToolStripMenuItem_Click(null, null);
             }
         }
 
+        //to do change here and implement guided mode
         private void goHereToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //if(MainV2.comPort.MAV.cs.landed)
+            //{
+                //takeOffToolStripMenuItem_Click(null, null);
+                // Thread.Sleep(5000);
+                //MainV2.comPort.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, MainV2.comPort.MAV.GuidedMode.z);
+            //}
+
             if (!MainV2.comPort.BaseStream.IsOpen)
             {
                 CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
@@ -2554,7 +2562,8 @@ namespace MissionPlanner.GCSViews
 
         private void hud1_DoubleClick(object sender, EventArgs e)
         {
-            if (huddropout || true)
+            #if DEBUG
+            if (huddropout)
                 return;
 
             SubMainLeft.Panel1Collapsed = true;
@@ -2566,6 +2575,7 @@ namespace MissionPlanner.GCSViews
             dropout.FormClosed += dropout_FormClosed;
             dropout.Show();
             huddropout = true;
+            #endif
         }
 
         void dropout_FormClosed(object sender, FormClosedEventArgs e)
@@ -2594,7 +2604,7 @@ namespace MissionPlanner.GCSViews
                 if (((Form) sender).WindowState == FormWindowState.Maximized)
                 {
                     Point tl = ((Form) sender).DesktopLocation;
-                    ((Form) sender).WindowState = FormWindowState.Normal;
+                    //((Form) sender).WindowState = FormWindowState.Normal;
                     ((Form) sender).Location = tl;
                 }
                 ((Form) sender).Width = (int) (formh*1.333f);
@@ -3304,24 +3314,27 @@ namespace MissionPlanner.GCSViews
 
         private void flyToHereAltToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string alt = "100";
+            string alt = "500";
 
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
             {
-                alt = (10*CurrentState.multiplierdist).ToString("0");
+                alt = (50*CurrentState.multiplierdist).ToString("0");
             }
             else
             {
-                alt = (100*CurrentState.multiplierdist).ToString("0");
+                alt = (500*CurrentState.multiplierdist).ToString("0");
             }
 
-            if (MainV2.config.ContainsKey("guided_alt"))
-                alt = MainV2.config["guided_alt"].ToString();
+            //if (MainV2.config.ContainsKey("guided_alt"))
+            //    alt = MainV2.config["guided_alt"].ToString();
 
-            if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
-                return;
+            //if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
+            //    return;
 
-            MainV2.config["guided_alt"] = alt;
+            InputFlightPlanning inputWindow = new InputFlightPlanning("GUIDED MODE ALTITUDE", false, alt, 50, 500);
+            inputWindow.ShowDialog();
+            alt = inputWindow.ResultString;
+            //MainV2.config["guided_alt"] = alt;
 
             int intalt = (int) (100*CurrentState.multiplierdist);
             if (!int.TryParse(alt, out intalt))
@@ -3893,7 +3906,7 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        private void takeOffToolStripMenuItem_Click(object sender, EventArgs e)
+        public void takeOffToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (MainV2.comPort.BaseStream.IsOpen)
             {

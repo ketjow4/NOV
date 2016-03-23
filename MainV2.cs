@@ -440,7 +440,7 @@ namespace MissionPlanner
             // full screen
             //this.TopMost = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-           // this.WindowState = FormWindowState.Maximized;
+            //this.WindowState = FormWindowState.Maximized;
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
@@ -487,6 +487,9 @@ namespace MissionPlanner
 
             splash.Refresh();
             Application.DoEvents();
+
+            //uncomment for full screen
+            //this.WindowState = FormWindowState.Maximized;
 
             if (MainV2.config.ContainsKey("comport"))
             {
@@ -691,17 +694,17 @@ namespace MissionPlanner
                     this.Location = startpos;
                 }
 
-                if (config["MainMaximised"] != null)
-                {
-                    this.WindowState =
-                        (FormWindowState) Enum.Parse(typeof (FormWindowState), config["MainMaximised"].ToString());
-                    // dont allow minimised start state
-                    if (this.WindowState == FormWindowState.Minimized)
-                    {
-                        this.WindowState = FormWindowState.Normal;
-                        this.Location = new Point(100, 100);
-                    }
-                }
+                //if (config["MainMaximised"] != null)
+                //{
+                //    this.WindowState =
+                //        (FormWindowState) Enum.Parse(typeof (FormWindowState), config["MainMaximised"].ToString());
+                //    // dont allow minimised start state
+                //    if (this.WindowState == FormWindowState.Minimized)
+                //    {
+                //        this.WindowState = FormWindowState.Maximized;
+                //        this.Location = new Point(100, 100);
+                //    }
+                //}
 
                 if (config["MainHeight"] != null)
                     this.Height = int.Parse(config["MainHeight"].ToString());
@@ -3388,7 +3391,7 @@ namespace MissionPlanner
             {
                 this.TopMost = true;
                 this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                this.WindowState = FormWindowState.Normal;
+                //this.WindowState = FormWindowState.Normal;
                 this.WindowState = FormWindowState.Maximized;
             }
             else
