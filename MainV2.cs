@@ -2627,21 +2627,14 @@ namespace MissionPlanner
 
             Program.Splash.Close();
 
-            try
-            {
-                tfr.GetTFRs();
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-            }
+            ThreadPool.QueueUserWorkItem(BGgetTFR);
 
             try
             {
                 log.Info("Load Pluggins");
                 Plugin.PluginLoader.LoadAll();
                 log.Info("Load Pluggins Done");
-                NoFly.NoFly.Scan();
+                ThreadPool.QueueUserWorkItem(BGNoFly);
             }
             catch (Exception ex)
             {
@@ -2762,7 +2755,20 @@ namespace MissionPlanner
               */
         }
 
-        private void BGGetAlmanac(object state)
+        private void BGNoFly(object state)
+        {
+            try
+            {
+                NoFly.NoFly.Scan();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+        }
+
+
+private void BGGetAlmanac(object state)
         {
             // prep for future
             try
@@ -3411,5 +3417,18 @@ namespace MissionPlanner
         {
             new ConnectionOptions().Show(this);
         }
+
+
+        private void BGgetTFR(object state)
+         {
+             try
+             {
+                 tfr.GetTFRs();
+             }
+             catch (Exception ex)
+             {
+                 log.Error(ex);
+             }
+         }
     }
 }
