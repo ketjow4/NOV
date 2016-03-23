@@ -123,8 +123,8 @@ namespace MissionPlanner
 
             InitializeComponent();
 
-            GCSViews.FlightPlanner.polygonMarkerMovedEvent += FlightPlanner_polygonMarkerMovedEvent;
-            map = (MissionPlanner.Controls.myGMAP)plugin.Host.FPGMapControl;
+			GCSViews.FlightPlanner.polygonMarkerMovedEvent += FlightPlanner_polygonMarkerMovedEvent;
+			map = (MissionPlanner.Controls.myGMAP)plugin.Host.FPGMapControl;
             map.MapProvider = plugin.Host.FDMapType;
 
             routesOverlay = new GMapOverlay("routes_grid");
@@ -136,24 +136,24 @@ namespace MissionPlanner
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
             if (plugin.Host.config["distunits"] != null)
                 DistUnits = plugin.Host.config["distunits"].ToString();
-            plugin.Host.FPDrawnPolygon.Points.Clear();
+			plugin.Host.FPDrawnPolygon.Points.Clear();
 
             CMB_startfrom.DataSource = Enum.GetNames(typeof(Grid.StartPosition));
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
 
             // set and angle that is good
             NUM_angle.Value = Tiles.AngleVal;
-            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString();
+            TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString(); 
         }
 
-        private void FlightPlanner_polygonMarkerMovedEvent(object sender, EventArgs e)
-        {
-            list.Clear();
-            plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
-            domainUpDown1_ValueChanged(null, null);
-        }
+		private void FlightPlanner_polygonMarkerMovedEvent(object sender, EventArgs e)
+		{
+			list.Clear();
+			plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
+			domainUpDown1_ValueChanged(null, null);
+		}
 
-        private void GridUI_Load(object sender, EventArgs e)
+		private void GridUI_Load(object sender, EventArgs e)
         {
             xmlcamera(false);
 
@@ -164,9 +164,9 @@ namespace MissionPlanner
 
             TRK_zoom.Value = (float)map.Zoom;
 
-            label1.Text += " (" + CurrentState.DistanceUnit + ")";
+            label1.Text += " (" + CurrentState.DistanceUnit+")";
             label24.Text += " (" + CurrentState.SpeedUnit + ")";
-        }
+		}
 
         private void GridUI_Resize(object sender, EventArgs e)
         {
@@ -242,7 +242,7 @@ namespace MissionPlanner
             num_overlap.Value = griddata.overlap;
             num_sidelap.Value = griddata.sidelap;
             NUM_spacing.Value = griddata.spacing;
-
+            
             CMB_startfrom.Text = griddata.startfrom;
 
             CHK_internals.Checked = griddata.internals;
@@ -295,7 +295,7 @@ namespace MissionPlanner
             griddata.overlap = num_overlap.Value;
             griddata.sidelap = num_sidelap.Value;
             griddata.spacing = NUM_spacing.Value;
-
+            
             // Copter Settings
             griddata.copter_delay = NUM_copter_delay.Value;
             griddata.copter_headinghold_chk = CHK_copter_headinghold.Checked;
@@ -600,9 +600,9 @@ namespace MissionPlanner
 
             // new grid system test
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
-            grid = Grid.CreateGrid(list, (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, Tiles.AngleVal, (double)NUM_overshoot.Value,
+            grid = Grid.CreateGrid(list, (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, Tiles.AngleVal, (double)NUM_overshoot.Value, 
                                    (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
-
+         
             List<PointLatLng> list2 = new List<PointLatLng>();
 
             grid.ForEach(x => { list2.Add(x); });
@@ -633,7 +633,7 @@ namespace MissionPlanner
                 if (item.Tag == "M")
                 {
                     images++;
-
+					
                     if (CHK_internals.Checked)
                     {
                         routesOverlay.Markers.Add(new GMarkerGoogle(item, GMarkerGoogleType.green) { ToolTipText = a.ToString(), ToolTipMode = MarkerTooltipMode.OnMouseOver });
@@ -757,7 +757,7 @@ namespace MissionPlanner
             else
             {
                 // Meters
-                Tiles.Area = ((double)(calcpolygonarea(list) / 100000)).ToString();      //km^2
+                Tiles.Area =  ((double)(calcpolygonarea(list) / 100000)).ToString();      //km^2
                 //lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
                 lbl_distance.Text = routetotal.ToString("0.##"); // +" km";
                 //lbl_spacing.Text = NUM_spacing.Value.ToString("#") + " m";
@@ -803,7 +803,7 @@ namespace MissionPlanner
             seconds = ((routetotal * 1000.0) / (flyspeedms));
             lbl_photoevery.Text = secondsToNice(((double)NUM_spacing.Value / flyspeedms));
             map.HoldInvalidation = false;
-
+            
             CalcHeadingHold();
         }
 
@@ -999,11 +999,11 @@ namespace MissionPlanner
             int current = (int)Math.Round(NUM_angle.Value);
 
             int change = current - previous;
-
+            
             if (change > 0) // Positive change
             {
                 int val = Convert.ToInt32(TXT_headinghold.Text) + change;
-                if (val > 359)
+                if (val > 359) 
                 {
                     val = val - 360;
                 }
@@ -1296,8 +1296,8 @@ namespace MissionPlanner
         private void BUT_headingholdplus_Click(object sender, EventArgs e)
         {
             int previous = Convert.ToInt32(TXT_headinghold.Text);
-            if (!CHK_copter_headingholdlock.Checked)
-            {
+            if(!CHK_copter_headingholdlock.Checked)
+            {                
                 if (previous + 180 > 359)
                 {
                     TXT_headinghold.Text = (previous - 180).ToString();
@@ -1323,7 +1323,7 @@ namespace MissionPlanner
         private void BUT_headingholdminus_Click(object sender, EventArgs e)
         {
             int previous = Convert.ToInt32(TXT_headinghold.Text);
-
+            
             if (!CHK_copter_headingholdlock.Checked)
             {
                 if (previous - 180 < 0)
@@ -1464,18 +1464,18 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
-            GCSViews.FlightPlanner.polygonMarkerMovedEvent -= FlightPlanner_polygonMarkerMovedEvent;
+			GCSViews.FlightPlanner.polygonMarkerMovedEvent -= FlightPlanner_polygonMarkerMovedEvent;
 
-            routesOverlay.Clear();
+			routesOverlay.Clear();
 
             for (int i = 0; i < map.Overlays.Count; i++)
-            {
+                {
                 if (map.Overlays.ElementAt(i).Id == "routes_grid")
                     map.Overlays.Remove(map.Overlays.ElementAt(i));
-            }
+                }
 
             if (grid != null && grid.Count > 0)
-            {
+                {
                 MainV2.instance.FlightPlanner.quickadd = true;
 
                 if (NUM_split.Value > 1 && CHK_toandland.Checked != true)
@@ -1513,9 +1513,7 @@ namespace MissionPlanner
 
 
                     int i = 0;
-                    bool startedtrigdist = false;
-                    PointLatLngAlt lastplla = PointLatLngAlt.Zero;
-                    foreach (var plla in grid)
+                    grid.ForEach(plla =>
                     {
                         // skip before start point
                         if (i < wpstart)
@@ -1545,98 +1543,86 @@ namespace MissionPlanner
                             else
                             {
                                 AddWP(plla.Lng, plla.Lat, plla.Alt);
-                                if (plla.Lat != lastplla.Lat || plla.Lng != lastplla.Lng || plla.Alt != lastplla.Alt)
+                                if (chk_stopstart.Checked)
                                 {
-                                    AddWP(plla.Lng, plla.Lat, plla.Alt);
-                                    {
-                                        if (chk_stopstart.Checked)
-                                        {
-                                            if (plla.Tag == "S")
-                                            {
-                                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST,
-                                                    (double)Math.Round(NUM_spacing.Value, 3, MidpointRounding.ToEven),
-                                                    0, 0, 0, 0, 0, 0);
-                                            }
-                                            else if (plla.Tag == "E")
-                                            {
-                                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0,
-                                                    0, 0, 0, 0, 0, 0);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (!startedtrigdist)
-                                            {
-                                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST,
-                                                (float)NUM_spacing.Value,
-                                                0, 0, 0, 0, 0, 0);
-                                                startedtrigdist = true;
-                                            }
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    AddWP(plla.Lng, plla.Lat, plla.Alt);
                                     if (rad_trigdist.Checked)
                                     {
-                                        plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (double)Math.Round(NUM_spacing.Value, 3, MidpointRounding.ToEven),
-                                            0, 0, 0, 0, 0, 0);
+                                        if (plla.Tag == "S")
+                                        {
+                                            plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST,
+                                                (double)Math.Round( NUM_spacing.Value,3,MidpointRounding.ToEven) ,
+                                                0, 0, 0, 0, 0, 0);
+                                        }
+                                        else if (plla.Tag == "E")
+                                        {
+                                            plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0,
+                                                0, 0, 0, 0, 0, 0);
+                                        }
                                     }
-                                }
-                                lastplla = plla;
-                                ++i;
-                            }
-
-                            // end
-                            if (rad_trigdist.Checked)
-                            {
-                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
-                            }
-
-                            if (CHK_usespeed.Checked)
-                            {
-                                if (MainV2.comPort.MAV.param["WPNAV_SPEED"] != null)
-                                {
-                                    double speed = MainV2.comPort.MAV.param["WPNAV_SPEED"].Value;
-                                    speed = speed / 100;
-                                    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0, speed, 0, 0, 0, 0, 0);
-                                }
-                            }
-                            CHK_toandland.Checked = false;
-                            CHK_toandland_RTL.Checked = false;
-                            if (CHK_toandland.Checked || true)
-                            {
-                                if (CHK_toandland_RTL.Checked || true)
-                                {
-                                    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0);
-                                }
-                                else
-                                {
-                                    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.LAND, 0, 0, 0, 0, plugin.Host.cs.HomeLocation.Lng,
-                                        plugin.Host.cs.HomeLocation.Lat, 0);
                                 }
                             }
                         }
+                        else
+                        {
+                            AddWP(plla.Lng, plla.Lat, plla.Alt);
+                            if (rad_trigdist.Checked)
+                            {
+                                plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, (double)Math.Round(NUM_spacing.Value, 3, MidpointRounding.ToEven),
+                                    0, 0, 0, 0, 0, 0);
+                            }
+                        }
+                        ++i;
+                    });
 
-                        // Redraw the polygon in FP
-                        plugin.Host.RedrawFPPolygon(list);
-
-                        savesettings();
-
-                        MainV2.instance.FlightPlanner.quickadd = false;
-
-                        MainV2.instance.FlightPlanner.writeKML();
-
-                        this.Close();
+                    // end
+                    if (rad_trigdist.Checked)
+                    {
+                        plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_SET_CAM_TRIGG_DIST, 0, 0, 0, 0, 0, 0, 0);
                     }
-            else
-            {
-                        CustomMessageBox.Show("Bad Grid", "Error");
+
+                    if (CHK_usespeed.Checked)
+                    {
+                        if (MainV2.comPort.MAV.param["WPNAV_SPEED"] != null)
+                        {
+                            double speed = MainV2.comPort.MAV.param["WPNAV_SPEED"].Value;
+                            speed = speed / 100;
+                            plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0, speed, 0, 0, 0, 0, 0);
+                        }
+                    }
+                    CHK_toandland.Checked = false;
+                    CHK_toandland_RTL.Checked = false;
+                    if (CHK_toandland.Checked || true)
+                    {
+                        if (CHK_toandland_RTL.Checked || true)
+                        {
+                            plugin.Host.AddWPtoList(MAVLink.MAV_CMD.RETURN_TO_LAUNCH, 0, 0, 0, 0, 0, 0, 0);
+                        }
+                        else
+                        {
+                            plugin.Host.AddWPtoList(MAVLink.MAV_CMD.LAND, 0, 0, 0, 0, plugin.Host.cs.HomeLocation.Lng,
+                                plugin.Host.cs.HomeLocation.Lat, 0);
+                        }
                     }
                 }
 
-protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+                // Redraw the polygon in FP
+                plugin.Host.RedrawFPPolygon(list);
+
+                savesettings();
+
+                MainV2.instance.FlightPlanner.quickadd = false;
+
+                MainV2.instance.FlightPlanner.writeKML();
+
+                this.Close();
+            }
+            else
+            {
+                CustomMessageBox.Show("Bad Grid", "Error");
+            }
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.O))
             {
