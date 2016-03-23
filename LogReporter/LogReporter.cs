@@ -25,6 +25,8 @@ namespace MissionPlanner.LogReporter
         private void DeleteOldFiles()
         {
             //load last log file name
+            try
+            { 
             String lastlog = LoadLastLogFileSend();
             String temp;
             String[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*");
@@ -36,11 +38,23 @@ namespace MissionPlanner.LogReporter
                     File.Delete(file);
                 }
             }
+            }
+            catch(DirectoryNotFoundException ex)
+            {
+                //not a problem
+            }
+            catch(Exception ex)
+            {
+                //
+            }
         }
 
         //split too big files into smaller ones and give the list of files to send
         private List<String> PrepareFilesToSend()
         {
+            try
+            {
+
             string[] filePaths = Directory.GetFiles("logs\\QUADROTOR\\1\\", "*.tlog");
             List<String> prepared = new List<String>();
 
@@ -69,7 +83,13 @@ namespace MissionPlanner.LogReporter
                 else
                     prepared.Add(file);
             }
+
             return prepared;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
 
