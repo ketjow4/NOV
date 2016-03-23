@@ -32,6 +32,7 @@ namespace MissionPlanner.GCSViews
         public static StartPosition begin = 0;
         public static bool showFootprint = false;
         public static bool cameraFacingForward = false;
+        public static bool guidedMode = false;
 
         public static event EventHandler pathAcceptedEvent;
 
@@ -69,6 +70,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton abortLandButton = null;
         public static TileButton offlineMaps = null;
         public static TileButton cancelOfflineMaps = null;
+        private static TileButton guidedModeButton = null;
 
         private static TileData sideLap = null;
         private static TileData overLap = null;
@@ -298,6 +300,9 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPS SAT COUNT", 1, 6, ""),
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
                 new TileButton("EXIT",2,0, ExitEvent),
+                new TileButton("START\nMISSION",2,6,StartMissionEvent),
+                guidedModeButton = new TileButton("GUIDED\nMODE",3,8,GuidedModeEvent),
+                new TileButton("TAKE OFF",4,8,TakeOffEvent),
                 mode = new TileData("MODE",0,6,""),
                 panicButton = new TileButton("BRAKE",12.3,4, PanicButtonEvent),
                 abortLandButton = new TileButton("ABORT\nLANDING",12.3,5, AbortLandEvent),
@@ -439,8 +444,28 @@ namespace MissionPlanner.GCSViews
             cancelOfflineMaps.Visible = false;
         }
 
+        private static void TakeOffEvent(object sender, EventArgs e)
+        {
+            FlightData.instance.takeOffToolStripMenuItem_Click(null,null);
+        }
 
-
+        private static void GuidedModeEvent(object sender, EventArgs e)
+        {
+           
+            if(guidedMode)
+            {
+                guidedModeButton.SetToOriginal();
+                (sender as Label).BackColor = Color.FromArgb(22, 23, 24);
+                guidedMode = false;
+            }
+            else
+            {
+                //guidedModeButton.SetToHoverColor();
+                //guidedModeButton.ChangeButtonColor(Color.FromArgb(0,120,60));
+                (sender as Label).BackColor = Color.FromArgb(0, 120, 60);
+                guidedMode = true;
+            }
+        }
 
 
 
@@ -473,6 +498,8 @@ namespace MissionPlanner.GCSViews
         }
 
         private static bool firstClick = true;
+        
+
         private static void OfflineMapsEvent(object sender, EventArgs e)
         {
             //first click action
@@ -744,6 +771,22 @@ namespace MissionPlanner.GCSViews
 
         #region EventsFlightData
 
+
+        private static void StartMissionEvent(object sender, EventArgs e)
+        {
+            try
+            {
+                int param1 = 0;
+                int param3 = 1;
+                MainV2.comPort.doCommand((MAVLink.MAV_CMD)Enum.Parse(typeof(MAVLink.MAV_CMD), "MISSION_START"),
+                           param1, 0, param3, 0, 0, 0, 0);
+            }
+            catch
+            {
+                CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+            }
+        }
+
         private static void PanicButtonEvent(object sender, EventArgs args)
         {
             try
@@ -835,6 +878,9 @@ namespace MissionPlanner.GCSViews
                 else
                     return;     //jeśli nie zaakceptowano to powrót i brak arm
             }
+
+            MainV2.comPort.setMode("Loiter");         //do usunięcia na potem !!!!
+
             FlightData.instance.BUT_ARM_Click(sender, args);
             if (armed && connected)
             {
