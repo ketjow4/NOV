@@ -1300,8 +1300,8 @@ namespace MissionPlanner.GCSViews
 
                             try
                             {
-                                //dist = (float)new PointLatLngAlt(home.x, home.y).GetDistance(new PointLatLngAlt(lastplla.x, lastplla.y));
-                                // distanceBar1.AddWPDist(dist);
+                                dist = (float)new PointLatLngAlt(home.x, home.y).GetDistance(new PointLatLngAlt(lastplla.x, lastplla.y));
+                                distanceBar1.AddWPDist(dist);
                             }
                             catch
                             {
@@ -3314,15 +3314,15 @@ namespace MissionPlanner.GCSViews
 
         private void flyToHereAltToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string alt = "500";
+            string alt = "50";
 
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
             {
-                alt = (50*CurrentState.multiplierdist).ToString("0");
+                //alt = (10*CurrentState.multiplierdist).ToString("0");
             }
             else
             {
-                alt = (500*CurrentState.multiplierdist).ToString("0");
+                //alt = (100*CurrentState.multiplierdist).ToString("0");
             }
 
             //if (MainV2.config.ContainsKey("guided_alt"))

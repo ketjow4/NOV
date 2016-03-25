@@ -2026,6 +2026,8 @@ namespace MissionPlanner.GCSViews
             this.distanceBar1.Name = "distanceBar1";
             this.distanceBar1.totaldist = 100F;
             this.distanceBar1.traveleddist = 0F;
+            this.distanceBar1.Location = new Point(135, 115);
+            this.distanceBar1.Size = new Size(655, 35);
             // 
             // bindingSourceGaugesTab
             // 

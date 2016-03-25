@@ -242,7 +242,7 @@ namespace MissionPlanner.GCSViews
                     if (pass == false)
                     {
                         CustomMessageBox.Show("You must have a home altitude");
-                        string homealt = "100";
+                        string homealt = "50";
                         if (DialogResult.Cancel == InputBox.Show("Home Alt", "Home Altitude", ref homealt))
                             return;
                         TXT_homealt.Text = homealt;
@@ -256,7 +256,7 @@ namespace MissionPlanner.GCSViews
 
                     if (results1 == 0)
                     {
-                        string defalt = "100";
+                        string defalt = "50";
                         if (DialogResult.Cancel == InputBox.Show("Default Alt", "Default Altitude", ref defalt))
                             return;
                         TXT_DefaultAlt.Text = defalt;

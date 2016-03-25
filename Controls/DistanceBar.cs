@@ -123,8 +123,13 @@ namespace MissionPlanner.Controls
                             if (trav > totaldist)
                                 trav = totaldist;
 
-                            etemp.FillPie(Brushes.Yellow, (bar.X + bar.Width*(trav/totaldist)) - iconwidth/2, bar.Top,
-                                bar.Height/2, bar.Height, 0, 360);
+                            Brush blueBrush = new SolidBrush(Color.FromArgb(41, 171, 226));
+
+                            etemp.FillRectangle(blueBrush, (bar.X + bar.Width * (trav / totaldist)) - iconwidth / 2, bar.Top,
+                                bar.Height / 4, bar.Height);
+
+                            //etemp.FillPie(blueBrush, (bar.X + bar.Width*(trav/totaldist)) - iconwidth/2, bar.Top,
+                            //    bar.Height/2, bar.Height, 0, 360);
                             //e.Graphics.DrawImage(icon, (bar.X + bar.Width * (trav / totaldist)) - iconwidth / 2, 1, iconwidth, bar.Height);
                         }
                     }
@@ -133,8 +138,23 @@ namespace MissionPlanner.Controls
 
                     string dist = traveleddist.ToString("0");
 
-                    etemp.DrawString(dist, this.Font, new SolidBrush(this.ForeColor), bartrav.Right,
-                        bartrav.Bottom - this.Font.Height);
+                    Font f = new Font("Century Gothic", 18, FontStyle.Regular);
+
+                    if(bartrav.Right > this.Size.Width/2)
+                    {
+                        var textSize = TextRenderer.MeasureText(dist, f);
+                        etemp.DrawString(dist, f, new SolidBrush(this.ForeColor), bartrav.Right - textSize.Width,
+                      bartrav.Bottom - f.Height);
+                    }
+                    else
+                    {
+                        etemp.DrawString(dist, f, new SolidBrush(this.ForeColor), bartrav.Right,
+                        bartrav.Bottom - f.Height);
+                    }
+                    Brush redBrush = new SolidBrush(Color.FromArgb(255, 51, 0));
+
+                    etemp.FillRectangle(redBrush, bartrav.Right, bar.Top,
+                               bar.Height / 6, bar.Height);
 
                     e.Graphics.DrawImageUnscaled(buffer, 0, 0);
                 }
