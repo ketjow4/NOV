@@ -158,7 +158,7 @@ namespace MissionPlanner
         SizeF txtsize = SizeF.Empty;
 
         public GMapMarkerWP(PointLatLng p, string wpno)
-            : base(p, GMarkerGoogleType.green)
+            : base(p, GMarkerGoogleType.blue)
         {
             this.wpno = wpno;
         }

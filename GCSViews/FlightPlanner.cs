@@ -253,7 +253,7 @@ namespace MissionPlanner.GCSViews
                         CustomMessageBox.Show("Your default alt is not valid");
                         return;
                     }
-
+                    results1 = 50; //hax
                     if (results1 == 0)
                     {
                         string defalt = "50";
@@ -263,7 +263,7 @@ namespace MissionPlanner.GCSViews
                     }
                 }
 
-                cell.Value = TXT_DefaultAlt.Text;
+                cell.Value = Tiles.AltitudeVal.ToString();
 
                 float ans;
                 if (float.TryParse(cell.Value.ToString(), out ans))
@@ -414,6 +414,7 @@ namespace MissionPlanner.GCSViews
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+#if DEBUG
             // undo
             if (keyData == (Keys.Control | Keys.Z))
             {
@@ -441,6 +442,7 @@ namespace MissionPlanner.GCSViews
                 return true;
             }
 
+#endif
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
