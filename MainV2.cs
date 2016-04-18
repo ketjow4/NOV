@@ -421,7 +421,7 @@ namespace MissionPlanner
 
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.Fixed3D;
-			//this.WindowState = FormWindowState.Maximized;
+			this.WindowState = FormWindowState.Maximized;
 
 			MyView = new MainSwitcher(this);
             View = MyView;
@@ -440,7 +440,7 @@ namespace MissionPlanner
             // full screen
             //this.TopMost = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            //this.WindowState = FormWindowState.Maximized;
+            this.WindowState = FormWindowState.Maximized;
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
@@ -489,7 +489,9 @@ namespace MissionPlanner
             Application.DoEvents();
 
             //uncomment for full screen
-            //this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.Location = new Point(0, 0);
 
             if (MainV2.config.ContainsKey("comport"))
             {
@@ -686,13 +688,13 @@ namespace MissionPlanner
 
             try
             {
-                if (config["MainLocX"] != null && config["MainLocY"] != null)
-                {
-                    this.StartPosition = FormStartPosition.Manual;
-                    Point startpos = new Point(int.Parse(config["MainLocX"].ToString()),
-                        int.Parse(config["MainLocY"].ToString()));
-                    this.Location = startpos;
-                }
+                //if (config["MainLocX"] != null && config["MainLocY"] != null)
+                //{
+                //    this.StartPosition = FormStartPosition.Manual;
+                //    Point startpos = new Point(int.Parse(config["MainLocX"].ToString()),
+                //        int.Parse(config["MainLocY"].ToString()));
+                //    this.Location = startpos;
+                //}
 
                 //if (config["MainMaximised"] != null)
                 //{
