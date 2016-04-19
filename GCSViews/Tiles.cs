@@ -291,15 +291,15 @@ namespace MissionPlanner.GCSViews
                 new TileButton("CONNECT", 0, 7, ConnectEvent),
             });
             commonTiles = tilesFlightMode;      //bad hax
-            mode.ValueLabel.Width = 120;    //ugly !!!
+            mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
 
             obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
-            obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
+            obsHeadBtn.ValueLabel.Width = ResolutionManager.MagicWidth;          //ugly !!!
             obsHeadBtn.Value = camName;
 
 
             startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
-            startFromBut.ValueLabel.Width = 120;   //ugly !!!
+            startFromBut.ValueLabel.Width = ResolutionManager.MagicWidth;   //ugly !!!
             startFromBut.Value = startFrom;
 
 
@@ -719,7 +719,7 @@ namespace MissionPlanner.GCSViews
         private static void SidelapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 100);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 99);
             inputWindow.ShowDialog();
             ChangeSideLap(inputWindow.Result);
         }
@@ -727,7 +727,7 @@ namespace MissionPlanner.GCSViews
         private static void OverlapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 100);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 99);
             inputWindow.ShowDialog();
             ChangeOverLap(inputWindow.Result);
         }
@@ -844,7 +844,7 @@ namespace MissionPlanner.GCSViews
                     return;     //jeśli nie zaakceptowano to powrót i brak arm
             }
 
-            MainV2.comPort.setMode("Loiter");         //do usunięcia na potem !!!!
+            //MainV2.comPort.setMode("Loiter");         //TODO do usunięcia na potem !!!!
 
             FlightData.instance.BUT_ARM_Click(sender, args);
             if (armed && connected)

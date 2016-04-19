@@ -384,6 +384,13 @@ namespace MissionPlanner
 		
         public MainV2()
         {
+            
+            var Resolution = Screen.PrimaryScreen.Bounds;
+            GCSViews.Modification.ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
+            GCSViews.Modification.ResolutionManager.Initialize();
+
+
+
             MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
             report = new Thread(new ThreadStart(nowyreporter.SendMail));
             report.Start();
