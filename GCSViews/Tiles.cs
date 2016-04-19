@@ -148,33 +148,10 @@ namespace MissionPlanner.GCSViews
         }
 
         internal static List<TileInfo> commonTiles = null;
-        private static List<Panel> common = new List<Panel>();
+
 
         public static void SetCommonTiles()
         {
-            commonTiles = new List<TileInfo>();
-            commonTiles.Add(new TileButton("AUTO", 1, 7, AutoModeEvent, Color.FromArgb(255, 255, 51, 0)));
-            commonTiles.Add(new TileButton("RESTART", 2, 7, RestartMissionEvent));
-            commonTiles.Add(new TileButton("RETURN", 2, 8, ReturnToLaunchEvent));
-            commonTiles.Add(new TileButton("LAND", 1, 8, LandEvent));
-            ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent);
-            commonTiles.Add(ArmButton);
-            commonTiles.Add(new TileButton("CONNECT", 0, 7, ConnectEvent));
-
-            foreach (var tile in commonTiles)
-            {
-                //TODO: transparent
-                var panel = new Panel
-                {
-                    Size = new Size(130, 55),
-                    Location = new Point((int)tile.Column * 132, (int)tile.Row * 57),
-                    BackColor = Color.FromArgb(220, 0, 0, 0),
-                };
-                panel.Controls.Add(tile.Label);
-                common.Add(panel);
-                panel.BringToFront();
-            }
-
             Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
             thread.Start();
         }
@@ -280,7 +257,7 @@ namespace MissionPlanner.GCSViews
             if (!isFlightMode && MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
 
-            windSpeed = new TileData("WIND SPEED", 8.35, 0, "m/s");
+            windSpeed = new TileData("WIND SPEED", ResolutionManager.WindSpeedLocation.Y, ResolutionManager.WindSpeedLocation.X, "m/s");
             TileData mode;
 
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
@@ -290,7 +267,6 @@ namespace MissionPlanner.GCSViews
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
-                new TileButton("DISARM", 0, 7),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, FlighPlanningShowEvent),
                 new TileData("AIR SPEED", 1, 1, "km/h"),
                 new TileData("DISTANCE TO HOME", 1, 2, "m"),
@@ -304,17 +280,27 @@ namespace MissionPlanner.GCSViews
                 guidedModeButton = new TileButton("GUIDED\nMODE",3,8,GuidedModeEvent),
                 new TileButton("TAKE OFF",4,8,TakeOffEvent),
                 mode = new TileData("MODE",0,6,""),
-                panicButton = new TileButton("BRAKE",12.3,4, PanicButtonEvent),
-                abortLandButton = new TileButton("ABORT\nLANDING",12.3,5, AbortLandEvent),
+                panicButton = new TileButton("BRAKE",ResolutionManager.PanicButtonLocation.Y,ResolutionManager.PanicButtonLocation.X, PanicButtonEvent),
+                abortLandButton = new TileButton("ABORT\nLANDING",ResolutionManager.AbortLandLocation.Y,ResolutionManager.AbortLandLocation.X, AbortLandEvent),
                 windSpeed,
+                new TileButton("AUTO", 1, 7, AutoModeEvent, Color.FromArgb(255, 255, 51, 0)),
+                new TileButton("RESTART", 2, 7, RestartMissionEvent),
+                new TileButton("RETURN", 2, 8, ReturnToLaunchEvent),
+                new TileButton("LAND", 1, 8, LandEvent),
+                ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
+                new TileButton("CONNECT", 0, 7, ConnectEvent),
             });
+            commonTiles = tilesFlightMode;      //bad hax
+            mode.ValueLabel.Width = 120;    //ugly !!!
 
-            mode.ValueLabel.Width = 120;
+            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
+            obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
+            obsHeadBtn.Value = camName;
 
 
-
-
-
+            startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
+            startFromBut.ValueLabel.Width = 120;   //ugly !!!
+            startFromBut.Value = startFrom;
 
 
 
@@ -335,9 +321,7 @@ namespace MissionPlanner.GCSViews
                 cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, CameraButtonListEvent));
                 i++;
             }
-            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
-            obsHeadBtn.ValueLabel.Width = 120;          //ugly !!!
-            obsHeadBtn.Value = camName;
+            
 
 
             startFromButtons = new List<TileButton>();
@@ -348,12 +332,10 @@ namespace MissionPlanner.GCSViews
                 startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7, StartFromButtonListEvent));
                 i++;
             }
-            startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
-            startFromBut.ValueLabel.Width = 120;
-            startFromBut.Value = startFrom;
+           
 
             accept = new TileButton("ACCEPT\nPATH", 2, 1, AcceptPathEvent);
-            Images = new TileData("IMAGES NUBMER", 12.4, 7, "");
+            Images = new TileData("IMAGES NUBMER", ResolutionManager.BottomOfScreenRow, 7, "");
             Images.Value = "0";
 
             var hideList = new TileInfo[] { accept, sideLap, overLap };
@@ -372,10 +354,10 @@ namespace MissionPlanner.GCSViews
                 flyingSpeed,
                 sideLap,overLap,Images,startFromBut,
 
-                new TileButton("COMPASS\nCALIBRATION",12.4,0, CompassCalibrationEvent),
-                area = new TileData("AREA",12.4,8,"km\u00B2"),
-                distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",11.4,7,"m"),
-                numberofStripes = new TileData("NUMBER OF STRIPS",11.4,8,""),
+                new TileButton("COMPASS\nCALIBRATION",ResolutionManager.BottomOfScreenRow,0, CompassCalibrationEvent),
+                area = new TileData("AREA",ResolutionManager.BottomOfScreenRow,8,"km\u00B2"),
+                distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",ResolutionManager.BottomOfScreenRow - 1,7,"m"),
+                numberofStripes = new TileData("NUMBER OF STRIPS",ResolutionManager.BottomOfScreenRow - 1,8,""),
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
                 new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
                 new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
@@ -383,35 +365,28 @@ namespace MissionPlanner.GCSViews
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => { }, Color.FromArgb(255, 255, 51, 0)),
                 new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
-                new TileButton("SHOW WP",11.4,0,ShowWPEvent),
+                new TileButton("SHOW WP",ResolutionManager.BottomOfScreenRow - 1,0,ShowWPEvent),
                 new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),
                 new TileButton("\u2610   CAM\nFORWARD",0,5, CameraFacingForwardEvent),
                 new TileButton("LOAD\nPOLYGON",0,6,LoadPolygonFileEvent),
-                new TileButton("SAVE\nPOLYGON",9.4,0,SavePolygonEvent),
-                offlineMaps = new TileButton("OFFLINE\nMAPS",10.4,0,OfflineMapsEvent),
-                cancelOfflineMaps = new TileButton("CANCEL",10.4,1,CancelOfflineMapsEvent),
+                new TileButton("SAVE\nPOLYGON",ResolutionManager.BottomOfScreenRow - 3,0,SavePolygonEvent),
+                offlineMaps = new TileButton("OFFLINE\nMAPS",ResolutionManager.BottomOfScreenRow - 2,0,OfflineMapsEvent),
+                cancelOfflineMaps = new TileButton("CANCEL",ResolutionManager.BottomOfScreenRow - 2,1,CancelOfflineMapsEvent),
 
                 writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
                 altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent),
-                groundResInfo = new TileData("GROUND RESOLUTION", 12.4, 5, "cm/p"),
-                flightTime = new TileData("FLIGHT TIME", 11.4, 6, "h:m:s"),
+                groundResInfo = new TileData("GROUND RESOLUTION", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
+                flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 6, "h:m:s"),
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,7, SaveWPFileEvent),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,8, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,LoadWPPlatformEvent),
-                distanceTile = new TileData("DISTANCE",12.4,6,"km"),
+                distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,6,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
             tilesFlightPlanning.AddRange(startFromButtons);
 
             var tilesArray = (isFlightMode) ? tilesFlightMode : tilesFlightPlanning;
-
-            foreach (var pan in common)
-            {
-                pan.Parent = FlightData.instance.splitContainer1.Panel2;
-                FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
-                pan.BringToFront();
-            }
 
             var sideValue = MainV2.config["grid_sidelap"];
             var overValue = MainV2.config["grid_overlap"];
@@ -422,11 +397,11 @@ namespace MissionPlanner.GCSViews
 
             foreach (var tile in tilesArray)
             {
-                //TODO: transparent
                 var panel = new Panel
                 {
-                    Size = new Size(130, 55),
-                    Location = new Point((int)(tile.Column * 132), (int)(tile.Row * 57)),
+                    Size = new Size(ResolutionManager.TileWidth,  ResolutionManager.TileHeight),
+                    Location = new Point((int)(tile.Column * (ResolutionManager.TileWidth + ResolutionManager.MarginSize)), 
+                                         (int)(tile.Row * (ResolutionManager.TileHeight + ResolutionManager.MarginSize))),
                     Parent = p,
                     Name = tile.Label.Text,
                 };
@@ -446,13 +421,13 @@ namespace MissionPlanner.GCSViews
 
         private static void TakeOffEvent(object sender, EventArgs e)
         {
-            FlightData.instance.takeOffToolStripMenuItem_Click(null,null);
+            FlightData.instance.takeOffToolStripMenuItem_Click(null, null);
         }
 
         private static void GuidedModeEvent(object sender, EventArgs e)
         {
-           
-            if(guidedMode)
+
+            if (guidedMode)
             {
                 guidedModeButton.SetToOriginal();
                 (sender as Label).BackColor = Color.FromArgb(22, 23, 24);
@@ -460,14 +435,10 @@ namespace MissionPlanner.GCSViews
             }
             else
             {
-                //guidedModeButton.SetToHoverColor();
-                //guidedModeButton.ChangeButtonColor(Color.FromArgb(0,120,60));
                 (sender as Label).BackColor = Color.FromArgb(0, 120, 60);
                 guidedMode = true;
             }
         }
-
-
 
 
         #region EventsFlightPlanner
@@ -494,11 +465,11 @@ namespace MissionPlanner.GCSViews
 
         private static void SavePolygonEvent(object sender, EventArgs e)
         {
-			FlightPlanner.instance.savePolygonToolStripMenuItem_Click(null, null);
+            FlightPlanner.instance.savePolygonToolStripMenuItem_Click(null, null);
         }
 
         private static bool firstClick = true;
-        
+
 
         private static void OfflineMapsEvent(object sender, EventArgs e)
         {
@@ -639,7 +610,7 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = false;
             sideLap.Visible = true;
             overLap.Visible = true;
-			FlightPlanner.instance.pathGenerationMode = true;
+            FlightPlanner.instance.pathGenerationMode = true;
             FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
             pathAccepted = false;
 
@@ -719,12 +690,6 @@ namespace MissionPlanner.GCSViews
             MainV2.View.ShowScreen("FlightData");
             MainV2.onMapPositionChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Position);
             MainV2.onMapZoomChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Zoom);
-            foreach (var pan in common)
-            {
-                pan.Parent = FlightData.instance.splitContainer1.Panel2;
-                FlightData.instance.splitContainer1.Panel2.Controls.Add(pan);
-                pan.BringToFront();
-            }
         }
 
         private static void AngelSettingEvent(object sender, EventArgs args)
@@ -835,7 +800,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.instance.MenuConnect_Click(null, null);
                 armed = MainV2.comPort.MAV.cs.armed;
                 if (armed)
-                    commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
+                    ArmButton.Label.Text = "DISARM";
                 if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                 {
                     windSpeed.Visible = false;
