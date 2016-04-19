@@ -420,7 +420,7 @@ namespace MissionPlanner
                     Font.GdiVerticalFont);
 
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = FormBorderStyle.None;
 			this.WindowState = FormWindowState.Maximized;
 
 			MyView = new MainSwitcher(this);
@@ -439,7 +439,7 @@ namespace MissionPlanner
 
             // full screen
             //this.TopMost = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
@@ -492,6 +492,7 @@ namespace MissionPlanner
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
             this.Location = new Point(0, 0);
+            
 
             if (MainV2.config.ContainsKey("comport"))
             {
@@ -1009,7 +1010,7 @@ namespace MissionPlanner
                     Height = 180,
                     MaximizeBox = false,
                     MinimizeBox = false,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    FormBorderStyle = FormBorderStyle.None,
                     Text = Strings.LinkStats
                 };
                 // Change the connection stats control, so that when/if the connection stats form is showing,
@@ -3405,7 +3406,7 @@ private void BGGetAlmanac(object state)
             else
             {
                 this.TopMost = false;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                 this.WindowState = FormWindowState.Maximized;
             }
         }

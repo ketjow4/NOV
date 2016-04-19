@@ -288,9 +288,9 @@ namespace MissionPlanner.GCSViews
             // 
             // MainH
             // 
-            this.MainH.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MainH.BorderStyle = System.Windows.Forms.BorderStyle.None;
             resources.ApplyResources(this.MainH, "MainH");
-            this.MainH.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            //this.MainH.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.MainH.Name = "MainH";
             // 
             // MainH.Panel1
@@ -308,7 +308,7 @@ namespace MissionPlanner.GCSViews
             // 
             // SubMainLeft
             // 
-            this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SubMainLeft.BorderStyle = System.Windows.Forms.BorderStyle.None;
             //resources.ApplyResources(this.SubMainLeft, "SubMainLeft");                    //comment below and uncomment this form log checking
 
             //responsive 
