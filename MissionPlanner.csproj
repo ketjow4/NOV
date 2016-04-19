@@ -474,6 +474,7 @@
     <Compile Include="GCSViews\InputFlightPlanning.Designer.cs">
       <DependentUpon>InputFlightPlanning.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\Modification\ResolutionManager.cs" />
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
     <Compile Include="GCSViews\OfflineMapsInput.cs">
       <SubType>Form</SubType>
