@@ -75,7 +75,7 @@ namespace MissionPlanner.GCSViews.Modification
 
         #endregion
 
-        public static void Initialize()                     //TODO include size of InputDialog, WaypointsForm, check if there should be any other things to change
+        public static void Initialize()                     //TODO include size of WaypointsForm, check if there should be any other things to change
         {
             BottomOfScreenRow = 13.1f;
 
@@ -87,7 +87,7 @@ namespace MissionPlanner.GCSViews.Modification
                 TileWidth = 134;
                 TileHeight = 55;
                 MarginSize = 2;
-                DistBarSize = new Size(675, 35);
+                DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
                 InputPanelSize = new Size(400, 370);
 
                 MagicWidth = 120;
@@ -118,11 +118,11 @@ namespace MissionPlanner.GCSViews.Modification
             }
             if (CurrentRes == Resolutions.r1600x900)
             {
-                HUDSize = new Size(360, 260);
+                HUDSize = new Size(360, 270);
                 TileWidth = 169;
                 TileHeight = 62;
                 MarginSize = 2;
-                DistBarSize = new Size(675, 35);
+                DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);        //TODO change this
                 InputPanelSize = new Size(520, 470);
 
                 MagicWidth = 150;
@@ -149,6 +149,39 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelWidth = 100;
                 ValueLabelFontSize = 20f;
             }
+            if (CurrentRes == Resolutions.r1366x768)
+            {
+                HUDSize = new Size(350, 260);
+                TileWidth = 144;
+                TileHeight = 53;
+                MarginSize = 2;
+                DistBarSize = new Size( (TileWidth+MarginSize)*5 - 3*MarginSize, 35);
+                InputPanelSize = new Size(400, 370);
+
+                MagicWidth = 120;
+
+                TileButtonFontSize = 11f;
+
+                InputInfoFontSize = 20.25f;
+                InputTextBoxFontSize = 24.0f;
+                InputButtonsFontSize = 15.75f;
+
+
+                HeadLabelFontSize = 8f;
+                HeadLabelTop = 7;
+                HeadLabelLeft = 4;
+                HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
+
+                UnitLabelFontSize = 10f;
+                UnitLabelLeft = TileWidth - 2 * MarginSize - 100; //165 - 100
+                UnitLabelTop = TileHeight - 23 - 8;
+
+                ValueLabelLeft = 4;
+                ValueLabelHeight = 20;
+                ValueLabelTop = TileHeight - 20 - 8;
+                ValueLabelWidth = 90;
+                ValueLabelFontSize = 15f;
+            }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);
             AbortLandLocation = new PointF(5, BottomOfScreenRow - 0.1f);
@@ -173,7 +206,7 @@ namespace MissionPlanner.GCSViews.Modification
             ScreenWidth = width;
             if (width == 1280 && height == 800)
                 CurrentRes = Resolutions.r1280x800;
-            if (width == 1366 && height == 768)
+            if ((width == 1366 || width == 1360) && height == 768)      //1366x768 or 1360x768 are treated the same
                 CurrentRes = Resolutions.r1366x768;
             if (width == 1600 && height == 900)
                 CurrentRes = Resolutions.r1600x900;
