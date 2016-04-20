@@ -695,7 +695,7 @@ namespace MissionPlanner.GCSViews
         private static void AngelSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE", false, AngleVal.ToString(), 0, 360);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE", false, AngleVal.ToString(), 0, 360, ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             ChangeAngle(inputWindow.Result);
         }
@@ -703,7 +703,7 @@ namespace MissionPlanner.GCSViews
         private static void AltitudeSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ALTITUDE", false, AltitudeVal.ToString(), altMin, altMax);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("ALTITUDE", false, AltitudeVal.ToString(), altMin, altMax, ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             ChangeAlt(inputWindow.Result);
         }
@@ -711,7 +711,7 @@ namespace MissionPlanner.GCSViews
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false, FlyingSpeed.ToString(), fsMin, fsMax);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false, FlyingSpeed.ToString(), fsMin, fsMax, ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             ChangeSpeed(inputWindow.Result);
         }
@@ -719,7 +719,7 @@ namespace MissionPlanner.GCSViews
         private static void SidelapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 99);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 99, ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             ChangeSideLap(inputWindow.Result);
         }
@@ -727,7 +727,7 @@ namespace MissionPlanner.GCSViews
         private static void OverlapSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 99);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 99, ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             ChangeOverLap(inputWindow.Result);
         }
@@ -800,7 +800,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.instance.MenuConnect_Click(null, null);
                 armed = MainV2.comPort.MAV.cs.armed;
                 if (armed)
-                    ArmButton.Label.Text = "DISARM";
+                    commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
                 if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                 {
                     windSpeed.Visible = false;

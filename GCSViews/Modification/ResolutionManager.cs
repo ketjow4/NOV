@@ -57,6 +57,8 @@ namespace MissionPlanner.GCSViews.Modification
 
         public static float ValueLabelFontSize;
 
+        public static Size InputPanelSize;
+
 
         public static Size PanelSize;
 
@@ -72,6 +74,8 @@ namespace MissionPlanner.GCSViews.Modification
         public static void Initialize()                     //TODO include size of InputDialog, WaypointsForm, check if there should be any other things to change
         {
             BottomOfScreenRow = 13.1f;
+
+            InputPanelSize = new Size(400, 370);
 
             if (CurrentRes == Resolutions.r1280x800)
             { 
