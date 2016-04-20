@@ -1189,13 +1189,10 @@ namespace MissionPlanner
                 catch { }
 
                 //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
-                foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
+                if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
                 {
-                    if (tile.Label.Text == "DISCONNECT")
-                    {
-                        tile.Label.Text = "CONNECT";
-                        GCSViews.Tiles.connected = false;
-                    }
+                    GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
+                    GCSViews.Tiles.connected = true;
                 }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
@@ -1473,22 +1470,24 @@ namespace MissionPlanner
 
                     // set connected icon
                     this.MenuConnect.Image = displayicons.disconnect;
-                    foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
-                    {
-                        if (tile.Label.Text == "CONNECT")
-                        {
-                            tile.Label.Text = "DISCONNECT";
-                            GCSViews.Tiles.connected = true;
-                        }
 
-                        //if (comPort.MAV.param.ContainsKey("RALLY_LIMIT_KM") &&
-                        //    (maxdist / 1000.0) > (float)comPort.MAV.param["RALLY_LIMIT_KM"])
-                        //{
-                        //    CustomMessageBox.Show(Strings.Warningrallypointdistance + " " +
-                        //                          (maxdist / 1000.0).ToString("0.00") + " > " +
-                        //                          (float)comPort.MAV.param["RALLY_LIMIT_KM"]);
-                        //}
+                    
+                     if (GCSViews.Tiles.ConnectButton.Label.Text == "CONNECT")
+                    {
+                        GCSViews.Tiles.ConnectButton.Label.Text = "DISCONNECT";
+                        GCSViews.Tiles.connected = true;
                     }
+
+
+
+                    //if (comPort.MAV.param.ContainsKey("RALLY_LIMIT_KM") &&
+                    //    (maxdist / 1000.0) > (float)comPort.MAV.param["RALLY_LIMIT_KM"])
+                    //{
+                    //    CustomMessageBox.Show(Strings.Warningrallypointdistance + " " +
+                    //                          (maxdist / 1000.0).ToString("0.00") + " > " +
+                    //                          (float)comPort.MAV.param["RALLY_LIMIT_KM"]);
+                    //}
+                    
 
                     // set connected icon
                     this.MenuConnect.Image = displayicons.disconnect;

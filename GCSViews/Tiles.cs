@@ -148,10 +148,12 @@ namespace MissionPlanner.GCSViews
         }
 
         internal static List<TileInfo> commonTiles = null;
-
+        public static TileButton ConnectButton;
 
         public static void SetCommonTiles()
         {
+            ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent);
+            ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent);
             Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
             thread.Start();
         }
@@ -245,6 +247,8 @@ namespace MissionPlanner.GCSViews
             catch (Exception ex)
             {
                 //MessageBox.Show("Transparent Label error" + ex.Message);
+                //Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
+                //thread.Start();
                 // log errors
             }
         }
@@ -287,8 +291,8 @@ namespace MissionPlanner.GCSViews
                 new TileButton("RESTART", 2, 7, RestartMissionEvent),
                 new TileButton("RETURN", 2, 8, ReturnToLaunchEvent),
                 new TileButton("LAND", 1, 8, LandEvent),
-                ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
-                new TileButton("CONNECT", 0, 7, ConnectEvent),
+                ArmButton,
+                ConnectButton,
             });
             commonTiles = tilesFlightMode;      //bad hax
             mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
