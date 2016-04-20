@@ -59,6 +59,10 @@ namespace MissionPlanner.GCSViews.Modification
 
         public static Size InputPanelSize;
 
+        public static float InputInfoFontSize;
+        public static float InputTextBoxFontSize;
+        public static float InputButtonsFontSize;
+
 
         public static Size PanelSize;
 
@@ -75,7 +79,7 @@ namespace MissionPlanner.GCSViews.Modification
         {
             BottomOfScreenRow = 13.1f;
 
-            InputPanelSize = new Size(400, 370);
+            
 
             if (CurrentRes == Resolutions.r1280x800)
             { 
@@ -84,8 +88,14 @@ namespace MissionPlanner.GCSViews.Modification
                 TileHeight = 55;
                 MarginSize = 2;
                 DistBarSize = new Size(675, 35);
+                InputPanelSize = new Size(400, 370);
 
                 MagicWidth = 120;
+
+
+                InputInfoFontSize = 20.25f;
+                InputTextBoxFontSize = 24.0f;
+                InputButtonsFontSize = 15.75f;
 
                 TileButtonFontSize = 11f;
 
@@ -113,10 +123,15 @@ namespace MissionPlanner.GCSViews.Modification
                 TileHeight = 62;
                 MarginSize = 2;
                 DistBarSize = new Size(675, 35);
+                InputPanelSize = new Size(520, 470);
 
                 MagicWidth = 150;
 
                 TileButtonFontSize = 13f;
+
+                InputInfoFontSize = 23.25f;
+                InputTextBoxFontSize = 27.0f;
+                InputButtonsFontSize = 18.75f;
 
 
                 HeadLabelFontSize = 12f;

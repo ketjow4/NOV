@@ -37,6 +37,19 @@ namespace MissionPlanner.GCSViews
             MinMaxLabel.Text = "MIN " + MinValue.ToString() + " - MAX " + MaxValue.ToString();
             InfoLabel.Text = infoLabelText;
             ValidateInput();
+            SetFonts();
+        }
+
+        public void SetFonts()
+        {
+            InputTextBox.Font = new Font("Century Gothic", Modification.ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);
+            MinMaxLabel.Font = InfoLabel.Font = new Font("Century Gothic", Modification.ResolutionManager.InputInfoFontSize, FontStyle.Regular);
+
+            foreach(var element in this.tableLayoutPanel1.Controls)
+            {
+                if(element is Button)
+                    (element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
+            }
         }
 
         private void OkButton_Click(object sender, EventArgs e)
