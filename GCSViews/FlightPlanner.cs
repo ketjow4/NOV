@@ -6107,7 +6107,7 @@ namespace MissionPlanner.GCSViews
             // altitude
             string alt = Tiles.AltitudeVal.ToString();
 
-            InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, new Size(460,380));
+            InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);         //new Size(460, 380)
             altitudeInput.ShowDialog();
             alt = altitudeInput.ResultString;
 

@@ -171,6 +171,14 @@ namespace MissionPlanner.GCSViews
 
             InitializeComponent();
 
+            this.SubMainLeft.Size = GCSViews.Modification.ResolutionManager.HUDSize;
+            this.SubMainLeft.Location = GCSViews.Modification.ResolutionManager.HUDLocation;
+            this.windDir1.Location = GCSViews.Modification.ResolutionManager.WindDirLocation;
+            this.windDir1.WindDirSize = GCSViews.Modification.ResolutionManager.WindDirSize;
+            this.distanceBar1.Location = GCSViews.Modification.ResolutionManager.DistBarLocation;
+            this.distanceBar1.Size = GCSViews.Modification.ResolutionManager.DistBarSize;
+            this.BorderStyle = BorderStyle.None;
+
             log.Info("Components Done");
 
             instance = this;
@@ -3331,7 +3339,7 @@ namespace MissionPlanner.GCSViews
             //if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
             //    return;
 
-            InputFlightPlanning inputWindow = new InputFlightPlanning("GUIDED MODE ALTITUDE", false, alt, 50, 500);
+            InputFlightPlanning inputWindow = new InputFlightPlanning("GUIDED MODE ALTITUDE", false, alt, 50, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);
             inputWindow.ShowDialog();
             alt = inputWindow.ResultString;
             //MainV2.config["guided_alt"] = alt;

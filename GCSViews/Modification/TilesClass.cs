@@ -45,16 +45,16 @@ namespace MissionPlanner.GCSViews.Modification
         {
             this.unit = unit;
             ClickMethod = handler;
-            panel = new Panel { Size = new Size(127, 55) };
+            panel = new Panel { Size = ResolutionManager.PanelSize };
             ;
             headLabel = new Label()
             {
                 Text = text,
                 ForeColor = Color.FromArgb(255, 41, 171, 226),
-                Font = new Font("Century Gothic", 8, FontStyle.Italic),
-                Top = 7,
-                Left = 2,
-                Width = 130,
+                Font = new Font("Century Gothic", ResolutionManager.HeadLabelFontSize, FontStyle.Italic),
+                Top = ResolutionManager.HeadLabelTop,
+                Left = ResolutionManager.HeadLabelLeft,
+                Width = ResolutionManager.HeadLabelWidth,
                 TextAlign = ContentAlignment.TopLeft
 
             };
@@ -62,23 +62,23 @@ namespace MissionPlanner.GCSViews.Modification
             {
                 Text = unit,
                 ForeColor = Color.White,
-                Font = new Font("Century Gothic", 10),
+                Font = new Font("Century Gothic", ResolutionManager.UnitLabelFontSize),
                 TextAlign = ContentAlignment.BottomRight,
             };
-            unitLabel.Top = 55 - unitLabel.Height - 8;
-            unitLabel.Left = 130 - unitLabel.Width - 0;
+            unitLabel.Top = ResolutionManager.UnitLabelTop;
+            unitLabel.Left = ResolutionManager.UnitLabelLeft;
 
             valueLabel = new Label()
             {
                 ForeColor = Color.White,
-                Font = new Font("Century Gothic", 15),
-                Left = 4,
+                Font = new Font("Century Gothic", ResolutionManager.ValueLabelFontSize),
+                Left = ResolutionManager.ValueLabelLeft,
                 Text = "0",
-                Height = 20,
-                Width = 80,         //new for 1280x800 design
+                Height = ResolutionManager.ValueLabelHeight,
+                Width = ResolutionManager.ValueLabelWidth,         //new for 1280x800 design
                 Name = text.Replace(' ', '_').Replace('\n', '_')
             };
-            valueLabel.Top = 55 - valueLabel.Height - 8;
+            valueLabel.Top = ResolutionManager.ValueLabelTop;
             panel.Controls.Add(unitLabel);
             panel.Controls.Add(valueLabel);
             valueLabel.BringToFront();
@@ -172,7 +172,7 @@ namespace MissionPlanner.GCSViews.Modification
                 AutoSize = false,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-                Font = new Font("Century Gothic", 11)
+                Font = new Font("Century Gothic", ResolutionManager.TileButtonFontSize)
             };
             label.Click += ClickMethod;
             label.MouseEnter += EnterHover;

@@ -386,6 +386,13 @@ namespace MissionPlanner
 		
         public MainV2()
         {
+            
+            var Resolution = Screen.PrimaryScreen.Bounds;
+            GCSViews.Modification.ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
+            GCSViews.Modification.ResolutionManager.Initialize();
+
+
+
             MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
             report = new Thread(new ThreadStart(nowyreporter.SendMail));
             report.Start();
@@ -419,8 +426,8 @@ namespace MissionPlanner
                     Font.GdiVerticalFont);
 
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.Fixed3D;
-			//this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = FormBorderStyle.None;
+			this.WindowState = FormWindowState.Maximized;
 
 			MyView = new MainSwitcher(this);
             View = MyView;
@@ -438,8 +445,8 @@ namespace MissionPlanner
 
             // full screen
             //this.TopMost = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            //this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
 
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
@@ -492,7 +499,10 @@ namespace MissionPlanner
             Application.DoEvents();
 
             //uncomment for full screen
-            //this.WindowState = FormWindowState.Maximized;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.WindowState = FormWindowState.Maximized;
+            this.Location = new Point(0, 0);
+            
 
             if (MainV2.config.ContainsKey("comport"))
             {
@@ -692,13 +702,13 @@ namespace MissionPlanner
 
             try
             {
-                if (config["MainLocX"] != null && config["MainLocY"] != null)
-                {
-                    this.StartPosition = FormStartPosition.Manual;
-                    Point startpos = new Point(int.Parse(config["MainLocX"].ToString()),
-                        int.Parse(config["MainLocY"].ToString()));
-                    this.Location = startpos;
-                }
+                //if (config["MainLocX"] != null && config["MainLocY"] != null)
+                //{
+                //    this.StartPosition = FormStartPosition.Manual;
+                //    Point startpos = new Point(int.Parse(config["MainLocX"].ToString()),
+                //        int.Parse(config["MainLocY"].ToString()));
+                //    this.Location = startpos;
+                //}
 
                 //if (config["MainMaximised"] != null)
                 //{
@@ -1014,7 +1024,7 @@ namespace MissionPlanner
                     Height = 180,
                     MaximizeBox = false,
                     MinimizeBox = false,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    FormBorderStyle = FormBorderStyle.None,
                     Text = Strings.LinkStats
                 };
                 // Change the connection stats control, so that when/if the connection stats form is showing,
@@ -1186,13 +1196,10 @@ namespace MissionPlanner
                 catch { }
 
                 //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
-                foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
+                if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
                 {
-                    if (tile.Label.Text == "DISCONNECT")
-                    {
-                        tile.Label.Text = "CONNECT";
-                        GCSViews.Tiles.connected = false;
-                    }
+                    GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
+                    GCSViews.Tiles.connected = true;
                 }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
@@ -1471,22 +1478,24 @@ namespace MissionPlanner
 
                     // set connected icon
                     this.MenuConnect.Image = displayicons.disconnect;
-                    foreach (var tile in MissionPlanner.GCSViews.Tiles.commonTiles)
-                    {
-                        if (tile.Label.Text == "CONNECT")
-                        {
-                            tile.Label.Text = "DISCONNECT";
-                            GCSViews.Tiles.connected = true;
-                        }
 
-                        //if (comPort.MAV.param.ContainsKey("RALLY_LIMIT_KM") &&
-                        //    (maxdist / 1000.0) > (float)comPort.MAV.param["RALLY_LIMIT_KM"])
-                        //{
-                        //    CustomMessageBox.Show(Strings.Warningrallypointdistance + " " +
-                        //                          (maxdist / 1000.0).ToString("0.00") + " > " +
-                        //                          (float)comPort.MAV.param["RALLY_LIMIT_KM"]);
-                        //}
+                    
+                     if (GCSViews.Tiles.ConnectButton.Label.Text == "CONNECT")
+                    {
+                        GCSViews.Tiles.ConnectButton.Label.Text = "DISCONNECT";
+                        GCSViews.Tiles.connected = true;
                     }
+
+
+
+                    //if (comPort.MAV.param.ContainsKey("RALLY_LIMIT_KM") &&
+                    //    (maxdist / 1000.0) > (float)comPort.MAV.param["RALLY_LIMIT_KM"])
+                    //{
+                    //    CustomMessageBox.Show(Strings.Warningrallypointdistance + " " +
+                    //                          (maxdist / 1000.0).ToString("0.00") + " > " +
+                    //                          (float)comPort.MAV.param["RALLY_LIMIT_KM"]);
+                    //}
+                    
 
                     // set connected icon
                     this.MenuConnect.Image = displayicons.disconnect;
@@ -3413,7 +3422,7 @@ private void BGGetAlmanac(object state)
             else
             {
                 this.TopMost = false;
-                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
                 this.WindowState = FormWindowState.Maximized;
             }
         }

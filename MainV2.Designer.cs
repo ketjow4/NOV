@@ -240,6 +240,7 @@ namespace MissionPlanner
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.Size = new System.Drawing.Size(1280,800);
+            this.Location = new System.Drawing.Point(0, 0);
             //this.AutoSize = false;
         }
 

@@ -34,11 +34,13 @@ namespace MissionPlanner.Controls
         Pen blackpen = new Pen(Color.Black,2);
         Pen redpen = new Pen(Color.Red, 2);
 
+        public Size WindDirSize;
+
         protected override void OnPaint(PaintEventArgs e)
         {
            // e.Graphics.Clear(Color.Transparent);
-            this.Width = 55;
-            this.Height = 55;
+            this.Width = WindDirSize.Width;
+            this.Height = WindDirSize.Height;
             try
             {
 
