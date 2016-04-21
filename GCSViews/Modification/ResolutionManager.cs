@@ -77,43 +77,6 @@ namespace MissionPlanner.GCSViews.Modification
         {
             BottomOfScreenRow = 13.1f;
 
-            
-
-            if (CurrentRes == Resolutions.r1280x800)
-            { 
-                HUDSize = new Size(320, 240);
-                TileWidth = 134;
-                TileHeight = 55;
-                MarginSize = 2;
-                DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
-                InputPanelSize = new Size(400, 370);
-
-                MagicWidth = 120;
-
-
-                InputInfoFontSize = 20.25f;
-                InputTextBoxFontSize = 24.0f;
-                InputButtonsFontSize = 15.75f;
-
-                TileButtonFontSize = 11f;
-
-
-                HeadLabelFontSize = 8f;
-                HeadLabelTop = 7;
-                HeadLabelLeft = 2;
-                HeadLabelWidth = TileWidth - 2*MarginSize;  //130
-
-                UnitLabelFontSize = 10f;
-                UnitLabelLeft = TileWidth - 2 * MarginSize - 100;   //130 - 100
-                UnitLabelTop = TileHeight - 23 - 8;
-
-                ValueLabelLeft = 4;
-                ValueLabelHeight = 20;
-                ValueLabelTop = TileHeight - 20 - 8;
-                ValueLabelWidth = 80;
-                ValueLabelFontSize = 15f;
-
-            }
             if (CurrentRes == Resolutions.r1600x900)
             {
                 HUDSize = new Size(360, 270);
@@ -147,7 +110,7 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelWidth = 100;
                 ValueLabelFontSize = 20f;
             }
-            if (CurrentRes == Resolutions.r1366x768)
+            else if (CurrentRes == Resolutions.r1366x768)
             {
                 HUDSize = new Size(350, 260);
                 if(ScreenWidth == 1360)
@@ -183,7 +146,7 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelWidth = 90;
                 ValueLabelFontSize = 15f;
             }
-            if (CurrentRes == Resolutions.r1920x1080)
+            else if(CurrentRes == Resolutions.r1920x1080)
             {
                 HUDSize = new Size(480, 360);
                 TileWidth = 205;
@@ -216,7 +179,7 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelWidth = 135;
                 ValueLabelFontSize = 22f;
             }
-            if (CurrentRes == Resolutions.r1920x1200)
+            else if(CurrentRes == Resolutions.r1920x1200)
             {
                 BottomOfScreenRow = 13.15f;
                 HUDSize = new Size(500, 380);
@@ -249,6 +212,40 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 39 - 8;
                 ValueLabelWidth = 130;
                 ValueLabelFontSize = 24f;
+            }
+            else //(CurrentRes == Resolutions.r1280x800)
+            {
+                HUDSize = new Size(320, 240);
+                TileWidth = 134;
+                TileHeight = 55;
+                MarginSize = 2;
+                DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
+                InputPanelSize = new Size(400, 370);
+
+                MagicWidth = 120;
+
+
+                InputInfoFontSize = 20.25f;
+                InputTextBoxFontSize = 24.0f;
+                InputButtonsFontSize = 15.75f;
+
+                TileButtonFontSize = 11f;
+
+
+                HeadLabelFontSize = 8f;
+                HeadLabelTop = 7;
+                HeadLabelLeft = 2;
+                HeadLabelWidth = TileWidth - 2 * MarginSize;  //130
+
+                UnitLabelFontSize = 10f;
+                UnitLabelLeft = TileWidth - 2 * MarginSize - 100;   //130 - 100
+                UnitLabelTop = TileHeight - 23 - 8;
+
+                ValueLabelLeft = 4;
+                ValueLabelHeight = 20;
+                ValueLabelTop = TileHeight - 20 - 8;
+                ValueLabelWidth = 80;
+                ValueLabelFontSize = 15f;
             }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);
