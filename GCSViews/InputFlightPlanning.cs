@@ -50,6 +50,11 @@ namespace MissionPlanner.GCSViews
                 if(element is Button)
                     (element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
             }
+            foreach (var element in this.tableLayoutPanel2.Controls)
+            {
+                if (element is Button)
+                    (element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
+            }
         }
 
         private void OkButton_Click(object sender, EventArgs e)
