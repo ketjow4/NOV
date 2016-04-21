@@ -845,6 +845,10 @@ namespace MissionPlanner.GCSViews
                 {
                     abortLandButton.Visible = true;
                 }
+				//FlightPlanner.instance.MainMap.Position = 
+				//	new GMap.NET.PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
+				//FlightPlanner.instance.MainMap.Zoom = 11.0;
+				
             }
             else                    //disconnect
             {

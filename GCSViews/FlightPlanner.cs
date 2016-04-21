@@ -682,7 +682,24 @@ namespace MissionPlanner.GCSViews
             return cmd;
         }
 
-        void Commands_DataError(object sender, DataGridViewDataErrorEventArgs e)
+		public void MavConnectedEventHandler(object sender, EventArgs args)
+		{
+			FlightData.instance.gMapControl1.Zoom = 17.0;
+			FlightData.instance.gMapControl1.Position = new PointLatLng(
+				MainV2.comPort.MAV.cs.lat,
+				MainV2.comPort.MAV.cs.lng
+			);
+			//FlightPlanner.instance.trackBar1.Value = 11;
+			////FlightPlanner.instance.MainMap.Zoom = 11.0;
+			//FlightData.instance.gMapControl1.Zoom = 11.0;
+			//FlightData.instance.
+			//FlightPlanner.instance.MainMap_OnCurrentPositionChanged(new PointLatLng(
+			//	MainV2.comPort.MAV.cs.lat,
+			//	MainV2.comPort.MAV.cs.lng
+			//));
+		}
+
+		void Commands_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
             log.Info(e.Exception + " " + e.Context + " col " + e.ColumnIndex);
             e.Cancel = false;

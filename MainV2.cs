@@ -95,6 +95,8 @@ namespace MissionPlanner
 		public static Thread report;
 		ManualResetEvent PluginThreadrunner = new ManualResetEvent(false);
 
+		public event EventHandler MavConnectedEvent;
+
 		private DateTime heatbeatSend = DateTime.Now;
 
 		/// <summary>
@@ -393,10 +395,7 @@ namespace MissionPlanner
 
             // create one here - but override on load
             MainV2.config["guid"] = Guid.NewGuid().ToString();
-
-            // load config
-            xmlconfig(false);
-
+			
             // force language to be loaded
             L10N.GetConfigLang();
 
@@ -442,13 +441,17 @@ namespace MissionPlanner
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             //this.WindowState = FormWindowState.Maximized;
 
+
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
             _connectionControl.CMB_serialport.SelectedIndexChanged += this.CMB_serialport_SelectedIndexChanged;
             _connectionControl.CMB_serialport.Click += this.CMB_serialport_Click;
             _connectionControl.TOOL_APMFirmware.SelectedIndexChanged += this.TOOL_APMFirmware_SelectedIndexChanged;
 
-            _connectionControl.ShowLinkStats += (sender, e) => ShowConnectionStatsForm();
+			// load config
+			xmlconfig(false);
+
+			_connectionControl.ShowLinkStats += (sender, e) => ShowConnectionStatsForm();
             srtm.datadirectory = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar +
                                  "srtm";
 
@@ -507,8 +510,8 @@ namespace MissionPlanner
             {
                 string temp2 = (string) config["baudrate"];
 
-            // load config
-            xmlconfig(false);
+				// load config
+				xmlconfig(false);
                 _connectionControl.CMB_baudrate.SelectedIndex = _connectionControl.CMB_baudrate.FindString(temp2);
                 if (_connectionControl.CMB_baudrate.SelectedIndex == -1)
                 {
@@ -657,8 +660,11 @@ namespace MissionPlanner
 
                 FlightData.Width = MyView.Width;
                 FlightPlanner.Width = MyView.Width;
-                //Simulation.Width = MyView.Width;
-            }
+				//Simulation.Width = MyView.Width;
+
+				MavConnectedEvent += FlightPlanner.MavConnectedEventHandler;
+
+			}
             catch (ArgumentException e)
             {
                 //http://www.microsoft.com/en-us/download/details.aspx?id=16083
@@ -821,6 +827,7 @@ namespace MissionPlanner
             // save config to test we have write access
             xmlconfig(true);
         }
+		
 		public static void onMapPositionChanged(int sourceMapControlId, GMap.NET.PointLatLng newPosition)
 		{
 			if(MapPositionChangedEvent != null)
@@ -1234,7 +1241,8 @@ namespace MissionPlanner
 
                 try
                 {
-                    // do autoscan
+					// do autoscan
+					log.Debug(_connectionControl.CMB_serialport.Text);
                     if (_connectionControl.CMB_serialport.Text == "AUTO")
                     {
                         Comms.CommsSerialScan.Scan(false);
@@ -1482,7 +1490,9 @@ namespace MissionPlanner
 
                     // set connected icon
                     this.MenuConnect.Image = displayicons.disconnect;
-                }
+					MavConnectedEvent(null, null);
+
+				}
                 catch (Exception ex)
                 {
                     log.Warn(ex);
@@ -1823,14 +1833,14 @@ namespace MissionPlanner
                                 {
                                     case "comport":
                                         string temp = xmlreader.ReadString();
-
-                                        _connectionControl.CMB_serialport.SelectedIndex = _connectionControl.CMB_serialport.FindString(temp);
+										comPort.BaseStream.PortName = temp;
+										comPortName = temp;
+										_connectionControl.CMB_serialport.SelectedIndex = _connectionControl.CMB_serialport.FindString(temp);
                                         if (_connectionControl.CMB_serialport.SelectedIndex == -1)
                                         {
                                             _connectionControl.CMB_serialport.Text = temp; // allows ports that dont exist - yet
                                         }
-                                        comPort.BaseStream.PortName = temp;
-                                        comPortName = temp;
+                                        
                                         break;
                                     case "baudrate":
                                         string temp2 = xmlreader.ReadString();
