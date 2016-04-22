@@ -287,7 +287,7 @@ namespace MissionPlanner.GCSViews
                 panicButton = new TileButton("BRAKE",ResolutionManager.PanicButtonLocation.Y,ResolutionManager.PanicButtonLocation.X, PanicButtonEvent),
                 abortLandButton = new TileButton("ABORT\nLANDING",ResolutionManager.AbortLandLocation.Y,ResolutionManager.AbortLandLocation.X, AbortLandEvent),
                 windSpeed,
-                new TileButton("AUTO", 1, 7, AutoModeEvent, Color.FromArgb(255, 255, 51, 0)),
+                new TileButton("AUTO", 1, 7, AutoModeEvent),
                 new TileButton("RESTART", 2, 7, RestartMissionEvent),
                 new TileButton("RETURN", 2, 8, ReturnToLaunchEvent),
                 new TileButton("LAND", 1, 8, LandEvent),
