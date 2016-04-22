@@ -692,8 +692,8 @@ namespace MissionPlanner.GCSViews
         private static void FlightInfoEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightData");
-            MainV2.onMapPositionChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Position);
-            MainV2.onMapZoomChanged(MainV2.instance.FlightPlanner.MainMap.Id, MainV2.instance.FlightPlanner.MainMap.Zoom);
+			MainV2.instance.syncMapPositions(MainV2.instance.FlightPlanner.MainMap.Position);
+			MainV2.instance.syncMapZooms(MainV2.instance.FlightPlanner.MainMap.Zoom);
         }
 
         private static void AngelSettingEvent(object sender, EventArgs args)
@@ -791,8 +791,8 @@ namespace MissionPlanner.GCSViews
         private static void FlighPlanningShowEvent(object sender, EventArgs args)
         {
             MainV2.View.ShowScreen("FlightPlanner");
-            MainV2.onMapPositionChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Position);
-            MainV2.onMapZoomChanged(MainV2.instance.FlightData.gMapControl1.Id, MainV2.instance.FlightData.gMapControl1.Zoom);
+			MainV2.instance.syncMapPositions(MainV2.instance.FlightData.gMapControl1.Position);
+			MainV2.instance.syncMapZooms(MainV2.instance.FlightData.gMapControl1.Zoom);
         }
 
 
@@ -814,9 +814,6 @@ namespace MissionPlanner.GCSViews
                 {
                     abortLandButton.Visible = true;
                 }
-				//FlightPlanner.instance.MainMap.Position = 
-				//	new GMap.NET.PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
-				//FlightPlanner.instance.MainMap.Zoom = 11.0;
 				
             }
             else                    //disconnect

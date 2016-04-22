@@ -555,6 +555,8 @@ namespace MissionPlanner.GCSViews
             }
             catch (Exception) { }
 
+			autopan = true;
+
             RegeneratePolygon();
 
             if (MainV2.getConfig("MapType") != "")
@@ -681,23 +683,6 @@ namespace MissionPlanner.GCSViews
 
             return cmd;
         }
-
-		public void MavConnectedEventHandler(object sender, EventArgs args)
-		{
-			FlightData.instance.gMapControl1.Zoom = 17.0;
-			FlightData.instance.gMapControl1.Position = new PointLatLng(
-				MainV2.comPort.MAV.cs.lat,
-				MainV2.comPort.MAV.cs.lng
-			);
-			//FlightPlanner.instance.trackBar1.Value = 11;
-			////FlightPlanner.instance.MainMap.Zoom = 11.0;
-			//FlightData.instance.gMapControl1.Zoom = 11.0;
-			//FlightData.instance.
-			//FlightPlanner.instance.MainMap_OnCurrentPositionChanged(new PointLatLng(
-			//	MainV2.comPort.MAV.cs.lat,
-			//	MainV2.comPort.MAV.cs.lng
-			//));
-		}
 
 		void Commands_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -3504,7 +3489,7 @@ namespace MissionPlanner.GCSViews
 				// sync maps
 				if (Visible)
 				{
-					MainV2.onMapZoomChanged(MainMap.Id, MainMap.Zoom);
+					MainV2.instance.syncMapZooms(MainMap.Zoom);
 				}
 				center.Position = MainMap.Position;
             }
@@ -3574,7 +3559,7 @@ namespace MissionPlanner.GCSViews
 			// sync maps
 			if(Visible)
 			{
-				MainV2.onMapPositionChanged(MainMap.Id, point);
+				MainV2.instance.syncMapPositions(point);
 			}
 			
 
@@ -4334,11 +4319,12 @@ namespace MissionPlanner.GCSViews
                 //autopan
                 if (autopan)
                 {
-                    if (route.Points[route.Points.Count - 1].Lat != 0 && (mapupdate.AddSeconds(3) < DateTime.Now))
+                    if (route.Points[route.Points.Count - 1].Lat != 0 && (mapupdate.AddSeconds(1) < DateTime.Now))
                     {
-                        updateMapPosition(currentloc);
-                        mapupdate = DateTime.Now;
-                    }
+						MainV2.instance.syncMapZooms(MainMap.Zoom);
+						MainV2.instance.syncMapPositions(MainMap.Position);
+						mapupdate = DateTime.Now;
+					}
                 }
             }
             catch (Exception ex)

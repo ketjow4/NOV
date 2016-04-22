@@ -373,18 +373,18 @@ namespace MissionPlanner.GCSViews
 				Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
 			}
 			catch { }
-			if (Visible)
-			{
-				MainV2.onMapZoomChanged(gMapControl1.Id, gMapControl1.Zoom);
-			}
+			//if (Visible)
+			//{
+			MainV2.instance.syncMapZooms(gMapControl1.Zoom);
+			//}
 		}
 
 		private void GMapControl1_OnPositionChanged(PointLatLng point)
 		{
-			if (Visible)
-			{
-				MainV2.onMapPositionChanged(gMapControl1.Id, point);
-			}
+			//if (Visible)
+			//{
+			MainV2.instance.syncMapPositions(point);
+			//}
 		}
 
 		void gMapControl1_MouseWheel(object sender, MouseEventArgs e)
@@ -832,8 +832,9 @@ namespace MissionPlanner.GCSViews
             CMB_mountmode.DisplayMember = "Value";
             CMB_mountmode.ValueMember = "Key";
 
-            if (MainV2.config["CHK_autopan"] != null)
-                CHK_autopan.Checked = bool.Parse(MainV2.config["CHK_autopan"].ToString());
+            //if (MainV2.config["CHK_autopan"] != null)
+            //    CHK_autopan.Checked = bool.Parse(MainV2.config["CHK_autopan"].ToString());
+			CHK_autopan.Checked = true;
 
             if (MainV2.config.Contains("FlightSplitter"))
             {
@@ -1409,7 +1410,7 @@ namespace MissionPlanner.GCSViews
                             }
 
                             if (route.Points[route.Points.Count - 1].Lat != 0 &&
-                                (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                                (mapupdate.AddSeconds(1) < DateTime.Now) && CHK_autopan.Checked)
                             {
                                 updateMapPosition(currentloc);
                                 mapupdate = DateTime.Now;
@@ -1691,10 +1692,11 @@ namespace MissionPlanner.GCSViews
             {
                 try
                 {
-                    if (lastmapposchange.Second != DateTime.Now.Second)
+                    if (lastmapposchange.Second != DateTime.Now.Second && Visible)
                     {
-                        //gMapControl1.Position = currentloc;
-                        lastmapposchange = DateTime.Now;
+						MainV2.instance.syncMapPositions(currentloc);
+						MainV2.instance.syncMapZooms(gMapControl1.Zoom);
+						lastmapposchange = DateTime.Now;
                     }
                     //hud1.Refresh();
                 }

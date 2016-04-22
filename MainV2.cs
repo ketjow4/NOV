@@ -135,8 +135,8 @@ namespace MissionPlanner
 		private ConnectionStats _connectionStats;
 
 		// map sync handlers and events
-		public delegate void MapPositionChangedEventHandler(int sourceMapControlId, GMap.NET.PointLatLng newPosition); 
-		public delegate void MapZoomChangedEventHandler(int sourceMapControlId, double newZoom);
+		public delegate void MapPositionChangedEventHandler(GMap.NET.PointLatLng newPosition); 
+		public delegate void MapZoomChangedEventHandler(double newZoom);
 		public static event MapPositionChangedEventHandler MapPositionChangedEvent;
 		public static event MapZoomChangedEventHandler MapZoomChangedEvent;
 
@@ -672,7 +672,7 @@ namespace MissionPlanner
                 FlightPlanner.Width = MyView.Width;
 				//Simulation.Width = MyView.Width;
 
-				MavConnectedEvent += FlightPlanner.MavConnectedEventHandler;
+				MavConnectedEvent += MavConnectedEventHandler;
 
 			}
             catch (ArgumentException e)
@@ -837,53 +837,35 @@ namespace MissionPlanner
             // save config to test we have write access
             xmlconfig(true);
         }
-		
-		public static void onMapPositionChanged(int sourceMapControlId, GMap.NET.PointLatLng newPosition)
+
+		private void MavConnectedEventHandler(object sender, EventArgs e)
 		{
-			if(MapPositionChangedEvent != null)
+			syncMapZooms(17.0);
+			syncMapPositions(new GMap.NET.PointLatLng(
+				comPort.MAV.cs.lat,
+				comPort.MAV.cs.lng
+			));
+		}
+		public void syncMapPositions(GMap.NET.PointLatLng newPosition)
+		{
+			if (FlightPlanner.MainMap.Position != newPosition)
 			{
-				MapPositionChangedEvent(sourceMapControlId, newPosition);
+				FlightPlanner.MainMap.Position = newPosition;
+			}
+			if (FlightData.gMapControl1.Position != newPosition)
+			{
+				FlightData.gMapControl1.Position = newPosition;
 			}
 		}
-		public static void onMapZoomChanged(int sourceMapControlId, double newZoom)
+		public void syncMapZooms(double newZoom)
 		{
-			if(MapZoomChangedEvent != null)
+			if (FlightPlanner.MainMap.Zoom != newZoom)
 			{
-				MapZoomChangedEvent(sourceMapControlId, newZoom);
+				FlightPlanner.MainMap.Zoom = newZoom;
 			}
-		}
-		public void syncMapPositions(int sourceMapControlId, GMap.NET.PointLatLng newPosition)
-		{
-			if(FlightPlanner.MainMap.Id != sourceMapControlId)
+			if (FlightData.gMapControl1.Zoom != newZoom)
 			{
-				if(FlightPlanner.MainMap.Position != newPosition)
-				{
-					FlightPlanner.MainMap.Position = newPosition;
-				}
-			}
-			if(FlightData.gMapControl1.Id != sourceMapControlId)
-			{
-				if(FlightData.gMapControl1.Position != newPosition)
-				{
-					FlightData.gMapControl1.Position = newPosition;
-				}
-			}
-		}
-		public void syncMapZooms(int sourceMapControlId, double newZoom)
-		{
-			if (FlightPlanner.MainMap.Id != sourceMapControlId)
-			{
-				if(FlightPlanner.MainMap.Zoom != newZoom)
-				{
-					FlightPlanner.MainMap.Zoom = newZoom;
-				}
-			}
-			if (FlightData.gMapControl1.Id != sourceMapControlId)
-			{
-				if (FlightData.gMapControl1.Zoom != newZoom)
-				{
-					FlightData.gMapControl1.Zoom = newZoom;
-				}
+				FlightData.gMapControl1.Zoom = newZoom;
 			}
 		}
 		
