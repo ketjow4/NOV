@@ -890,7 +890,6 @@ namespace MissionPlanner.GCSViews
             try
             {
                 MainV2.comPort.setWPCurrent(0);
-                //StartMissionEvent(null, null);    //TODO Ask Oliver
             }
             catch
             {

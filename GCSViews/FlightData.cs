@@ -1404,7 +1404,7 @@ namespace MissionPlanner.GCSViews
                                     else
                                     {
                                         // unknown type
-                                        routes.Markers.Add(new GMarkerGoogle(portlocation, GMarkerGoogleType.green_dot));
+                                        routes.Markers.Add(new GMarkerGoogle(portlocation, GMarkerGoogleType.blue_dot));
                                     }
                                 }
                             }
@@ -1747,7 +1747,7 @@ namespace MissionPlanner.GCSViews
             try
             {
                 PointLatLng point = new PointLatLng(lat, lng);
-                GMarkerGoogle m = new GMarkerGoogle(point, GMarkerGoogleType.green);
+                GMarkerGoogle m = new GMarkerGoogle(point, GMarkerGoogleType.blue);
                 m.ToolTipMode = MarkerTooltipMode.Always;
                 m.ToolTipText = tag;
                 m.Tag = tag;
