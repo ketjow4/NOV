@@ -5833,7 +5833,7 @@ namespace MissionPlanner.GCSViews
 
             if (area.IsEmpty)
 			{
-				MessageBox.Show("Please, select an area.");
+				CustomMessageBox.Show("Please, select an area.");
 				Tiles.cancelOfflineMaps.Visible = false;
 				return;
 			}
