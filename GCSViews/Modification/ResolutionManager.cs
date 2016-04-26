@@ -71,6 +71,10 @@ namespace MissionPlanner.GCSViews.Modification
         public static Point TransparentLabelLocation;
         public static Font TransparentLabelFont;
 
+        public static Size PreFlightCheckSize;
+        public static float PreFlightCheckFontButton;
+        public static float PreFlightCheckFontCheckBox;
+        public static float PreFlightCheckFontWarning;
 
         public static int MagicWidth;
 
@@ -82,6 +86,9 @@ namespace MissionPlanner.GCSViews.Modification
         public static void Initialize()                     //TODO check if there should be any other things to change
         {
             BottomOfScreenRow = 13.1f;
+
+            
+
 
             if (CurrentRes == Resolutions.r1600x900)
             {
@@ -117,6 +124,10 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 30 - 8;
                 ValueLabelWidth = 110;
                 ValueLabelFontSize = 20f;
+                PreFlightCheckSize = new Size(500, 600);
+                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
             }
             else if (CurrentRes == Resolutions.r1366x768)
             {
@@ -155,6 +166,11 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 20 - 8;
                 ValueLabelWidth = 90;
                 ValueLabelFontSize = 15f;
+
+                PreFlightCheckSize = new Size(500, 515);
+                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
             }
             else if(CurrentRes == Resolutions.r1920x1080)
             {
@@ -190,6 +206,11 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 35 - 8;
                 ValueLabelWidth = 135;
                 ValueLabelFontSize = 22f;
+
+                PreFlightCheckSize = new Size(550, 630);
+                PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
             }
             else if(CurrentRes == Resolutions.r1920x1200)
             {
@@ -226,6 +247,11 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 39 - 8;
                 ValueLabelWidth = 130;
                 ValueLabelFontSize = 24f;
+
+                PreFlightCheckSize = new Size(550, 630);
+                PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
             }
             else //(CurrentRes == Resolutions.r1280x800)
             {
@@ -261,6 +287,11 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelTop = TileHeight - 20 - 8;
                 ValueLabelWidth = 80;
                 ValueLabelFontSize = 15f;
+
+                PreFlightCheckSize = new Size(415, 515);
+                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
             }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);

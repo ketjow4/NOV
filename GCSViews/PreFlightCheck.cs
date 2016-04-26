@@ -31,9 +31,40 @@ namespace MissionPlanner.GCSViews
             AutoCheck();
             thread = new Thread(new ThreadStart(Do_AutoCheck));
             thread.Start();
+            this.Size = Modification.ResolutionManager.PreFlightCheckSize;
+            SetFonts();
         }
 
-        //Need to refactor
+
+        private void SetFonts()
+        {
+            Font ButtonFont = new Font("Century Gothic", Modification.ResolutionManager.PreFlightCheckFontButton, FontStyle.Regular);
+            Font CheckBoxFont = new Font("Century Gothic", Modification.ResolutionManager.PreFlightCheckFontCheckBox, FontStyle.Regular);
+            foreach (var element in this.tableLayoutPanel1.Controls)
+            {
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
+            }
+            foreach (var element in this.tableLayoutPanel3.Controls)
+            {
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
+            }
+            foreach (var element in this.tableLayoutPanel4.Controls)
+            {
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
+            }
+            foreach (var checkbox in this.CheckBoxTableLayout.Controls)
+            {
+                (checkbox as CheckBox).Font = CheckBoxFont;
+            }
+            EmployeeLabel.Font = CheckBoxFont;      //this font is used because is the same as for checkbox
+            employee_data.Font = ButtonFont;         //this font is used because is the same as for buttons
+            warning_label.Font = new Font("Century Gothic", Modification.ResolutionManager.PreFlightCheckFontWarning, FontStyle.Regular); 
+        }
+
+        //TODO Need to refactor
         public void Do_AutoCheck()
         {
             try
