@@ -177,6 +177,13 @@ namespace MissionPlanner.GCSViews
             this.windDir1.WindDirSize = GCSViews.Modification.ResolutionManager.WindDirSize;
             this.distanceBar1.Location = GCSViews.Modification.ResolutionManager.DistBarLocation;
             this.distanceBar1.Size = GCSViews.Modification.ResolutionManager.DistBarSize;
+
+
+            this.transparent.Size = GCSViews.Modification.ResolutionManager.TransparentLabelSize;
+            this.transparent.Location = GCSViews.Modification.ResolutionManager.TransparentLabelLocation;
+            this.transparent.Font = GCSViews.Modification.ResolutionManager.TransparentLabelFont;
+            this.transparent.TextAlign = ContentAlignment.MiddleCenter;
+
             this.BorderStyle = BorderStyle.None;
 
             log.Info("Components Done");
@@ -423,8 +430,8 @@ namespace MissionPlanner.GCSViews
                             string temp;
                             int timeInSeconds = Convert.ToInt32(convertEventArgs.Value);
                             int seconds = timeInSeconds % 60;
-                            int minutes = timeInSeconds / 60;
-                            int hours = timeInSeconds / 3600;
+                            int minutes = (timeInSeconds / 60) % 60;
+                            int hours = (timeInSeconds / 3600);
                             temp = hours.ToString() + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
                             convertEventArgs.Value = temp;
                         };

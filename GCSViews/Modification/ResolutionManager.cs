@@ -66,6 +66,12 @@ namespace MissionPlanner.GCSViews.Modification
         public static float InputTextBoxFontSize;
         public static float InputButtonsFontSize;
 
+
+        public static Size TransparentLabelSize;
+        public static Point TransparentLabelLocation;
+        public static Font TransparentLabelFont;
+
+
         public static int MagicWidth;
 
         public static Resolutions CurrentRes;
@@ -87,6 +93,8 @@ namespace MissionPlanner.GCSViews.Modification
                 InputPanelSize = new Size(520, 470);
 
                 MagicWidth = 150;
+                
+                TransparentLabelFont = new Font("Century Gothic", 40);
 
                 TileButtonFontSize = 13f;
 
@@ -107,7 +115,7 @@ namespace MissionPlanner.GCSViews.Modification
                 ValueLabelLeft = 4;
                 ValueLabelHeight = 30;
                 ValueLabelTop = TileHeight - 30 - 8;
-                ValueLabelWidth = 100;
+                ValueLabelWidth = 110;
                 ValueLabelFontSize = 20f;
             }
             else if (CurrentRes == Resolutions.r1366x768)
@@ -123,6 +131,8 @@ namespace MissionPlanner.GCSViews.Modification
                 InputPanelSize = new Size(400, 370);
 
                 MagicWidth = 120;
+
+                TransparentLabelFont = new Font("Century Gothic", 36);
 
                 TileButtonFontSize = 11f;
 
@@ -156,6 +166,8 @@ namespace MissionPlanner.GCSViews.Modification
                 InputPanelSize = new Size(700, 670);
 
                 MagicWidth = 190;
+
+                TransparentLabelFont = new Font("Century Gothic", 48);
 
                 TileButtonFontSize = 17f;
 
@@ -191,6 +203,8 @@ namespace MissionPlanner.GCSViews.Modification
 
                 MagicWidth = 190;
 
+                TransparentLabelFont = new Font("Century Gothic", 48);
+
                 TileButtonFontSize = 18f;
 
                 InputInfoFontSize = 32.25f;
@@ -224,6 +238,7 @@ namespace MissionPlanner.GCSViews.Modification
 
                 MagicWidth = 120;
 
+                TransparentLabelFont = new Font("Century Gothic", 36);
 
                 InputInfoFontSize = 20.25f;
                 InputTextBoxFontSize = 24.0f;
@@ -251,6 +266,8 @@ namespace MissionPlanner.GCSViews.Modification
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);
             AbortLandLocation = new PointF(5, BottomOfScreenRow - 0.1f);
 
+            TransparentLabelSize = new System.Drawing.Size((7 * ScreenWidth) / 16, (3 * ScreenHeight) / 9);
+            TransparentLabelLocation = new Point((ScreenWidth - TransparentLabelSize.Width) / 2, (ScreenHeight - TransparentLabelSize.Height) / 2);
             PanelSize = new Size(TileWidth, TileHeight);
             HUDLocation = new Point(0, ScreenHeight - HUDSize.Height);
             WindSpeedLocation = new PointF(0, (float)(ScreenHeight - HUDSize.Height - TileHeight - MarginSize) / (float)(TileHeight + MarginSize));
