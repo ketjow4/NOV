@@ -297,7 +297,7 @@ namespace MissionPlanner.GCSViews
             commonTiles = tilesFlightMode;      //bad hax
             mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
 
-            obsHeadBtn = new TileData("OBSERVATION HEAD", 1, 3, "", ObservationHeadEvent);
+            obsHeadBtn = new TileData("PAYLOAD", 1, 3, "", ObservationHeadEvent);
             obsHeadBtn.ValueLabel.Width = ResolutionManager.MagicWidth;          //ugly !!!
             obsHeadBtn.Value = camName;
 
@@ -377,14 +377,14 @@ namespace MissionPlanner.GCSViews
                 offlineMaps = new TileButton("OFFLINE\nMAPS",ResolutionManager.BottomOfScreenRow - 2,0,OfflineMapsEvent),
                 cancelOfflineMaps = new TileButton("CANCEL",ResolutionManager.BottomOfScreenRow - 2,1,CancelOfflineMapsEvent),
 
-                writeWaypoints = new TileButton("SAVE WP PLATFORM", 1, 7, SaveWPPlatformEvent),
+                writeWaypoints = new TileButton("UPLOAD TO PLATFORM", 1, 7, SaveWPPlatformEvent),
                 angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
                 altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent),
-                groundResInfo = new TileData("GROUND RESOLUTION", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
+                groundResInfo = new TileData("GROUND RES", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
                 flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 6, "h:m:s"),
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,7, SaveWPFileEvent),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,8, LoadWPFileEvent),
-                LoadWPPlatform = new TileButton("LOAD WP PLATFORM",1,8,LoadWPPlatformEvent),
+                LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,8,LoadWPPlatformEvent),
                 distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,6,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);

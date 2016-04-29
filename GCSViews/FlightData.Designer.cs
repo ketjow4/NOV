@@ -1819,7 +1819,7 @@ namespace MissionPlanner.GCSViews
             this.TRK_zoom.Scroll += new System.EventHandler(this.TRK_zoom_Scroll);
 			this.TRK_zoom.Width = 45;
 			this.TRK_zoom.Height = 319;
-			this.TRK_zoom.Margin = new Padding(3, 3, 3, 3);
+			this.TRK_zoom.Margin = new Padding(0,0,0,0);
 
 			// 
 			// panel1

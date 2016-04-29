@@ -106,7 +106,7 @@ namespace MissionPlanner.GCSViews
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(403, 36);
             this.checkBox3.TabIndex = 8;
-            this.checkBox3.Text = "No physical damege seen on UAV";
+            this.checkBox3.Text = "No physical damage seen on UAV";
             this.checkBox3.UseVisualStyleBackColor = true;
             this.checkBox3.CheckedChanged += new System.EventHandler(this.CanBeArmed);
             // 

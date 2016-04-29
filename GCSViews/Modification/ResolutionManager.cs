@@ -300,7 +300,7 @@ namespace MissionPlanner.GCSViews.Modification
             TransparentLabelSize = new System.Drawing.Size((7 * ScreenWidth) / 16, (3 * ScreenHeight) / 9);
             TransparentLabelLocation = new Point((ScreenWidth - TransparentLabelSize.Width) / 2, (ScreenHeight - TransparentLabelSize.Height) / 2);
             PanelSize = new Size(TileWidth, TileHeight);
-            HUDLocation = new Point(0, ScreenHeight - HUDSize.Height);
+            HUDLocation = new Point(1, ScreenHeight - HUDSize.Height - 1);  //1 is because of some margin on flight info screen
             WindSpeedLocation = new PointF(0, (float)(ScreenHeight - HUDSize.Height - TileHeight - MarginSize) / (float)(TileHeight + MarginSize));
             WindDirLocation = new Point(TileWidth, (int)((TileHeight + MarginSize) * WindSpeedLocation.Y));
             WindDirSize = new Size(TileHeight, TileHeight);
