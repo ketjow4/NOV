@@ -452,6 +452,9 @@ namespace MissionPlanner.GCSViews
 
             InitializeComponent();
 
+            //Resolution manager changes
+            this.trackBar1.Width = Modification.ResolutionManager.FlightPlanningZoomTrackBarWidth;
+
             // config map             
             MainMap.CacheLocation = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar +
                                     "gmapcache" + Path.DirectorySeparatorChar;
@@ -740,7 +743,7 @@ namespace MissionPlanner.GCSViews
             if (MainV2.config["WMSserver"] != null)
                 WMSProvider.CustomWMSURL = MainV2.config["WMSserver"].ToString();
 
-			trackBar1.Value = (float)MainMap.Zoom;
+            trackBar1.Value = (int)MainMap.Zoom;//(float)MainMap.Zoom;
 
             // check for net and set offline if needed
             try
@@ -3478,8 +3481,8 @@ namespace MissionPlanner.GCSViews
             {
                 try
                 {
-					trackBar1.Value = (float)MainMap.Zoom;
-					//trackBar1.Value = (int) (MainMap.Zoom);
+					trackBar1.Value = (int)MainMap.Zoom;//(float)MainMap.Zoom;
+                                                        //trackBar1.Value = (int) (MainMap.Zoom);
                 }
                 catch
                 {
@@ -3585,7 +3588,7 @@ namespace MissionPlanner.GCSViews
             {
                 MainMap.ZoomAndCenterMarkers(null);
             }
-            trackBar1.Value = (float) MainMap.Zoom;
+            trackBar1.Value = (int)MainMap.Zoom; //(float) MainMap.Zoom;
         }
 
         // ensure focus on map, trackbar can have it too
@@ -4246,8 +4249,8 @@ namespace MissionPlanner.GCSViews
         {
             // this is a mono fix for the zoom bar
             //Console.WriteLine("panelmap "+panelMap.Size.ToString());
-            MainMap.Size = new Size(panelMap.Size.Width - 50, panelMap.Size.Height);
-            trackBar1.Location = new Point(panelMap.Size.Width - 50, trackBar1.Location.Y);
+            MainMap.Size = new Size(panelMap.Size.Width - trackBar1.Width, panelMap.Size.Height);
+            trackBar1.Location = new Point(panelMap.Size.Width - trackBar1.Width ,trackBar1.Location.Y);
             trackBar1.Size = new Size(trackBar1.Size.Width, panelMap.Size.Height - trackBar1.Location.Y);
         }
 

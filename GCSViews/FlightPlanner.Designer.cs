@@ -51,7 +51,13 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         private void InitializeComponent()
         {
-			this.components = new System.ComponentModel.Container();
+            gTrackBar.ColorPack colorPack1 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack2 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack3 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack4 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack5 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack6 = new gTrackBar.ColorPack();
+            this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightPlanner));
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -124,7 +130,7 @@ namespace MissionPlanner.GCSViews
 			this.lbl_homedist = new System.Windows.Forms.Label();
 			this.lbl_prevdist = new System.Windows.Forms.Label();
 			this.MainMap = new MissionPlanner.Controls.myGMAP();
-			this.trackBar1 = new MissionPlanner.Controls.MyTrackBar();
+            this.trackBar1 = new gTrackBar.gTrackBar();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.deleteWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.insertWpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,7 +211,7 @@ namespace MissionPlanner.GCSViews
 			this.panel3.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panelMap.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+			//((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
 			this.panelBASE.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -724,9 +730,9 @@ namespace MissionPlanner.GCSViews
 			// 
 			// panelMap
 			// 
-			this.panelMap.Controls.Add(this.lbl_distance);
-			this.panelMap.Controls.Add(this.lbl_homedist);
-			this.panelMap.Controls.Add(this.lbl_prevdist);
+			//this.panelMap.Controls.Add(this.lbl_distance);
+			//this.panelMap.Controls.Add(this.lbl_homedist);
+			//this.panelMap.Controls.Add(this.lbl_prevdist);
 			this.panelMap.Controls.Add(this.MainMap);
 			this.panelMap.Controls.Add(this.trackBar1);
 			resources.ApplyResources(this.panelMap, "panelMap");
@@ -775,22 +781,68 @@ namespace MissionPlanner.GCSViews
 			this.MainMap.ShowTileGridLines = false;
 			this.MainMap.Zoom = 3D;
 			this.MainMap.Paint += new System.Windows.Forms.PaintEventHandler(this.MainMap_Paint);
-			// 
-			// trackBar1
-			// 
-			resources.ApplyResources(this.trackBar1, "trackBar1");
-			this.trackBar1.LargeChange = 1F;
-			this.trackBar1.Maximum = 24F;
-			this.trackBar1.Minimum = 1F;
-			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.SmallChange = 0.001F;
-			this.trackBar1.TickFrequency = 1F;
-			this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-			this.trackBar1.Value = 2F;
-			this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-			this.trackBar1.Width = 45;
-			this.trackBar1.Height = 319;
-			this.trackBar1.Margin = new Padding(3, 3, 3, 3);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.trackBar1.ChangeLarge = 5;
+            colorPack1.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack1.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack1.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.trackBar1.ColorDown = colorPack1;
+            colorPack2.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack2.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack2.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.trackBar1.ColorHover = colorPack2;
+            colorPack3.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack3.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack3.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.trackBar1.ColorUp = colorPack3;
+            this.trackBar1.FloatValueFontColor = System.Drawing.SystemColors.ActiveBorder;
+            this.trackBar1.Label = "";
+            this.trackBar1.Orientation = Orientation.Vertical;
+            this.trackBar1.LabelShow = false;
+            this.trackBar1.Location = new System.Drawing.Point(0, 0);
+            this.trackBar1.Margin = new System.Windows.Forms.Padding(2);
+            this.trackBar1.MaxValue = 24;
+            this.trackBar1.MinValue = 1;
+            this.trackBar1.Name = "ZoomTrackBar";
+            this.trackBar1.Size = new System.Drawing.Size(70, 70);
+            this.trackBar1.SliderShape = gTrackBar.gTrackBar.eShape.Rectangle;
+            this.trackBar1.SliderSize = new System.Drawing.Size(15, 30);
+            this.trackBar1.SliderWidthHigh = 1F;
+            this.trackBar1.SliderWidthLow = 1F;
+            this.trackBar1.TickColor = System.Drawing.Color.White;
+            this.trackBar1.TickInterval = 1;
+            this.trackBar1.TickThickness = 2F;
+            this.trackBar1.TickType = gTrackBar.gTrackBar.eTickType.Down_Left;
+            this.trackBar1.UpDownShow = false;
+            this.trackBar1.Value = 1;
+            this.trackBar1.ValueAdjusted = 1F;
+            this.trackBar1.ValueBox = gTrackBar.gTrackBar.eValueBox.Right;
+            this.trackBar1.ValueBoxBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.trackBar1.ValueBoxBorder = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.trackBar1.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.trackBar1.ValueBoxFontColor = System.Drawing.Color.White;
+            this.trackBar1.ValueBoxSize = new System.Drawing.Size(40, 40);
+            this.trackBar1.ValueDivisor = gTrackBar.gTrackBar.eValueDivisor.e1;
+            this.trackBar1.ValueStrFormat = null;
+            this.trackBar1.ValueChanged += new gTrackBar.gTrackBar.ValueChangedEventHandler(this.trackBar1_Scroll);
+
+
+            resources.ApplyResources(this.trackBar1, "trackBar1");
+			//this.trackBar1.LargeChange = 1F;
+			//this.trackBar1.Maximum = 24F;
+			//this.trackBar1.Minimum = 1F;
+			//this.trackBar1.Name = "trackBar1";
+			//this.trackBar1.SmallChange = 0.001F;
+			//this.trackBar1.TickFrequency = 1F;
+			//this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+			//this.trackBar1.Value = 2F;
+			//this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+			//this.trackBar1.Width = 45;
+			//this.trackBar1.Height = 319;
+			//this.trackBar1.Margin = new Padding(3, 3, 3, 3);
             // 
             // contextMenuStrip1
             //
@@ -1299,7 +1351,7 @@ namespace MissionPlanner.GCSViews
 			this.panel2.PerformLayout();
 			this.panelMap.ResumeLayout(false);
 			this.panelMap.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+			//((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
 			this.panelBASE.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -1332,7 +1384,7 @@ namespace MissionPlanner.GCSViews
         private BSE.Windows.Forms.Panel panelAction;
         private System.Windows.Forms.Panel panelMap;
         public Controls.myGMAP MainMap;
-        private Controls.MyTrackBar trackBar1;
+        private gTrackBar.gTrackBar trackBar1;
         private System.Windows.Forms.Label lbl_distance;
         private System.Windows.Forms.Label lbl_prevdist;
         private BSE.Windows.Forms.Splitter splitter1;

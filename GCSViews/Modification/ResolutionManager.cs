@@ -76,6 +76,9 @@ namespace MissionPlanner.GCSViews.Modification
         public static float PreFlightCheckFontCheckBox;
         public static float PreFlightCheckFontWarning;
 
+        public static int FlightDataZoomTrackBarWidth;
+        public static int FlightPlanningZoomTrackBarWidth;
+
         public static int MagicWidth;
 
         public static Resolutions CurrentRes;
@@ -87,7 +90,8 @@ namespace MissionPlanner.GCSViews.Modification
         {
             BottomOfScreenRow = 13.1f;
 
-            
+            FlightDataZoomTrackBarWidth = 45;
+            FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 2;
 
 
             if (CurrentRes == Resolutions.r1600x900)
@@ -109,6 +113,8 @@ namespace MissionPlanner.GCSViews.Modification
                 InputTextBoxFontSize = 27.0f;
                 InputButtonsFontSize = 18.75f;
 
+                FlightDataZoomTrackBarWidth = 52;
+                FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
                 HeadLabelFontSize = 12f;
                 HeadLabelTop = 7;
@@ -184,6 +190,7 @@ namespace MissionPlanner.GCSViews.Modification
                 MagicWidth = 190;
 
                 TransparentLabelFont = new Font("Century Gothic", 48);
+                
 
                 TileButtonFontSize = 17f;
 

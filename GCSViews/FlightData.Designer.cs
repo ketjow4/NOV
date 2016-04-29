@@ -9,6 +9,12 @@ namespace MissionPlanner.GCSViews
 
         private void InitializeComponent()
         {
+            gTrackBar.ColorPack colorPack1 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack2 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack3 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack4 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack5 = new gTrackBar.ColorPack();
+            gTrackBar.ColorPack colorPack6 = new gTrackBar.ColorPack();
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FlightData));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -138,7 +144,7 @@ namespace MissionPlanner.GCSViews
             this.lbl_hdop = new MissionPlanner.Controls.MyLabel();
             this.lbl_sats = new MissionPlanner.Controls.MyLabel();
             this.gMapControl1 = new MissionPlanner.Controls.myGMAP();
-            this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
+            this.TRK_zoom = new gTrackBar.gTrackBar();
             //this.panel1 = new System.Windows.Forms.Panel();
             this.coords1 = new MissionPlanner.Controls.Coords();
             this.Zoomlevel = new System.Windows.Forms.NumericUpDown();
@@ -206,7 +212,7 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.contextMenuStripMap.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).BeginInit();
+            //((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).BeginInit();
             //this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Zoomlevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceHud)).BeginInit();
@@ -1807,19 +1813,66 @@ namespace MissionPlanner.GCSViews
             // 
             // TRK_zoom
             // 
+            this.TRK_zoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.TRK_zoom.ChangeLarge = 5;
+            colorPack1.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack1.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack1.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.TRK_zoom.ColorDown = colorPack1;
+            colorPack2.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack2.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack2.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.TRK_zoom.ColorHover = colorPack2;
+            colorPack3.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack3.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            colorPack3.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.TRK_zoom.ColorUp = colorPack3;
+            //this.TRK_zoom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TRK_zoom.FloatValueFontColor = System.Drawing.SystemColors.ActiveBorder;
+            this.TRK_zoom.Label = "";
+            this.TRK_zoom.Orientation = Orientation.Vertical;
+            this.TRK_zoom.LabelShow = false;
+            this.TRK_zoom.Location = new System.Drawing.Point(0,0);
+            this.TRK_zoom.Margin = new System.Windows.Forms.Padding(2);
+            this.TRK_zoom.MaxValue = 24;
+            this.TRK_zoom.MinValue = 1;
+            this.TRK_zoom.Name = "ZoomTrackBar";
+            this.TRK_zoom.Size = new System.Drawing.Size(70, 70);
+            this.TRK_zoom.SliderShape = gTrackBar.gTrackBar.eShape.Rectangle;
+            this.TRK_zoom.SliderSize = new System.Drawing.Size(15, 30);
+            this.TRK_zoom.SliderWidthHigh = 1F;
+            this.TRK_zoom.SliderWidthLow = 1F;
+            this.TRK_zoom.TickColor = System.Drawing.Color.White;
+            this.TRK_zoom.TickInterval = 1;
+            this.TRK_zoom.TickThickness = 2F;
+            this.TRK_zoom.TickType = gTrackBar.gTrackBar.eTickType.Down_Left;
+            this.TRK_zoom.UpDownShow = false;
+            this.TRK_zoom.Value = 1;
+            this.TRK_zoom.ValueAdjusted = 1F;
+            this.TRK_zoom.ValueBox = gTrackBar.gTrackBar.eValueBox.Right;
+            this.TRK_zoom.ValueBoxBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.TRK_zoom.ValueBoxBorder = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
+            this.TRK_zoom.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.TRK_zoom.ValueBoxFontColor = System.Drawing.Color.White;
+            this.TRK_zoom.ValueBoxSize = new System.Drawing.Size(40, 40);
+            this.TRK_zoom.ValueDivisor = gTrackBar.gTrackBar.eValueDivisor.e1;
+            this.TRK_zoom.ValueStrFormat = null;
+            this.TRK_zoom.ValueChanged += new gTrackBar.gTrackBar.ValueChangedEventHandler(this.TRK_zoom_Scroll);
+
+
             resources.ApplyResources(this.TRK_zoom, "TRK_zoom");
-            this.TRK_zoom.LargeChange = 1F;
-            this.TRK_zoom.Maximum = 24F;
-            this.TRK_zoom.Minimum = 1F;
-            this.TRK_zoom.Name = "TRK_zoom";
-            this.TRK_zoom.SmallChange = 0.001F;
-            this.TRK_zoom.TickFrequency = 1F;
-            this.TRK_zoom.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.TRK_zoom.Value = 2F;
-            this.TRK_zoom.Scroll += new System.EventHandler(this.TRK_zoom_Scroll);
-			this.TRK_zoom.Width = 45;
-			this.TRK_zoom.Height = 319;
-			this.TRK_zoom.Margin = new Padding(0,0,0,0);
+   //         this.TRK_zoom.LargeChange = 1F;
+   //         this.TRK_zoom.Maximum = 24F;
+   //         this.TRK_zoom.Minimum = 1F;
+   //         this.TRK_zoom.Name = "TRK_zoom";
+   //         this.TRK_zoom.SmallChange = 0.001F;
+   //         this.TRK_zoom.TickFrequency = 1F;
+   //         this.TRK_zoom.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+   //         this.TRK_zoom.Value = 2F;
+   //         this.TRK_zoom.Scroll += new System.EventHandler(this.TRK_zoom_Scroll);
+			//this.TRK_zoom.Width = 45;
+			//this.TRK_zoom.Height = 319;
+			//this.TRK_zoom.Margin = new Padding(0,0,0,0);
 
 			// 
 			// panel1
@@ -2109,7 +2162,7 @@ namespace MissionPlanner.GCSViews
             this.splitContainer1.ResumeLayout(false);
             this.contextMenuStripMap.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).EndInit();
+            //((System.ComponentModel.ISupportInitialize)(this.TRK_zoom)).EndInit();
             //this.panel1.ResumeLayout(false);
             //this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Zoomlevel)).EndInit();
@@ -2193,7 +2246,7 @@ namespace MissionPlanner.GCSViews
         private Controls.ModifyandSet modifyandSetAlt;
         private Controls.ModifyandSet modifyandSetSpeed;
         private System.Windows.Forms.ToolStripMenuItem triggerCameraToolStripMenuItem;
-        private Controls.MyTrackBar TRK_zoom;
+        private gTrackBar.gTrackBar TRK_zoom;
         private Controls.MyLabel LBL_logfn;
         private System.Windows.Forms.TabPage tabServo;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanelServos;

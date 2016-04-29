@@ -369,15 +369,17 @@ namespace MissionPlanner.GCSViews
             Tiles.SetCommonTiles();
             Tiles.SetTiles(splitContainer1.Panel2, true);
             BindLabels();
+            TRK_zoom.Width = Modification.ResolutionManager.FlightDataZoomTrackBarWidth;
         }
 
 		private void GMapControl1_OnMapZoomChanged()
 		{
 			try
 			{
-				// Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
-				TRK_zoom.Value = (float)gMapControl1.Zoom;
-				Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
+                // Exception System.Runtime.InteropServices.SEHException: External component has thrown an exception.
+                TRK_zoom.Value = (Int32)gMapControl1.Zoom;//(float)gMapControl1.Zoom;
+
+                Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
 			}
 			catch { }
 			//if (Visible)
@@ -802,7 +804,7 @@ namespace MissionPlanner.GCSViews
             {
                     gMapControl1.Zoom -= 1; 
             }
-                TRK_zoom.Value = (float)gMapControl1.Zoom;
+                TRK_zoom.Value = (Int32)gMapControl1.Zoom;//(float)gMapControl1.Zoom;
                 Zoomlevel.Value = Convert.ToDecimal(gMapControl1.Zoom);
             }
             catch { }
@@ -817,8 +819,8 @@ namespace MissionPlanner.GCSViews
             NoFly.NoFly.NoFlyEvent += NoFly_NoFlyEvent;
 
             //TRK_zoom.Minimum = gMapControl1.MapProvider.MinZoom;
-            TRK_zoom.Maximum = 24;
-            TRK_zoom.Value = (float) gMapControl1.Zoom;
+            TRK_zoom.MaxValue = 24;
+            TRK_zoom.Value = (Int32)gMapControl1.Zoom;//(float) gMapControl1.Zoom;
 
             gMapControl1.EmptyTileColor = Color.Gray;
 
