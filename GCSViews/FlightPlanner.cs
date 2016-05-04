@@ -472,6 +472,7 @@ namespace MissionPlanner.GCSViews
             MainMap.MouseUp += MainMap_MouseUp;
             MainMap.OnMarkerEnter += MainMap_OnMarkerEnter;
             MainMap.OnMarkerLeave += MainMap_OnMarkerLeave;
+            MainMap.Paint += MainMapPaintEvent;
 
             MainMap.MapScaleInfoEnabled = false;
             MainMap.ScalePen = new Pen(Color.Red);
@@ -590,7 +591,13 @@ namespace MissionPlanner.GCSViews
             panelMap.Visible = false;
         }
 
-		private void polygonMarkerMovedEvent_EventHandler(object sender, EventArgs e)
+        private void MainMapPaintEvent(object sender, PaintEventArgs e)
+        {
+            trackBar1.Invalidate();
+            trackBar1.Update();
+        }
+
+        private void polygonMarkerMovedEvent_EventHandler(object sender, EventArgs e)
 		{
 			redrawPolygon();
 		}
@@ -1366,15 +1373,15 @@ namespace MissionPlanner.GCSViews
 							 "</longitude>     <latitude>" + TXT_homelat.Text.ToString(new CultureInfo("en-US")) +
 							 "</latitude> <range>4000</range> </LookAt>";
 
-					RectLatLng? rect = MainMap.GetRectOfAllMarkers("objects");
-					if (rect.HasValue)
-					{
-						MainMap.Position = rect.Value.LocationMiddle;
-					}
+					//RectLatLng? rect = MainMap.GetRectOfAllMarkers("objects");
+					//if (rect.HasValue)
+					//{
+					//	MainMap.Position = rect.Value.LocationMiddle;
+					//}
 
-					//MainMap.Zoom = 17;
+					////MainMap.Zoom = 17;
 
-					MainMap_OnMapZoomChanged();
+					//MainMap_OnMapZoomChanged();
 				}
 
 				//RegeneratePolygon();
@@ -6094,13 +6101,16 @@ namespace MissionPlanner.GCSViews
         public void takeoffToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // altitude
+            
             string alt = Tiles.AltitudeVal.ToString();
 
-            InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);         //new Size(460, 380)
-            altitudeInput.ShowDialog();
-            alt = altitudeInput.ResultString;
+            if (Tiles.pathAccepted)     //for adding take off on mission altitude in path generation
+            { 
+                InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);         //new Size(460, 380)
+                altitudeInput.ShowDialog();
+                alt = altitudeInput.ResultString;
+            }
 
-            
 
             int alti = -1;
 

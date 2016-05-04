@@ -90,10 +90,6 @@ namespace MissionPlanner.GCSViews.Modification
         {
             BottomOfScreenRow = 13.1f;
 
-            FlightDataZoomTrackBarWidth = 45;
-            FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 2;
-
-
             if (CurrentRes == Resolutions.r1600x900)
             {
                 HUDSize = new Size(360, 270);
@@ -157,6 +153,16 @@ namespace MissionPlanner.GCSViews.Modification
                 InputTextBoxFontSize = 24.0f;
                 InputButtonsFontSize = 15.75f;
 
+                if (ScreenWidth == 1360)
+                {
+                    FlightDataZoomTrackBarWidth = 46;
+                    FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
+                }
+                else
+                {
+                    FlightDataZoomTrackBarWidth = 43;
+                    FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
+                }
 
                 HeadLabelFontSize = 8f;
                 HeadLabelTop = 7;
@@ -190,7 +196,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MagicWidth = 190;
 
                 TransparentLabelFont = new Font("Century Gothic", 48);
-                
+
+                FlightDataZoomTrackBarWidth = 48;
+                FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
                 TileButtonFontSize = 17f;
 
@@ -234,6 +242,9 @@ namespace MissionPlanner.GCSViews.Modification
                 TransparentLabelFont = new Font("Century Gothic", 48);
 
                 TileButtonFontSize = 18f;
+
+                FlightDataZoomTrackBarWidth = 48;
+                FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
                 InputInfoFontSize = 32.25f;
                 InputTextBoxFontSize = 42.0f;
@@ -279,6 +290,8 @@ namespace MissionPlanner.GCSViews.Modification
 
                 TileButtonFontSize = 11f;
 
+                FlightDataZoomTrackBarWidth = 48;
+                FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
                 HeadLabelFontSize = 8f;
                 HeadLabelTop = 7;

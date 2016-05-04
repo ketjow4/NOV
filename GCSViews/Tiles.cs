@@ -627,6 +627,7 @@ namespace MissionPlanner.GCSViews
                         .Where(item => item.Text.Equals("Survey (Grid)"))
                         .OfType<ToolStripMenuItem>())
             {
+                FlightPlanner.instance.takeoffToolStripMenuItem_Click(null,null);     //always add take off at mission height
                 toolStripItem.PerformClick();
                 break;
             }
@@ -831,7 +832,7 @@ namespace MissionPlanner.GCSViews
 
         private static void ArmDisarmEvent(object sender, EventArgs args)
         {
-            if (!MainV2.comPort.MAV.cs.armed)         //jeśli rozbrajamy to nie robimy preflightcheck
+            if (!MainV2.comPort.MAV.cs.armed)         //if we disarm then don't do preflightcheck
             {
                 if (!connected)
                 {
@@ -848,8 +849,6 @@ namespace MissionPlanner.GCSViews
                 else
                     return;     //jeśli nie zaakceptowano to powrót i brak arm
             }
-
-            //MainV2.comPort.setMode("Loiter");         //TODO do usunięcia na potem !!!!
 
             FlightData.instance.BUT_ARM_Click(sender, args);
             if (armed && connected)

@@ -484,6 +484,8 @@ namespace MissionPlanner.GCSViews
 
         void mymap_Paint(object sender, PaintEventArgs e)
         {
+            TRK_zoom.Invalidate();
+            TRK_zoom.Update();
             distanceBar1.DoPaintRemote(e);
         }
 
@@ -3463,9 +3465,9 @@ namespace MissionPlanner.GCSViews
             // arm the MAV
             try
             {
-                //if (MainV2.comPort.MAV.cs.armed)
-                //if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
-                //return;
+                if (MainV2.comPort.MAV.cs.armed)
+                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
+                        return;
 
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
 
