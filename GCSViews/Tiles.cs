@@ -783,7 +783,7 @@ namespace MissionPlanner.GCSViews
 
         private static void ExitEvent(object sender, EventArgs args)
         {
-            MissionPlanner.LogReporter.LogReporter.stopThread = true;
+            //MissionPlanner.LogReporter.LogReporter.stopThread = true;
             MainV2.config["grid_sidelap"] = SideLap.ToString();
             MainV2.config["grid_overlap"] = OverLap.ToString();
             MainV2.instance.Close();

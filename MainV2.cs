@@ -393,9 +393,9 @@ namespace MissionPlanner
 
 
 
-            MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
-            report = new Thread(new ThreadStart(nowyreporter.SendMail));
-            report.Start();
+            //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
+            //report = new Thread(new ThreadStart(nowyreporter.SendMail));
+            //report.Start();
 
             // set this before we reset it
             MainV2.config["NUM_tracklength"] = "2000";
