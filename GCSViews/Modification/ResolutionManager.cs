@@ -118,7 +118,7 @@ namespace MissionPlanner.GCSViews.Modification
                 HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
 
                 UnitLabelFontSize = 13f;
-                UnitLabelLeft = TileWidth - 2 * MarginSize - 100; //165 - 100
+                UnitLabelLeft = TileWidth - 2 * MarginSize - 95; //165 - 100
                 UnitLabelTop = TileHeight - 23 - 8;
 
                 ValueLabelLeft = 4;

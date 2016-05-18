@@ -709,7 +709,7 @@ namespace MissionPlanner
             */
 
             // turn radrad = tas^2 / (tan(angle) * G)
-            float v_sq = (float)(((float)NUM_UpDownFlySpeed.Value / CurrentState.multiplierspeed) * ((float)NUM_UpDownFlySpeed.Value / CurrentState.multiplierspeed));
+            float v_sq = (float)(((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed) * ((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed));
             float turnrad = (float)(v_sq / (float)(9.808f * Math.Tan(35 * deg2rad)));
 
             // Update Stats 
@@ -1505,10 +1505,11 @@ namespace MissionPlanner
                         }
                     }
 
+                    CHK_usespeed.Checked = true;
                     if (CHK_usespeed.Checked)
                     {
                         plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0,
-                            (int)((float)NUM_UpDownFlySpeed.Value / CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
+                            (int)((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
                     }
 
 
