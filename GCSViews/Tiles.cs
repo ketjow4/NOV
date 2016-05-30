@@ -87,8 +87,8 @@ namespace MissionPlanner.GCSViews
         private static int altMin = 50;
         private static int altMax = 500;
 
-        private static int fsMin = 3;
-        private static int fsMax = 8;
+        private static int fsMin = 1;
+        private static int fsMax = 10;
 
         private static double groundRes;
 
