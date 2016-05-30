@@ -267,12 +267,12 @@ namespace MissionPlanner.GCSViews
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {}, Color.FromArgb(255, 255, 51, 0)),
-                new TileData("GROUND SPEED", 0, 1, "km/h"),
+                new TileData("GROUND SPEED", 0, 1, "m/s"),
                 new TileData("ALTITUDE", 0, 2, "m"),
                 new TileData("TIME IN THE AIR", 0, 3, "h:m:s"),
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, FlighPlanningShowEvent),
-                new TileData("AIR SPEED", 1, 1, "km/h"),
+                new TileData("AIR SPEED", 1, 1, "m/s"),
                 new TileData("DISTANCE TO HOME", 1, 2, "m"),
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
