@@ -757,7 +757,7 @@ namespace MissionPlanner
             else
             {
                 // Meters
-                Tiles.Area =  ((double)(calcpolygonarea(list) / 100000)).ToString();      //km^2
+                Tiles.Area =  ((double)(calcpolygonarea(list) / 1000000)).ToString();      //km^2
                 //lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
                 lbl_distance.Text = routetotal.ToString("0.##"); // +" km";
                 //lbl_spacing.Text = NUM_spacing.Value.ToString("#") + " m";
