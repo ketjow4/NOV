@@ -84,7 +84,7 @@ namespace MissionPlanner.GCSViews
 
         private static TileData windSpeed = null;
 
-        private static int altMin = 50;
+        private static int altMin = 25;
         private static int altMax = 500;
 
         private static int fsMin = 1;
