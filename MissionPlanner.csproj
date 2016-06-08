@@ -7,7 +7,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MissionPlanner</RootNamespace>
-    <AssemblyName>Novelty RPAS Flight Manager</AssemblyName>
+    <AssemblyName>Novelty Flight Manager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -3337,12 +3337,12 @@
     <Content Include="LogAnalyzer\VehicleType.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="logo.png" />
     <Content Include="mavgraphs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ogar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\ogar.png" />
+    <Content Include="Resources\novelty_splash.bmp" />
     <Content Include="Scripts\example5 inject data.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -6937,7 +6937,6 @@
     <None Include="Resources\PlusFramesGreen_06.png" />
     <None Include="Resources\pixhawk.jpg" />
     <None Include="Resources\novelty.png" />
-    <None Include="Resources\novelty_splash.bmp" />
     <Content Include="Resources\rover.png" />
     <Content Include="Resources\splash.jpg" />
     <Content Include="Scripts\datetime.py">

@@ -101,7 +101,7 @@ namespace MissionPlanner
             WebRequest.DefaultWebProxy = WebRequest.GetSystemWebProxy();
             WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
 
-            string name = "Novelty";
+            string name = "Novelty Flight Manager";
 
             if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt"))
                 name = File.ReadAllText(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt",
@@ -217,7 +217,7 @@ namespace MissionPlanner
 
             Splash = new MissionPlanner.Splash();
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Splash.Text = "Novelty"; //name+" " + Application.ProductVersion + " build " + strVersion;
+            Splash.Text = "Novelty Flight Manager"; //name+" " + Application.ProductVersion + " build " + strVersion;
             Splash.Show();
 
             Application.DoEvents();
