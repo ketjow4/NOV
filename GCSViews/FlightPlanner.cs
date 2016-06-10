@@ -619,7 +619,7 @@ namespace MissionPlanner.GCSViews
             }
 
             cmds.Add("UNKNOWN");
-
+            cmds.Remove("DO_PARACHUTE");
             Command.DataSource = cmds;
         }
 
