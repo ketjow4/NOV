@@ -3465,10 +3465,16 @@ namespace MissionPlanner.GCSViews
             // arm the MAV
             try
             {
-                if (MainV2.comPort.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
+                //Sanity check
+                if (MainV2.comPort.MAV.cs.armed && !MainV2.comPort.MAV.cs.landed)
+                {
+                    var result = CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
                         return;
-
+                    else if (result == DialogResult.Yes)
+                        if (CustomMessageBox.Show("UAV is still in the air. Do nothing", "Disarm?!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        return;
+                }
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
 
                 System.Threading.Thread.Sleep(1000);         //wait for MAV change state to ARMED

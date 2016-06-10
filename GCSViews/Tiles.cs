@@ -71,6 +71,8 @@ namespace MissionPlanner.GCSViews
         public static TileButton offlineMaps = null;
         public static TileButton cancelOfflineMaps = null;
         private static TileButton guidedModeButton = null;
+        private static TileButton pathGenerationButton = null;
+        private static TileButton exitButton = null;
 
         private static TileData sideLap = null;
         private static TileData overLap = null;
@@ -154,6 +156,7 @@ namespace MissionPlanner.GCSViews
         {
             ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent);
             ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent);
+            exitButton = new TileButton("EXIT", 2, 0, ExitEvent);                   //hack
             Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
             thread.Start();
         }
@@ -215,6 +218,14 @@ namespace MissionPlanner.GCSViews
                             ArmButton.Label.Text = "ARM";
                     }));
 
+                  
+                    exitButton.Label.Invoke(new MethodInvoker(delegate 
+                    {
+                        if (MainV2.comPort.MAV.cs.armed)
+                            exitButton.PanelColor = Color.FromArgb(128, 128, 128);
+                        else
+                            exitButton.PanelColor = Color.Aqua;
+                    }));
 
                     var homeLoc = MainV2.comPort.MAV.cs.HomeLocation;
 
@@ -246,9 +257,9 @@ namespace MissionPlanner.GCSViews
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("Transparent Label error" + ex.Message);
-                //Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
-                //thread.Start();
+                MessageBox.Show("Transparent Label error" + ex.Message);
+                Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
+                thread.Start();
                 // log errors
             }
         }
@@ -279,7 +290,7 @@ namespace MissionPlanner.GCSViews
                 new TileData("GPSHDOP", 1, 5, ""),
                 new TileData("GPS SAT COUNT", 1, 6, ""),
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
-                new TileButton("EXIT",2,0, ExitEvent),
+                exitButton,
                 new TileButton("START\nMISSION",2,6,StartMissionEvent),
                 guidedModeButton = new TileButton("GUIDED\nMODE",3,8,GuidedModeEvent),
                 new TileButton("TAKE OFF",4,8,TakeOffEvent),
@@ -338,7 +349,7 @@ namespace MissionPlanner.GCSViews
             }
            
 
-            accept = new TileButton("ACCEPT\nPATH", 2, 1, AcceptPathEvent);
+            accept = new TileButton("ACCEPT\nPATH", 1, 1, AcceptPathEvent);
             Images = new TileData("IMAGES NUBMER", ResolutionManager.BottomOfScreenRow, 7, "");
             Images.Value = "0";
 
@@ -367,7 +378,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
                 new TileButton("CLEAR", 0, 3, ClearEvent),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => { }, Color.FromArgb(255, 255, 51, 0)),
-                new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
+                pathGenerationButton = new TileButton("PATH\nGENERATION", 1, 1, PathGenerationEvent),
                 new TileButton("ADD LANDING POINT", 1, 2, AddLandingPointEvent),
                 new TileButton("SHOW WP",ResolutionManager.BottomOfScreenRow - 1,0,ShowWPEvent),
                 new TileButton("\u2610 FOOTPRINT",0,4, FootprintEvent),
@@ -473,7 +484,7 @@ namespace MissionPlanner.GCSViews
         }
 
         private static bool firstClick = true;
-
+        
 
         private static void OfflineMapsEvent(object sender, EventArgs e)
         {
@@ -608,10 +619,14 @@ namespace MissionPlanner.GCSViews
 
         private static void PathGenerationEvent(object sender, EventArgs args)
         {
+            if (!pathAccepted)          //cannot generate many paths at once
+                return;
             SaveWPFile.Visible = false;
             LoadWPFile.Visible = false;
             LoadWPPlatform.Visible = false;
             writeWaypoints.Visible = false;
+            accept.Visible = true;
+            pathGenerationButton.Visible = false;
             sideLap.Visible = true;
             overLap.Visible = true;
             FlightPlanner.instance.pathGenerationMode = true;
@@ -666,7 +681,9 @@ namespace MissionPlanner.GCSViews
 
         public static void AcceptPathEvent(object sender, EventArgs args)
         {
-            pathAccepted = true; accept.Visible = false; calcGrid = null;
+            pathAccepted = true;
+            pathGenerationButton.Visible = true;
+            accept.Visible = false; calcGrid = null;
             SaveWPFile.Visible = true;
             LoadWPFile.Visible = true;
             LoadWPPlatform.Visible = true;
@@ -783,6 +800,8 @@ namespace MissionPlanner.GCSViews
 
         private static void ExitEvent(object sender, EventArgs args)
         {
+            if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) == DialogResult.No)
+                return;
             //MissionPlanner.LogReporter.LogReporter.stopThread = true;
             MainV2.config["grid_sidelap"] = SideLap.ToString();
             MainV2.config["grid_overlap"] = OverLap.ToString();

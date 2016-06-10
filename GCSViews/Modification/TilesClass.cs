@@ -220,5 +220,16 @@ namespace MissionPlanner.GCSViews.Modification
         {
             this.label.BackColor = hoverColor;
         }
+
+        public Color PanelColor
+        {
+            set {
+                    label.BackColor = value;
+                }
+
+            get {
+                    return label.BackColor;
+                }
+        }
     }
 }
