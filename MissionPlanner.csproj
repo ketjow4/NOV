@@ -3337,7 +3337,6 @@
     <Content Include="LogAnalyzer\VehicleType.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="logo.png" />
     <Content Include="mavgraphs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
