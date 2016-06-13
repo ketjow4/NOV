@@ -218,13 +218,22 @@ namespace MissionPlanner.GCSViews
                             ArmButton.Label.Text = "ARM";
                     }));
 
-                  
-                    exitButton.Label.Invoke(new MethodInvoker(delegate 
+                   
+
+                    exitButton.Label.Invoke(new MethodInvoker(delegate
                     {
                         if (MainV2.comPort.MAV.cs.armed)
-                            exitButton.PanelColor = Color.FromArgb(128, 128, 128);
+                        {
+                            exitButton.UnsetHoverEvent();
+                            exitButton.PanelColor = TileButton.HoverColor;
+                            exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
+                        }
                         else
-                            exitButton.PanelColor = Color.Aqua;
+                        {
+                            exitButton.SetHoverEvents();
+                            exitButton.PanelColor = TileButton.StandardColor;
+                            exitButton.Label.ForeColor = Color.White;
+                        }
                     }));
 
                     var homeLoc = MainV2.comPort.MAV.cs.HomeLocation;
@@ -800,7 +809,9 @@ namespace MissionPlanner.GCSViews
 
         private static void ExitEvent(object sender, EventArgs args)
         {
-            if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) == DialogResult.No)
+            if (!MainV2.comPort.MAV.cs.landed && MainV2.comPort.MAV.cs.armed)       //Can't exit when armed and not landed
+                return;
+            if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
             //MissionPlanner.LogReporter.LogReporter.stopThread = true;
             MainV2.config["grid_sidelap"] = SideLap.ToString();
@@ -838,8 +849,9 @@ namespace MissionPlanner.GCSViews
             }
             else                    //disconnect
             {
+                CustomMessageBox.Show("Cannot disconnect when armed. Disarm first", "Information",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 if (MainV2.comPort.MAV.cs.armed)
-                    ArmButton.ClickMethod(ArmButton, null);     //disarm before disconnect
+                    return;
                 FlightData.instance.hud1.warning = "";
                 MainV2.instance.MenuConnect_Click(null, null);
                 windSpeed.Visible = true;
