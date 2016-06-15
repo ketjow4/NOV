@@ -367,7 +367,7 @@ namespace MissionPlanner.GCSViews
             MainV2_AdvancedChanged(null, null);
 
             Tiles.SetCommonTiles();
-            Tiles.SetTiles(splitContainer1.Panel2, true);
+            Tiles.SetTilesFlightData(splitContainer1.Panel2);
             BindLabels();
             TRK_zoom.Width = Modification.ResolutionManager.FlightDataZoomTrackBarWidth;
         }

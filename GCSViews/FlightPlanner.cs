@@ -584,8 +584,7 @@ namespace MissionPlanner.GCSViews
 
             panelWaypoints.Visible = false;
             panelAction.Visible = false;
-            Tiles.SetTiles(panelBASE, false);
-        
+            Tiles.SetTilesFlightPlannign(panelBASE);
 
             // hide the map to prevent redraws when its loaded
             panelMap.Visible = false;
