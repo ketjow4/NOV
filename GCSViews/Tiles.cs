@@ -836,7 +836,10 @@ namespace MissionPlanner.GCSViews
         {
             try
             {
-                MainV2.comPort.setMode("BRAKE");
+                if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
+                    MainV2.comPort.setMode("BRAKE");
+                else if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
+                    MainV2.comPort.setMode("CIRCLE");
             }
             catch
             {
