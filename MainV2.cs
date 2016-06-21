@@ -1181,7 +1181,7 @@ namespace MissionPlanner
                 if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
                 {
                     GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
-                    GCSViews.Tiles.connected = true;
+                    GCSViews.Tiles.connected = false;
                 }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;

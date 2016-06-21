@@ -89,9 +89,14 @@ namespace MissionPlanner.GCSViews
 
         private static int altMin = 25;
         private static int altMax = 500;
+        
+        //Ogar speed
+        private static int fsMinOgar = 1;
+        private static int fsMaxOgar = 10;
 
-        private static int fsMin = 1;
-        private static int fsMax = 10;
+        //Albatros speed 
+        private static int fsMinAlbatros = 17;
+        private static int fsMaxAlbatros = 21;
 
         private static double groundRes;
 
@@ -123,8 +128,8 @@ namespace MissionPlanner.GCSViews
         public static void ChangeSpeed(int v)
         {
             int val = v;
-            if (val < fsMin) val = fsMin;
-            else if (val > fsMax) val = fsMax;
+            if (val < fsMinOgar) val = fsMinOgar;
+            else if (val > fsMaxOgar) val = fsMaxOgar;
             flyingSpeed.Value = val.ToString();
             if (calcGrid != null)
                 calcGrid(null, null);
@@ -736,7 +741,26 @@ namespace MissionPlanner.GCSViews
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("FLYING SPEED", false, FlyingSpeed.ToString(), fsMin, fsMax, ResolutionManager.InputPanelSize);
+            InputFlightPlanning inputWindow;
+
+            if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2 && connected)
+                inputWindow = new InputFlightPlanning("FLYING SPEED - OGAR", false, FlyingSpeed.ToString(), fsMinOgar, fsMaxOgar, ResolutionManager.InputPanelSize);
+            else if(MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane && connected)
+                inputWindow = new InputFlightPlanning("FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString(), fsMinAlbatros, fsMaxAlbatros, ResolutionManager.InputPanelSize);
+            else
+            {
+                PlatformChoose chooseWindow = new PlatformChoose();
+                chooseWindow.ShowDialog();
+                if (chooseWindow.Result == PlatformChoose.Platform.Albatros)
+                    inputWindow = new InputFlightPlanning("FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString(), fsMinAlbatros, fsMaxAlbatros, ResolutionManager.InputPanelSize);
+                else if (chooseWindow.Result == PlatformChoose.Platform.Ogar)
+                    inputWindow = new InputFlightPlanning("FLYING SPEED - OGAR", false, FlyingSpeed.ToString(), fsMinOgar, fsMaxOgar, ResolutionManager.InputPanelSize);
+                else
+                { 
+                    CustomMessageBox.Show("Error, operation is not valid");
+                    return;
+                }
+            }
             inputWindow.ShowDialog();
             ChangeSpeed(inputWindow.Result);
         }

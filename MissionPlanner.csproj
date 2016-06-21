@@ -482,6 +482,12 @@
     <Compile Include="GCSViews\OfflineMapsInput.Designer.cs">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\PlatformChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\PlatformChoose.Designer.cs">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
+    </Compile>
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1217,6 +1223,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\OfflineMapsInput.resx">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\PlatformChoose.resx">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\PreFlightCheck.resx">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
