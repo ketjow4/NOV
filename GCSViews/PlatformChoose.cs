@@ -23,7 +23,7 @@ namespace MissionPlanner.GCSViews
         public PlatformChoose()
         {
             InitializeComponent();
-            //this.Size = Modification.ResolutionManager.
+            this.Size = new Size(Modification.ResolutionManager.InputPanelSize.Width,Modification.ResolutionManager.ValueLabelWidth);
             foreach(var b in  Grid.Controls)
             {
                 if(b is Button)

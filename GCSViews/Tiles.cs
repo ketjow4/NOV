@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using IronPython.Runtime.Operations;
 using System.Threading;
 
+using MissionPlanner.Mavlink;
 using MissionPlanner.GCSViews.Modification; //classes for tiles
+using MissionPlanner.Utilities;
 
 namespace MissionPlanner.GCSViews
 {
@@ -97,6 +99,10 @@ namespace MissionPlanner.GCSViews
         //Albatros speed 
         private static int fsMinAlbatros = 17;
         private static int fsMaxAlbatros = 21;
+
+        //Current speed limits
+        private static int fsMin = 0;
+        private static int fsMax = 0;
 
         private static double groundRes;
 
@@ -242,7 +248,7 @@ namespace MissionPlanner.GCSViews
                     takeOff.Label.Invoke(new MethodInvoker(delegate
                     {
                         if (MainV2.comPort.MAV.cs.landed)
-                            takeOff.Label.Text = "TAKE OFF";
+                            takeOff.Label.Text = "TAKEOFF";
                         else
                             takeOff.Label.Text = "CHANGE ALT";
                     }));
@@ -451,7 +457,7 @@ namespace MissionPlanner.GCSViews
                  ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent),
             ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
             exitButton = new TileButton("EXIT", 2, 0, ExitEvent),                //hack
-            takeOff = new TileButton("TAKE OFF", 4, 8, TakeOffEvent),
+            takeOff = new TileButton("TAKEOFF", 4, 8, TakeOffEvent),
             });
             commonTiles = tilesFlightMode;      //bad hax
             mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
@@ -650,7 +656,6 @@ namespace MissionPlanner.GCSViews
                         .Where(item => item.Text.Equals("Survey (Grid)"))
                         .OfType<ToolStripMenuItem>())
             {
-                FlightPlanner.instance.takeoffToolStripMenuItem_Click(null,null);     //always add take off at mission height
                 toolStripItem.PerformClick();
                 break;
             }
@@ -689,6 +694,7 @@ namespace MissionPlanner.GCSViews
 
         public static void AcceptPathEvent(object sender, EventArgs args)
         {
+            FlightPlanner.instance.takeoffToolStripMenuItem_Click(null, null);     //always add takeoff at mission height
             pathAccepted = true;
             pathGenerationButton.Visible = true;
             accept.Visible = false; calcGrid = null;
@@ -808,6 +814,11 @@ namespace MissionPlanner.GCSViews
 
         private static void StartMissionEvent(object sender, EventArgs e)
         {
+            if(CheckMissionSpeed())
+            {
+                CustomMessageBox.Show("Speed is out of range for this platform.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             try
             {
                 int param1 = 0;
@@ -876,20 +887,27 @@ namespace MissionPlanner.GCSViews
                     commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
                 if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
                 {
+                    fsMin = fsMinOgar;
+                    fsMax = fsMaxOgar;
                     windSpeed.Visible = false;
                     FlightData.instance.windDir1.Visible = false;
                 }
                 else if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane)
                 {
+                    fsMin = fsMinAlbatros;
+                    fsMax = fsMaxAlbatros;
                     abortLandButton.Visible = true;
                 }
 				
             }
             else                    //disconnect
             {
-                CustomMessageBox.Show("Cannot disconnect when armed. Disarm first", "Information",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                
                 if (MainV2.comPort.MAV.cs.armed)
+                {
+                    CustomMessageBox.Show("Cannot disconnect when armed. Disarm first", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information); 
                     return;
+                }
                 FlightData.instance.hud1.warning = "";
                 MainV2.instance.MenuConnect_Click(null, null);
                 windSpeed.Visible = true;
@@ -977,5 +995,43 @@ namespace MissionPlanner.GCSViews
             }
         }
 #endregion
+
+
+        private static bool CheckMissionSpeed()
+        {
+            var Commands = GetWP();
+
+            if (Commands.Any(c => (c.id == (byte)MavlinkHelper.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
+                return true;
+
+            return false;
+        }
+
+        private static List<Locationwp> GetWP()
+        {
+            List<Locationwp> cmds = new List<Locationwp>();
+
+            try
+            {
+                MAVLinkInterface port = MainV2.comPort;
+                MainV2.comPort.giveComport = true;
+
+                int cmdcount = port.getWPCount();
+
+                for (ushort a = 0; a < cmdcount; a++)
+                {
+                    cmds.Add(port.getWP(a));
+                }
+
+                port.setWPACK();
+                return cmds;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
     }
 }
