@@ -561,34 +561,6 @@ namespace MissionPlanner
             }
         }
 
-        public float ReadAvgSpeed(String filename)
-        {
-            bool exists = File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + filename);
-            float result = 0;
-            try
-            {
-                using (XmlTextReader xmlreader = new XmlTextReader(Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar + filename))
-                {
-                    while (xmlreader.Read())
-                    {
-                        xmlreader.MoveToElement();
-                        try
-                        {
-                            switch (xmlreader.Name)
-                            {
-                                case "FlyingSpeed":
-                                    result = float.Parse(xmlreader.ReadString(), new System.Globalization.CultureInfo("en-US"));
-                                    break;
-                            }
-                        }
-                        catch (Exception ex) { Console.WriteLine(ex.Message); }
-                    }
-                }
-            }
-            catch (Exception ex) { Console.WriteLine("Bad Platform File: " + ex.ToString()); }
-            return result;
-        }
-
         // Do Work
         public void domainUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -771,22 +743,12 @@ namespace MissionPlanner
 
             double flyspeedms = 0;
 
-            //MainV2.comPort.MAV.cs.firmware
-            //if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
-
             flyspeedms = Tiles.FlyingSpeed;
 
             Tiles.DistanceUnit = "km";
             Tiles.Distance = lbl_distance.Text;
 
-            //if (File.Exists("ARDU.xml"))
-            //{
-            //    flyspeedms = ReadAvgSpeed("ARDU.xml");
-            //}
-            //else
-            //{
-            //    flyspeedms = 5.0;
-            //}
+           
             //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
 
             //lbl_pictures.Text = images.ToString();
@@ -1464,7 +1426,7 @@ namespace MissionPlanner
 
         public void BUT_Accept_Click(object sender, EventArgs e)
         {
-			GCSViews.FlightPlanner.polygonMarkerMovedEvent -= FlightPlanner_polygonMarkerMovedEvent;
+            GCSViews.FlightPlanner.polygonMarkerMovedEvent -= FlightPlanner_polygonMarkerMovedEvent;
 
 			routesOverlay.Clear();
 
