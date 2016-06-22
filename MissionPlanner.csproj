@@ -478,6 +478,7 @@
     <Compile Include="GCSViews\InputFlightPlanning.Designer.cs">
       <DependentUpon>InputFlightPlanning.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\Modification\MavlinkHelper.cs" />
     <Compile Include="GCSViews\Modification\ResolutionManager.cs" />
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
     <Compile Include="GCSViews\OfflineMapsInput.cs">
@@ -485,6 +486,12 @@
     </Compile>
     <Compile Include="GCSViews\OfflineMapsInput.Designer.cs">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCSViews\PlatformChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\PlatformChoose.Designer.cs">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
@@ -1227,6 +1234,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\OfflineMapsInput.resx">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\PlatformChoose.resx">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\PreFlightCheck.resx">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
@@ -3354,7 +3364,6 @@
     <Content Include="LogAnalyzer\VehicleType.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="logo.png" />
     <Content Include="mavgraphs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

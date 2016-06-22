@@ -367,7 +367,7 @@ namespace MissionPlanner.GCSViews
             MainV2_AdvancedChanged(null, null);
 
             Tiles.SetCommonTiles();
-            Tiles.SetTiles(splitContainer1.Panel2, true);
+            Tiles.SetTilesFlightData(splitContainer1.Panel2);
             BindLabels();
             TRK_zoom.Width = Modification.ResolutionManager.FlightDataZoomTrackBarWidth;
         }
@@ -3465,14 +3465,20 @@ namespace MissionPlanner.GCSViews
             // arm the MAV
             try
             {
-                if (MainV2.comPort.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) == DialogResult.No)
+                //Sanity check
+                if (MainV2.comPort.MAV.cs.Armed && !MainV2.comPort.MAV.cs.landed)
+                {
+                    var result = CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo);
+                    if (result == DialogResult.No)
                         return;
-
-                bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
+                    else if (result == DialogResult.Yes)
+                        if (CustomMessageBox.Show("UAV is still in the air. Do nothing", "Disarm?!", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        return;
+                }
+                bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.Armed);
 
                 System.Threading.Thread.Sleep(1000);         //wait for MAV change state to ARMED
-                Tiles.armed = MainV2.comPort.MAV.cs.armed;
+                Tiles.armed = MainV2.comPort.MAV.cs.Armed;
 
                 //if (ans == false)
                 //    CustomMessageBox.Show("Error: Arm message rejected by MAV", "Error");
@@ -4040,7 +4046,7 @@ namespace MissionPlanner.GCSViews
                         }
 
                         timeout = 0;
-                        while (!MainV2.comPort.MAV.cs.armed)
+                        while (!MainV2.comPort.MAV.cs.Armed)
                         {
                             MainV2.comPort.doARM(true);
                             Thread.Sleep(1000);

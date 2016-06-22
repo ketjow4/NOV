@@ -121,7 +121,7 @@ namespace MissionPlanner.Wizard
             }
 
             // arm check
-            if (MainV2.comPort.MAV.cs.armed)
+            if (MainV2.comPort.MAV.cs.Armed)
             {
                 lbl_prearm.BackColor = Color.Green;
                 try

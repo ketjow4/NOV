@@ -584,8 +584,7 @@ namespace MissionPlanner.GCSViews
 
             panelWaypoints.Visible = false;
             panelAction.Visible = false;
-            Tiles.SetTiles(panelBASE, false);
-        
+            Tiles.SetTilesFlightPlanning(panelBASE);
 
             // hide the map to prevent redraws when its loaded
             panelMap.Visible = false;
@@ -619,7 +618,7 @@ namespace MissionPlanner.GCSViews
             }
 
             cmds.Add("UNKNOWN");
-
+            cmds.Remove("DO_PARACHUTE");
             Command.DataSource = cmds;
         }
 

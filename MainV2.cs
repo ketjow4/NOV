@@ -419,11 +419,11 @@ namespace MissionPlanner
 
             instance = this;
 
-            //disable dpi scaling
-            if (Font.Name != "宋体")
-                //Chinese displayed normally when scaling. But would be too small or large using this line of code.
-                Font = new Font(Font.Name, 8.25f*96f/CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet,
-                    Font.GdiVerticalFont);
+            ////disable dpi scaling                                     -------------------DELETED--------------------
+            //if (Font.Name != "宋体")
+            //    //Chinese displayed normally when scaling. But would be too small or large using this line of code.
+            //    Font = new Font(Font.Name, 8.25f*96f/CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet,
+            //        Font.GdiVerticalFont);
 
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
@@ -1181,7 +1181,7 @@ namespace MissionPlanner
                 if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
                 {
                     GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
-                    GCSViews.Tiles.connected = true;
+                    GCSViews.Tiles.connected = false;
                 }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
@@ -2219,7 +2219,7 @@ namespace MissionPlanner
                     if (speechEnable && speechEngine != null && (DateTime.Now - speechlowspeedtime).TotalSeconds > 10 &&
                         (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen))
                     {
-                        if (MainV2.getConfig("speechlowspeedenabled") == "True" && MainV2.comPort.MAV.cs.armed)
+                        if (MainV2.getConfig("speechlowspeedenabled") == "True" && MainV2.comPort.MAV.cs.Armed)
                         {
                             float warngroundspeed = 0;
                             float.TryParse(MainV2.getConfig("speechlowgroundspeedtrigger"), out warngroundspeed);
@@ -2263,7 +2263,7 @@ namespace MissionPlanner
                             altwarningmax = (int)Math.Max(MainV2.comPort.MAV.cs.alt, altwarningmax);
 
                             if (MainV2.getConfig("speechaltenabled") == "True" && MainV2.comPort.MAV.cs.alt != 0.00 &&
-                                (MainV2.comPort.MAV.cs.alt <= warnalt) && MainV2.comPort.MAV.cs.armed)
+                                (MainV2.comPort.MAV.cs.alt <= warnalt) && MainV2.comPort.MAV.cs.Armed)
                             {
                                 if (altwarningmax > warnalt)
                                 {
@@ -2311,7 +2311,7 @@ namespace MissionPlanner
                         && (DateTime.Now - connecttime).TotalSeconds > 30
                         && (DateTime.Now - nodatawarning).TotalSeconds > 5
                         && (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen)
-                        && MainV2.comPort.MAV.cs.armed)
+                        && MainV2.comPort.MAV.cs.Armed)
                     {
                         if (speechEnable && speechEngine != null)
                         {
@@ -2327,11 +2327,11 @@ namespace MissionPlanner
                     }
 
                     // get home point on armed status change.
-                    if (armedstatus != MainV2.comPort.MAV.cs.armed && comPort.BaseStream.IsOpen)
+                    if (armedstatus != MainV2.comPort.MAV.cs.Armed && comPort.BaseStream.IsOpen)
                     {
-                        armedstatus = MainV2.comPort.MAV.cs.armed;
+                        armedstatus = MainV2.comPort.MAV.cs.Armed;
                         // status just changed to armed
-                        if (MainV2.comPort.MAV.cs.armed == true && MainV2.comPort.MAV.aptype != MAVLink.MAV_TYPE.GIMBAL)
+                        if (MainV2.comPort.MAV.cs.Armed == true && MainV2.comPort.MAV.aptype != MAVLink.MAV_TYPE.GIMBAL)
                         {
                             try
                             {

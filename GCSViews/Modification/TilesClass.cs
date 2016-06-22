@@ -157,8 +157,8 @@ namespace MissionPlanner.GCSViews.Modification
     {
         private readonly Color color;
         private Label label;
-        private readonly Color hoverColor = Color.FromArgb(85, 86, 88);
-        private readonly Color standardColor = Color.FromArgb(22, 23, 24);
+        private static readonly Color hoverColor = Color.FromArgb(85, 86, 88);
+        private static readonly Color standardColor = Color.FromArgb(22, 23, 24);
 
         public TileButton(string text, double row, double column, EventHandler handler = null, Color? color = null)
             : base(text, row, column)
@@ -175,8 +175,7 @@ namespace MissionPlanner.GCSViews.Modification
                 Font = new Font("Century Gothic", ResolutionManager.TileButtonFontSize)
             };
             label.Click += ClickMethod;
-            label.MouseEnter += EnterHover;
-            label.MouseLeave += LeaveHover;
+            SetHoverEvents();
         }
 
         public EventHandler ClickMethod;
@@ -190,6 +189,19 @@ namespace MissionPlanner.GCSViews.Modification
         {
             set { if (label.Parent != null) label.Parent.Visible = value; }
             get { return label.Parent != null && label.Parent.Visible; }
+        }
+
+
+        public void UnsetHoverEvent()
+        {
+            label.MouseHover -= EnterHover;
+            label.MouseLeave -= LeaveHover;
+        }
+
+        public void SetHoverEvents()
+        {
+            label.MouseEnter += EnterHover;
+            label.MouseLeave += LeaveHover;
         }
 
         private void EnterHover(object sender, EventArgs args)
@@ -219,6 +231,33 @@ namespace MissionPlanner.GCSViews.Modification
         public void SetToHoverColor()
         {
             this.label.BackColor = hoverColor;
+        }
+
+        public Color PanelColor
+        {
+            set {
+                    label.BackColor = value;
+                }
+
+            get {
+                    return label.BackColor;
+                }
+        }
+
+        public static Color StandardColor
+        {
+            get
+            {
+                return standardColor;
+            }
+        }
+
+        public static Color HoverColor
+        {
+            get
+            {
+                return hoverColor;
+            }
         }
     }
 }

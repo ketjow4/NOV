@@ -804,7 +804,7 @@ namespace MissionPlanner
         public float freemem { get; set; }
         public float load { get; set; }
         public float brklevel { get; set; }
-        public bool armed { get; set; }
+        private bool armed;
 
         // Sik radio
         [DisplayText("Sik Radio rssi")]
@@ -1094,7 +1094,7 @@ namespace MissionPlanner
                     {
                         lastsecondcounter = datetime;
 
-                        if (lastpos.Lat != 0 && lastpos.Lng != 0 && armed)
+                        if (lastpos.Lat != 0 && lastpos.Lng != 0 && Armed)
                         {
                             if (!mavinterface.BaseStream.IsOpen && !mavinterface.logreadmode)
                                 distTraveled = 0;
@@ -1413,7 +1413,7 @@ namespace MissionPlanner
                         }
                         else
                         {
-                            armed = (hb.base_mode & (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) ==
+                            Armed = (hb.base_mode & (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) ==
                                     (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED;
 
                             // for future use
@@ -2365,5 +2365,21 @@ namespace MissionPlanner
         public float rpm1 { get; set; }
 
         public float rpm2 { get; set; }
+
+        public static event EventHandler ArmedSet;
+
+        public bool Armed
+        {
+            get
+            {
+                return armed;
+            }
+
+            set
+            {
+                if (ArmedSet != null && value != armed) ArmedSet(this, null);
+                armed = value;
+            }
+        }
     }
 }
