@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 
 using MissionPlanner.Controls;
+using MissionPlanner.Validators;
 
 namespace MissionPlanner.GCSViews
 {
@@ -17,6 +18,8 @@ namespace MissionPlanner.GCSViews
     {
         private Thread thread;
         private volatile bool stop = false;
+
+        
 
         public PreFlightCheck()
         {
@@ -142,6 +145,30 @@ namespace MissionPlanner.GCSViews
 
         private void ReadyButton_Click(object sender, EventArgs e)
         {
+            string[] allLines = File.ReadAllLines("data.csv");
+
+            var query = from line in allLines
+                        let data = line.Split(',')
+                        select new
+                        {
+                            ID = data[2],
+                            PIN = data[3]
+                        };
+
+            var intValidator = new NumericValidator<int>(0, 9999);
+            InputFlightPlanning pinForm = new InputFlightPlanning(intValidator, "ENTER PIN", false, "");
+
+            int result; 
+            int.TryParse(employee_data.SelectedText.Substring(employee_data.SelectedText.LastIndexOf("Id:")),out result);
+
+            var b = query.Where(a => a.ID == result.ToString());
+
+            if (b.FirstOrDefault() != null)
+                if (pinForm.Result.ToString() != b.FirstOrDefault().PIN)
+                {
+                    DialogResult = DialogResult.Cancel; 
+                    return;
+                }
             SaveLogFile();
             stop = true;
             DialogResult = DialogResult.OK;

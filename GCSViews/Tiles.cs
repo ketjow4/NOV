@@ -418,41 +418,7 @@ namespace MissionPlanner.GCSViews
             abortLandButton.Visible = false;
         }
 
-        private static void Cs_ArmedSet(object sender, EventArgs e)
-        {
-            try
-            { 
-            ArmButton.Label.BeginInvoke(new MethodInvoker(delegate
-            {
-                if (MainV2.comPort.MAV.cs.Armed)
-                    ArmButton.Label.Text = "DISARM";
-                else
-                    ArmButton.Label.Text = "ARM";
-            }));
-
-            exitButton.Label.BeginInvoke(new MethodInvoker(delegate
-            {
-                if (MainV2.comPort.MAV.cs.Armed)
-                {
-                    exitButton.UnsetHoverEvent();
-                    exitButton.PanelColor = TileButton.HoverColor;
-                    exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
-                }
-                else
-                {
-                    exitButton.SetHoverEvents();
-                    exitButton.PanelColor = TileButton.StandardColor;
-                    exitButton.Label.ForeColor = Color.White;
-                }
-            }));
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-
+ 
 
 
         #region EventsFlightPlanner
@@ -806,7 +772,7 @@ namespace MissionPlanner.GCSViews
 #endregion
 
 
-#region EventsFlightData
+        #region EventsFlightData
 
         private static void TakeOffEvent(object sender, EventArgs e)
         {
@@ -1086,5 +1052,41 @@ namespace MissionPlanner.GCSViews
             }
             return startFromButtons;
         }
+
+        private static void Cs_ArmedSet(object sender, EventArgs e)
+        {
+            try
+            {
+                ArmButton.Label.BeginInvoke(new MethodInvoker(delegate
+                {
+                    if (MainV2.comPort.MAV.cs.Armed)
+                        ArmButton.Label.Text = "DISARM";
+                    else
+                        ArmButton.Label.Text = "ARM";
+                }));
+
+                exitButton.Label.BeginInvoke(new MethodInvoker(delegate
+                {
+                    if (MainV2.comPort.MAV.cs.Armed)
+                    {
+                        exitButton.UnsetHoverEvent();
+                        exitButton.PanelColor = TileButton.HoverColor;
+                        exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
+                    }
+                    else
+                    {
+                        exitButton.SetHoverEvents();
+                        exitButton.PanelColor = TileButton.StandardColor;
+                        exitButton.Label.ForeColor = Color.White;
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show(ex.Message);
+            }
+        }
+
+
     }
 }
