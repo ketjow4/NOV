@@ -25,6 +25,7 @@ using System.Linq;
 using MissionPlanner.Warnings;
 using OpenTK;
 using LogAnalyzer = MissionPlanner.Utilities.LogAnalyzer;
+using MissionPlanner.Validators;
 
 // written by michael oborne
 
@@ -3346,15 +3347,20 @@ namespace MissionPlanner.GCSViews
                 //alt = (100*CurrentState.multiplierdist).ToString("0");
             }
 
-            //if (MainV2.config.ContainsKey("guided_alt"))
-            //    alt = MainV2.config["guided_alt"].ToString();
+			//if (MainV2.config.ContainsKey("guided_alt"))
+			//    alt = MainV2.config["guided_alt"].ToString();
 
-            //if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
-            //    return;
+			//if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
+			//    return;
 
-            InputFlightPlanning inputWindow = new InputFlightPlanning("GUIDED MODE ALTITUDE", false, alt, 50, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);
-            inputWindow.ShowDialog();
-            alt = inputWindow.ResultString;
+			var intValidator = new NumericValidator<int>(50, 500);
+			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "GUIDED MODE ALTITUDE", false, alt);
+			inputWindow.WindowSize = GCSViews.Modification.ResolutionManager.InputPanelSize;
+			if (inputWindow.ShowDialog() == DialogResult.OK)
+			{
+				alt = inputWindow.Result.ToString();
+			}
+			
             //MainV2.config["guided_alt"] = alt;
 
             int intalt = (int) (100*CurrentState.multiplierdist);

@@ -47,6 +47,7 @@ using GeoUtility.GeoSystem;
 using GeoUtility.GeoSystem.Base;
 using DotSpatial.Data;
 using System.Drawing.Drawing2D;
+using MissionPlanner.Validators;
 
 namespace MissionPlanner.GCSViews
 {
@@ -6104,10 +6105,14 @@ namespace MissionPlanner.GCSViews
             string alt = Tiles.AltitudeVal.ToString();
 
             if (Tiles.pathAccepted)     //for adding take off on mission altitude in path generation
-            { 
-                InputFlightPlanning altitudeInput = new InputFlightPlanning("Please enter your takeoff altitude", false, alt, 30, 500, GCSViews.Modification.ResolutionManager.InputPanelSize);         //new Size(460, 380)
-                altitudeInput.ShowDialog();
-                alt = altitudeInput.ResultString;
+            {
+				var intValidator = new NumericValidator<int>(30, 500);
+				InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "Please enter your takeoff altitude", false, alt);
+				inputWindow.WindowSize = GCSViews.Modification.ResolutionManager.InputPanelSize;
+				if (inputWindow.ShowDialog() == DialogResult.OK)
+				{
+					alt = inputWindow.Result.ToString();
+				}
             }
 
 

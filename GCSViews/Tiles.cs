@@ -719,8 +719,7 @@ namespace MissionPlanner.GCSViews
 			var intValidator = new NumericValidator<int>(0, 360);
 			Slider slider = new Slider(intValidator, "ANGLE", AngleVal.ToString());
 			slider.WindowSize = ResolutionManager.InputPanelSize;
-			slider.ShowDialog();
-			if(slider.DialogResult == DialogResult.OK)
+			if(slider.ShowDialog() == DialogResult.OK)
 			{
 				ChangeAngle(slider.Result);
 			}
@@ -729,53 +728,81 @@ namespace MissionPlanner.GCSViews
         private static void AltitudeSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ALTITUDE", false, AltitudeVal.ToString(), altMin, altMax, ResolutionManager.InputPanelSize);
-            inputWindow.ShowDialog();
-            ChangeAlt(inputWindow.Result);
+			var intValidator = new NumericValidator<int>(altMin, altMax);
+			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "ALTITUDE", false, AltitudeVal.ToString());
+			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
+			if(inputWindow.ShowDialog() == DialogResult.OK)
+			{
+				ChangeAlt(inputWindow.Result);
+			}
         }
 
         private static void FlyingSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow;
-
+			IValidator<int> intValidator;
+			InputFlightPlanning inputWindow;
+			PlatformChoose.Platform platform = PlatformChoose.Platform.Error;
+			
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2 && connected)
-                inputWindow = new InputFlightPlanning("FLYING SPEED - OGAR", false, FlyingSpeed.ToString(), fsMinOgar, fsMaxOgar, ResolutionManager.InputPanelSize);
-            else if(MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane && connected)
-                inputWindow = new InputFlightPlanning("FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString(), fsMinAlbatros, fsMaxAlbatros, ResolutionManager.InputPanelSize);
-            else
+			{
+				platform = PlatformChoose.Platform.Ogar;
+			}
+			else if(MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduPlane && connected)
+			{
+				platform = PlatformChoose.Platform.Albatros;
+			}
+			else
             {
-                PlatformChoose chooseWindow = new PlatformChoose();
-                chooseWindow.ShowDialog();
-                if (chooseWindow.Result == PlatformChoose.Platform.Albatros)
-                    inputWindow = new InputFlightPlanning("FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString(), fsMinAlbatros, fsMaxAlbatros, ResolutionManager.InputPanelSize);
-                else if (chooseWindow.Result == PlatformChoose.Platform.Ogar)
-                    inputWindow = new InputFlightPlanning("FLYING SPEED - OGAR", false, FlyingSpeed.ToString(), fsMinOgar, fsMaxOgar, ResolutionManager.InputPanelSize);
-                else
-                { 
-                    CustomMessageBox.Show("Error, operation is not valid");
-                    return;
-                }
-            }
-            inputWindow.ShowDialog();
-            ChangeSpeed(inputWindow.Result);
+				PlatformChoose chooseWindow = new PlatformChoose();
+				chooseWindow.ShowDialog();
+				platform = chooseWindow.Result;
+			}
+
+			switch (platform)
+			{
+				case PlatformChoose.Platform.Albatros:
+					intValidator = new NumericValidator<int>(fsMinAlbatros, fsMaxAlbatros);
+					inputWindow = new InputFlightPlanning(intValidator, "FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString());
+					break;
+				case PlatformChoose.Platform.Ogar:
+					intValidator = new NumericValidator<int>(fsMinOgar, fsMaxOgar);
+					inputWindow = new InputFlightPlanning(intValidator, "FLYING SPEED - OGAR", false, FlyingSpeed.ToString());
+					break;
+				case PlatformChoose.Platform.Error:
+				default:
+					CustomMessageBox.Show("Error, operation is not valid");
+					return;
+			}
+
+			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
+			if(inputWindow.ShowDialog() == DialogResult.OK)
+			{
+				ChangeSpeed(inputWindow.Result);
+			}
         }
 
         private static void SidelapSettingEvent(object sender, EventArgs args)
         {
-            cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("SIDELAP", false, SideLap.ToString(), 0, 99, ResolutionManager.InputPanelSize);
-            inputWindow.ShowDialog();
-            ChangeSideLap(inputWindow.Result);
-        }
+			var intValidator = new NumericValidator<int>(0, 99);
+			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "SIDELAP", false, SideLap.ToString());
+			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
+			if (inputWindow.ShowDialog() == DialogResult.OK)
+			{
+				ChangeAlt(inputWindow.Result);
+			}
+		}
 
         private static void OverlapSettingEvent(object sender, EventArgs args)
         {
-            cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("OVERLAP", false, OverLap.ToString(), 0, 99, ResolutionManager.InputPanelSize);
-            inputWindow.ShowDialog();
-            ChangeOverLap(inputWindow.Result);
-        }
+			var intValidator = new NumericValidator<int>(0, 99);
+			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "OVERLAP", false, OverLap.ToString());
+			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
+			if (inputWindow.ShowDialog() == DialogResult.OK)
+			{
+				ChangeAlt(inputWindow.Result);
+			}
+		}
 #endregion
 
 
