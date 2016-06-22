@@ -287,7 +287,7 @@ namespace MissionPlanner.Swarm
                     {
                         exists = true;
                         ((Status) ctl).GPS.Text = port.MAV.cs.gpsstatus >= 3 ? "OK" : "Bad";
-                        ((Status) ctl).Armed.Text = port.MAV.cs.armed.ToString();
+                        ((Status) ctl).Armed.Text = port.MAV.cs.Armed.ToString();
                         ((Status) ctl).Mode.Text = port.MAV.cs.mode;
                         ((Status) ctl).MAV.Text = port.ToString();
                         ((Status) ctl).Guided.Text = port.MAV.GuidedMode.x + "," + port.MAV.GuidedMode.y + "," +

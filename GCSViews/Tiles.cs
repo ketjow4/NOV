@@ -219,32 +219,6 @@ namespace MissionPlanner.GCSViews
                         }
                     }));
 
-                    ArmButton.Label.Invoke(new MethodInvoker(delegate
-                    {
-                        if (MainV2.comPort.MAV.cs.armed)
-                            ArmButton.Label.Text = "DISARM";
-                        else
-                            ArmButton.Label.Text = "ARM";
-                    }));
-
-                   
-
-                    exitButton.Label.Invoke(new MethodInvoker(delegate
-                    {
-                        if (MainV2.comPort.MAV.cs.armed)
-                        {
-                            exitButton.UnsetHoverEvent();
-                            exitButton.PanelColor = TileButton.HoverColor;
-                            exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
-                        }
-                        else
-                        {
-                            exitButton.SetHoverEvents();
-                            exitButton.PanelColor = TileButton.StandardColor;
-                            exitButton.Label.ForeColor = Color.White;
-                        }
-                    }));
-
                     takeOff.Label.Invoke(new MethodInvoker(delegate
                     {
                         if (MainV2.comPort.MAV.cs.landed)
@@ -291,47 +265,16 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+
+
         public static void SetTilesFlightPlanning(Panel p)
         {
             altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent);
             if (MainV2.config.ContainsKey("TXT_DefaultAlt"))
                 altInfo.Value = FlightPlanner.instance.TXT_DefaultAlt.Text = MainV2.config["TXT_DefaultAlt"].ToString();
 
-            obsHeadBtn = new TileData("PAYLOAD", 1, 3, "", ObservationHeadEvent);
-            obsHeadBtn.ValueLabel.Width = ResolutionManager.MagicWidth;          //ugly !!!
-            obsHeadBtn.Value = camName;
-
-
-            startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
-            startFromBut.ValueLabel.Width = ResolutionManager.MagicWidth;   //ugly !!!
-            startFromBut.Value = startFrom;
-
-            cameras_buttons = new List<TileButton>();
-
-            sideLap = new TileData("SIDELAP", 0, 7, "%", SidelapSettingEvent);
-            overLap = new TileData("OVERLAP", 0, 8, "%", OverlapSettingEvent);
-            flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", FlyingSettingEvent);
-            flyingSpeed.Value = "3";
-
-
-            XmlHelper.ReadCameraName("noveltyCam.xml");
-
-            int i = 0;
-            foreach (var camera in XmlHelper.cameras)
-            {
-                cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, CameraButtonListEvent));
-                i++;
-            }
-
-            startFromButtons = new List<TileButton>();
-            var names = Enum.GetNames(typeof(StartPosition));
-            i = 0;
-            foreach (var name in names)
-            {
-                startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7, StartFromButtonListEvent));
-                i++;
-            }
-
+            cameras_buttons = CreateCameraButtons();
+            startFromButtons = CreateStartFromButtons();
 
             accept = new TileButton("ACCEPT\nPATH", 1, 1, AcceptPathEvent);
             Images = new TileData("IMAGES NUBMER", ResolutionManager.BottomOfScreenRow, 7, "");
@@ -343,7 +286,13 @@ namespace MissionPlanner.GCSViews
             hidelist2.AddRange(hideList);
             hidelist2.AddRange(cameras_buttons.ToArray());
             hidelist2.AddRange(startFromButtons.ToArray());
+
             obsHeadBtn.ClickMethod(null, null);
+
+            sideLap = new TileData("SIDELAP", 0, 7, "%", SidelapSettingEvent);
+            overLap = new TileData("OVERLAP", 0, 8, "%", OverlapSettingEvent);
+            flyingSpeed = new TileData("FLYING SPEED", 1, 6, "m/s", FlyingSettingEvent);
+            flyingSpeed.Value = "3";
 
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
@@ -392,12 +341,10 @@ namespace MissionPlanner.GCSViews
             AltitudeVal = altMin;
 
             SetToView(tilesFlightPlanning, p);
-    
-            foreach (var tile in tilesFlightPlanning)
-            {
-                if (hidelist2.Contains(tile) && tile is TileButton)
-                    (tile as TileButton).Visible = false;
-            }
+
+            tilesFlightPlanning.Where(tile => hidelist2.Contains(tile) && tile is TileButton)
+                               .ForEach(tile => (tile as TileButton).Visible = false);
+
             sideLap.Visible = false;
             overLap.Visible = false;
             cancelOfflineMaps.Visible = false;
@@ -425,6 +372,8 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTilesFlightData(Panel p)
         {
+            CurrentState.ArmedSet += Cs_ArmedSet;
+
             //------------------------------------------------------------Flight Mode tiles---------------------------------------------------------------//
             windSpeed = new TileData("WIND SPEED", ResolutionManager.WindSpeedLocation.Y, ResolutionManager.WindSpeedLocation.X, "m/s");
             TileData mode;
@@ -467,10 +416,44 @@ namespace MissionPlanner.GCSViews
             abortLandButton.Visible = false;
         }
 
-      
+        private static void Cs_ArmedSet(object sender, EventArgs e)
+        {
+            try
+            { 
+            ArmButton.Label.BeginInvoke(new MethodInvoker(delegate
+            {
+                if (MainV2.comPort.MAV.cs.Armed)
+                    ArmButton.Label.Text = "DISARM";
+                else
+                    ArmButton.Label.Text = "ARM";
+            }));
+
+            exitButton.Label.BeginInvoke(new MethodInvoker(delegate
+            {
+                if (MainV2.comPort.MAV.cs.Armed)
+                {
+                    exitButton.UnsetHoverEvent();
+                    exitButton.PanelColor = TileButton.HoverColor;
+                    exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
+                }
+                else
+                {
+                    exitButton.SetHoverEvents();
+                    exitButton.PanelColor = TileButton.StandardColor;
+                    exitButton.Label.ForeColor = Color.White;
+                }
+            }));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
 
-#region EventsFlightPlanner
+
+
+        #region EventsFlightPlanner
 
         private static void LoadPolygonFileEvent(object sender, EventArgs e)
         {
@@ -861,7 +844,7 @@ namespace MissionPlanner.GCSViews
 
         private static void ExitEvent(object sender, EventArgs args)
         {
-            if (!MainV2.comPort.MAV.cs.landed && MainV2.comPort.MAV.cs.armed)       //Can't exit when armed and not landed
+            if (!MainV2.comPort.MAV.cs.landed && MainV2.comPort.MAV.cs.Armed)       //Can't exit when armed and not landed
                 return;
             if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
@@ -885,7 +868,7 @@ namespace MissionPlanner.GCSViews
             if (connected == false)  //connect
             {
                 MainV2.instance.MenuConnect_Click(null, null);
-                armed = MainV2.comPort.MAV.cs.armed;
+                armed = MainV2.comPort.MAV.cs.Armed;
                 if (armed)
                     commonTiles.Where(x => x.Label.Text == "ARM").First().Label.Text = "DISARM";
                 if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2)
@@ -906,7 +889,7 @@ namespace MissionPlanner.GCSViews
             else                    //disconnect
             {
                 
-                if (MainV2.comPort.MAV.cs.armed)
+                if (MainV2.comPort.MAV.cs.Armed)
                 {
                     CustomMessageBox.Show("Cannot disconnect when armed. Disarm first", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information); 
                     return;
@@ -922,7 +905,7 @@ namespace MissionPlanner.GCSViews
 
         private static void ArmDisarmEvent(object sender, EventArgs args)
         {
-            if (!MainV2.comPort.MAV.cs.armed)         //if we disarm then don't do preflightcheck
+            if (!MainV2.comPort.MAV.cs.Armed)         //if we disarm then don't do preflightcheck
             {
                 if (!connected)
                 {
@@ -1035,6 +1018,39 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+        private static List<TileButton> CreateCameraButtons()
+        {
+            obsHeadBtn = new TileData("PAYLOAD", 1, 3, "", ObservationHeadEvent);
+            obsHeadBtn.ValueLabel.Width = ResolutionManager.MagicWidth;          //ugly !!!
+            obsHeadBtn.Value = camName;
 
+            cameras_buttons = new List<TileButton>();
+            XmlHelper.ReadCameraName("noveltyCam.xml");
+
+            int i = 0;
+            foreach (var camera in XmlHelper.cameras)
+            {
+                cameras_buttons.Add(new TileButton(XmlHelper.cameras.ElementAt(i).Value.name.upper(), i + 2, 3, CameraButtonListEvent));
+                i++;
+            }
+            return cameras_buttons;
+        }
+
+        private static List<TileButton> CreateStartFromButtons()
+        {
+            startFromBut = new TileData("START FROM", 1, 7, "", StartFromHeadEvent);
+            startFromBut.ValueLabel.Width = ResolutionManager.MagicWidth;   //ugly !!!
+            startFromBut.Value = startFrom;
+
+            startFromButtons = new List<TileButton>();
+            var names = Enum.GetNames(typeof(StartPosition));
+            int i = 0;
+            foreach (var name in names)
+            {
+                startFromButtons.Add(new TileButton(name.ToUpper(), i + 2, 7, StartFromButtonListEvent));
+                i++;
+            }
+            return startFromButtons;
+        }
     }
 }
