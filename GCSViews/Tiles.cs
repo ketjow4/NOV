@@ -6,8 +6,10 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using IronPython.Runtime.Operations;
 using System.Threading;
+using Slider = MissionPlanner.GCSViews.ValueSlider.ValueSlider;
 
 using MissionPlanner.GCSViews.Modification; //classes for tiles
+using MissionPlanner.Validators;
 
 namespace MissionPlanner.GCSViews
 {
@@ -378,7 +380,7 @@ namespace MissionPlanner.GCSViews
                 cancelOfflineMaps = new TileButton("CANCEL",ResolutionManager.BottomOfScreenRow - 2,1,CancelOfflineMapsEvent),
 
                 writeWaypoints = new TileButton("UPLOAD TO PLATFORM", 1, 7, SaveWPPlatformEvent),
-                angleInfo = new TileData("ANGLE", 1, 4, "deg", AngelSettingEvent),
+                angleInfo = new TileData("ANGLE", 1, 4, "deg", AngleSettingEvent),
                 altInfo = new TileData("ALTITUDE ", 1, 5, "m", AltitudeSettingEvent),
                 groundResInfo = new TileData("GROUND RES", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
                 flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 6, "h:m:s"),
@@ -697,12 +699,17 @@ namespace MissionPlanner.GCSViews
 			MainV2.instance.syncMapZooms(MainV2.instance.FlightPlanner.MainMap.Zoom);
         }
 
-        private static void AngelSettingEvent(object sender, EventArgs args)
+        private static void AngleSettingEvent(object sender, EventArgs args)
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
-            InputFlightPlanning inputWindow = new InputFlightPlanning("ANGLE", false, AngleVal.ToString(), 0, 360, ResolutionManager.InputPanelSize);
-            inputWindow.ShowDialog();
-            ChangeAngle(inputWindow.Result);
+			var intValidator = new NumericValidator<int>(0, 360);
+			Slider slider = new Slider(intValidator, "ANGLE", AngleVal.ToString());
+			slider.WindowSize = ResolutionManager.InputPanelSize;
+			slider.ShowDialog();
+			if(slider.DialogResult == DialogResult.OK)
+			{
+				ChangeAngle(slider.Result);
+			}
         }
 
         private static void AltitudeSettingEvent(object sender, EventArgs args)

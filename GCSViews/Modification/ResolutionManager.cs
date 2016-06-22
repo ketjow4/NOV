@@ -62,7 +62,8 @@ namespace MissionPlanner.GCSViews.Modification
         #endregion
 
         public static Size InputPanelSize;
-        public static float InputInfoFontSize;
+        public static Size SliderPanelSize;
+		public static float InputInfoFontSize;
         public static float InputTextBoxFontSize;
         public static float InputButtonsFontSize;
 
@@ -98,8 +99,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MarginSize = 2;
                 DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);        //TODO change this
                 InputPanelSize = new Size(520, 470);
+                SliderPanelSize = new Size(520, 240);
 
-                MagicWidth = 150;
+				MagicWidth = 150;
                 
                 TransparentLabelFont = new Font("Century Gothic", 40);
 
@@ -142,8 +144,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MarginSize = 2;
                 DistBarSize = new Size( (TileWidth+MarginSize)*5 - 3*MarginSize, 35);
                 InputPanelSize = new Size(400, 370);
+				SliderPanelSize = new Size(400, 185);
 
-                MagicWidth = 120;
+				MagicWidth = 120;
 
                 TransparentLabelFont = new Font("Century Gothic", 36);
 
@@ -192,8 +195,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MarginSize = 2;
                 DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
                 InputPanelSize = new Size(700, 670);
+				SliderPanelSize = new Size(700, 324);
 
-                MagicWidth = 190;
+				MagicWidth = 190;
 
                 TransparentLabelFont = new Font("Century Gothic", 48);
 
@@ -236,8 +240,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MarginSize = 2;
                 DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
                 InputPanelSize = new Size(700, 670);
+				SliderPanelSize = new Size(700, 324);
 
-                MagicWidth = 190;
+				MagicWidth = 190;
 
                 TransparentLabelFont = new Font("Century Gothic", 48);
 
@@ -279,8 +284,9 @@ namespace MissionPlanner.GCSViews.Modification
                 MarginSize = 2;
                 DistBarSize = new Size((TileWidth + MarginSize) * 5 - 3 * MarginSize, 35);
                 InputPanelSize = new Size(400, 370);
+				SliderPanelSize = new Size(400, 185);
 
-                MagicWidth = 120;
+				MagicWidth = 120;
 
                 TransparentLabelFont = new Font("Century Gothic", 36);
 
