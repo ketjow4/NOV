@@ -28,9 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			gTrackBar.ColorPack colorPack4 = new gTrackBar.ColorPack();
-			gTrackBar.ColorPack colorPack5 = new gTrackBar.ColorPack();
-			gTrackBar.ColorPack colorPack6 = new gTrackBar.ColorPack();
+			gTrackBar.ColorPack colorPack1 = new gTrackBar.ColorPack();
+			gTrackBar.ColorPack colorPack2 = new gTrackBar.ColorPack();
+			gTrackBar.ColorPack colorPack3 = new gTrackBar.ColorPack();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.InfoLabel = new System.Windows.Forms.Label();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -40,10 +40,10 @@
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.trackBar = new gTrackBar.gTrackBar();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonMinus1 = new System.Windows.Forms.Button();
-			this.buttonMinus10 = new System.Windows.Forms.Button();
-			this.buttonPlus10 = new System.Windows.Forms.Button();
 			this.buttonPlus1 = new System.Windows.Forms.Button();
+			this.buttonPlus10 = new System.Windows.Forms.Button();
+			this.buttonMinus10 = new System.Windows.Forms.Button();
+			this.buttonMinus1 = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -167,18 +167,18 @@
 			// trackBar
 			// 
 			this.trackBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
-			colorPack4.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack4.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack4.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			this.trackBar.ColorDown = colorPack4;
-			colorPack5.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack5.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack5.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			this.trackBar.ColorHover = colorPack5;
-			colorPack6.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack6.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			colorPack6.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			this.trackBar.ColorUp = colorPack6;
+			colorPack1.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack1.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack1.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			this.trackBar.ColorDown = colorPack1;
+			colorPack2.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack2.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack2.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			this.trackBar.ColorHover = colorPack2;
+			colorPack3.Border = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack3.Face = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			colorPack3.Highlight = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			this.trackBar.ColorUp = colorPack3;
 			this.trackBar.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.trackBar.FloatValueFontColor = System.Drawing.SystemColors.ActiveBorder;
 			this.trackBar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -229,39 +229,22 @@
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(400, 46);
 			this.tableLayoutPanel4.TabIndex = 3;
 			// 
-			// buttonMinus1
+			// buttonPlus1
 			// 
-			this.buttonMinus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
-			this.buttonMinus1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.buttonMinus1.FlatAppearance.BorderSize = 0;
-			this.buttonMinus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonMinus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.buttonMinus1.ForeColor = System.Drawing.Color.White;
-			this.buttonMinus1.Location = new System.Drawing.Point(102, 2);
-			this.buttonMinus1.Margin = new System.Windows.Forms.Padding(2);
-			this.buttonMinus1.Name = "buttonMinus1";
-			this.buttonMinus1.Size = new System.Drawing.Size(96, 42);
-			this.buttonMinus1.TabIndex = 77;
-			this.buttonMinus1.Text = "-1";
-			this.buttonMinus1.UseVisualStyleBackColor = false;
-			this.buttonMinus1.Click += new System.EventHandler(this.buttonMinus1_Click);
-			// 
-			// buttonMinus10
-			// 
-			this.buttonMinus10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
-			this.buttonMinus10.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.buttonMinus10.FlatAppearance.BorderSize = 0;
-			this.buttonMinus10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonMinus10.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.buttonMinus10.ForeColor = System.Drawing.Color.White;
-			this.buttonMinus10.Location = new System.Drawing.Point(2, 2);
-			this.buttonMinus10.Margin = new System.Windows.Forms.Padding(2);
-			this.buttonMinus10.Name = "buttonMinus10";
-			this.buttonMinus10.Size = new System.Drawing.Size(96, 42);
-			this.buttonMinus10.TabIndex = 83;
-			this.buttonMinus10.Text = "-10";
-			this.buttonMinus10.UseVisualStyleBackColor = false;
-			this.buttonMinus10.Click += new System.EventHandler(this.buttonMinus10_Click);
+			this.buttonPlus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
+			this.buttonPlus1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.buttonPlus1.FlatAppearance.BorderSize = 0;
+			this.buttonPlus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonPlus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.buttonPlus1.ForeColor = System.Drawing.Color.White;
+			this.buttonPlus1.Location = new System.Drawing.Point(202, 2);
+			this.buttonPlus1.Margin = new System.Windows.Forms.Padding(2);
+			this.buttonPlus1.Name = "buttonPlus1";
+			this.buttonPlus1.Size = new System.Drawing.Size(96, 42);
+			this.buttonPlus1.TabIndex = 85;
+			this.buttonPlus1.Text = "+1";
+			this.buttonPlus1.UseVisualStyleBackColor = false;
+			this.buttonPlus1.Click += new System.EventHandler(this.buttonPlus1_Click);
 			// 
 			// buttonPlus10
 			// 
@@ -280,22 +263,39 @@
 			this.buttonPlus10.UseVisualStyleBackColor = false;
 			this.buttonPlus10.Click += new System.EventHandler(this.buttonPlus10_Click);
 			// 
-			// buttonPlus1
+			// buttonMinus10
 			// 
-			this.buttonPlus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
-			this.buttonPlus1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.buttonPlus1.FlatAppearance.BorderSize = 0;
-			this.buttonPlus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonPlus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.buttonPlus1.ForeColor = System.Drawing.Color.White;
-			this.buttonPlus1.Location = new System.Drawing.Point(202, 2);
-			this.buttonPlus1.Margin = new System.Windows.Forms.Padding(2);
-			this.buttonPlus1.Name = "buttonPlus1";
-			this.buttonPlus1.Size = new System.Drawing.Size(96, 42);
-			this.buttonPlus1.TabIndex = 85;
-			this.buttonPlus1.Text = "+1";
-			this.buttonPlus1.UseVisualStyleBackColor = false;
-			this.buttonPlus1.Click += new System.EventHandler(this.buttonPlus1_Click);
+			this.buttonMinus10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
+			this.buttonMinus10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.buttonMinus10.FlatAppearance.BorderSize = 0;
+			this.buttonMinus10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonMinus10.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.buttonMinus10.ForeColor = System.Drawing.Color.White;
+			this.buttonMinus10.Location = new System.Drawing.Point(2, 2);
+			this.buttonMinus10.Margin = new System.Windows.Forms.Padding(2);
+			this.buttonMinus10.Name = "buttonMinus10";
+			this.buttonMinus10.Size = new System.Drawing.Size(96, 42);
+			this.buttonMinus10.TabIndex = 83;
+			this.buttonMinus10.Text = "-10";
+			this.buttonMinus10.UseVisualStyleBackColor = false;
+			this.buttonMinus10.Click += new System.EventHandler(this.buttonMinus10_Click);
+			// 
+			// buttonMinus1
+			// 
+			this.buttonMinus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
+			this.buttonMinus1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.buttonMinus1.FlatAppearance.BorderSize = 0;
+			this.buttonMinus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonMinus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.buttonMinus1.ForeColor = System.Drawing.Color.White;
+			this.buttonMinus1.Location = new System.Drawing.Point(102, 2);
+			this.buttonMinus1.Margin = new System.Windows.Forms.Padding(2);
+			this.buttonMinus1.Name = "buttonMinus1";
+			this.buttonMinus1.Size = new System.Drawing.Size(96, 42);
+			this.buttonMinus1.TabIndex = 77;
+			this.buttonMinus1.Text = "-1";
+			this.buttonMinus1.UseVisualStyleBackColor = false;
+			this.buttonMinus1.Click += new System.EventHandler(this.buttonMinus1_Click);
 			// 
 			// ValueSlider
 			// 
@@ -309,6 +309,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "ValueSlider";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "ValueSlider";
 			this.TransparencyKey = System.Drawing.Color.Lime;
 			this.tableLayoutPanel1.ResumeLayout(false);
