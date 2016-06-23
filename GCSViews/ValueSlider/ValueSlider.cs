@@ -2,13 +2,16 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MissionPlanner.Validators;
+using System.Windows.Threading;
 
 namespace MissionPlanner.GCSViews.ValueSlider
 {
 	public partial class ValueSlider : Form
 	{
 		IValidator<int> Validator;
-		
+
+        public event EventHandler<Modification.ChangeValueEventArgs<int>> OnValidValueSet;
+
 		public int Result { get; set; }
 		private bool isValid;
 		
@@ -109,7 +112,9 @@ namespace MissionPlanner.GCSViews.ValueSlider
 				InputValue.BackColor = Color.FromArgb(255, 255, 255, 255);
 				Result = IntValidator.Value;
 				trackBar.Value = IntValidator.Value;
-			}
+                if (OnValidValueSet != null)
+                    OnValidValueSet(this, new Modification.ChangeValueEventArgs<int>(Result));
+            }
 		}
 
 		public NumericValidator<int> IntValidator

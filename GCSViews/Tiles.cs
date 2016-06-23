@@ -133,6 +133,11 @@ namespace MissionPlanner.GCSViews
                 calcGrid(null, null);
         }
 
+        public static void ChangeAngle(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeAngle(e.Value);
+        }
+
         public static void ChangeSpeed(int v)
         {
             int val = v;
@@ -684,6 +689,7 @@ namespace MissionPlanner.GCSViews
             cameras_buttons.ForEach(cam => cam.Visible = false);
 			var intValidator = new NumericValidator<int>(0, 360);
 			Slider slider = new Slider(intValidator, "ANGLE", AngleVal.ToString());
+            slider.OnValidValueSet += ChangeAngle;
 			slider.WindowSize = ResolutionManager.InputPanelSize;
 			if(slider.ShowDialog() == DialogResult.OK)
 			{
@@ -987,7 +993,9 @@ namespace MissionPlanner.GCSViews
         {
             var Commands = GetWP();
 
-            if (Commands.Any(c => (c.id == (byte)MavlinkHelper.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
+            
+
+            if (Commands.Any(c => (c.id == (byte)MAVLink.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
                 return true;
 
             return false;
