@@ -117,6 +117,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HUDT.resx</DependentUpon>
     </Compile>
+    <Compile Include="HUDT.zh-Hans.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HUDT.zh-Hans.resx</DependentUpon>
+    </Compile>
     <Compile Include="IActivate.cs" />
     <Compile Include="IDynamicParameterControl.cs" />
     <Compile Include="ImageLabel.cs">
@@ -133,6 +138,16 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MainSwitcher.cs" />
+    <Compile Include="MessageBox\ButtonInfo.cs" />
+    <Compile Include="MessageBox\MessageBox.cs" />
+    <Compile Include="MessageBox\MessageBoxButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageBox\MessageBoxButton.Designer.cs">
+      <DependentUpon>MessageBoxButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageBox\ButtonClickEventArgs.cs" />
+    <Compile Include="MessageBox\NovMessageBox.cs" />
     <Compile Include="MyButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -153,6 +168,12 @@
     </Compile>
     <Compile Include="MyUserControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MessageBox\NovMessageBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MessageBox\NovMessageBoxForm.Designer.cs">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
     </Compile>
     <Compile Include="OptionForm.cs">
       <SubType>Form</SubType>
@@ -257,12 +278,20 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HUDT.zh-Hans.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HUDT.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageLabel.resx">
       <DependentUpon>ImageLabel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MessageBox\MessageBoxButton.resx">
+      <DependentUpon>MessageBoxButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MyProgressBar.resx">
       <DependentUpon>MyProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageBox\NovMessageBoxForm.resx">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OptionForm.resx">
       <DependentUpon>OptionForm.cs</DependentUpon>
