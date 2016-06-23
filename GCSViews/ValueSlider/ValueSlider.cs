@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MissionPlanner.Validators;
+using MissionPlanner.Controls.MessageBox;
 
 namespace MissionPlanner.GCSViews.ValueSlider
 {
@@ -93,7 +94,8 @@ namespace MissionPlanner.GCSViews.ValueSlider
 			}
 			else
 			{
-				CustomMessageBox.Show(String.Format("Value should be between {0} and {1}", Min, Max), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				NovMessageBox.Show(MessageBoxType.WARNING, MessageBoxButtons.OK, String.Format("Value should be between {0} and {1}", Min, Max), "Error", "Test details");
+				//CustomMessageBox.Show(String.Format("Value should be between {0} and {1}", Min, Max), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}	
 		}
 

@@ -1,7 +1,7 @@
 ﻿namespace MissionPlanner.GCSViews
 {
-    partial class InputFlightPlanning
-    {
+    partial class InputFlightPlanning<T>
+	{
         /// <summary>
         /// Required designer variable.
         /// </summary>

@@ -6107,7 +6107,7 @@ namespace MissionPlanner.GCSViews
             if (Tiles.pathAccepted)     //for adding take off on mission altitude in path generation
             {
 				var intValidator = new NumericValidator<int>(30, 500);
-				InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "Please enter your takeoff altitude", false, alt);
+				InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "Please enter your takeoff altitude", false, alt);
 				inputWindow.WindowSize = GCSViews.Modification.ResolutionManager.InputPanelSize;
 				if (inputWindow.ShowDialog() == DialogResult.OK)
 				{

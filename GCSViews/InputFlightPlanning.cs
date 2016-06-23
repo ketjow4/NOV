@@ -10,15 +10,15 @@ using System.Windows.Forms;
 
 namespace MissionPlanner.GCSViews
 {
-    public partial class InputFlightPlanning : Form
+    public partial class InputFlightPlanning<T> : Form where T: IConvertible, IComparable
     {
-		IValidator<int> Validator; 
+		IValidator<T> Validator; 
         private bool DotButtonEnabled { get; set; }
 		private bool isValid;
 
-        public int Result { get; set; }
+        public T Result { get; set; }
 		
-        public InputFlightPlanning(IValidator<int> validator, String infoLabelText, bool dotEnabled, String initialValue,Size? windowSize = null)
+        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue,Size? windowSize = null)
         {
 			Validator = validator;
             InitializeComponent();
@@ -148,15 +148,15 @@ namespace MissionPlanner.GCSViews
 			else
 			{
 				InputTextBox.BackColor = Color.FromArgb(255, 255, 255, 255);
-				Result = IntValidator.Value;
+				Result = TypedValidator.Value;
 			}
         }
 
-		public NumericValidator<int> IntValidator
+		public NumericValidator<T> TypedValidator
 		{
 			get
 			{
-				return Validator as NumericValidator<int>;
+				return Validator as NumericValidator<T>;
 			}
 		}
 
@@ -172,19 +172,19 @@ namespace MissionPlanner.GCSViews
 			}
 		}
 
-		public int Min
+		public T Min
 		{
 			get
 			{
-				return IntValidator.Min;
+				return TypedValidator.Min;
 			}
 		}
 
-		public int Max
+		public T Max
 		{
 			get
 			{
-				return IntValidator.Max;
+				return TypedValidator.Max;
 			}
 		}
 	}
