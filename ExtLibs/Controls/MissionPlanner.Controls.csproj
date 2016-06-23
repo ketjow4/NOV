@@ -117,11 +117,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HUDT.resx</DependentUpon>
     </Compile>
-    <Compile Include="HUDT.zh-Hans.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HUDT.zh-Hans.resx</DependentUpon>
-    </Compile>
+    <Compile Include="HUDT.zh-Hans.Designer.cs" />
     <Compile Include="IActivate.cs" />
     <Compile Include="IDynamicParameterControl.cs" />
     <Compile Include="ImageLabel.cs">

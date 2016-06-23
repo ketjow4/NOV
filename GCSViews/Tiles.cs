@@ -123,6 +123,11 @@ namespace MissionPlanner.GCSViews
                 calcGrid(null, null);
         }
 
+        public static void ChangeAlt(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeAlt(e.Value);
+        }
+
         public static void ChangeAngle(int v)
         {
             int val = v;
@@ -131,6 +136,11 @@ namespace MissionPlanner.GCSViews
             angleInfo.Value = val.ToString();
             if (calcGrid != null)
                 calcGrid(null, null);
+        }
+
+        public static void ChangeAngle(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeAngle(e.Value);
         }
 
         public static void ChangeSpeed(int v)
@@ -143,6 +153,11 @@ namespace MissionPlanner.GCSViews
                 calcGrid(null, null);
         }
 
+        public static void ChangeSpeed(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeSpeed(e.Value);
+        }
+
         public static void ChangeSideLap(int v)
         {
             int val = v;
@@ -153,6 +168,11 @@ namespace MissionPlanner.GCSViews
                 calcGrid(null, null);
         }
 
+        public static void ChangeSideLap(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeSideLap(e.Value);
+        }
+
         public static void ChangeOverLap(int v)
         {
             int val = v;
@@ -161,6 +181,11 @@ namespace MissionPlanner.GCSViews
             overLap.Value = val.ToString();
             if (calcGrid != null)
                 calcGrid(null, null);
+        }
+
+        public static void ChangeOverLap(object sender, ChangeValueEventArgs<int> e)
+        {
+            ChangeOverLap(e.Value);
         }
 
         internal static List<TileInfo> commonTiles = null;
@@ -418,41 +443,7 @@ namespace MissionPlanner.GCSViews
             abortLandButton.Visible = false;
         }
 
-        private static void Cs_ArmedSet(object sender, EventArgs e)
-        {
-            try
-            { 
-            ArmButton.Label.BeginInvoke(new MethodInvoker(delegate
-            {
-                if (MainV2.comPort.MAV.cs.Armed)
-                    ArmButton.Label.Text = "DISARM";
-                else
-                    ArmButton.Label.Text = "ARM";
-            }));
-
-            exitButton.Label.BeginInvoke(new MethodInvoker(delegate
-            {
-                if (MainV2.comPort.MAV.cs.Armed)
-                {
-                    exitButton.UnsetHoverEvent();
-                    exitButton.PanelColor = TileButton.HoverColor;
-                    exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
-                }
-                else
-                {
-                    exitButton.SetHoverEvents();
-                    exitButton.PanelColor = TileButton.StandardColor;
-                    exitButton.Label.ForeColor = Color.White;
-                }
-            }));
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-
+ 
 
 
         #region EventsFlightPlanner
@@ -718,6 +709,7 @@ namespace MissionPlanner.GCSViews
             cameras_buttons.ForEach(cam => cam.Visible = false);
 			var intValidator = new NumericValidator<int>(0, 360);
 			Slider slider = new Slider(intValidator, "ANGLE", AngleVal.ToString());
+            slider.OnValidValueSet += ChangeAngle;
 			slider.WindowSize = ResolutionManager.InputPanelSize;
 			if(slider.ShowDialog() == DialogResult.OK)
 			{
@@ -730,7 +722,8 @@ namespace MissionPlanner.GCSViews
             cameras_buttons.ForEach(cam => cam.Visible = false);
 			var intValidator = new NumericValidator<int>(altMin, altMax);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "ALTITUDE", false, AltitudeVal.ToString());
-			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
+            inputWindow.OnValidValueSet += ChangeAlt;
+            inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 			if(inputWindow.ShowDialog() == DialogResult.OK)
 			{
 				ChangeAlt(inputWindow.Result);
@@ -774,7 +767,7 @@ namespace MissionPlanner.GCSViews
 					CustomMessageBox.Show("Error, operation is not valid");
 					return;
 			}
-
+            inputWindow.OnValidValueSet += ChangeSpeed;
 			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 			if(inputWindow.ShowDialog() == DialogResult.OK)
 			{
@@ -787,9 +780,10 @@ namespace MissionPlanner.GCSViews
 			var intValidator = new NumericValidator<int>(0, 99);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "SIDELAP", false, SideLap.ToString());
 			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
-			if (inputWindow.ShowDialog() == DialogResult.OK)
+            inputWindow.OnValidValueSet += ChangeSideLap;
+            if (inputWindow.ShowDialog() == DialogResult.OK)
 			{
-				ChangeAlt(inputWindow.Result);
+				ChangeSideLap(inputWindow.Result);
 			}
 		}
 
@@ -798,15 +792,16 @@ namespace MissionPlanner.GCSViews
 			var intValidator = new NumericValidator<int>(0, 99);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "OVERLAP", false, OverLap.ToString());
 			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
-			if (inputWindow.ShowDialog() == DialogResult.OK)
+            inputWindow.OnValidValueSet += ChangeOverLap;
+            if (inputWindow.ShowDialog() == DialogResult.OK)
 			{
-				ChangeAlt(inputWindow.Result);
+				ChangeOverLap(inputWindow.Result);
 			}
 		}
 #endregion
 
 
-#region EventsFlightData
+        #region EventsFlightData
 
         private static void TakeOffEvent(object sender, EventArgs e)
         {
@@ -1021,7 +1016,9 @@ namespace MissionPlanner.GCSViews
         {
             var Commands = GetWP();
 
-            if (Commands.Any(c => (c.id == (byte)MavlinkHelper.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
+            
+
+            if (Commands.Any(c => (c.id == (byte)MAVLink.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
                 return true;
 
             return false;
@@ -1086,5 +1083,41 @@ namespace MissionPlanner.GCSViews
             }
             return startFromButtons;
         }
+
+        private static void Cs_ArmedSet(object sender, EventArgs e)
+        {
+            try
+            {
+                ArmButton.Label.BeginInvoke(new MethodInvoker(delegate
+                {
+                    if (MainV2.comPort.MAV.cs.Armed)
+                        ArmButton.Label.Text = "DISARM";
+                    else
+                        ArmButton.Label.Text = "ARM";
+                }));
+
+                exitButton.Label.BeginInvoke(new MethodInvoker(delegate
+                {
+                    if (MainV2.comPort.MAV.cs.Armed)
+                    {
+                        exitButton.UnsetHoverEvent();
+                        exitButton.PanelColor = TileButton.HoverColor;
+                        exitButton.Label.ForeColor = Color.FromArgb(178, 178, 178);
+                    }
+                    else
+                    {
+                        exitButton.SetHoverEvents();
+                        exitButton.PanelColor = TileButton.StandardColor;
+                        exitButton.Label.ForeColor = Color.White;
+                    }
+                }));
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show(ex.Message);
+            }
+        }
+
+
     }
 }

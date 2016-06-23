@@ -1196,7 +1196,7 @@ namespace MissionPlanner
                 //NUM_Distance.Enabled = false;
             }
 
-            doCalc();
+            //doCalc();
         }
 
         private void TXT_TextChanged(object sender, EventArgs e)

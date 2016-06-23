@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading;
 
 using MissionPlanner.Controls;
+using MissionPlanner.Validators;
 
 namespace MissionPlanner.GCSViews
 {
@@ -18,10 +19,12 @@ namespace MissionPlanner.GCSViews
         private Thread thread;
         private volatile bool stop = false;
 
+        
+
         public PreFlightCheck()
         {
             InitializeComponent();
-
+            
             Utilities.ThemeManager.ApplyThemeTo(this);
             ReadyButton.Enabled = false;
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -142,6 +145,33 @@ namespace MissionPlanner.GCSViews
 
         private void ReadyButton_Click(object sender, EventArgs e)
         {
+            string[] allLines = File.ReadAllLines("data.csv");
+
+            var query = from line in allLines
+                        let data = line.Split(',')
+                        select new
+                        {
+                            ID = data[2],
+                            PIN = data[3]
+                        };
+
+            var intValidator = new NumericValidator<int>(0, 9999);
+            InputFlightPlanning<int> pinForm = new InputFlightPlanning<int>(intValidator, "ENTER PIN", false, "");
+            this.Hide();
+            pinForm.ShowDialog();
+            int result;
+            int temp = employee_data.SelectedItem.ToString().LastIndexOf(":");
+            int.TryParse(employee_data.SelectedItem.ToString().Substring(temp+1),out result);   //+1 bo następny znak za znakiem ':'
+
+            var b = query.Where(a => a.ID == result.ToString());
+
+            if (b.FirstOrDefault() != null)
+                if (pinForm.Result.ToString() != b.FirstOrDefault().PIN)
+                {
+                    DialogResult = DialogResult.Cancel;
+                    stop = true;
+                    return;
+                }
             SaveLogFile();
             stop = true;
             DialogResult = DialogResult.OK;

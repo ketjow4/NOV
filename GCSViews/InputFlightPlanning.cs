@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MissionPlanner.GCSViews.Modification;
 
 namespace MissionPlanner.GCSViews
 {
@@ -15,6 +16,8 @@ namespace MissionPlanner.GCSViews
 		IValidator<T> Validator; 
         private bool DotButtonEnabled { get; set; }
 		private bool isValid;
+		
+        public event EventHandler<ChangeValueEventArgs<T>> OnValidValueSet;
 
         public T Result { get; set; }
 		
@@ -31,18 +34,18 @@ namespace MissionPlanner.GCSViews
 
         public void SetFonts()
         {
-            InputTextBox.Font = new Font("Century Gothic", Modification.ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);
-            MinMaxLabel.Font = InfoLabel.Font = new Font("Century Gothic", Modification.ResolutionManager.InputInfoFontSize, FontStyle.Regular);
+            InputTextBox.Font = new Font("Century Gothic", ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);
+            MinMaxLabel.Font = InfoLabel.Font = new Font("Century Gothic", ResolutionManager.InputInfoFontSize, FontStyle.Regular);
 
             foreach(var element in this.tableLayoutPanel1.Controls)
             {
                 if(element is Button)
-                    (element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
+                    (element as Button).Font = new Font("Century Gothic", ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
             }
             foreach (var element in this.tableLayoutPanel2.Controls)
             {
                 if (element is Button)
-                    (element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
+                    (element as Button).Font = new Font("Century Gothic", ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
             }
         }
 
@@ -149,6 +152,8 @@ namespace MissionPlanner.GCSViews
 			{
 				InputTextBox.BackColor = Color.FromArgb(255, 255, 255, 255);
 				Result = TypedValidator.Value;
+                if (OnValidValueSet != null)
+                    OnValidValueSet(this, new ChangeValueEventArgs<T>(Result));
 			}
         }
 
