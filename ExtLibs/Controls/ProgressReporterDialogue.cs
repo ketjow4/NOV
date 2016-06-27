@@ -1,341 +1,372 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading;
-using System.Windows.Forms;
-using System.Reflection;
-using log4net;
+using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using MissionPlanner.Controls.MessageBox;
+using log4net;
+using System.Reflection;
+using System.Threading;
 
 namespace MissionPlanner.Controls
 {
-    /// <summary>
-    /// Form that is shown to the user during a background operation
-    /// </summary>
-    /// <remarks>
-    /// Performs operation excplicitely on a threadpool thread due to 
-    /// Mono not playing nice with the BackgroundWorker
-    /// </remarks>
-    public partial class ProgressReporterDialogue : Form
-    {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+	public partial class ProgressReporterDialogue : Form
+	{
+		private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private Exception workerException;
-        public ProgressWorkerEventArgs doWorkArgs;
+		private MessageBoxButton.ButtonClickEventHandler buttonCloseHandler;
+		private MessageBoxButton.ButtonClickEventHandler buttonCancelHandler;
+		private Exception workerException;
 
-        internal object locker = new object();
-        internal int _progress = -1;
-        internal string _status = "";
+		public ProgressWorkerEventArgs doWorkArgs;
+		public delegate void DoWorkEventHandler(object sender, ProgressWorkerEventArgs e, object passdata = null);
+		public event DoWorkEventHandler DoWork;
 
-        public bool Running = false;
+		internal object locker = new object();
+		internal int _progress = -1;
+		internal string _status = "";
+		public bool Running = false;
+		private bool errorVisible = false;
 
-        public delegate void DoWorkEventHandler(object sender, ProgressWorkerEventArgs e, object passdata = null);
+		private string text;
 
-        // This is the event that will be raised on the BG thread
-        public event DoWorkEventHandler DoWork;
+		MessageBoxButton buttonClose, buttonCancel;
 
-        public ProgressReporterDialogue()
-        {
-            InitializeComponent();
-            doWorkArgs = new ProgressWorkerEventArgs();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.btnClose.Visible = false;
+		public ProgressReporterDialogue()
+		{
+			InitializeComponent();
+			doWorkArgs = new ProgressWorkerEventArgs();
+			Text = text;
 
-            this.progressBar1._BGGradTop = Color.FromArgb(41, 171, 226);
-            this.progressBar1._BGGradBot = Color.FromArgb(12, 67, 90);
-            this.progressBar1._TextColor = Color.White;
-            this.progressBar1._Outline = Color.FromArgb(12, 67, 90);
-        }
+			detailsButtonPanel.Visible = false;
+			errorPanel.Visible = false;
+			pictureBox1.Visible = false;
+			pictureBox1.Image = SystemIcons.Warning.ToBitmap();
 
-        /// <summary>
-        /// Called at setup - will kick off the background process on a thread pool thread
-        /// </summary>
-        public void RunBackgroundOperationAsync()
-        {
-            ThreadPool.QueueUserWorkItem(RunBackgroundOperation);
+			buttonCloseHandler = new MessageBoxButton.ButtonClickEventHandler(btn_Close_Click);
+			buttonCancelHandler = new MessageBoxButton.ButtonClickEventHandler(btnCancel_Click);
+			
+			buttonClose = new MessageBoxButton("Close", DialogResult.OK, buttonCloseHandler);
+			buttonCancel = new MessageBoxButton("Cancel", DialogResult.Abort, buttonCancelHandler);
 
-            var t = Type.GetType("Mono.Runtime");
-            if ((t != null))
-                this.Height += 25;
+			flowLayoutPanel1.Controls.Add(buttonClose);
+			flowLayoutPanel1.Controls.Add(buttonCancel);
+		}
+		
+		private void showErrorDetailsButton_Click(object sender, EventArgs e)
+		{
+			errorVisible = !errorVisible;
+			if (errorVisible)
+			{
+				errorPanel.Visible = true;
+				showErrorDetailsButton.Text = "Hide error details.";
+			}
+			else
+			{
+				errorPanel.Visible = false;
+				showErrorDetailsButton.Text = "Show error details.";
+			}
+		}
 
-            this.ShowDialog();
-        }
+		public void RunBackgroundOperationAsync()
+		{
+			ThreadPool.QueueUserWorkItem(RunBackgroundOperation);
+			ShowDialog();
+		}
 
-        private void RunBackgroundOperation(object o)
-        {
-            Running = true;
-            log.Info("RunBackgroundOperation");
+		private void RunBackgroundOperation(object o)
+		{
+			Running = true;
+			log.Info("RunBackgroundOperation");
 
-            try
-            {
-                Thread.CurrentThread.Name = "ProgressReporterDialogue Background thread";
-            }
-            catch { } // ok on windows - fails on mono
+			try
+			{
+				Thread.CurrentThread.Name = "ProgressReporterDialogue Background thread";
+			}
+			catch { } // ok on windows - fails on mono
+			// mono fix - ensure the dialog is running
+			while (!IsHandleCreated)
+			{
+				Thread.Sleep(100);
+			}
+			try
+			{
+				Invoke((MethodInvoker)delegate
+				{
+					// make sure its drawn
+					Refresh();
+				});
+			}
+			catch { Running = false; return; }
+			log.Info("Focus ctl ");
+			try
+			{
+				Invoke((MethodInvoker)delegate
+				{
+					log.Info("in focus invoke");
+					// if this windows isnt the current active windows, popups inherit the wrong parent.
+					if (!Focused)
+					{
+						Focus();
+						Application.DoEvents();
+					}
+				});
+			}
+			catch { Running = false; return; }
 
-            // mono fix - ensure the dialog is running
-            while (this.IsHandleCreated == false)
-            {
-                System.Threading.Thread.Sleep(100);
-            }
+			try
+			{
+				log.Info("DoWork");
+				DoWork?.Invoke(this, doWorkArgs);
+				log.Info("DoWork Done");
+			}
+			catch (Exception e)
+			{
+				// The background operation thew an exception.
+				// Examine the work args, if there is an error, then display that and the exception details
+				// Otherwise display 'Unexpected error' and exception details
+				timer1.Stop();
+				ShowDoneWithError(e, doWorkArgs.ErrorMessage);
+				Running = false;
+				return;
+			}
 
-            
-            try
-            {
-                this.Invoke((MethodInvoker)delegate
-                {
-            // make sure its drawn
-            this.Refresh();
-                });
-            }
-            catch { Running = false; return; }
+			// stop the timer
+			timer1.Stop();
 
-            log.Info("Focus ctl ");
+			// run once more to do final message and progressbar
+			if (IsDisposed || Disposing || !IsHandleCreated)
+			{
+				return;
+			}
 
-            try
-            {
-                this.Invoke((MethodInvoker)delegate
-                {
-                    log.Info("in focus invoke");
-                     // if this windows isnt the current active windows, popups inherit the wrong parent.
-                     if (!this.Focused)
-                     {
-                         this.Focus();
-                         Application.DoEvents();
-                     }
-                });
-            }
-            catch { Running = false; return; }
+			try
+			{
+				Invoke((MethodInvoker)delegate
+				{
+					timer1_Tick(null, null);
+				});
+			}
+			catch
+			{
+				Running = false;
+				return;
+			}
 
-            try
-            {
-                log.Info("DoWork");
-                if (this.DoWork != null) this.DoWork(this, doWorkArgs);
-                log.Info("DoWork Done");
-            }
-            catch(Exception e)
-            {
-                // The background operation thew an exception.
-                // Examine the work args, if there is an error, then display that and the exception details
-                // Otherwise display 'Unexpected error' and exception details
-                timer1.Stop();
-                ShowDoneWithError(e, doWorkArgs.ErrorMessage);
-                Running = false;
-                return;
-            }
+			if (doWorkArgs.CancelRequested && doWorkArgs.CancelAcknowledged)
+			{
+				//ShowDoneCancelled();
+				Running = false;
+				BeginInvoke((MethodInvoker)Close);
+				return;
+			}
 
-            // stop the timer
-            timer1.Stop();
+			if (!string.IsNullOrEmpty(doWorkArgs.ErrorMessage))
+			{
+				ShowDoneWithError(null, doWorkArgs.ErrorMessage);
+				Running = false;
+				return;
+			}
 
-            // run once more to do final message and progressbar
-            if (this.IsDisposed || this.Disposing || !this.IsHandleCreated)
-            {
-                return;
-            }
+			if (doWorkArgs.CancelRequested)
+			{
+				ShowDoneWithError(null, "Operation could not cancel");
+				Running = false;
+				return;
+			}
 
-            try
-            {
-                this.Invoke((MethodInvoker)delegate
-                {
-                    timer1_Tick(null, null);
-                });
-            }
-            catch { 
-                Running = false; 
-                return;
-            }
+			ShowDone();
+			Running = false;
+		}
 
-            if (doWorkArgs.CancelRequested && doWorkArgs.CancelAcknowledged)
-            {
-                //ShowDoneCancelled();
-                Running = false;
-                this.BeginInvoke((MethodInvoker)this.Close);
-                return;
-            }
+		// Called as a possible last operation of the bg thread that was cancelled
+		// - Hide progress bar 
+		// - Set label text
+		private void ShowDoneCancelled()
+		{
+			Invoke((MethodInvoker)delegate
+			{
+				progressPanel.Visible = false;
+				Content = "Cancelled";
+				buttonClose.Visible = true;
+			});
+		}
 
-            if (!string.IsNullOrEmpty(doWorkArgs.ErrorMessage))
-            {
-                ShowDoneWithError(null, doWorkArgs.ErrorMessage);
-                Running = false;
-                return;
-            }
+		// Called as a possible last operation of the bg thread
+		// - Set progress bar to 100%
+		// - Wait a little bit to allow the Aero progress animatiom to catch up
+		// - Signal that we can close
+		private void ShowDone()
+		{
+			if (!IsHandleCreated)
+				return;
 
-            if (doWorkArgs.CancelRequested)
-            {
-                ShowDoneWithError(null, "Operation could not cancel");
-                Running = false;
-                return;
-            }
+			Invoke((MethodInvoker)delegate
+			{
+				progressBar1.Style = ProgressBarStyle.Continuous;
+				progressBar1.Value = 100;
+				buttonCancel.Visible = false;
+				buttonClose.Visible = false;
+			});
 
-            ShowDone();
-            Running = false;
-        }
+			Thread.Sleep(1000);
+			BeginInvoke((MethodInvoker)Close);
+		}
 
-        // Called as a possible last operation of the bg thread that was cancelled
-        // - Hide progress bar 
-        // - Set label text
-        private void ShowDoneCancelled()
-        {
-            this.Invoke((MethodInvoker)delegate
-            {
-                this.progressBar1.Visible = false;
-                this.lblProgressMessage.Text = "Cancelled";
-                this.btnClose.Visible = true;
-            });
-        }
+		// Called as a possible last operation of the bg thread
+		// There was an exception on the worker event, so:
+		// - Show the error message supplied by the worker, or a default message
+		// - Make visible the error icon
+		// - Make the progress bar invisible to make room for:
+		// - Add the exception details and stack trace in an expansion panel
+		// - Change the Cancel button to 'Close', so that the user can look at the exception message a bit
+		private void ShowDoneWithError(Exception exception, string doWorkArgs)
+		{
+			var errMessage = doWorkArgs ?? "There was an unexpected error";
 
-        // Called as a possible last operation of the bg thread
-        // - Set progress bar to 100%
-        // - Wait a little bit to allow the Aero progress animatiom to catch up
-        // - Signal that we can close
-        private void ShowDone()
-        {
-            if (!this.IsHandleCreated)
-                return;
+			if (Disposing || IsDisposed)
+				return;
 
-            this.Invoke((MethodInvoker)delegate
-                {
-                    this.progressBar1.Style = ProgressBarStyle.Continuous;
-                    this.progressBar1.Value = 100;
-                    this.btnCancel.Visible = false;
-                    this.btnClose.Visible = false;
-                });
+			if (InvokeRequired)
+			{
+				try
+				{
+					Invoke((MethodInvoker)delegate
+					{
+						Text = "Error";
+						Content = exception.Message;
+						pictureBox1.Visible = true;
+						progressPanel.Visible = false;
+						buttonCancel.Visible = false;
+						buttonClose.Visible = true;
+						if(exception != null)
+						{
+							detailsButtonPanel.Visible = true;
+							DetailsLabel.Text = errMessage;
+						}
+						workerException = exception;
+					});
+				}
+				catch { } // disposing
+			}
 
-            Thread.Sleep(1000);
-
-            this.BeginInvoke((MethodInvoker)this.Close);
-        }
-
-        // Called as a possible last operation of the bg thread
-        // There was an exception on the worker event, so:
-        // - Show the error message supplied by the worker, or a default message
-        // - Make visible the error icon
-        // - Make the progress bar invisible to make room for:
-        // - Add the exception details and stack trace in an expansion panel
-        // - Change the Cancel button to 'Close', so that the user can look at the exception message a bit
-        private void ShowDoneWithError(Exception exception, string doWorkArgs)
-        {
-            var errMessage = doWorkArgs ?? "There was an unexpected error";
-
-            if (this.Disposing || this.IsDisposed)
-                return;
-            
-            if (this.InvokeRequired)
-            {
-                try
-                {
-                    this.Invoke((MethodInvoker)delegate
-                                                    {
-                                                        this.Text = "Error";
-                                                        this.lblProgressMessage.Left = 65;
-                                                        this.lblProgressMessage.Text = errMessage;
-                                                        this.imgWarning.Visible = true;
-                                                        this.progressBar1.Visible = false;
-                                                        this.btnCancel.Visible = false;
-                                                        this.btnClose.Visible = true;
-                                                        this.linkLabel1.Visible = exception != null;
-                                                        this.workerException = exception;
-                                                    });
-                }
-                catch { } // disposing
-            }
-
-        }
-
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            // User wants to cancel - 
-            // * Set the text of the Cancel button to 'Close'
-            // * Set the cancel button to disabled, will enable it and let the user dismiss the dialogue
-            //      when the async operation is complete
-            // * Set the status text to 'Cancelling...'
-            // * Set the progress bar to marquee, we don't know how long the worker will take to cancel
-            // * Signal the worker.
-            this.btnCancel.Visible = false;
-            this.lblProgressMessage.Text = "Cancelling...";
-            this.progressBar1.Style = ProgressBarStyle.Marquee;
-
-            doWorkArgs.CancelRequested = true;
-        }
+		}
 
 
-        private void btn_Close_Click(object sender, EventArgs e)
-        {
-            // we have already cancelled, and this now a 'close' button
-            this.Close();
-        }
-        
-        /// <summary>
-        /// Called from the BG thread
-        /// </summary>
-        /// <param name="progress">progress in %, -1 means inderteminate</param>
-        /// <param name="status"></param>
-        public void UpdateProgressAndStatus(int progress, string status)
-        {
-            // we don't let the worker update progress when  a cancel has been
-            // requested, unless the cancel has been acknowleged, so we know that
-            // this progress update pertains to the cancellation cleanup
-            if (doWorkArgs.CancelRequested && !doWorkArgs.CancelAcknowledged)
-                return;
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			// User wants to cancel - 
+			// * Set the text of the Cancel button to 'Close'
+			// * Set the cancel button to disabled, will enable it and let the user dismiss the dialogue
+			//      when the async operation is complete
+			// * Set the status text to 'Cancelling...'
+			// * Set the progress bar to marquee, we don't know how long the worker will take to cancel
+			// * Signal the worker.
 
-            lock (locker)
-            {
-                _progress = progress;
-                _status = status;
-            }
+			//this.btnCancel.Visible = false;
+			Content = "Cancelling...";
+			progressBar1.Style = ProgressBarStyle.Marquee;
+			doWorkArgs.CancelRequested = true;
+		}
 
-        }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            var message = this.workerException.Message
-                          + Environment.NewLine + Environment.NewLine;
-                          //+ this.workerException.StackTrace;
+		private void btn_Close_Click(object sender, EventArgs e)
+		{
+			// we have already cancelled, and this now a 'close' button
+			Close();
+		}
 
-            CustomMessageBox.Show(message,"Exception Details",MessageBoxButtons.OK,MessageBoxIcon.Information);
-        }
+		/// <summary>
+		/// Called from the BG thread
+		/// </summary>
+		/// <param name="progress">progress in %, -1 means inderteminate</param>
+		/// <param name="status"></param>
+		public void UpdateProgressAndStatus(int progress, string status)
+		{
+			// we don't let the worker update progress when  a cancel has been
+			// requested, unless the cancel has been acknowleged, so we know that
+			// this progress update pertains to the cancellation cleanup
+			if (doWorkArgs.CancelRequested && !doWorkArgs.CancelAcknowledged)
+				return;
 
-        /// <summary>
-        /// prevent using invokes on main update status call "UpdateProgressAndStatus", as this is slow on mono
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (this.Disposing || this.IsDisposed)
-                return;
+			lock (locker)
+			{
+				_progress = progress;
+				_status = status;
+			}
 
-            int pgv = -1;
-            lock (locker)
-            {
-                pgv = _progress;
-                lblProgressMessage.Text = _status;
-            }
-            if (pgv == -1)
-            {
-                this.progressBar1.Style = ProgressBarStyle.Marquee;
-            }
-            else
-            {
-                this.progressBar1.Style = ProgressBarStyle.Continuous;
-                try
-                {
-                    this.progressBar1.Value = pgv;
-                } // Exception System.ArgumentOutOfRangeException: Value of '-12959800' is not valid for 'Value'. 'Value' should be between 'minimum' and 'maximum'.
-                catch { } // clean fail. and ignore, chances are we will hit this again in the next 100 ms
-            }
-        }
+		}
 
-        private void ProgressReporterDialogue_Load(object sender, EventArgs e)
-        {
-            this.Focus();
-        }
+		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			var message = this.workerException.Message
+						  + Environment.NewLine + Environment.NewLine;
+			//+ this.workerException.StackTrace;
 
-    }
+			CustomMessageBox.Show(message, "Exception Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
+		}
 
-    public class ProgressWorkerEventArgs : EventArgs
-    {
-        public string ErrorMessage;
-        public volatile bool CancelRequested;
-        public volatile bool CancelAcknowledged;
-    }
+		/// <summary>
+		/// prevent using invokes on main update status call "UpdateProgressAndStatus", as this is slow on mono
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			if (Disposing || IsDisposed)
+				return;
+
+			int pgv = -1;
+			lock (locker)
+			{
+				pgv = _progress;
+				Content = _status;
+			}
+			if (pgv == -1)
+			{
+				progressBar1.Style = ProgressBarStyle.Marquee;
+			}
+			else
+			{
+				progressBar1.Style = ProgressBarStyle.Continuous;
+				try
+				{
+					progressBar1.Value = pgv;
+				} // Exception System.ArgumentOutOfRangeException: Value of '-12959800' is not valid for 'Value'. 'Value' should be between 'minimum' and 'maximum'.
+				catch { } // clean fail. and ignore, chances are we will hit this again in the next 100 ms
+			}
+		}
+
+		private void ProgressReporterDialogue_Load(object sender, EventArgs e)
+		{
+			Focus();
+		}
+
+		private string Content
+		{
+			get
+			{
+				return ContentLabel.Text;
+			}
+			set
+			{
+				ContentLabel.Text = value;
+			}
+		}
+
+		public override string Text
+		{
+			get
+			{
+				return text;
+			}
+			set
+			{
+				text = value;
+			}
+		}
+	}
 }

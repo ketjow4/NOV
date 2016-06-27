@@ -29,11 +29,11 @@
 		private void InitializeComponent()
 		{
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.InfoLabel = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.ContentLabel = new System.Windows.Forms.Label();
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			this.InfoLabel = new System.Windows.Forms.Label();
 			this.detailsSwitchPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
 			this.label2 = new System.Windows.Forms.Label();
@@ -67,6 +67,21 @@
 			this.tableLayoutPanel3.Size = new System.Drawing.Size(331, 46);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
+			// InfoLabel
+			// 
+			this.InfoLabel.AutoSize = true;
+			this.InfoLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
+			this.InfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.InfoLabel.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.InfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			this.InfoLabel.Location = new System.Drawing.Point(2, 2);
+			this.InfoLabel.Margin = new System.Windows.Forms.Padding(2);
+			this.InfoLabel.Name = "InfoLabel";
+			this.InfoLabel.Size = new System.Drawing.Size(327, 42);
+			this.InfoLabel.TabIndex = 22;
+			this.InfoLabel.Text = "Message";
+			this.InfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 3;
@@ -82,7 +97,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(331, 70);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(331, 100);
 			this.tableLayoutPanel1.TabIndex = 3;
 			// 
 			// tableLayoutPanel2
@@ -99,7 +114,7 @@
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(327, 66);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(327, 96);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// ContentLabel
@@ -107,14 +122,14 @@
 			this.ContentLabel.AutoSize = true;
 			this.ContentLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.ContentLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.ContentLabel.Font = new System.Drawing.Font("Century Gothic", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.ContentLabel.Font = new System.Drawing.Font("Century Gothic", 11F);
 			this.ContentLabel.ForeColor = System.Drawing.Color.White;
 			this.ContentLabel.Location = new System.Drawing.Point(72, 2);
 			this.ContentLabel.Margin = new System.Windows.Forms.Padding(2);
 			this.ContentLabel.Name = "ContentLabel";
-			this.ContentLabel.Size = new System.Drawing.Size(253, 62);
+			this.ContentLabel.Size = new System.Drawing.Size(253, 92);
 			this.ContentLabel.TabIndex = 23;
-			this.ContentLabel.Text = "Question Here";
+			this.ContentLabel.Text = "Message dialog.";
 			this.ContentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// pictureBox1
@@ -123,24 +138,10 @@
 			this.pictureBox1.Location = new System.Drawing.Point(10, 10);
 			this.pictureBox1.Margin = new System.Windows.Forms.Padding(10);
 			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(50, 46);
+			this.pictureBox1.Size = new System.Drawing.Size(50, 76);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
 			this.pictureBox1.TabIndex = 0;
 			this.pictureBox1.TabStop = false;
-			// 
-			// InfoLabel
-			// 
-			this.InfoLabel.AutoSize = true;
-			this.InfoLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
-			this.InfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.InfoLabel.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-			this.InfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
-			this.InfoLabel.Location = new System.Drawing.Point(2, 2);
-			this.InfoLabel.Margin = new System.Windows.Forms.Padding(2);
-			this.InfoLabel.Name = "InfoLabel";
-			this.InfoLabel.Size = new System.Drawing.Size(327, 42);
-			this.InfoLabel.TabIndex = 22;
-			this.InfoLabel.Text = "Question Here";
-			this.InfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// detailsSwitchPanel
 			// 
@@ -149,7 +150,7 @@
 			this.detailsSwitchPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.detailsSwitchPanel.Controls.Add(this.tableLayoutPanel5, 0, 0);
 			this.detailsSwitchPanel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.detailsSwitchPanel.Location = new System.Drawing.Point(0, 116);
+			this.detailsSwitchPanel.Location = new System.Drawing.Point(0, 146);
 			this.detailsSwitchPanel.Name = "detailsSwitchPanel";
 			this.detailsSwitchPanel.RowCount = 1;
 			this.detailsSwitchPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -204,7 +205,7 @@
 			// flowLayoutPanel1
 			// 
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 262);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 292);
 			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(331, 46);
@@ -239,7 +240,7 @@
 			this.DetailsLabel.Padding = new System.Windows.Forms.Padding(5);
 			this.DetailsLabel.Size = new System.Drawing.Size(323, 92);
 			this.DetailsLabel.TabIndex = 25;
-			this.DetailsLabel.Text = "Show details";
+			this.DetailsLabel.Text = "No details available.";
 			// 
 			// detailsPanel
 			// 
@@ -249,7 +250,7 @@
 			this.detailsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 2F));
 			this.detailsPanel.Controls.Add(this.actualDetailsPanel, 1, 1);
 			this.detailsPanel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.detailsPanel.Location = new System.Drawing.Point(0, 162);
+			this.detailsPanel.Location = new System.Drawing.Point(0, 192);
 			this.detailsPanel.Margin = new System.Windows.Forms.Padding(0);
 			this.detailsPanel.Name = "detailsPanel";
 			this.detailsPanel.RowCount = 3;

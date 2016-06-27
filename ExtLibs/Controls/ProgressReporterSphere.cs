@@ -6,7 +6,7 @@ using System.Configuration;
 
 namespace MissionPlanner.Controls
 {
-    public class ProgressReporterSphere : ProgressReporterDialogue
+    public class ProgressReporterSphere : ProgressReporterDialogueOld
     {
         private System.Windows.Forms.CheckBox CHK_rotate;
         public Sphere sphere2;
