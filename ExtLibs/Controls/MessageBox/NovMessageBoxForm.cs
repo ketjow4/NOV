@@ -12,10 +12,15 @@ namespace MissionPlanner.Controls.MessageBox
 	public partial class NovMessageBoxForm : Form
 	{
 		private MessageBoxButton.ButtonClickEventHandler buttonClickHandler;
+		private static int _width = 0;
 
 		public NovMessageBoxForm(MessageBoxType type, MessageBoxButtons buttons, string content, string title, string details)
 		{
 			InitializeComponent();
+			if(_width != 0)
+			{
+				Size = new Size(_width, Size.Height);
+			}
 			InfoLabel.Text = title;
 			ContentLabel.Text = content;
 			if (!string.IsNullOrEmpty(details))
@@ -74,6 +79,11 @@ namespace MissionPlanner.Controls.MessageBox
 					break;
 			}
 		}
+
+		public static void setWidth(int width)
+		{
+			_width = width;
+		} 
 
 		private void buttonClick(object sender, ButtonClickEventArgs args)
 		{

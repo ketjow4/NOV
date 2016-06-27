@@ -390,7 +390,8 @@ namespace MissionPlanner
             var Resolution = Screen.PrimaryScreen.Bounds;
             GCSViews.Modification.ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
             GCSViews.Modification.ResolutionManager.Initialize();
-
+			MissionPlanner.Controls.MessageBox.NovMessageBoxForm.setWidth(
+				GCSViews.Modification.ResolutionManager.InputPanelSize.Width);
 
 
             //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
