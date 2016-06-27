@@ -30,6 +30,7 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreFlightCheck));
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.employee_data = new System.Windows.Forms.ComboBox();
@@ -52,12 +53,14 @@ namespace MissionPlanner.GCSViews
             this.ReadyButton = new MissionPlanner.Controls.MyButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.GPSFix = new MissionPlanner.Controls.MyButton();
+            this.currentStateBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.BatteryVol = new MissionPlanner.Controls.MyButton();
             this.CheckBoxTableLayout.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.currentStateBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -78,7 +81,7 @@ namespace MissionPlanner.GCSViews
             this.employee_data.Dock = System.Windows.Forms.DockStyle.Fill;
             this.employee_data.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.employee_data.FormattingEnabled = true;
-            this.employee_data.Location = new System.Drawing.Point(3, 38);
+            this.employee_data.Location = new System.Drawing.Point(3, 37);
             this.employee_data.Name = "employee_data";
             this.employee_data.Size = new System.Drawing.Size(201, 28);
             this.employee_data.TabIndex = 5;
@@ -124,7 +127,7 @@ namespace MissionPlanner.GCSViews
             this.CheckBoxTableLayout.Controls.Add(this.checkBox2, 0, 1);
             this.CheckBoxTableLayout.Controls.Add(this.checkBox1, 0, 0);
             this.CheckBoxTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CheckBoxTableLayout.Location = new System.Drawing.Point(3, 119);
+            this.CheckBoxTableLayout.Location = new System.Drawing.Point(3, 116);
             this.CheckBoxTableLayout.Name = "CheckBoxTableLayout";
             this.CheckBoxTableLayout.RowCount = 7;
             this.CheckBoxTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -135,7 +138,7 @@ namespace MissionPlanner.GCSViews
             this.CheckBoxTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CheckBoxTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.CheckBoxTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.CheckBoxTableLayout.Size = new System.Drawing.Size(409, 327);
+            this.CheckBoxTableLayout.Size = new System.Drawing.Size(409, 320);
             this.CheckBoxTableLayout.TabIndex = 9;
             // 
             // checkBox8
@@ -210,12 +213,12 @@ namespace MissionPlanner.GCSViews
             this.warning_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.warning_label.Font = new System.Drawing.Font("Century Gothic", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.warning_label.ForeColor = System.Drawing.Color.Red;
-            this.warning_label.Location = new System.Drawing.Point(3, 68);
+            this.warning_label.Location = new System.Drawing.Point(3, 66);
             this.warning_label.Margin = new System.Windows.Forms.Padding(3);
             this.warning_label.MaximumSize = new System.Drawing.Size(405, 0);
             this.warning_label.Name = "warning_label";
             this.warning_label.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.warning_label.Size = new System.Drawing.Size(405, 45);
+            this.warning_label.Size = new System.Drawing.Size(405, 44);
             this.warning_label.TabIndex = 15;
             this.warning_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.warning_label.UseMnemonic = false;
@@ -236,11 +239,11 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.900936F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.893655F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.97573F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 64.69354F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 12.53614F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 6.765623F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.778092F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.780127F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 63.42504F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.25112F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(415, 515);
             this.tableLayoutPanel2.TabIndex = 17;
             // 
@@ -251,7 +254,7 @@ namespace MissionPlanner.GCSViews
             this.EmployeeLabel.Location = new System.Drawing.Point(3, 3);
             this.EmployeeLabel.Name = "EmployeeLabel";
             this.EmployeeLabel.resize = false;
-            this.EmployeeLabel.Size = new System.Drawing.Size(201, 29);
+            this.EmployeeLabel.Size = new System.Drawing.Size(201, 28);
             this.EmployeeLabel.TabIndex = 6;
             this.EmployeeLabel.Text = "Employee";
             // 
@@ -263,11 +266,11 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel3.Controls.Add(this.SkipButton, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.CompassCalibrationButton, 1, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 452);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 442);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(201, 60);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(201, 70);
             this.tableLayoutPanel3.TabIndex = 14;
             // 
             // SkipButton
@@ -277,7 +280,7 @@ namespace MissionPlanner.GCSViews
             this.SkipButton.Location = new System.Drawing.Point(3, 1);
             this.SkipButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
             this.SkipButton.Name = "SkipButton";
-            this.SkipButton.Size = new System.Drawing.Size(94, 59);
+            this.SkipButton.Size = new System.Drawing.Size(94, 69);
             this.SkipButton.TabIndex = 10;
             this.SkipButton.Text = "Skip prefligh check";
             this.SkipButton.UseVisualStyleBackColor = true;
@@ -290,7 +293,7 @@ namespace MissionPlanner.GCSViews
             this.CompassCalibrationButton.Location = new System.Drawing.Point(103, 1);
             this.CompassCalibrationButton.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.CompassCalibrationButton.Name = "CompassCalibrationButton";
-            this.CompassCalibrationButton.Size = new System.Drawing.Size(98, 59);
+            this.CompassCalibrationButton.Size = new System.Drawing.Size(98, 69);
             this.CompassCalibrationButton.TabIndex = 16;
             this.CompassCalibrationButton.Text = "Compass Calibration";
             this.CompassCalibrationButton.UseVisualStyleBackColor = true;
@@ -305,11 +308,11 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel4.Controls.Add(this.CancelButton, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.ReadyButton, 1, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(210, 452);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(210, 442);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(202, 60);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(202, 70);
             this.tableLayoutPanel4.TabIndex = 15;
             // 
             // CancelButton
@@ -319,7 +322,7 @@ namespace MissionPlanner.GCSViews
             this.CancelButton.Location = new System.Drawing.Point(0, 1);
             this.CancelButton.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(98, 59);
+            this.CancelButton.Size = new System.Drawing.Size(98, 69);
             this.CancelButton.TabIndex = 2;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
@@ -332,7 +335,7 @@ namespace MissionPlanner.GCSViews
             this.ReadyButton.Location = new System.Drawing.Point(104, 1);
             this.ReadyButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 0);
             this.ReadyButton.Name = "ReadyButton";
-            this.ReadyButton.Size = new System.Drawing.Size(95, 59);
+            this.ReadyButton.Size = new System.Drawing.Size(95, 69);
             this.ReadyButton.TabIndex = 1;
             this.ReadyButton.Text = "Ready to arm";
             this.ReadyButton.UseVisualStyleBackColor = true;
@@ -354,11 +357,12 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel2.SetRowSpan(this.tableLayoutPanel1, 2);
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(202, 62);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(202, 60);
             this.tableLayoutPanel1.TabIndex = 16;
             // 
             // GPSFix
             // 
+            this.GPSFix.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.currentStateBindingSource, "gpsstatus", true));
             this.GPSFix.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GPSFix.FlatAppearance.BorderSize = 0;
             this.GPSFix.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
@@ -369,6 +373,10 @@ namespace MissionPlanner.GCSViews
             this.GPSFix.TabIndex = 4;
             this.GPSFix.Text = "GPS Fix";
             this.GPSFix.UseVisualStyleBackColor = true;
+            // 
+            // currentStateBindingSource
+            // 
+            this.currentStateBindingSource.DataSource = typeof(MissionPlanner.CurrentState);
             // 
             // BatteryVol
             // 
@@ -402,6 +410,7 @@ namespace MissionPlanner.GCSViews
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel4.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.currentStateBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -430,5 +439,6 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private MyButton GPSFix;
         private MyButton BatteryVol;
+        private System.Windows.Forms.BindingSource currentStateBindingSource;
     }
 }

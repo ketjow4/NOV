@@ -49,7 +49,8 @@ namespace MissionPlanner.Controls
 
         Dictionary<int, character> charDict = new Dictionary<int, character>();
 
-        public string warning;
+        [System.ComponentModel.Browsable(true), System.ComponentModel.Category("Values")]
+        public string warning { get { return _warning; } set { _warning = value; this.Invalidate(); data.DataSource = this; data.ResetBindings(false); } }
         public int huddrawtime = 0;
 
         public bool opengl { get { return UseOpenGL; } set { UseOpenGL = value; } }
@@ -82,6 +83,8 @@ namespace MissionPlanner.Controls
 
         bool started = false;
 
+        public BindingSource data = new BindingSource();
+
         public HUD()
         {
             if (this.DesignMode)
@@ -90,6 +93,7 @@ namespace MissionPlanner.Controls
                 //return;
             }
 
+            data.DataSource = new { warning, lowvoltagealert };
             displayheading = displayspeed = displayalt = displayconninfo = displayxtrack = displayrollpitch = displaygps = bgon = hudon = batteryon = true;
 
             this.Name = "Hud";
@@ -104,7 +108,7 @@ namespace MissionPlanner.Controls
             graphicsObjectGDIP = Graphics.FromImage(objBitmap);
         }
 
-
+        string _warning = "";
         float _roll = 0;
         float _navroll = 0;
         float _pitch = 0;
@@ -1768,7 +1772,7 @@ namespace MissionPlanner.Controls
                     warning += message;
                 }
                 //else
-                    //warning = "";
+                //warning = "";
 
                 graphicsObject.ResetTransform();
 

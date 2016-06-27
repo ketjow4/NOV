@@ -30,6 +30,7 @@ namespace MissionPlanner.GCSViews
             MinMaxLabel.Text = "MIN " + Min.ToString() + " - MAX " + Max.ToString();
             InfoLabel.Text = infoLabelText;
             SetFonts();
+            this.Size = ResolutionManager.InputPanelSize;
         }
 
         public void SetFonts()
