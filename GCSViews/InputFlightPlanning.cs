@@ -33,6 +33,21 @@ namespace MissionPlanner.GCSViews
             this.Size = ResolutionManager.InputPanelSize;
         }
 
+
+        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue, char passwordChar, bool hideMaxMin = true)
+        {
+            Validator = validator;
+            InitializeComponent();
+            InputTextBox.Text = initialValue;
+            DotButton.Enabled = dotEnabled;
+            MinMaxLabel.Text = "MIN " + Min.ToString() + " - MAX " + Max.ToString();
+            InfoLabel.Text = infoLabelText;
+            InputTextBox.PasswordChar = passwordChar;
+            MinMaxLabel.Visible = hideMaxMin;
+            SetFonts();
+            this.Size = ResolutionManager.InputPanelSize;
+        }
+
         public void SetFonts()
         {
             InputTextBox.Font = new Font("Century Gothic", ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);

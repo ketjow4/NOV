@@ -368,7 +368,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("LAND", 1, 8, LandEvent),
                  ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent),
             ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
-            exitButton = new TileButton("EXIT", 2, 0, ExitEvent),                //hack
+            exitButton = new TileButton("EXIT", 2, 0, ExitEvent),                
             takeOff = new TileButton("TAKEOFF", 4, 8, TakeOffEvent),
             });
             commonTiles = tilesFlightMode;      //bad hax
