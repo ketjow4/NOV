@@ -14,12 +14,79 @@ using MissionPlanner.Validators;
 
 namespace MissionPlanner.GCSViews
 {
-    public partial class PreFlightCheck : Form
+    public partial class PreFlightCheck : Form, INotifyPropertyChanged
     {
-        private Thread thread;
-        private volatile bool stop = false;
+        private double gpsfix;
+        private double gpshdop;
+        private string warningText;
+        private bool lowVoltageWarning;
 
-        
+        public double Gpsfix
+        {
+            get
+            {
+                return gpsfix;
+            }
+
+            set
+            {
+                gpsfix = value;
+                OnPropertyChanged("Gpsfix");
+            }
+        }
+
+        public double Gpshdop
+        {
+            get
+            {
+                return gpshdop;
+            }
+
+            set
+            {
+                gpshdop = value;
+                OnPropertyChanged("Gpshdop");
+            }
+        }
+
+        public string WarningText
+        {
+            get
+            {
+                return warningText;
+            }
+
+            set
+            {
+                warningText = value;
+                OnPropertyChanged("WarningText");
+            }
+        }
+
+        public bool LowVoltageWarning
+        {
+            get
+            {
+                return lowVoltageWarning;
+            }
+
+            set
+            {
+                lowVoltageWarning = value;
+                OnPropertyChanged("LowVoltageWarning");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
+        }
 
         public PreFlightCheck()
         {
@@ -29,11 +96,16 @@ namespace MissionPlanner.GCSViews
             ReadyButton.Enabled = false;
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
 
+            DataBindings.Add(new Binding("Gpshdop", FlightData.instance.bindingSource1, "gpshdop", true));
+            DataBindings.Add(new Binding("Gpsfix", FlightData.instance.bindingSource1, "gpsstatus", true));
+            DataBindings.Add(new Binding("WarningText", FlightData.instance.hud1.data, "warning", true));
+            DataBindings.Add(new Binding("LowVoltageWarning", FlightData.instance.hud1.data, "lowvoltagealert", true));
+            warning_label.DataBindings.Add(new Binding("Text", FlightData.instance.hud1.data, "warning", true));
+
             ReadEmployeeData("data.csv");
 
-            AutoCheck();
-            thread = new Thread(new ThreadStart(Do_AutoCheck));
-            thread.Start();
+            PropertyChanged += AutoCheck;
+
             this.Size = Modification.ResolutionManager.PreFlightCheckSize;
             SetFonts();
         }
@@ -66,63 +138,6 @@ namespace MissionPlanner.GCSViews
             employee_data.Font = ButtonFont;         //this font is used because is the same as for buttons
             warning_label.Font = new Font("Century Gothic", Modification.ResolutionManager.PreFlightCheckFontWarning, FontStyle.Regular); 
         }
-
-        //TODO Need to refactor
-        public void Do_AutoCheck()
-        {
-            try
-            {
-                while(!stop)
-                {
-                Boolean enabled = true;
-                String text = "";
-                float gpsfix = 0;
-                float gpshdop = 0;
-
-                FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { gpsfix =  FlightData.instance.hud1.gpsfix; gpshdop = FlightData.instance.hud1.gpshdop;}));
-
-                if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
-                {
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToGreen();  }));
-                }
-                else
-                {
-                    enabled = false;
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToRed(); }));
-                }
-                if (FlightData.instance.hud1.lowvoltagealert)
-                {
-                    enabled = false;
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToRed(); }));
-                }
-                else
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToGreen(); }));
-                
-                warning_label.Invoke(new MethodInvoker(delegate { warning_label.Text = FlightData.instance.hud1.warning;
-                                                              text   = warning_label.Text;}));
-
-            if (text != "")
-                enabled = false;
-
-
-            if (enabled == false)
-            {
-                ReadyButton.Invoke(new MethodInvoker(delegate { ReadyButton.Enabled = enabled; }));
-            }
-            if(stop)
-                break;
-
-            Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
-            {
-                //silnet errors here because of no waiting to kill process before close window
-                //MessageBox.Show("Transparent Label error" + ex.Message);
-                // log errors
-            }
-        }
-        
 
         private void ReadEmployeeData(string FilePath)
         {
@@ -169,11 +184,9 @@ namespace MissionPlanner.GCSViews
                 if (pinForm.Result.ToString() != b.FirstOrDefault().PIN)
                 {
                     DialogResult = DialogResult.Cancel;
-                    stop = true;
                     return;
                 }
             SaveLogFile();
-            stop = true;
             DialogResult = DialogResult.OK;
         }
 
@@ -181,7 +194,6 @@ namespace MissionPlanner.GCSViews
         private void SaveLogFile()
         {
             String pathString = CreateLogFile();
-
             FileInfo fInfo = new FileInfo(pathString);
 
             using (StreamWriter outfile = new StreamWriter(pathString))
@@ -192,10 +204,8 @@ namespace MissionPlanner.GCSViews
                 outfile.WriteLine("All system are checked and ready to fly.");
                 outfile.Close();
             }
-            // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
         }
-
 
         private String CreateLogFile()
         {
@@ -224,7 +234,6 @@ namespace MissionPlanner.GCSViews
                 outfile.WriteLine("Time: " + DateTime.Now.ToString());
                 outfile.Close();
             }
-            // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
         }
 
@@ -236,12 +245,8 @@ namespace MissionPlanner.GCSViews
                 if ((checkbox as CheckBox).Checked == false)
                 {
                     enabled = false;
+                    break;
                 }
-            }
-
-            if (!AutoCheck())
-            {
-                enabled = false;
             }
 
             object SelectedItem = new object();
@@ -252,30 +257,29 @@ namespace MissionPlanner.GCSViews
             ReadyButton.Enabled = enabled;
         }
 
-        private bool AutoCheck()
+        private void AutoCheck(object obj, PropertyChangedEventArgs e)
         {
             Boolean enabled = true;
-            if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2.21)
+
+            if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
             {
                 GPSFixToGreen();
+                enabled = true;
             }
             else
             {
-                enabled = false;
                 GPSFixToRed();
-            }
-            if (FlightData.instance.hud1.lowvoltagealert)
-            {
                 enabled = false;
-                BatteryVolToRed();
             }
-            else
-                BatteryVolToGreen();
-            warning_label.Text = FlightData.instance.hud1.warning;
-
             if (warning_label.Text != "")
                 enabled = false;
-            return enabled;
+            else
+                enabled = true;
+            if(LowVoltageWarning)
+                enabled = false;
+            else
+                enabled = true;
+            ReadyButton.Enabled = enabled;
         }
 
         private void CompassCalibrationButton_Click(object sender, EventArgs e)

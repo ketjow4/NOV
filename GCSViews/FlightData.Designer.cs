@@ -2179,7 +2179,7 @@ namespace MissionPlanner.GCSViews
 
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn2;
-        private System.Windows.Forms.BindingSource bindingSource1;
+        public System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.Timer ZedGraphTimer;
         private System.Windows.Forms.SplitContainer MainH;
         private System.Windows.Forms.SplitContainer SubMainLeft;
