@@ -48,6 +48,7 @@ using GeoUtility.GeoSystem.Base;
 using DotSpatial.Data;
 using System.Drawing.Drawing2D;
 using MissionPlanner.Validators;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews
 {

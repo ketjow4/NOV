@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ProjNet.CoordinateSystems.Transformations;
 using ProjNet.CoordinateSystems;
 using ProjNet.Converters;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.Swarm
 {

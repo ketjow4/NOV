@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using log4net;
 using MissionPlanner.Controls;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews.ConfigurationView
 {

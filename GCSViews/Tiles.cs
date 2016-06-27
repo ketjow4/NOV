@@ -12,6 +12,7 @@ using MissionPlanner.Mavlink;
 using MissionPlanner.GCSViews.Modification; //classes for tiles
 using MissionPlanner.Utilities;
 using MissionPlanner.Validators;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews
 {
@@ -285,7 +286,7 @@ namespace MissionPlanner.GCSViews
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("Transparent Label error" + ex.Message);
+                MessageBox.Show("Transparent Label error\n" + ex.Message);
 #endif
                 Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
                 thread.Start();

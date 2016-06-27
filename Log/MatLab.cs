@@ -12,6 +12,7 @@ using System.Globalization;
 using log4net;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.Log
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MissionPlanner.Controls;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews.ConfigurationView
 {
