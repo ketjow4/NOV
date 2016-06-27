@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace MissionPlanner.GCSViews.Modification
 {
-    class ResolutionManager
+    public class ResolutionManager
     {
         public enum Resolutions
         {

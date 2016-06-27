@@ -12,6 +12,7 @@ using MissionPlanner.Mavlink;
 using MissionPlanner.GCSViews.Modification; //classes for tiles
 using MissionPlanner.Utilities;
 using MissionPlanner.Validators;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews
 {
@@ -285,7 +286,7 @@ namespace MissionPlanner.GCSViews
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("Transparent Label error" + ex.Message);
+                MessageBox.Show("Transparent Label error\n" + ex.Message);
 #endif
                 Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
                 thread.Start();
@@ -721,7 +722,7 @@ namespace MissionPlanner.GCSViews
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
 			var intValidator = new NumericValidator<int>(altMin, altMax);
-			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "ALTITUDE", false, AltitudeVal.ToString());
+			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "ALTITUDE", false, AltitudeVal.ToString());
             inputWindow.OnValidValueSet += ChangeAlt;
             inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 			if(inputWindow.ShowDialog() == DialogResult.OK)
@@ -734,7 +735,7 @@ namespace MissionPlanner.GCSViews
         {
             cameras_buttons.ForEach(cam => cam.Visible = false);
 			IValidator<int> intValidator;
-			InputFlightPlanning inputWindow;
+			InputFlightPlanning<int> inputWindow;
 			PlatformChoose.Platform platform = PlatformChoose.Platform.Error;
 			
             if (MainV2.comPort.MAV.cs.firmware == MainV2.Firmwares.ArduCopter2 && connected)
@@ -756,11 +757,11 @@ namespace MissionPlanner.GCSViews
 			{
 				case PlatformChoose.Platform.Albatros:
 					intValidator = new NumericValidator<int>(fsMinAlbatros, fsMaxAlbatros);
-					inputWindow = new InputFlightPlanning(intValidator, "FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString());
+					inputWindow = new InputFlightPlanning<int>(intValidator, "FLYING SPEED - ALBATROS", false, FlyingSpeed.ToString());
 					break;
 				case PlatformChoose.Platform.Ogar:
 					intValidator = new NumericValidator<int>(fsMinOgar, fsMaxOgar);
-					inputWindow = new InputFlightPlanning(intValidator, "FLYING SPEED - OGAR", false, FlyingSpeed.ToString());
+					inputWindow = new InputFlightPlanning<int>(intValidator, "FLYING SPEED - OGAR", false, FlyingSpeed.ToString());
 					break;
 				case PlatformChoose.Platform.Error:
 				default:
@@ -778,7 +779,7 @@ namespace MissionPlanner.GCSViews
         private static void SidelapSettingEvent(object sender, EventArgs args)
         {
 			var intValidator = new NumericValidator<int>(0, 99);
-			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "SIDELAP", false, SideLap.ToString());
+			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "SIDELAP", false, SideLap.ToString());
 			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             inputWindow.OnValidValueSet += ChangeSideLap;
             if (inputWindow.ShowDialog() == DialogResult.OK)
@@ -790,7 +791,7 @@ namespace MissionPlanner.GCSViews
         private static void OverlapSettingEvent(object sender, EventArgs args)
         {
 			var intValidator = new NumericValidator<int>(0, 99);
-			InputFlightPlanning inputWindow = new InputFlightPlanning(intValidator, "OVERLAP", false, OverLap.ToString());
+			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "OVERLAP", false, OverLap.ToString());
 			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             inputWindow.OnValidValueSet += ChangeOverLap;
             if (inputWindow.ShowDialog() == DialogResult.OK)

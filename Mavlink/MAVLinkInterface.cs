@@ -19,6 +19,7 @@ using MissionPlanner.Utilities;
 using System.Windows.Forms;
 using MissionPlanner.HIL;
 using MissionPlanner.Mavlink;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner
 {
@@ -2360,7 +2361,7 @@ Please check the following
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Failed to change Modes");
+                MessageBox.Show("Failed to change Modes");
             }
         }
 
@@ -3709,7 +3710,7 @@ Please check the following
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show("Failed to find Mode");
+                MessageBox.Show("Failed to find Mode");
                 return false;
             }
 

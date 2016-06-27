@@ -11,6 +11,7 @@ using MissionPlanner.Controls;
 using MissionPlanner.Joystick;
 using MissionPlanner.Utilities;
 using WebCamService;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews.ConfigurationView
 {

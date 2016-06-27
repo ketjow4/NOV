@@ -7,6 +7,7 @@ using MissionPlanner.Controls;
 using System.IO;
 using System.Collections.Generic;
 using BrightIdeasSoftware;
+using MissionPlanner.GCSViews.Modification;
 
 namespace MissionPlanner.Utilities
 {
@@ -70,6 +71,11 @@ namespace MissionPlanner.Utilities
         /// <param name="control"></param>
         public static void ApplyThemeTo(Control control)
         {
+			if((control as ProgressReporterDialogue) != null)
+			{
+				control.Width = ResolutionManager.InputPanelSize.Width;
+				return;
+			}
             switch (_currentTheme)
             {
                 case Themes.BurntKermit:

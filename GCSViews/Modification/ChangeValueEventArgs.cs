@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MissionPlanner.GCSViews.Modification
 {
-    public class ChangeValueEventArgs<T> : EventArgs
+    public class ChangeValueEventArgs<T> : EventArgs where T: IConvertible, IComparable
     {
         private T value;
 

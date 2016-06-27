@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Diagnostics;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Core.Xml
 {
@@ -82,9 +83,9 @@ namespace Core.Xml
             }
             catch (Exception e) {
 #if DEBUG
-                System.Windows.Forms.MessageBox.Show("Couldn't serialize to: " + file_path + "\n" + e.ToString());
+                MessageBox.Show("Couldn't serialize to: " + file_path + "\n" + e.ToString());
 #else
-                System.Windows.Forms.MessageBox.Show("Failed to Save Document: "+file_path);
+                MessageBox.Show("Failed to Save Document: "+file_path);
 #endif
             }
             finally {
@@ -99,7 +100,7 @@ namespace Core.Xml
                     File.Move(streamPath, file_path);
                 }
                 catch (Exception ex) {
-                    System.Windows.Forms.MessageBox.Show("Warning, could not overwrite: " + file_path+"\n"+ex.Message+"\n\nSaved as: "+streamPath);
+                    MessageBox.Show("Warning, could not overwrite: " + file_path+"\n"+ex.Message+"\n\nSaved as: "+streamPath);
                 }
             }
         }
@@ -118,7 +119,7 @@ namespace Core.Xml
             }
             catch (Exception e) {
 #if DEBUG
-                System.Windows.Forms.MessageBox.Show("Couldn't deserialize stream:\n" + e.ToString());
+                MessageBox.Show("Couldn't deserialize stream:\n" + e.ToString());
 #endif
                 return null;
             }

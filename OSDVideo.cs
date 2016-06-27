@@ -14,6 +14,7 @@ using System.IO;
 using DirectShowLib;
 using AviFile;
 using DirectShowLib.DES;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner
 {
