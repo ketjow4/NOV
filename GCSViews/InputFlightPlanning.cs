@@ -21,7 +21,7 @@ namespace MissionPlanner.GCSViews
 
         public T Result { get; set; }
 		
-        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue,Size? windowSize = null)
+        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue)
         {
 			Validator = validator;
             InitializeComponent();
@@ -34,18 +34,11 @@ namespace MissionPlanner.GCSViews
         }
 
 
-        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue, char passwordChar, bool hideMaxMin = true)
+        public InputFlightPlanning(IValidator<T> validator, String infoLabelText, bool dotEnabled, String initialValue, char passwordChar, bool hideMaxMin = true) 
+                                   : this(validator,infoLabelText,dotEnabled,initialValue)
         {
-            Validator = validator;
-            InitializeComponent();
-            InputTextBox.Text = initialValue;
-            DotButton.Enabled = dotEnabled;
-            MinMaxLabel.Text = "MIN " + Min.ToString() + " - MAX " + Max.ToString();
-            InfoLabel.Text = infoLabelText;
             InputTextBox.PasswordChar = passwordChar;
             MinMaxLabel.Visible = hideMaxMin;
-            SetFonts();
-            this.Size = ResolutionManager.InputPanelSize;
         }
 
         public void SetFonts()
@@ -181,6 +174,7 @@ namespace MissionPlanner.GCSViews
 			}
 		}
 
+        //This work only after window is displayed (constructor uses values from resolution manager)
 		public Size WindowSize
 		{
 			get
