@@ -238,7 +238,7 @@ namespace MissionPlanner.GCSViews
 
                 {
                     double result;
-                    TXT_homealt.Text = Tiles.AltitudeVal.ToString();
+                    TXT_homealt.Text = TilesFlightPlanning.AltitudeVal.ToString();
                     bool pass = double.TryParse(TXT_homealt.Text, out result);
 
                     if (pass == false)
@@ -265,7 +265,7 @@ namespace MissionPlanner.GCSViews
                     }
                 }
 
-                cell.Value = Tiles.AltitudeVal.ToString();
+                cell.Value = TilesFlightPlanning.AltitudeVal.ToString();
 
                 float ans;
                 if (float.TryParse(cell.Value.ToString(), out ans))
@@ -586,7 +586,7 @@ namespace MissionPlanner.GCSViews
 
             panelWaypoints.Visible = false;
             panelAction.Visible = false;
-            Tiles.SetTilesFlightPlanning(panelBASE);
+            TilesFlightPlanning.SetTilesFlightPlanning(panelBASE);
 
             // hide the map to prevent redraws when its loaded
             panelMap.Visible = false;
@@ -5825,7 +5825,7 @@ namespace MissionPlanner.GCSViews
 
         public void prefetchToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tiles.offlineMaps.SetToHoverColor();
+            TilesFlightPlanning.offlineMaps.SetToHoverColor();
             MainMap.DisableAltForSelection = true;
             MainMap.MouseMove -= MainMap_MouseMove;
             MainMap.MouseDown -= MainMap_MouseDown;
@@ -5845,7 +5845,7 @@ namespace MissionPlanner.GCSViews
             if (area.IsEmpty)
 			{
 				CustomMessageBox.Show("Please, select an area.");
-				Tiles.cancelOfflineMaps.Visible = false;
+				TilesFlightPlanning.cancelOfflineMaps.Visible = false;
 				return;
 			}
 
@@ -5864,7 +5864,7 @@ namespace MissionPlanner.GCSViews
             if(input.canceled)
             {
                 MainMap.SelectedArea = RectLatLng.Empty;
-                Tiles.cancelOfflineMaps.Visible = false;
+                TilesFlightPlanning.cancelOfflineMaps.Visible = false;
                 return;
             }
 
@@ -5878,7 +5878,7 @@ namespace MissionPlanner.GCSViews
                     break;
             }
 
-			Tiles.cancelOfflineMaps.Visible = false;
+			TilesFlightPlanning.cancelOfflineMaps.Visible = false;
 			MainMap.SelectedArea = RectLatLng.Empty;
         }
 
@@ -5891,7 +5891,7 @@ namespace MissionPlanner.GCSViews
 		public void RestoreMainMapSettings()
         {
             MainMap.DisableAltForSelection = false;
-            Tiles.offlineMaps.SetToOriginal();
+            TilesFlightPlanning.offlineMaps.SetToOriginal();
             MainMap.MouseMove += MainMap_MouseMove;
             MainMap.MouseDown += MainMap_MouseDown;
             MainMap.MouseUp += MainMap_MouseUp;    
@@ -6103,7 +6103,7 @@ namespace MissionPlanner.GCSViews
         {
             // altitude
             
-            string alt = Tiles.AltitudeVal.ToString();
+            string alt = TilesFlightPlanning.AltitudeVal.ToString();
 
             if (Tiles.pathAccepted)     //for adding take off on mission altitude in path generation
             {
@@ -6124,7 +6124,7 @@ namespace MissionPlanner.GCSViews
                 MessageBox.Show("Bad Alt");
                 return;
             }
-            Tiles.AltitudeVal = alti;
+            TilesFlightPlanning.AltitudeVal = alti;
             //if (alti < 30) alti = 30;
 
             // take off pitch

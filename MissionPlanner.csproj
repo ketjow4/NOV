@@ -499,6 +499,8 @@
     <Compile Include="GCSViews\PreFlightCheck.Designer.cs">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\TilesFlightData.cs" />
+    <Compile Include="GCSViews\TilesFlightPlanning.cs" />
     <Compile Include="GCSViews\ValueSlider\ValueSlider.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1179,9 +1179,9 @@ namespace MissionPlanner
                 catch { }
 
                 //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
-                if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
+                if (GCSViews.TilesFlightData.ConnectButton.Label.Text == "DISCONNECT")
                 {
-                    GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
+                    GCSViews.TilesFlightData.ConnectButton.Label.Text = "CONNECT";
                     GCSViews.Tiles.connected = false;
                 }
 
@@ -1463,9 +1463,9 @@ namespace MissionPlanner
                     this.MenuConnect.Image = displayicons.disconnect;
 
                     
-                     if (GCSViews.Tiles.ConnectButton.Label.Text == "CONNECT")
+                     if (GCSViews.TilesFlightData.ConnectButton.Label.Text == "CONNECT")
                     {
-                        GCSViews.Tiles.ConnectButton.Label.Text = "DISCONNECT";
+                        GCSViews.TilesFlightData.ConnectButton.Label.Text = "DISCONNECT";
                         GCSViews.Tiles.connected = true;
                     }
 

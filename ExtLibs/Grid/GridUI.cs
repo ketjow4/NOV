@@ -142,7 +142,7 @@ namespace MissionPlanner
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
 
             // set and angle that is good
-            NUM_angle.Value = Tiles.AngleVal;
+            NUM_angle.Value = TilesFlightPlanning.AngleVal;
             TXT_headinghold.Text = (Math.Round(NUM_angle.Value)).ToString(); 
         }
 
@@ -369,8 +369,8 @@ namespace MissionPlanner
                 loadsetting("grid_copter_delay", NUM_copter_delay);
                 //loadsetting("grid_copter_headinghold_chk", CHK_copter_headinghold);
 
-                NUM_angle.Value = Tiles.AngleVal;
-                NUM_altitude.Value = Tiles.AltitudeVal;
+                NUM_angle.Value = TilesFlightPlanning.AngleVal;
+                NUM_altitude.Value = TilesFlightPlanning.AltitudeVal;
                 // Plane Settings
                 loadsetting("grid_min_lane_separation", NUM_Lane_Dist);
             }
@@ -572,7 +572,7 @@ namespace MissionPlanner
 
             // new grid system test
             CMB_startfrom.SelectedIndex = (int)Tiles.begin;
-            grid = Grid.CreateGrid(list, (double)Tiles.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, Tiles.AngleVal, (double)NUM_overshoot.Value, 
+            grid = Grid.CreateGrid(list, (double)TilesFlightPlanning.AltitudeVal, (double)NUM_Distance.Value, (double)NUM_spacing.Value, TilesFlightPlanning.AngleVal, (double)NUM_overshoot.Value, 
                                    (double)NUM_overshoot2.Value, (Grid.StartPosition)Enum.Parse(typeof(Grid.StartPosition), CMB_startfrom.Text), false, 0.0f);
          
             List<PointLatLng> list2 = new List<PointLatLng>();
@@ -632,7 +632,7 @@ namespace MissionPlanner
                             double angle1 = startangle - (Math.Tan((fovv / 2.0) / (fovh / 2.0)) * rad2deg);
                             double dist1 = Math.Sqrt(Math.Pow(fovh / 2.0, 2) + Math.Pow(fovv / 2.0, 2));
 
-                            double bearing = Tiles.AngleVal;//(double)NUM_angle.Value;// (prevpoint.GetBearing(item) + 360.0) % 360;
+                            double bearing = TilesFlightPlanning.AngleVal;//(double)NUM_angle.Value;// (prevpoint.GetBearing(item) + 360.0) % 360;
 
                             List<PointLatLng> footprint = new List<PointLatLng>();
                             footprint.Add(item.newpos(bearing + angle1, dist1));
@@ -681,7 +681,7 @@ namespace MissionPlanner
             */
 
             // turn radrad = tas^2 / (tan(angle) * G)
-            float v_sq = (float)(((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed) * ((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed));
+            float v_sq = (float)(((float)TilesFlightPlanning.FlyingSpeed / CurrentState.multiplierspeed) * ((float)TilesFlightPlanning.FlyingSpeed / CurrentState.multiplierspeed));
             float turnrad = (float)(v_sq / (float)(9.808f * Math.Tan(35 * deg2rad)));
 
             // Update Stats 
@@ -729,13 +729,13 @@ namespace MissionPlanner
             else
             {
                 // Meters
-                Tiles.Area =  ((double)(calcpolygonarea(list) / 1000000)).ToString();      //km^2
+                TilesFlightPlanning.Area =  ((double)(calcpolygonarea(list) / 1000000)).ToString();      //km^2
                 //lbl_area.Text = calcpolygonarea(list).ToString("#") + " m^2";
                 lbl_distance.Text = routetotal.ToString("0.##"); // +" km";
                 //lbl_spacing.Text = NUM_spacing.Value.ToString("#") + " m";
                 lbl_grndres.Text = TXT_cmpixel.Text;
                 lbl_distbetweenlines.Text = NUM_Distance.Value.ToString("0.##") + " m";
-                Tiles.DistanceBeteweenLines = NUM_Distance.Value.ToString("0.##");
+                TilesFlightPlanning.DistanceBeteweenLines = NUM_Distance.Value.ToString("0.##");
                 lbl_footprint.Text = TXT_fovH.Text + " x " + TXT_fovV.Text + " m";
                 lbl_turnrad.Text = (turnrad * 2).ToString("0") + " m";
             }
@@ -743,25 +743,25 @@ namespace MissionPlanner
 
             double flyspeedms = 0;
 
-            flyspeedms = Tiles.FlyingSpeed;
+            flyspeedms = TilesFlightPlanning.FlyingSpeed;
 
-            Tiles.DistanceUnit = "km";
-            Tiles.Distance = lbl_distance.Text;
+            TilesFlightPlanning.DistanceUnit = "km";
+            TilesFlightPlanning.Distance = lbl_distance.Text;
 
-           
+
             //double flyspeedms = CurrentState.fromSpeedDisplayUnit((double)NUM_UpDownFlySpeed.Value);
 
             //lbl_pictures.Text = images.ToString();
-            Tiles.ImagesCount = images;
+            TilesFlightPlanning.ImagesCount = images;
 
             lbl_strips.Text = ((int)(strips / 2)).ToString();
-            Tiles.NumberOfStripes = lbl_strips.Text;
+            TilesFlightPlanning.NumberOfStripes = lbl_strips.Text;
             double seconds = ((routetotal * 1000.0) / ((flyspeedms) * 0.8));
             // reduce flying speed by 20 %
             double secs = seconds % 60;
             int mins = (int)(seconds / 60) % 60;
             int hours = (int)(seconds / 3600) % 24;
-            Tiles.EstimatedFlightTime = hours + ":" + mins.ToString("00") + ":" + secs.ToString("00");
+            TilesFlightPlanning.EstimatedFlightTime = hours + ":" + mins.ToString("00") + ":" + secs.ToString("00");
             seconds = ((routetotal * 1000.0) / (flyspeedms));
             lbl_photoevery.Text = secondsToNice(((double)NUM_spacing.Value / flyspeedms));
             map.HoldInvalidation = false;
@@ -902,7 +902,7 @@ namespace MissionPlanner
             {
                 // entered values
                 float focallen = (float)NUM_focallength.Value;
-                float flyalt = (float)Tiles.AltitudeVal;         //NUM_altitude.Value;
+                float flyalt = (float)TilesFlightPlanning.AltitudeVal;         //NUM_altitude.Value;
                 int imagewidth = int.Parse(TXT_imgwidth.Text);
                 int imageheight = int.Parse(TXT_imgheight.Text);
 
@@ -912,8 +912,8 @@ namespace MissionPlanner
                 //int overlap = (int)num_overlap.Value;
                 //int sidelap = (int)num_sidelap.Value;
 
-                int overlap = Tiles.OverLap;
-                int sidelap = Tiles.SideLap;
+                int overlap = TilesFlightPlanning.OverLap;
+                int sidelap = TilesFlightPlanning.SideLap;
 
 
                 // scale      mm / mm
@@ -935,7 +935,7 @@ namespace MissionPlanner
                 //    mm  / pixels * 100
                 TXT_cmpixel.Text = ((viewheight / imageheight) * 100).ToString();
 
-                Tiles.GroundRes = Convert.ToDouble(TXT_cmpixel.Text);
+                TilesFlightPlanning.GroundRes = Convert.ToDouble(TXT_cmpixel.Text);
 
                 // Imperial
                 inchpixel = (((viewheight / imageheight) * 100) * 0.393701).ToString("0.00 inches");
@@ -1471,7 +1471,7 @@ namespace MissionPlanner
                     if (CHK_usespeed.Checked)
                     {
                         plugin.Host.AddWPtoList(MAVLink.MAV_CMD.DO_CHANGE_SPEED, 0,
-                            (int)((float)Tiles.FlyingSpeed / CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
+                            (int)((float)TilesFlightPlanning.FlyingSpeed / CurrentState.multiplierspeed), 0, 0, 0, 0, 0);
                     }
 
 
