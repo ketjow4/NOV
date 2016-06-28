@@ -114,6 +114,9 @@ namespace MissionPlanner.GCSViews
         private static List<TileButton> cameras_buttons;
         private static List<TileButton> startFromButtons;
 
+
+        #region ChangeFunctions
+
         public static void ChangeAlt(int v)
         {
             int val = v;
@@ -189,16 +192,18 @@ namespace MissionPlanner.GCSViews
             ChangeOverLap(e.Value);
         }
 
+        #endregion
+
         internal static List<TileInfo> commonTiles = null;
         public static TileButton ConnectButton;
 
-        public static void SetCommonTiles()
+        public static void BindingsForTransparentLabel()
         {
-            Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
-            thread.Start();
+            Binding b = new Binding("Visible", FlightData.instance.hud1.data, "warning", true);
+            b.Format += (obj, args) => { if ((obj as Binding).Control.Text == "") args.Value = false; else args.Value = true; };
+            FlightData.instance.transparent.DataBindings.Add(b);
+            FlightData.instance.transparent.DataBindings.Add(new Binding("Text", FlightData.instance.hud1.data, "warning", true));
         }
-
-        private static volatile bool firstTime = true;
 
 
         private static void ThreadSafeMapZoomToHome()
@@ -223,77 +228,6 @@ namespace MissionPlanner.GCSViews
                 }
             }
         }
-
-        //this refresh transparent label and ARM/DISARM button when it's armed through RC 
-        public static void RefreshTransparentLabel()
-        {
-            try
-            {
-                while (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
-                    System.Threading.Thread.Sleep(1000);
-
-                string text = "";
-                while (true)
-                {
-                    FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { text = FlightData.instance.hud1.warning; }));
-                    FlightData.instance.transparent.Invoke(new MethodInvoker(delegate
-                    {
-                        if (text == "")
-                            FlightData.instance.transparent.Visible = false;
-                        else
-                        {
-                            FlightData.instance.transparent.Visible = true;
-                            FlightData.instance.transparent.Text = text;
-                        }
-                    }));
-
-                    takeOff.Label.Invoke(new MethodInvoker(delegate
-                    {
-                        if (MainV2.comPort.MAV.cs.landed)
-                            takeOff.Label.Text = "TAKEOFF";
-                        else
-                            takeOff.Label.Text = "CHANGE ALT";
-                    }));
-
-                        var homeLoc = MainV2.comPort.MAV.cs.HomeLocation;
-
-                    if (homeLoc.Lat != 0)
-                    {
-                        if (MainV2.comPort.MAV.cs.gpsstatus != 0 && MainV2.comPort.MAV.cs.gpsstatus != 1 && firstTime)
-                        {
-                            //System.Threading.Thread.Sleep(1000);
-                            FlightData.instance.gMapControl1.Invoke(new MethodInvoker(delegate
-                                {
-                                    FlightData.instance.gMapControl1.Position = MainV2.comPort.MAV.cs.HomeLocation;
-                                    FlightData.instance.gMapControl1.Zoom = 16;
-                                }));
-                            if (FlightPlanner.instance.IsHandleCreated)
-                            {
-                                FlightPlanner.instance.MainMap.Invoke(new MethodInvoker(delegate
-                                    {
-                                        FlightPlanner.instance.MainMap.Position = MainV2.comPort.MAV.cs.HomeLocation;
-                                        FlightPlanner.instance.MainMap.Zoom = 16;
-                                    }));
-                            }
-                            firstTime = false;
-                        }
-                    }
-                    System.Threading.Thread.Sleep(500);
-                    if (!MissionPlanner.GCSViews.FlightData.instance.IsHandleCreated)
-                        return;
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("Transparent Label error\n" + ex.Message);
-#endif
-                Thread thread = new Thread(new ThreadStart(RefreshTransparentLabel));
-                thread.Start();
-            }
-        }
-
-
 
         public static void SetTilesFlightPlanning(Panel p)
         {
@@ -400,7 +334,8 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTilesFlightData(Panel p)
         {
-            CurrentState.ArmedSet += Cs_ArmedSet;
+            CurrentState.ArmedStatusChanged += Cs_ArmedSet;
+            CurrentState.LandedChanged += CurrentState_LandedChanged;
 
             //------------------------------------------------------------Flight Mode tiles---------------------------------------------------------------//
             windSpeed = new TileData("WIND SPEED", ResolutionManager.WindSpeedLocation.Y, ResolutionManager.WindSpeedLocation.X, "m/s");
@@ -433,7 +368,7 @@ namespace MissionPlanner.GCSViews
                 new TileButton("LAND", 1, 8, LandEvent),
                  ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent),
             ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
-            exitButton = new TileButton("EXIT", 2, 0, ExitEvent),                //hack
+            exitButton = new TileButton("EXIT", 2, 0, ExitEvent),                
             takeOff = new TileButton("TAKEOFF", 4, 8, TakeOffEvent),
             });
             commonTiles = tilesFlightMode;      //bad hax
@@ -443,8 +378,6 @@ namespace MissionPlanner.GCSViews
             SetToView(tilesFlightMode, p);
             abortLandButton.Visible = false;
         }
-
- 
 
 
         #region EventsFlightPlanner
@@ -874,7 +807,7 @@ namespace MissionPlanner.GCSViews
 
         private static void ExitEvent(object sender, EventArgs args)
         {
-            if (!MainV2.comPort.MAV.cs.landed && MainV2.comPort.MAV.cs.Armed)       //Can't exit when armed and not landed
+            if (!MainV2.comPort.MAV.cs.Landed && MainV2.comPort.MAV.cs.Armed)       //Can't exit when armed and not landed
                 return;
             if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
@@ -1017,8 +950,6 @@ namespace MissionPlanner.GCSViews
         {
             var Commands = GetWP();
 
-            
-
             if (Commands.Any(c => (c.id == (byte)MAVLink.MAV_CMD.DO_CHANGE_SPEED && (c.p2 > fsMax || c.p2 < fsMin))))
                 return true;
 
@@ -1117,6 +1048,17 @@ namespace MissionPlanner.GCSViews
             {
                 CustomMessageBox.Show(ex.Message);
             }
+        }
+
+        private static void CurrentState_LandedChanged(object sender, EventArgs e)
+        {
+            takeOff.Label.BeginInvoke(new MethodInvoker(delegate
+            {
+                if (MainV2.comPort.MAV.cs.Landed)
+                    takeOff.Label.Text = "TAKEOFF";
+                else
+                    takeOff.Label.Text = "CHANGE ALT";
+            }));
         }
 
 

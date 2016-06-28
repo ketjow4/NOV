@@ -367,7 +367,7 @@ namespace MissionPlanner.GCSViews
             // first run
             MainV2_AdvancedChanged(null, null);
 
-            Tiles.SetCommonTiles();
+            Tiles.BindingsForTransparentLabel();
             Tiles.SetTilesFlightData(splitContainer1.Panel2);
             BindLabels();
             TRK_zoom.Width = Modification.ResolutionManager.FlightDataZoomTrackBarWidth;
@@ -3472,7 +3472,7 @@ namespace MissionPlanner.GCSViews
             try
             {
                 //Sanity check
-                if (MainV2.comPort.MAV.cs.Armed && !MainV2.comPort.MAV.cs.landed)
+                if (MainV2.comPort.MAV.cs.Armed && !MainV2.comPort.MAV.cs.Landed)
                 {
                     var result = CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo);
                     if (result == DialogResult.No)

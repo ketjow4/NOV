@@ -171,7 +171,7 @@ namespace MissionPlanner.GCSViews
                         };
 
             var intValidator = new NumericValidator<int>(0, 9999);
-            InputFlightPlanning<int> pinForm = new InputFlightPlanning<int>(intValidator, "ENTER PIN", false, "");
+            InputFlightPlanning<int> pinForm = new InputFlightPlanning<int>(intValidator, "ENTER PIN", false, "",'*');
             this.Hide();
             pinForm.ShowDialog();
             int result;
