@@ -412,8 +412,8 @@ namespace MissionPlanner
             // setup adsb
             Utilities.adsb.UpdatePlanePosition += adsb_UpdatePlanePosition;
 
-            Form splash = Program.Splash;
-
+			Splash splash = Program.Splash;
+			splash.VersionNumber = Application.ProductVersion;
             splash.Refresh();
 
             Application.DoEvents();

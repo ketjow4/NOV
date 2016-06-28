@@ -54,6 +54,7 @@ namespace MissionPlanner.Controls
 
 			flowLayoutPanel1.Controls.Add(buttonClose);
 			flowLayoutPanel1.Controls.Add(buttonCancel);
+			buttonClose.Visible = false;
 		}
 		
 		private void showErrorDetailsButton_Click(object sender, EventArgs e)
@@ -159,6 +160,8 @@ namespace MissionPlanner.Controls
 			if (doWorkArgs.CancelRequested && doWorkArgs.CancelAcknowledged)
 			{
 				//ShowDoneCancelled();
+				Content = "Cancelled.";
+				Thread.Sleep(500);
 				Running = false;
 				BeginInvoke((MethodInvoker)Close);
 				return;
