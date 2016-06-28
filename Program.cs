@@ -247,6 +247,8 @@ namespace MissionPlanner
             catch
             {
             }
+
+			log.Debug("Flight Manager version: " + Application.ProductVersion);
         }
 
         static void CleanupFiles()

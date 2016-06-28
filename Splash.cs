@@ -24,6 +24,14 @@ namespace MissionPlanner
             //    pictureBox1.Image = Program.Logo;
             //    pictureBox1.Visible = true;
             //}
-        }   
+        }
+
+		public string VersionNumber
+		{
+			set
+			{
+				Version.Text = "version: " + value;
+			}
+		}
     }
 }
