@@ -195,6 +195,7 @@
     <Compile Include="ProgressReporterDialogueOld.designer.cs">
       <DependentUpon>ProgressReporterDialogueOld.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressReporterDialogueTest.cs" />
     <Compile Include="ProgressReporterSphere.cs">
       <SubType>Form</SubType>
     </Compile>

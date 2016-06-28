@@ -41,8 +41,8 @@
 			this.errorPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.DetailsLabel = new System.Windows.Forms.Label();
 			this.progressPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.progressBar1 = new MissionPlanner.Controls.MyProgressBar();
+			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.TitlePanel.SuspendLayout();
 			this.tableLayoutContentPanel.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -181,6 +181,7 @@
 			// 
 			this.timer1.Enabled = true;
 			this.timer1.Interval = 200;
+			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// errorPanel
 			// 
@@ -227,20 +228,11 @@
 			this.progressPanel.Size = new System.Drawing.Size(331, 46);
 			this.progressPanel.TabIndex = 17;
 			// 
-			// flowLayoutPanel1
-			// 
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 338);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(331, 46);
-			this.flowLayoutPanel1.TabIndex = 18;
-			// 
 			// progressBar1
 			// 
 			this.progressBar1.BackColor = System.Drawing.Color.White;
-			this.progressBar1.BGGradBot = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(133)))), ((int)(((byte)(145)))));
-			this.progressBar1.BGGradTop = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(133)))), ((int)(((byte)(145)))));
+			this.progressBar1.BGGradBot = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+			this.progressBar1.BGGradTop = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
 			this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.progressBar1.Location = new System.Drawing.Point(2, 2);
 			this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
@@ -250,6 +242,15 @@
 			this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.progressBar1.TabIndex = 0;
 			this.progressBar1.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(54)))), ((int)(((byte)(8)))));
+			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 338);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(331, 46);
+			this.flowLayoutPanel1.TabIndex = 18;
 			// 
 			// ProgressReporterDialogue
 			// 
