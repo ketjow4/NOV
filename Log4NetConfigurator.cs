@@ -26,20 +26,32 @@ namespace MissionPlanner
 			FileInfo[] logFiles = logs_subdirectory.GetFiles();
 			int filesToday = logFiles.Where(f => f.Name.StartsWith(todayString)).ToList().Count;
 			string newFileName = todayString + "-Flight-Manager-Log-" + (filesToday + 1).ToString();
+			
+			string config_contents = string.Format(defaultConfigString, @"logs\FlightManager\" + newFileName + ".txt");
+			XmlDocument doc = new XmlDocument();
+			doc.LoadXml(config_contents);
+			XmlConfigurator.Configure(doc.DocumentElement);
 
-			FileInfo log4net_config = new FileInfo("log4net_config.xml");
-			if (log4net_config.Exists)
-			{
-				string config_contents = File.ReadAllText(log4net_config.ToString());
-				config_contents = string.Format(config_contents, @"logs\FlightManager\" + newFileName + ".txt");
-				XmlDocument doc = new XmlDocument();
-				doc.LoadXml(config_contents);
-				XmlConfigurator.Configure(doc.DocumentElement);
-			}
-			else
-			{
-				throw new Exception("Failed to configure log4net. Config not present.");
-			}
+			Console.SetOut(new ConsoleOverride());
 		}
+
+		private static string defaultConfigString = @"<log4net>
+    <appender name=""RollingFile"" type=""log4net.Appender.RollingFileAppender"">
+        <file value=""{0}"" />
+        <appendToFile value=""true"" />
+        <maximumFileSize value=""10MB"" />
+        <maxSizeRollBackups value=""2"" />
+
+        <layout type=""log4net.Layout.PatternLayout"">
+            <conversionPattern value=""%level %thread - %message (%file:%line)%newline"" />
+        </layout>
+    </appender>
+    
+    <root>
+        <level value=""DEBUG"" />
+        <appender-ref ref=""Console"" />
+        <appender-ref ref=""RollingFile"" />
+    </root>
+</log4net>";
 	}
 }

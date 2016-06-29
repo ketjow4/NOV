@@ -130,7 +130,7 @@ namespace MissionPlanner
             routesOverlay = new GMapOverlay("routes_grid");
             map.Overlays.Add(routesOverlay);
 
-            Tiles.calcGrid = this.domainUpDown1_ValueChanged;
+            TilesFlightPlanning.calcGrid = this.domainUpDown1_ValueChanged;
 
 
             plugin.Host.FPDrawnPolygon.Points.ForEach(x => { list.Add(x); });
