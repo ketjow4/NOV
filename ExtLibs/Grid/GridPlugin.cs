@@ -74,8 +74,7 @@ namespace MissionPlanner
             {
 				gridui = new GridUI(this);
 				GCSViews.FlightPlanner.instance.pathGenerationMode = true;
-				GCSViews.Tiles.PathAcceptButtonVisible = true;
-				GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;       
+				GCSViews.TilesFlightPlanning.pathAcceptedEvent += pathAcceptedEventHandler;       
             }
             else
             {
@@ -85,15 +84,14 @@ namespace MissionPlanner
 					GCSViews.FlightPlanner.instance.pathGenerationMode = true;
 					gridui.LoadGrid();
                     gridui.BUT_Accept_Click(sender, e);
-                    GCSViews.Tiles.PathAcceptButtonVisible = true;
-                    GCSViews.Tiles.pathAcceptedEvent += pathAcceptedEventHandler;
+                    GCSViews.TilesFlightPlanning.pathAcceptedEvent += pathAcceptedEventHandler;
                 }
                 else
                 {
 					GCSViews.FlightPlanner.instance.pathGenerationMode = false;
 					CustomMessageBox.Show("Please define a polygon.", "Error");
-                    GCSViews.Tiles.pathAcceptedEvent -= pathAcceptedEventHandler;
-                    GCSViews.Tiles.AcceptPathEvent(null, null);                         //change visibility of some buttons
+                    GCSViews.TilesFlightPlanning.pathAcceptedEvent -= pathAcceptedEventHandler;
+                    GCSViews.TilesFlightPlanning.AcceptPathEvent(null, null);                         //change visibility of some buttons
                 }
             }
         }
