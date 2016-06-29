@@ -48,8 +48,7 @@ namespace MissionPlanner
     </appender>
     
     <root>
-        <level value=""DEBUG"" />
-        <appender-ref ref=""Console"" />
+        <level value=""INFO"" />
         <appender-ref ref=""RollingFile"" />
     </root>
 </log4net>";

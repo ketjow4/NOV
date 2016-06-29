@@ -12,7 +12,6 @@
     
     <root>
         <level value="DEBUG" />
-        <appender-ref ref="Console" />
         <appender-ref ref="RollingFile" />
     </root>
 </log4net>
