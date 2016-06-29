@@ -6,7 +6,7 @@ using System.Reflection;
 using log4net;
 using System.Drawing;
 
-namespace MissionPlanner.Controls
+namespace MissionPlanner.Controls.Old
 {
     /// <summary>
     /// Form that is shown to the user during a background operation
@@ -291,7 +291,7 @@ namespace MissionPlanner.Controls
                           + Environment.NewLine + Environment.NewLine;
                           //+ this.workerException.StackTrace;
 
-            CustomMessageBox.Show(message,"Exception Details",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            //CustomMessageBox.Show(message,"Exception Details",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
         /// <summary>

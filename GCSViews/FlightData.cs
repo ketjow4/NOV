@@ -16,6 +16,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using ZedGraph; // Graphs
 using MissionPlanner.Controls;
+using MissionPlanner.Controls.Modification;
 using MissionPlanner.Utilities;
 //using Crom.Controls.Docking;
 using log4net;
@@ -172,17 +173,17 @@ namespace MissionPlanner.GCSViews
 
             InitializeComponent();
 
-            this.SubMainLeft.Size = GCSViews.Modification.ResolutionManager.HUDSize;
-            this.SubMainLeft.Location = GCSViews.Modification.ResolutionManager.HUDLocation;
-            this.windDir1.Location = GCSViews.Modification.ResolutionManager.WindDirLocation;
-            this.windDir1.WindDirSize = GCSViews.Modification.ResolutionManager.WindDirSize;
-            this.distanceBar1.Location = GCSViews.Modification.ResolutionManager.DistBarLocation;
-            this.distanceBar1.Size = GCSViews.Modification.ResolutionManager.DistBarSize;
+            this.SubMainLeft.Size = ResolutionManager.HUDSize;
+            this.SubMainLeft.Location = ResolutionManager.HUDLocation;
+            this.windDir1.Location = ResolutionManager.WindDirLocation;
+            this.windDir1.WindDirSize = ResolutionManager.WindDirSize;
+            this.distanceBar1.Location = ResolutionManager.DistBarLocation;
+            this.distanceBar1.Size = ResolutionManager.DistBarSize;
 
 
-            this.transparent.Size = GCSViews.Modification.ResolutionManager.TransparentLabelSize;
-            this.transparent.Location = GCSViews.Modification.ResolutionManager.TransparentLabelLocation;
-            this.transparent.Font = GCSViews.Modification.ResolutionManager.TransparentLabelFont;
+            this.transparent.Size = ResolutionManager.TransparentLabelSize;
+            this.transparent.Location = ResolutionManager.TransparentLabelLocation;
+            this.transparent.Font = ResolutionManager.TransparentLabelFont;
             this.transparent.TextAlign = ContentAlignment.MiddleCenter;
 
             this.BorderStyle = BorderStyle.None;
@@ -370,7 +371,7 @@ namespace MissionPlanner.GCSViews
             TilesFlightData.BindingsForTransparentLabel();
             TilesFlightData.SetTilesFlightData(splitContainer1.Panel2);
             BindLabels();
-            TRK_zoom.Width = Modification.ResolutionManager.FlightDataZoomTrackBarWidth;
+            TRK_zoom.Width = ResolutionManager.FlightDataZoomTrackBarWidth;
         }
 
 		private void GMapControl1_OnMapZoomChanged()
@@ -3355,7 +3356,7 @@ namespace MissionPlanner.GCSViews
 
 			var intValidator = new NumericValidator<int>(50, 500);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "GUIDED MODE ALTITUDE", false, alt);
-			inputWindow.WindowSize = GCSViews.Modification.ResolutionManager.InputPanelSize;
+			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 			if (inputWindow.ShowDialog() == DialogResult.OK)
 			{
 				alt = inputWindow.Result.ToString();

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using IronPython.Runtime.Operations;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews.Modification
 {

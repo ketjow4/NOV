@@ -9,6 +9,7 @@ using System.Threading;
 using Slider = MissionPlanner.GCSViews.ValueSlider.ValueSlider;
 
 using MissionPlanner.Mavlink;
+using MissionPlanner.Controls.Modification;
 using MissionPlanner.GCSViews.Modification; //classes for tiles
 using MissionPlanner.Utilities;
 using MissionPlanner.Validators;

@@ -72,6 +72,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ControlExt.cs" />
+    <Compile Include="ControlHelpers.cs" />
     <Compile Include="Coords.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -134,16 +135,22 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MainSwitcher.cs" />
-    <Compile Include="MessageBox\ButtonInfo.cs" />
-    <Compile Include="MessageBox\MessageBox.cs" />
-    <Compile Include="MessageBox\MessageBoxButton.cs">
+    <Compile Include="MsgBox\ButtonClickEventArgs.cs" />
+    <Compile Include="MsgBox\ButtonInfo.cs" />
+    <Compile Include="MsgBox\MessageBox.cs" />
+    <Compile Include="MsgBox\MessageBoxButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MessageBox\MessageBoxButton.Designer.cs">
+    <Compile Include="MsgBox\MessageBoxButton.Designer.cs">
       <DependentUpon>MessageBoxButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageBox\ButtonClickEventArgs.cs" />
-    <Compile Include="MessageBox\NovMessageBox.cs" />
+    <Compile Include="MsgBox\NovMessageBox.cs" />
+    <Compile Include="MsgBox\NovMessageBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MsgBox\NovMessageBoxForm.Designer.cs">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -165,18 +172,6 @@
     <Compile Include="MyUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MessageBox\NovMessageBoxForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MessageBox\NovMessageBoxForm.Designer.cs">
-      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProgressReporterDialogue.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProgressReporterDialogue.Designer.cs">
-      <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
-    </Compile>
     <Compile Include="OptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -188,6 +183,12 @@
     </Compile>
     <Compile Include="PictureBoxWithPseudoOpacity.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProgressReporterDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressReporterDialogue.Designer.cs">
+      <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
     </Compile>
     <Compile Include="ProgressReporterDialogueOld.cs">
       <SubType>Form</SubType>
@@ -230,6 +231,7 @@
     <Compile Include="RangeControl.Designer.cs">
       <DependentUpon>RangeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ResolutionManager.cs" />
     <Compile Include="Sphere.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -287,20 +289,20 @@
     <EmbeddedResource Include="ImageLabel.resx">
       <DependentUpon>ImageLabel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageBox\MessageBoxButton.resx">
+    <EmbeddedResource Include="MsgBox\MessageBoxButton.resx">
       <DependentUpon>MessageBoxButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MsgBox\NovMessageBoxForm.resx">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyProgressBar.resx">
       <DependentUpon>MyProgressBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageBox\NovMessageBoxForm.resx">
-      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
+    <EmbeddedResource Include="OptionForm.resx">
+      <DependentUpon>OptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressReporterDialogue.resx">
       <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="OptionForm.resx">
-      <DependentUpon>OptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressReporterDialogueOld.resx">
       <DependentUpon>ProgressReporterDialogueOld.cs</DependentUpon>

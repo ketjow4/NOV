@@ -1,17 +1,13 @@
 ﻿using MissionPlanner.Validators;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using MissionPlanner.Controls.Modification;
 using MissionPlanner.GCSViews.Modification;
 
 namespace MissionPlanner.GCSViews
 {
-    public partial class InputFlightPlanning<T> : Form where T: IConvertible, IComparable
+	public partial class InputFlightPlanning<T> : Form where T: IConvertible, IComparable
     {
 		IValidator<T> Validator; 
         private bool DotButtonEnabled { get; set; }

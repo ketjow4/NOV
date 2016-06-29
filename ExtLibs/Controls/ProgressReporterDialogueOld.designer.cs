@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace MissionPlanner.Controls
+namespace MissionPlanner.Controls.Old
 {
 	partial class ProgressReporterDialogueOld
 	{

@@ -1,15 +1,9 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Windows.Forms;
 using MissionPlanner.Controls;
-using System.Threading;
-using MissionPlanner.Controls.MessageBox;
 
 namespace System
 {
-    public static class CustomMessageBox
+	public static class CustomMessageBox
     {
         public static DialogResult Show(string text, string details = "")
         {

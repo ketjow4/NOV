@@ -27,6 +27,7 @@ using System.Web.Script.Serialization;
 using System.Speech.Synthesis;
 using MissionPlanner;
 using MissionPlanner.Joystick;
+using MissionPlanner.Controls.Modification;
 using System.Collections.ObjectModel;
 
 namespace MissionPlanner
@@ -388,10 +389,10 @@ namespace MissionPlanner
         {
             
             var Resolution = Screen.PrimaryScreen.Bounds;
-            GCSViews.Modification.ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
-            GCSViews.Modification.ResolutionManager.Initialize();
-			MissionPlanner.Controls.MessageBox.NovMessageBoxForm.setWidth(
-				GCSViews.Modification.ResolutionManager.InputPanelSize.Width);
+            ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
+            ResolutionManager.Initialize();
+			NovMessageBoxForm.setWidth(
+				ResolutionManager.InputPanelSize.Width);
 
 
             //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();

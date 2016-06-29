@@ -7,7 +7,7 @@ using MissionPlanner.Controls;
 using System.IO;
 using System.Collections.Generic;
 using BrightIdeasSoftware;
-using MissionPlanner.GCSViews.Modification;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.Utilities
 {

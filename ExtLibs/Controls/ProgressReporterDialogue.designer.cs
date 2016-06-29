@@ -1,4 +1,6 @@
-﻿namespace MissionPlanner.Controls
+﻿using MissionPlanner.Controls;
+
+namespace MissionPlanner.Controls
 {
 	partial class ProgressReporterDialogue
 	{
@@ -41,8 +43,8 @@
 			this.errorPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.DetailsLabel = new System.Windows.Forms.Label();
 			this.progressPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.progressBar1 = new MissionPlanner.Controls.MyProgressBar();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.progressBar1 = new MissionPlanner.Controls.MyProgressBar();
 			this.TitlePanel.SuspendLayout();
 			this.tableLayoutContentPanel.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
@@ -228,6 +230,15 @@
 			this.progressPanel.Size = new System.Drawing.Size(331, 46);
 			this.progressPanel.TabIndex = 17;
 			// 
+			// flowLayoutPanel1
+			// 
+			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 338);
+			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
+			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(331, 50);
+			this.flowLayoutPanel1.TabIndex = 18;
+			// 
 			// progressBar1
 			// 
 			this.progressBar1.BackColor = System.Drawing.Color.White;
@@ -242,15 +253,6 @@
 			this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
 			this.progressBar1.TabIndex = 0;
 			this.progressBar1.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(54)))), ((int)(((byte)(8)))));
-			// 
-			// flowLayoutPanel1
-			// 
-			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 338);
-			this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
-			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(331, 46);
-			this.flowLayoutPanel1.TabIndex = 18;
 			// 
 			// ProgressReporterDialogue
 			// 

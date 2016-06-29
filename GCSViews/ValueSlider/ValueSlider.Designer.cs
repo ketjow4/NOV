@@ -96,6 +96,7 @@
 			this.tableLayoutPanel2.Controls.Add(this.ButtonCancel, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 139);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -106,11 +107,11 @@
 			// 
 			this.InputValue.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.InputValue.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.InputValue.Font = new System.Drawing.Font("Century Gothic", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+			this.InputValue.Font = new System.Drawing.Font("Century Gothic", 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.InputValue.Location = new System.Drawing.Point(266, 2);
 			this.InputValue.Margin = new System.Windows.Forms.Padding(2);
 			this.InputValue.Name = "InputValue";
-			this.InputValue.Size = new System.Drawing.Size(132, 40);
+			this.InputValue.Size = new System.Drawing.Size(132, 39);
 			this.InputValue.TabIndex = 24;
 			this.InputValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.InputValue.TextChanged += new System.EventHandler(this.InputValue_TextChanged);
@@ -120,6 +121,7 @@
 			this.ButtonOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.ButtonOk.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ButtonOk.FlatAppearance.BorderSize = 0;
+			this.ButtonOk.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.ButtonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ButtonOk.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.ButtonOk.ForeColor = System.Drawing.Color.White;
@@ -137,6 +139,7 @@
 			this.ButtonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.ButtonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.ButtonCancel.FlatAppearance.BorderSize = 0;
+			this.ButtonCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.ButtonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.ButtonCancel.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.ButtonCancel.ForeColor = System.Drawing.Color.White;
@@ -234,6 +237,7 @@
 			this.buttonPlus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.buttonPlus1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.buttonPlus1.FlatAppearance.BorderSize = 0;
+			this.buttonPlus1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.buttonPlus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonPlus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.buttonPlus1.ForeColor = System.Drawing.Color.White;
@@ -251,6 +255,7 @@
 			this.buttonPlus10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.buttonPlus10.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.buttonPlus10.FlatAppearance.BorderSize = 0;
+			this.buttonPlus10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.buttonPlus10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonPlus10.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.buttonPlus10.ForeColor = System.Drawing.Color.White;
@@ -268,6 +273,7 @@
 			this.buttonMinus10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.buttonMinus10.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.buttonMinus10.FlatAppearance.BorderSize = 0;
+			this.buttonMinus10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.buttonMinus10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonMinus10.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.buttonMinus10.ForeColor = System.Drawing.Color.White;
@@ -285,6 +291,7 @@
 			this.buttonMinus1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(17)))), ((int)(((byte)(18)))));
 			this.buttonMinus1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.buttonMinus1.FlatAppearance.BorderSize = 0;
+			this.buttonMinus1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(85)))), ((int)(((byte)(86)))), ((int)(((byte)(88)))));
 			this.buttonMinus1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonMinus1.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
 			this.buttonMinus1.ForeColor = System.Drawing.Color.White;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Configuration;
+using MissionPlanner.Controls.Old;
 
 namespace MissionPlanner.Controls
 {

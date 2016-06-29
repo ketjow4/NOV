@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using MissionPlanner.Controls.MessageBox;
 using log4net;
 using System.Reflection;
 using System.Threading;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.Controls
 {
@@ -32,12 +28,14 @@ namespace MissionPlanner.Controls
 		private bool errorVisible = false;
 
 		private string text;
+		Color borderColor;
 
 		MessageBoxButton buttonClose, buttonCancel;
 
 		public ProgressReporterDialogue()
 		{
 			InitializeComponent();
+			borderColor = ResolutionManager.InputWindowElementBorderColor;
 			doWorkArgs = new ProgressWorkerEventArgs();
 			Text = text;
 
@@ -55,8 +53,34 @@ namespace MissionPlanner.Controls
 			flowLayoutPanel1.Controls.Add(buttonClose);
 			flowLayoutPanel1.Controls.Add(buttonCancel);
 			buttonClose.Visible = false;
+
+			List<Control> controls = new List<Control>() { Title, tableLayoutPanel2, showErrorDetailsButton, errorPanel, progressBar1 };
+			foreach (Control child in flowLayoutPanel1.Controls)
+			{
+				controls.Insert(0, child);
+			}
+			controls.ForEach(c => c.Paint += Control_Paint);
+			SetFonts();
 		}
-		
+
+		public void SetFonts()
+		{
+			Title.Font = new Font("Century Gothic", ResolutionManager.InputInfoFontSize, FontStyle.Regular);
+			showErrorDetailsButton.Font = new Font("Century Gothic", ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
+			ContentLabel.Font = DetailsLabel.Font
+				= new Font("Century Gothic", ResolutionManager.InputSmallTextFontSize , FontStyle.Regular);
+			IEnumerable<Control> buttons = ControlHelpers.GetAll(flowLayoutPanel1, typeof(Button));
+			List<Control> buttonsList = new List<Control>(buttons);
+			buttonsList.ForEach(b =>
+				b.Font = new Font("Century Gothic", ResolutionManager.InputButtonsFontSize, FontStyle.Regular));
+		}
+
+		private void Control_Paint(object sender, PaintEventArgs e)
+		{
+			Control ctl = sender as Control;
+			ControlPaint.DrawBorder(e.Graphics, ctl.ClientRectangle, borderColor, ButtonBorderStyle.Solid);
+		}
+
 		private void showErrorDetailsButton_Click(object sender, EventArgs e)
 		{
 			errorVisible = !errorVisible;
@@ -371,5 +395,12 @@ namespace MissionPlanner.Controls
 				text = value;
 			}
 		}
+	}
+
+	public class ProgressWorkerEventArgs : EventArgs
+	{
+		public string ErrorMessage;
+		public volatile bool CancelRequested;
+		public volatile bool CancelAcknowledged;
 	}
 }

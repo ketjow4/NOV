@@ -24,6 +24,7 @@ using System.Threading;
 using log4net;
 using MissionPlanner.Controls;
 using MissionPlanner.Controls.Waypoints;
+using MissionPlanner.Controls.Modification;
 using MissionPlanner.Maps;
 using MissionPlanner.Properties;
 using MissionPlanner.Utilities;
@@ -455,7 +456,7 @@ namespace MissionPlanner.GCSViews
             InitializeComponent();
 
             //Resolution manager changes
-            this.trackBar1.Width = Modification.ResolutionManager.FlightPlanningZoomTrackBarWidth;
+            this.trackBar1.Width = ResolutionManager.FlightPlanningZoomTrackBarWidth;
 
             // config map             
             MainMap.CacheLocation = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar +
@@ -6109,7 +6110,7 @@ namespace MissionPlanner.GCSViews
             {
 				var intValidator = new NumericValidator<int>(30, 500);
 				InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "Please enter your takeoff altitude", false, alt);
-				inputWindow.WindowSize = GCSViews.Modification.ResolutionManager.InputPanelSize;
+				inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 				if (inputWindow.ShowDialog() == DialogResult.OK)
 				{
 					alt = inputWindow.Result.ToString();

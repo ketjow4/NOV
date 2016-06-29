@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews
 {
@@ -23,11 +24,11 @@ namespace MissionPlanner.GCSViews
         public PlatformChoose()
         {
             InitializeComponent();
-            this.Size = new Size(Modification.ResolutionManager.InputPanelSize.Width,Modification.ResolutionManager.ValueLabelWidth);
+            this.Size = new Size(ResolutionManager.InputPanelSize.Width,ResolutionManager.ValueLabelWidth);
             foreach(var b in  Grid.Controls)
             {
                 if(b is Button)
-                    (b as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputInfoFontSize, FontStyle.Regular);
+                    (b as Button).Font = new Font("Century Gothic", ResolutionManager.InputInfoFontSize, FontStyle.Regular);
             }
         }
 

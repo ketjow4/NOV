@@ -314,7 +314,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                 return;
             MainV2.instance.changelanguage((CultureInfo) CMB_language.SelectedItem);
 
-            MessageBox.Show("Please Restart the Planner");
+			MessageBox.Show("Please Restart the Planner");
 
             MainV2.instance.Close();
             //Application.Exit();

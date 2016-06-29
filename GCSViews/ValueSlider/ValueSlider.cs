@@ -2,8 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using MissionPlanner.Validators;
-using MissionPlanner.Controls.MessageBox;
-using System.Windows.Threading;
+using System.Collections.Generic;
+using MissionPlanner.Controls;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews.ValueSlider
 {
@@ -15,7 +16,8 @@ namespace MissionPlanner.GCSViews.ValueSlider
 
 		public int Result { get; set; }
 		private bool isValid;
-		
+		Color borderColor = Color.FromArgb(100, Color.White);
+
 		public ValueSlider(IValidator<int> validator, string infoLabelText, string initialValue)
 		{
 			Validator = validator;
@@ -25,28 +27,30 @@ namespace MissionPlanner.GCSViews.ValueSlider
 			trackBar.MinValue = IntValidator.Min;
 			trackBar.MaxValue = IntValidator.Max;
 			SetFonts();
+
+			List<Control> controls = new List<Control>() { InfoLabel, trackBar, buttonMinus10, buttonMinus1,
+				buttonPlus1, buttonPlus10, ButtonCancel, ButtonOk };
+			controls.ForEach(c => c.Paint += Control_Paint);
 		}
-		
+
+		private void Control_Paint(object sender, PaintEventArgs e)
+		{
+			Control ctl = sender as Control;
+			ControlPaint.DrawBorder(e.Graphics, ctl.ClientRectangle, borderColor, ButtonBorderStyle.Solid);
+		}
+
 		public void SetFonts()
 		{
-			InputValue.Font = new Font("Century Gothic", Modification.ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);
-			InfoLabel.Font = InfoLabel.Font = new Font("Century Gothic", Modification.ResolutionManager.InputInfoFontSize, FontStyle.Regular);
+			InputValue.Font = new Font("Century Gothic", ResolutionManager.InputTextBoxFontSize, FontStyle.Regular);
+			InfoLabel.Font = InfoLabel.Font = new Font("Century Gothic", ResolutionManager.InputInfoFontSize, FontStyle.Regular);
 
-			TableLayoutPanel[] panels = new TableLayoutPanel[] {
-				tableLayoutPanel3,
-				tableLayoutPanel4
-			};
-
-			foreach(TableLayoutPanel panel in panels)
-			{
-				foreach (var element in panel.Controls)
-				{
-					if (element is Button)
-					{
-						(element as Button).Font = new Font("Century Gothic", Modification.ResolutionManager.InputButtonsFontSize, FontStyle.Regular);
-					}
-				}
-			}
+			IEnumerable<Control> buttons1 = ControlHelpers.GetAll(tableLayoutPanel3, typeof(Button));
+			IEnumerable<Control> buttons2 = ControlHelpers.GetAll(tableLayoutPanel4, typeof(Button));
+			List<Control> buttonsList1 = new List<Control>(buttons1);
+			List<Control> buttonsList2 = new List<Control>(buttons2);
+			buttonsList1.ForEach(b => buttonsList2.Add(b));
+			buttonsList2.ForEach(b =>
+				b.Font = new Font("Century Gothic", ResolutionManager.InputButtonsFontSize, FontStyle.Regular));
 		}
 
 		private void buttonMinus10_Click(object sender, EventArgs e)
@@ -97,8 +101,7 @@ namespace MissionPlanner.GCSViews.ValueSlider
 			}
 			else
 			{
-				NovMessageBox.Show(MessageBoxType.WARNING, MessageBoxButtons.OK, String.Format("Value should be between {0} and {1}", Min, Max), "Error", "Test details");
-				//CustomMessageBox.Show(String.Format("Value should be between {0} and {1}", Min, Max), "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				NovMessageBox.Show(MessageBoxType.WARNING, MessageBoxButtons.OK, String.Format("Value should be between {0} and {1}", Min, Max), "Error");
 			}	
 		}
 
