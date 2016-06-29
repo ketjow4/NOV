@@ -45,7 +45,14 @@ namespace MissionPlanner
             Thread = Thread.CurrentThread;
 
             System.Windows.Forms.Application.EnableVisualStyles();
-            XmlConfigurator.Configure();
+			try
+			{
+				Log4NetConfigurator.Configure();
+			}
+			catch(Exception e)
+			{
+				log.Info(e.Message);
+			}
             log.Info("******************* Logging Configured *******************");
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
