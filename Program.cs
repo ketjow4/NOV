@@ -54,7 +54,8 @@ namespace MissionPlanner
 				log.Info(e.Message);
 			}
             log.Info("******************* Logging Configured *******************");
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+			log.Info("Flight Manager version: " + Application.ProductVersion);
+			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
             ServicePointManager.DefaultConnectionLimit = 10;
 
@@ -254,8 +255,6 @@ namespace MissionPlanner
             catch
             {
             }
-
-			log.Debug("Flight Manager version: " + Application.ProductVersion);
         }
 
         static void CleanupFiles()
