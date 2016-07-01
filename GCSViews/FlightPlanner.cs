@@ -6110,7 +6110,6 @@ namespace MissionPlanner.GCSViews
             {
 				var intValidator = new NumericValidator<int>(30, 500);
 				InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "Please enter your takeoff altitude", false, alt);
-				inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 				if (inputWindow.ShowDialog() == DialogResult.OK)
 				{
 					alt = inputWindow.Result.ToString();

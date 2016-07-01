@@ -78,8 +78,7 @@ namespace MissionPlanner.GCSViews
             else if (val > altMax) val = altMax;
             AltitudeVal = val;
             FlightPlanner.instance.TXT_DefaultAlt.Text = val.ToString();
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         public static void ChangeAlt(object sender, ChangeValueEventArgs<int> e)
@@ -93,8 +92,7 @@ namespace MissionPlanner.GCSViews
             if (val < 0) val = 360;
             else if (val > 360) val = 0;
             AngleVal = val;
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         public static void ChangeAngle(object sender, ChangeValueEventArgs<int> e)
@@ -108,8 +106,7 @@ namespace MissionPlanner.GCSViews
             if (val < fsMinOgar) val = fsMinOgar;
             else if (val > fsMaxOgar) val = fsMaxOgar;
             FlyingSpeed = val;
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         public static void ChangeSpeed(object sender, ChangeValueEventArgs<int> e)
@@ -123,8 +120,7 @@ namespace MissionPlanner.GCSViews
             if (val > 100) val = 100;
             if (val < 0) val = 0;
             SideLap = val;
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         public static void ChangeSideLap(object sender, ChangeValueEventArgs<int> e)
@@ -138,8 +134,7 @@ namespace MissionPlanner.GCSViews
             if (val > 100) val = 100;
             if (val < 0) val = 0;
             OverLap = val;
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         public static void ChangeOverLap(object sender, ChangeValueEventArgs<int> e)
@@ -339,8 +334,7 @@ namespace MissionPlanner.GCSViews
                 (sender as Label).Text = "\u2612 FOOTPRINT";       //checked
                 showFootprint = !showFootprint;
             }
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
         }
 
         private static void CameraFacingForwardEvent(object sender, EventArgs e)
@@ -355,8 +349,7 @@ namespace MissionPlanner.GCSViews
                 (sender as Label).Text = "\u2612   CAM\nFORWARD";       //checked
                 cameraFacingForward = !cameraFacingForward;
             }
-            if (calcGrid != null)
-                calcGrid(null, null);
+            calcGrid?.Invoke(null, null);
 
         }
 
@@ -497,7 +490,6 @@ namespace MissionPlanner.GCSViews
             var intValidator = new NumericValidator<int>(0, 360);
             Slider slider = new Slider(intValidator, "ANGLE", AngleVal.ToString());
             slider.OnValidValueSet += ChangeAngle;
-            slider.WindowSize = ResolutionManager.InputPanelSize;
             if (slider.ShowDialog() == DialogResult.OK)
             {
                 ChangeAngle(slider.Result);
@@ -510,7 +502,6 @@ namespace MissionPlanner.GCSViews
             var intValidator = new NumericValidator<int>(altMin, altMax);
             InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "ALTITUDE", false, AltitudeVal.ToString());
             inputWindow.OnValidValueSet += ChangeAlt;
-            inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             if (inputWindow.ShowDialog() == DialogResult.OK)
             {
                 ChangeAlt(inputWindow.Result);
@@ -555,7 +546,6 @@ namespace MissionPlanner.GCSViews
                     return;
             }
             inputWindow.OnValidValueSet += ChangeSpeed;
-            inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             if (inputWindow.ShowDialog() == DialogResult.OK)
             {
                 ChangeSpeed(inputWindow.Result);
@@ -566,7 +556,6 @@ namespace MissionPlanner.GCSViews
         {
             var intValidator = new NumericValidator<int>(0, 99);
             InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "SIDELAP", false, SideLap.ToString());
-            inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             inputWindow.OnValidValueSet += ChangeSideLap;
             if (inputWindow.ShowDialog() == DialogResult.OK)
             {
@@ -578,7 +567,6 @@ namespace MissionPlanner.GCSViews
         {
             var intValidator = new NumericValidator<int>(0, 99);
             InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "OVERLAP", false, OverLap.ToString());
-            inputWindow.WindowSize = ResolutionManager.InputPanelSize;
             inputWindow.OnValidValueSet += ChangeOverLap;
             if (inputWindow.ShowDialog() == DialogResult.OK)
             {
