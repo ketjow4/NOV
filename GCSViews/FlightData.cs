@@ -3356,7 +3356,6 @@ namespace MissionPlanner.GCSViews
 
 			var intValidator = new NumericValidator<int>(50, 500);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "GUIDED MODE ALTITUDE", false, alt);
-			inputWindow.WindowSize = ResolutionManager.InputPanelSize;
 			if (inputWindow.ShowDialog() == DialogResult.OK)
 			{
 				alt = inputWindow.Result.ToString();
