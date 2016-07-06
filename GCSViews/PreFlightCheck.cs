@@ -11,6 +11,7 @@ using System.Threading;
 using MissionPlanner.Controls.Modification;
 using MissionPlanner.Controls;
 using MissionPlanner.Validators;
+using System.Runtime.InteropServices;
 
 namespace MissionPlanner.GCSViews
 {
@@ -141,7 +142,16 @@ namespace MissionPlanner.GCSViews
 
         private void ReadEmployeeData(string FilePath)
         {
-            string[] allLines = File.ReadAllLines(FilePath);
+            StreamReader sr = new StreamReader("Amplify.rex");
+            String sSecretKey = sr.ReadToEnd().Trim();
+
+            byte[] tempforhex = Decryption.FromHex(sSecretKey);
+            string keyinascii = Encoding.ASCII.GetString(tempforhex);
+
+            GCHandle gch = GCHandle.Alloc(keyinascii, GCHandleType.Pinned);
+
+            string[] allLines = Decryption.DecryptFile("data.rex", keyinascii);
+            allLines = allLines.Take(allLines.Length - 1).ToArray();
 
             var query = from line in allLines
                         let data = line.Split(',')
@@ -160,7 +170,15 @@ namespace MissionPlanner.GCSViews
 
         private void ReadyButton_Click(object sender, EventArgs e)
         {
-            string[] allLines = File.ReadAllLines("data.csv");
+            StreamReader sr = new StreamReader("Amplify.rex");
+            String sSecretKey = sr.ReadToEnd().Trim();
+
+            byte[] tempforhex = Decryption.FromHex(sSecretKey);
+            string keyinascii = Encoding.ASCII.GetString(tempforhex);
+
+            GCHandle gch = GCHandle.Alloc(keyinascii, GCHandleType.Pinned);
+            
+            string[] allLines = Decryption.DecryptFile("data.rex", keyinascii);
 
             var query = from line in allLines
                         let data = line.Split(',')
