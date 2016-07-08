@@ -30,6 +30,7 @@ using MissionPlanner.Joystick;
 using MissionPlanner.Controls.Modification;
 using System.Collections.ObjectModel;
 
+
 namespace MissionPlanner
 {
     public partial class MainV2 : Form
@@ -384,10 +385,36 @@ namespace MissionPlanner
                 MenuSimulation.Visible = true;
             }
         }
-		
+
+        private enum ProcessDPIAwareness
+        {
+            ProcessDPIUnaware = 0,
+            ProcessSystemDPIAware = 1,
+            ProcessPerMonitorDPIAware = 2
+        }
+
+        [DllImport("shcore.dll")]
+        private static extern int SetProcessDpiAwareness(ProcessDPIAwareness value);
+
+        private static void SetDpiAwareness()
+        {
+            try
+            {
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    SetProcessDpiAwareness(ProcessDPIAwareness.ProcessPerMonitorDPIAware);
+                }
+            }
+            catch (EntryPointNotFoundException)//this exception occures if OS does not implement this API, just ignore it.
+            {
+            }
+        }
+
         public MainV2()
         {
-            
+
+
+            SetDpiAwareness();
             var Resolution = Screen.PrimaryScreen.Bounds;
             ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
             ResolutionManager.Initialize();
