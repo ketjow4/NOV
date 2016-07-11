@@ -23,6 +23,10 @@ namespace MissionPlanner.GCSViews
         {
             InitializeComponent();
             tilesOnZoomLevel = tilesOnZoomLevel_;
+            downloadProgressBar.Value = 0;
+            downloadProgressBar.Minimum = 0;
+            downloadProgressBar.Maximum = 100;
+            downloadProgressBar.Step = 1;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -58,13 +62,90 @@ namespace MissionPlanner.GCSViews
         private void ChangeInfo()
         {
             int sum = 0;
-            for(int i = MinZoomTrackBar.Value; i <= MaxZoomTrackBar.Value; i++)
+
+            if (MaxZoomTrackBar.Value <= tilesOnZoomLevel.Count)
             {
-                sum += tilesOnZoomLevel[i-1];  //because zoom levels starts from 1 and list start index is 0
+                for (int i = MinZoomTrackBar.Value; i <= MaxZoomTrackBar.Value; i++)
+                {
+                    sum += tilesOnZoomLevel[i - 1];  //because zoom levels starts from 1 and list start index is 0
+                }
+                TilesCountLabel.Text = sum.ToString();
+                EstimatedSizeMBLabel.Text = (sum * sizeOfTile).ToString("#.0");
             }
-            TilesCountLabel.Text = sum.ToString();
-            EstimatedSizeMBLabel.Text = (sum * sizeOfTile).ToString("#.0");
+            else
+            {
+                TilesCountLabel.Text = "-";
+                EstimatedSizeMBLabel.Text = "-";
+            }
+
         }
+
+        delegate void SetTilesCountLabelTextCallback(string text);
+        delegate void SetEstimatedSizeMBLabelTextCallback(string text);
+
+        private void SetTilesCountLabelText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.TilesCountLabel.InvokeRequired)
+            {
+                SetTilesCountLabelTextCallback d = new SetTilesCountLabelTextCallback(SetTilesCountLabelText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.TilesCountLabel.Text = text;
+            }
+        }
+
+        private void SetEstimatedSizeMBLabelText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.EstimatedSizeMBLabel.InvokeRequired)
+            {
+                SetEstimatedSizeMBLabelTextCallback d = new SetEstimatedSizeMBLabelTextCallback(SetEstimatedSizeMBLabelText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.EstimatedSizeMBLabel.Text = text;
+            }
+        }
+
+        public void refreshInfo()
+        {
+            int sum = 0;
+
+            if (MaxZoomTrackBar.Value <= tilesOnZoomLevel.Count)
+            {
+                for (int i = MinZoomTrackBar.Value; i <= MaxZoomTrackBar.Value; i++)
+                {
+                    sum += tilesOnZoomLevel[i - 1];  //because zoom levels starts from 1 and list start index is 0
+                }
+
+                // TilesCountLabel.Text = sum.ToString();
+                // EstimatedSizeMBLabel.Text = sum.ToString();
+                SetTilesCountLabelText(sum.ToString());
+                SetEstimatedSizeMBLabelText((sum * sizeOfTile).ToString("#.0"));
+            }
+            else
+            {
+               // TilesCountLabel.Text = "-";
+               // EstimatedSizeMBLabel.Text = "-";
+                SetTilesCountLabelText("-");
+                SetEstimatedSizeMBLabelText("-");
+            }
+        }
+
+
+        public void updateBar()
+        {
+            downloadProgressBar.PerformStep();
+        }
+
 
 		public int MinZoom
 		{
@@ -81,5 +162,6 @@ namespace MissionPlanner.GCSViews
 				return MaxZoomTrackBar.Value;
 			}
 		}
+
     }
 }

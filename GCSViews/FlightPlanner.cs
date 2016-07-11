@@ -86,6 +86,7 @@ namespace MissionPlanner.GCSViews
 
         List<int> groupmarkers = new List<int>();
 
+
         public enum altmode
         {
             Relative = MAVLink.MAV_FRAME.GLOBAL_RELATIVE_ALT,
@@ -5836,12 +5837,41 @@ namespace MissionPlanner.GCSViews
 		private int MinZoom;
 		private int MaxZoom;
 		OfflineMapsInput input;
+        Thread downloadThread;
+        RectLatLng area;
+        List<int> tilesCount;
+
+        private void DownloadOnSmallZoomThread()
+        {
+            
+
+            for (int i = 16; i <= 20; i++)
+            {
+                var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                tilesCount.Add(list.Count);
+
+                MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)i / 20.0 * 100));
+                if (input.downloadProgressBar.InvokeRequired)
+                {
+                    input.downloadProgressBar.Invoke(mi);
+                }
+                else
+                {
+                    mi.Invoke();
+                }
+ 
+                input.refreshInfo();
+            }
+
+            NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
+
+        }
 
 		public void DownloadOfflineMap()
         {
             RestoreMainMapSettings();
 
-            RectLatLng area = MainMap.SelectedArea;
+            area = MainMap.SelectedArea;
 
             if (area.IsEmpty)
 			{
@@ -5850,40 +5880,95 @@ namespace MissionPlanner.GCSViews
 				return;
 			}
 
-
-            List<int> tilesCount = new List<int>();
-            for (int i = 1; i <= 20; i++)
+            if (MainMap.Zoom > 5)
             {
-                var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
-                tilesCount.Add(list.Count);
+                tilesCount = new List<int>();
+                for (int i = 1; i <= 15; i++)
+                {
+                    var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                    tilesCount.Add(list.Count);
+                }
+
+                if(MainMap.Zoom>15) //selected area is small
+                {
+                    for (int i=16;i<=20;i++)
+                    {
+                        var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                        tilesCount.Add(list.Count);
+                    }
+
+                    input = new OfflineMapsInput(tilesCount);
+                    input.OkClicked += Input_OkClicked;
+                    input.ShowDialog();
+
+                    if (input.canceled)
+                    {
+                        MainMap.SelectedArea = RectLatLng.Empty;
+                        TilesFlightPlanning.cancelOfflineMaps.Visible = false;
+                        return;
+                    }
+
+
+                }
+                else
+                {
+                    input = new OfflineMapsInput(tilesCount);
+                    input.OkClicked += Input_OkClicked;
+
+                    downloadThread = new Thread(DownloadOnSmallZoomThread);
+                    downloadThread.Name = "MapDownloadThread";
+                    downloadThread.Start();
+                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Downloading...", "INFO");
+
+                    input.ShowDialog();
+
+                    if (input.canceled)
+                    {
+                        MainMap.SelectedArea = RectLatLng.Empty;
+                        TilesFlightPlanning.cancelOfflineMaps.Visible = false;
+                        return;
+                    }
+
+                    // 
+
+
+
+                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Downloading...","INFO");
+
+                    //for (int i = 16; i <= 20; i++)
+                    //{
+                    //    var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                    //    tilesCount.Add(list.Count);
+                    //}
+
+                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
+
+                    downloadThread.Join();
+                }
+
+
+                for (int i = MinZoom; i <= MaxZoom; i++)
+                {
+                    TilePrefetcher obj = new TilePrefetcher();
+                    obj.ShowCompleteMessage = false;
+                    obj.Start(area, i, MainMap.MapProvider, 100, 0);
+
+                    if (obj.UserAborted)
+                        break;
+                }
+
             }
-
-            input = new OfflineMapsInput(tilesCount);
-			input.OkClicked += Input_OkClicked;
-            input.ShowDialog();
-
-            if(input.canceled)
+            else
             {
-                MainMap.SelectedArea = RectLatLng.Empty;
-                TilesFlightPlanning.cancelOfflineMaps.Visible = false;
-                return;
-            }
-
-            for (int i = MinZoom; i <= MaxZoom; i++)
-            {
-                TilePrefetcher obj = new TilePrefetcher();
-                obj.ShowCompleteMessage = false;
-                obj.Start(area, i, MainMap.MapProvider, 100, 0);
-
-                if (obj.UserAborted)
-                    break;
+                CustomMessageBox.Show("Please, use zoom greater than 5");
             }
 
 			TilesFlightPlanning.cancelOfflineMaps.Visible = false;
 			MainMap.SelectedArea = RectLatLng.Empty;
         }
 
-		private void Input_OkClicked(object sender, EventArgs e)
+
+        private void Input_OkClicked(object sender, EventArgs e)
 		{
 			MinZoom = input.MinZoom;
 			MaxZoom = input.MaxZoom;
