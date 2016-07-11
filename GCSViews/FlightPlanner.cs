@@ -5850,7 +5850,7 @@ namespace MissionPlanner.GCSViews
                 var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
                 tilesCount.Add(list.Count);
 
-                MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)i / 20.0 * 100));
+                MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)(i-16) / (20.0-16.0) * 100));
                 if (input.downloadProgressBar.InvokeRequired)
                 {
                     input.downloadProgressBar.Invoke(mi);

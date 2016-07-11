@@ -35,7 +35,10 @@ namespace MissionPlanner.GCSViews
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            downloadThread.Abort();
+            if (downloadThread != null)
+            {
+                downloadThread.Abort();
+            }
             canceled = true;
             this.Close();
         }
