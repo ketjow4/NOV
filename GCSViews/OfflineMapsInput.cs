@@ -5,19 +5,23 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MissionPlanner.GCSViews
 {
     public partial class OfflineMapsInput : Form
     {
-		//private int tilesCount;
-		//private double estimatedSizeMB;
-		public event EventHandler OkClicked;
+        //private int tilesCount;
+        //private double estimatedSizeMB;
+        public event EventHandler OkClicked;
         private readonly double sizeOfTile = 0.054255525;
 
         public bool canceled = false;
         public List<int> tilesOnZoomLevel;
+
+        private Thread downloadThread;
+
 
         public OfflineMapsInput(List<int> tilesOnZoomLevel_)
         {
@@ -31,16 +35,17 @@ namespace MissionPlanner.GCSViews
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
+            downloadThread.Abort();
             canceled = true;
             this.Close();
         }
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-			if(OkClicked != null)
-			{
-				OkClicked(null, null);
-			}
+            if (OkClicked != null)
+            {
+                OkClicked(null, null);
+            }
             this.Close();
         }
 
@@ -133,35 +138,34 @@ namespace MissionPlanner.GCSViews
             }
             else
             {
-               // TilesCountLabel.Text = "-";
-               // EstimatedSizeMBLabel.Text = "-";
+                // TilesCountLabel.Text = "-";
+                // EstimatedSizeMBLabel.Text = "-";
                 SetTilesCountLabelText("-");
                 SetEstimatedSizeMBLabelText("-");
             }
         }
 
-
-        public void updateBar()
+        public void setDownloadThread(Thread downloadThr)
         {
-            downloadProgressBar.PerformStep();
+            downloadThread = downloadThr;
         }
 
 
-		public int MinZoom
-		{
-			get
-			{
-				return MinZoomTrackBar.Value;
-			}
-		}
+        public int MinZoom
+        {
+            get
+            {
+                return MinZoomTrackBar.Value;
+            }
+        }
 
-		public int MaxZoom
-		{
-			get
-			{
-				return MaxZoomTrackBar.Value;
-			}
-		}
+        public int MaxZoom
+        {
+            get
+            {
+                return MaxZoomTrackBar.Value;
+            }
+        }
 
     }
 }

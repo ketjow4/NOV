@@ -5919,7 +5919,7 @@ namespace MissionPlanner.GCSViews
                     downloadThread.Name = "MapDownloadThread";
                     downloadThread.Start();
                     //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Downloading...", "INFO");
-
+                    input.setDownloadThread(downloadThread);
                     input.ShowDialog();
 
                     if (input.canceled)
