@@ -5849,8 +5849,10 @@ namespace MissionPlanner.GCSViews
             {
                 var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
                 tilesCount.Add(list.Count);
+                Thread.Sleep(500);
+                // input.downloadProgressBar.Value= (int)((double)(i - 16) / (20.0 - 16.0) * 100);
 
-                MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)(i-16) / (20.0-16.0) * 100));
+                MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)(i - 16) / (20.0 - 16.0) * 100));
                 if (input.downloadProgressBar.InvokeRequired)
                 {
                     input.downloadProgressBar.Invoke(mi);
@@ -5859,12 +5861,12 @@ namespace MissionPlanner.GCSViews
                 {
                     mi.Invoke();
                 }
- 
+
                 input.refreshInfo();
             }
 
             NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
-
+            
         }
 
 		public void DownloadOfflineMap()

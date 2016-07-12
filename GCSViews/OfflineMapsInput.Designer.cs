@@ -1,4 +1,7 @@
-﻿namespace MissionPlanner.GCSViews
+﻿using System.Drawing;
+using System.Windows.Media;
+
+namespace MissionPlanner.GCSViews
 {
     partial class OfflineMapsInput
     {
@@ -56,22 +59,21 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.downloadProgressBar, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.OkButton, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.OkButton, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.CancelButton, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.MinZoomTrackBar, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.MaxZoomTrackBar, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.downloadProgressBar, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.76484F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 28.14572F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.42721F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.66223F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(500, 310);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -84,10 +86,10 @@
             this.OkButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.OkButton.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.OkButton.ForeColor = System.Drawing.Color.White;
-            this.OkButton.Location = new System.Drawing.Point(2, 263);
+            this.OkButton.Location = new System.Drawing.Point(252, 265);
             this.OkButton.Margin = new System.Windows.Forms.Padding(2);
             this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(246, 45);
+            this.OkButton.Size = new System.Drawing.Size(246, 43);
             this.OkButton.TabIndex = 11;
             this.OkButton.Text = "OK";
             this.OkButton.UseVisualStyleBackColor = false;
@@ -101,10 +103,10 @@
             this.CancelButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.CancelButton.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.CancelButton.ForeColor = System.Drawing.Color.White;
-            this.CancelButton.Location = new System.Drawing.Point(252, 263);
+            this.CancelButton.Location = new System.Drawing.Point(2, 265);
             this.CancelButton.Margin = new System.Windows.Forms.Padding(2);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(246, 45);
+            this.CancelButton.Size = new System.Drawing.Size(246, 43);
             this.CancelButton.TabIndex = 10;
             this.CancelButton.Text = "CANCEL";
             this.CancelButton.UseVisualStyleBackColor = false;
@@ -134,12 +136,12 @@
             this.MinZoomTrackBar.LabelFont = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.MinZoomTrackBar.LabelPadding = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.MinZoomTrackBar.LabelShow = true;
-            this.MinZoomTrackBar.Location = new System.Drawing.Point(2, 79);
+            this.MinZoomTrackBar.Location = new System.Drawing.Point(2, 76);
             this.MinZoomTrackBar.Margin = new System.Windows.Forms.Padding(2);
             this.MinZoomTrackBar.MaxValue = 20;
             this.MinZoomTrackBar.MinValue = 1;
             this.MinZoomTrackBar.Name = "MinZoomTrackBar";
-            this.MinZoomTrackBar.Size = new System.Drawing.Size(496, 74);
+            this.MinZoomTrackBar.Size = new System.Drawing.Size(496, 71);
             this.MinZoomTrackBar.SliderShape = gTrackBar.gTrackBar.eShape.Rectangle;
             this.MinZoomTrackBar.SliderSize = new System.Drawing.Size(15, 30);
             this.MinZoomTrackBar.SliderWidthHigh = 1F;
@@ -191,7 +193,7 @@
             this.MaxZoomTrackBar.MaxValue = 20;
             this.MaxZoomTrackBar.MinValue = 1;
             this.MaxZoomTrackBar.Name = "MaxZoomTrackBar";
-            this.MaxZoomTrackBar.Size = new System.Drawing.Size(496, 73);
+            this.MaxZoomTrackBar.Size = new System.Drawing.Size(496, 70);
             this.MaxZoomTrackBar.SliderShape = gTrackBar.gTrackBar.eShape.Rectangle;
             this.MaxZoomTrackBar.SliderSize = new System.Drawing.Size(15, 30);
             this.MaxZoomTrackBar.SliderWidthHigh = 1F;
@@ -228,14 +230,14 @@
             this.tableLayoutPanel2.Controls.Add(this.TilesCountLabel, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.button1, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 188);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 192);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(494, 70);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 68F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 68F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 68F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(494, 68);
             this.tableLayoutPanel2.TabIndex = 12;
             // 
             // EstimatedSizeMBLabel
@@ -251,7 +253,7 @@
             this.EstimatedSizeMBLabel.Location = new System.Drawing.Point(392, 2);
             this.EstimatedSizeMBLabel.Margin = new System.Windows.Forms.Padding(2);
             this.EstimatedSizeMBLabel.Name = "EstimatedSizeMBLabel";
-            this.EstimatedSizeMBLabel.Size = new System.Drawing.Size(100, 66);
+            this.EstimatedSizeMBLabel.Size = new System.Drawing.Size(100, 64);
             this.EstimatedSizeMBLabel.TabIndex = 15;
             this.EstimatedSizeMBLabel.Text = "0";
             this.EstimatedSizeMBLabel.UseVisualStyleBackColor = false;
@@ -269,7 +271,7 @@
             this.button3.Location = new System.Drawing.Point(248, 2);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(140, 66);
+            this.button3.Size = new System.Drawing.Size(140, 64);
             this.button3.TabIndex = 14;
             this.button3.Text = "ESTIMATED SIZE (MB)";
             this.button3.UseVisualStyleBackColor = false;
@@ -287,7 +289,7 @@
             this.TilesCountLabel.Location = new System.Drawing.Point(146, 2);
             this.TilesCountLabel.Margin = new System.Windows.Forms.Padding(2);
             this.TilesCountLabel.Name = "TilesCountLabel";
-            this.TilesCountLabel.Size = new System.Drawing.Size(98, 66);
+            this.TilesCountLabel.Size = new System.Drawing.Size(98, 64);
             this.TilesCountLabel.TabIndex = 13;
             this.TilesCountLabel.Text = "0";
             this.TilesCountLabel.UseVisualStyleBackColor = false;
@@ -305,7 +307,7 @@
             this.button1.Location = new System.Drawing.Point(2, 2);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(140, 66);
+            this.button1.Size = new System.Drawing.Size(140, 64);
             this.button1.TabIndex = 12;
             this.button1.Text = "TILES COUNT";
             this.button1.UseVisualStyleBackColor = false;
@@ -313,10 +315,12 @@
             // downloadProgressBar
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.downloadProgressBar, 2);
-            this.downloadProgressBar.Location = new System.Drawing.Point(3, 158);
+            this.downloadProgressBar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
+            this.downloadProgressBar.Location = new System.Drawing.Point(3, 152);
             this.downloadProgressBar.Name = "downloadProgressBar";
-            this.downloadProgressBar.Size = new System.Drawing.Size(494, 22);
-            this.downloadProgressBar.TabIndex = 14;
+            this.downloadProgressBar.Size = new System.Drawing.Size(494, 34);
+            this.downloadProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.downloadProgressBar.TabIndex = 13;
             // 
             // OfflineMapsInput
             // 

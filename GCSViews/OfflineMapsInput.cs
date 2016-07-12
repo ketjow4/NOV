@@ -30,7 +30,6 @@ namespace MissionPlanner.GCSViews
             downloadProgressBar.Value = 0;
             downloadProgressBar.Minimum = 0;
             downloadProgressBar.Maximum = 100;
-            downloadProgressBar.Step = 1;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
