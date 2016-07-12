@@ -5840,6 +5840,7 @@ namespace MissionPlanner.GCSViews
         Thread downloadThread;
         RectLatLng area;
         List<int> tilesCount;
+        List<GPoint>[] list;
 
         private void DownloadOnSmallZoomThread()
         {
@@ -5847,8 +5848,8 @@ namespace MissionPlanner.GCSViews
 
             for (int i = 16; i <= 20; i++)
             {
-                var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
-                tilesCount.Add(list.Count);
+                list[i] = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                tilesCount.Add(list[i].Count);
                 Thread.Sleep(500);
                 // input.downloadProgressBar.Value= (int)((double)(i - 16) / (20.0 - 16.0) * 100);
 
@@ -5873,6 +5874,8 @@ namespace MissionPlanner.GCSViews
         {
             RestoreMainMapSettings();
 
+            list = new List<GPoint>[21];
+
             area = MainMap.SelectedArea;
 
             if (area.IsEmpty)
@@ -5882,21 +5885,21 @@ namespace MissionPlanner.GCSViews
 				return;
 			}
 
-            if (MainMap.Zoom > 5)
+            if (MainMap.Zoom > 10)
             {
                 tilesCount = new List<int>();
                 for (int i = 1; i <= 15; i++)
                 {
-                    var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
-                    tilesCount.Add(list.Count);
+                    list[i] = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                    tilesCount.Add(list[i].Count);
                 }
 
                 if(MainMap.Zoom>15) //selected area is small
                 {
                     for (int i=16;i<=20;i++)
                     {
-                        var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
-                        tilesCount.Add(list.Count);
+                        list[i] = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
+                        tilesCount.Add(list[i].Count);
                     }
 
                     input = new OfflineMapsInput(tilesCount);
@@ -5953,6 +5956,9 @@ namespace MissionPlanner.GCSViews
                 {
                     TilePrefetcher obj = new TilePrefetcher();
                     obj.ShowCompleteMessage = false;
+
+                    obj.setList(list[i]);
+
                     obj.Start(area, i, MainMap.MapProvider, 100, 0);
 
                     if (obj.UserAborted)
@@ -5962,7 +5968,7 @@ namespace MissionPlanner.GCSViews
             }
             else
             {
-                CustomMessageBox.Show("Please, use zoom greater than 5");
+                CustomMessageBox.Show("Please, use zoom greater than 10");
             }
 
 			TilesFlightPlanning.cancelOfflineMaps.Visible = false;
