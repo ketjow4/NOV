@@ -167,7 +167,7 @@ namespace MissionPlanner.GCSViews
             hidelist2.AddRange(startFromButtons.ToArray());
 
             obsHeadBtn.ClickMethod(null, null);
-
+            
             sideLap = new TileData("SIDELAP", 8, 8, "%", SidelapSettingEvent);
             overLap = new TileData("OVERLAP", 7, 8, "%", OverlapSettingEvent);
             flyingSpeed = new TileData("FLYING SPEED", 1, 4, "m/s", FlyingSettingEvent);
@@ -175,7 +175,7 @@ namespace MissionPlanner.GCSViews
             Footprint = new TileButton("\u2610 FOOTPRINT", 4, 8, FootprintEvent);
             Camforward = new TileButton("\u2610   CAM\nFORWARD", 5, 8, CameraFacingForwardEvent);
             angleInfo = new TileData("ANGLE", 6, 8, "deg", AngleSettingEvent);
-
+            
 
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {

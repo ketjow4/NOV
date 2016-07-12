@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace MissionPlanner.Controls.Modification
 {
@@ -38,6 +39,8 @@ namespace MissionPlanner.Controls.Modification
         public static float BottomOfScreenRow;
 
         public static float TileButtonFontSize;
+
+        public static float sizefactor = 1;
 
         #region TileInfoValues
 
@@ -88,9 +91,15 @@ namespace MissionPlanner.Controls.Modification
         private static int ScreenWidth;
         private static int ScreenHeight;
 
-        public static void Initialize()                     //TODO check if there should be any other things to change
+
+        public static void Initialize(int dpivalue)                     //TODO check if there should be any other things to change
         {
             BottomOfScreenRow = 13.1f;
+            
+            if (dpivalue == 120) sizefactor = 0.8f;
+            if (dpivalue == 144) sizefactor = 0.66f;
+            if (dpivalue == 192) sizefactor = 0.5f;
+            if (dpivalue == 240) sizefactor = 0.41f;
 
             if (CurrentRes == Resolutions.r1600x900)
             {
@@ -104,24 +113,24 @@ namespace MissionPlanner.Controls.Modification
 
 				MagicWidth = 150;
                 
-                TransparentLabelFont = new Font("Century Gothic", 40);
+                TransparentLabelFont = new Font("Century Gothic", 40 * sizefactor);
 
-                TileButtonFontSize = 13f;
+                TileButtonFontSize = 13f * sizefactor;
 
-                InputInfoFontSize = 23.25f;
-                InputTextBoxFontSize = 27.0f;
-                InputButtonsFontSize = 18.75f;
-                InputSmallTextFontSize = 10.00f;
+                InputInfoFontSize = 23.25f * sizefactor;
+                InputTextBoxFontSize = 27.0f * sizefactor;
+                InputButtonsFontSize = 18.75f * sizefactor;
+                InputSmallTextFontSize = 10.00f * sizefactor;
 
 				FlightDataZoomTrackBarWidth = 52;
                 FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
-                HeadLabelFontSize = 12f;
+                HeadLabelFontSize = 12f * sizefactor;
                 HeadLabelTop = 7;
                 HeadLabelLeft = 4;
                 HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
 
-                UnitLabelFontSize = 13f;
+                UnitLabelFontSize = 13f * sizefactor;
                 UnitLabelLeft = TileWidth - 2 * MarginSize - 95; //165 - 100
                 UnitLabelTop = TileHeight - 23 - 8;
 
@@ -129,11 +138,11 @@ namespace MissionPlanner.Controls.Modification
                 ValueLabelHeight = 30;
                 ValueLabelTop = TileHeight - 30 - 8;
                 ValueLabelWidth = 110;
-                ValueLabelFontSize = 20f;
+                ValueLabelFontSize = 20f * sizefactor;
                 PreFlightCheckSize = new Size(500, 600);
-                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
-                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
-                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+                PreFlightCheckFontButton = TileButtonFontSize * sizefactor; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize * sizefactor;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize * sizefactor;//21.75f;
             }
             else if (CurrentRes == Resolutions.r1366x768)
             {
@@ -150,14 +159,14 @@ namespace MissionPlanner.Controls.Modification
 
 				MagicWidth = 120;
 
-                TransparentLabelFont = new Font("Century Gothic", 36);
+                TransparentLabelFont = new Font("Century Gothic", 36 * sizefactor);
 
-                TileButtonFontSize = 11f;
+                TileButtonFontSize = 11f * sizefactor;
 
-                InputInfoFontSize = 20.25f;
-                InputTextBoxFontSize = 24.0f;
-                InputButtonsFontSize = 15.75f;
-				InputSmallTextFontSize = 9.00f;
+                InputInfoFontSize = 20.25f * sizefactor;
+                InputTextBoxFontSize = 24.0f * sizefactor;
+                InputButtonsFontSize = 15.75f * sizefactor;
+				InputSmallTextFontSize = 9.00f * sizefactor;
 
 				if (ScreenWidth == 1360)
                 {
@@ -170,12 +179,12 @@ namespace MissionPlanner.Controls.Modification
                     FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
                 }
 
-                HeadLabelFontSize = 8f;
+                HeadLabelFontSize = 8f * sizefactor;
                 HeadLabelTop = 7;
                 HeadLabelLeft = 4;
                 HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
 
-                UnitLabelFontSize = 10f;
+                UnitLabelFontSize = 10f * sizefactor;
                 UnitLabelLeft = TileWidth - 2 * MarginSize - 100; //165 - 100
                 UnitLabelTop = TileHeight - 23 - 8;
 
@@ -183,15 +192,16 @@ namespace MissionPlanner.Controls.Modification
                 ValueLabelHeight = 20;
                 ValueLabelTop = TileHeight - 20 - 8;
                 ValueLabelWidth = 90;
-                ValueLabelFontSize = 15f;
+                ValueLabelFontSize = 15f * sizefactor;
 
                 PreFlightCheckSize = new Size(500, 515);
-                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
-                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
-                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+                PreFlightCheckFontButton = TileButtonFontSize * sizefactor; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize * sizefactor;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize * sizefactor;//21.75f;
             }
             else if(CurrentRes == Resolutions.r1920x1080)
             {
+
                 HUDSize = new Size(480, 360);
                 TileWidth = 205;
                 TileHeight = 75;
@@ -202,25 +212,24 @@ namespace MissionPlanner.Controls.Modification
 
 				MagicWidth = 190;
 
-                TransparentLabelFont = new Font("Century Gothic", 48);
+                TransparentLabelFont = new Font("Century Gothic", 48 * sizefactor);
 
                 FlightDataZoomTrackBarWidth = 48;
                 FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
-                TileButtonFontSize = 17f;
+                TileButtonFontSize = 17f * sizefactor;
 
-                InputInfoFontSize = 32.25f;
-                InputTextBoxFontSize = 42.0f;
-                InputButtonsFontSize = 26.75f;
-				InputSmallTextFontSize = 14.00f;
+                InputInfoFontSize = 32.25f * sizefactor;
+                InputTextBoxFontSize = 42.0f * sizefactor;
+                InputButtonsFontSize = 26.75f * sizefactor;
+				InputSmallTextFontSize = 14.00f * sizefactor;
 
-
-				HeadLabelFontSize = 14f;
+				HeadLabelFontSize = 14f * sizefactor;
                 HeadLabelTop = 7;
                 HeadLabelLeft = 4;
                 HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
 
-                UnitLabelFontSize = 15f;
+                UnitLabelFontSize = 15f * sizefactor;
                 UnitLabelLeft = TileWidth - 2 * MarginSize - 100; //165 - 100
                 UnitLabelTop = TileHeight - 23 - 8;
 
@@ -228,12 +237,12 @@ namespace MissionPlanner.Controls.Modification
                 ValueLabelHeight = 35;
                 ValueLabelTop = TileHeight - 35 - 8;
                 ValueLabelWidth = 135;
-                ValueLabelFontSize = 22f;
+                ValueLabelFontSize = 22f * sizefactor;
 
                 PreFlightCheckSize = new Size(550, 630);
-                PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
-                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
-                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+                PreFlightCheckFontButton = (TileButtonFontSize - 0.5f) * sizefactor; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize * sizefactor;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize * sizefactor;//21.75f;
             }
             else if(CurrentRes == Resolutions.r1920x1200)
             {
@@ -248,24 +257,24 @@ namespace MissionPlanner.Controls.Modification
 
 				MagicWidth = 190;
 
-                TransparentLabelFont = new Font("Century Gothic", 48);
+                TransparentLabelFont = new Font("Century Gothic", 48 * sizefactor);
 
-                TileButtonFontSize = 18f;
+                TileButtonFontSize = 18f * sizefactor;
 
                 FlightDataZoomTrackBarWidth = 48;
                 FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
-                InputInfoFontSize = 32.25f;
-                InputTextBoxFontSize = 42.0f;
-                InputButtonsFontSize = 26.75f;
-				InputSmallTextFontSize = 14.00f;
+                InputInfoFontSize = 32.25f * sizefactor;
+                InputTextBoxFontSize = 42.0f * sizefactor;
+                InputButtonsFontSize = 26.75f * sizefactor;
+				InputSmallTextFontSize = 14.00f * sizefactor;
 
-				HeadLabelFontSize = 15f;
+				HeadLabelFontSize = 15f * sizefactor;
                 HeadLabelTop = 7;
                 HeadLabelLeft = 4;
                 HeadLabelWidth = TileWidth - 2 * MarginSize;    //165
 
-                UnitLabelFontSize = 16f;
+                UnitLabelFontSize = 16f * sizefactor;
                 UnitLabelLeft = TileWidth - 2 * MarginSize - 100; //165 - 100
                 UnitLabelTop = TileHeight - 27 - 8;
 
@@ -273,12 +282,13 @@ namespace MissionPlanner.Controls.Modification
                 ValueLabelHeight = 39;
                 ValueLabelTop = TileHeight - 39 - 8;
                 ValueLabelWidth = 130;
-                ValueLabelFontSize = 24f;
+                ValueLabelFontSize = 24f * sizefactor;
 
                 PreFlightCheckSize = new Size(550, 630);
-                PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
-                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
-                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+                PreFlightCheckFontButton = (TileButtonFontSize - 0.5f) * sizefactor; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize * sizefactor;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize * sizefactor;//21.75f;
+
             }
             else //(CurrentRes == Resolutions.r1280x800)
             {
@@ -292,24 +302,24 @@ namespace MissionPlanner.Controls.Modification
 
 				MagicWidth = 120;
 
-                TransparentLabelFont = new Font("Century Gothic", 36);
+                TransparentLabelFont = new Font("Century Gothic", 36 * sizefactor);
 
-                InputInfoFontSize = 20.25f;
-                InputTextBoxFontSize = 24.0f;
-                InputButtonsFontSize = 15.75f;
-				InputSmallTextFontSize = 8.00f;
+                InputInfoFontSize = 20.25f * sizefactor;
+                InputTextBoxFontSize = 24.0f * sizefactor;
+                InputButtonsFontSize = 15.75f * sizefactor;
+				InputSmallTextFontSize = 8.00f * sizefactor;
 
-				TileButtonFontSize = 11f;
+				TileButtonFontSize = 11f * sizefactor;
 
                 FlightDataZoomTrackBarWidth = 48;
                 FlightPlanningZoomTrackBarWidth = FlightDataZoomTrackBarWidth + 8;
 
-                HeadLabelFontSize = 8f;
+                HeadLabelFontSize = 8f * sizefactor;
                 HeadLabelTop = 7;
                 HeadLabelLeft = 2;
                 HeadLabelWidth = TileWidth - 2 * MarginSize;  //130
 
-                UnitLabelFontSize = 10f;
+                UnitLabelFontSize = 10f * sizefactor;
                 UnitLabelLeft = TileWidth - 2 * MarginSize - 100;   //130 - 100
                 UnitLabelTop = TileHeight - 23 - 8;
 
@@ -317,12 +327,12 @@ namespace MissionPlanner.Controls.Modification
                 ValueLabelHeight = 20;
                 ValueLabelTop = TileHeight - 20 - 8;
                 ValueLabelWidth = 80;
-                ValueLabelFontSize = 15f;
+                ValueLabelFontSize = 15f * sizefactor;
 
                 PreFlightCheckSize = new Size(415, 515);
-                PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
-                PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
-                PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+                PreFlightCheckFontButton = TileButtonFontSize * sizefactor; // 11.25f;
+                PreFlightCheckFontCheckBox = ValueLabelFontSize * sizefactor;//15.0f;
+                PreFlightCheckFontWarning = InputInfoFontSize * sizefactor;//21.75f;
             }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);

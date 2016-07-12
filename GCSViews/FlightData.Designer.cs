@@ -1852,7 +1852,7 @@ namespace MissionPlanner.GCSViews
             this.TRK_zoom.ValueBox = gTrackBar.gTrackBar.eValueBox.Right;
             this.TRK_zoom.ValueBoxBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
             this.TRK_zoom.ValueBoxBorder = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(23)))), ((int)(((byte)(24)))));
-            this.TRK_zoom.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            //this.TRK_zoom.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.TRK_zoom.ValueBoxFontColor = System.Drawing.Color.White;
             this.TRK_zoom.ValueBoxSize = new System.Drawing.Size(40, 40);
             this.TRK_zoom.ValueDivisor = gTrackBar.gTrackBar.eValueDivisor.e1;

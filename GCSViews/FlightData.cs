@@ -172,7 +172,9 @@ namespace MissionPlanner.GCSViews
             log.Info("Ctor Start");
 
             InitializeComponent();
-
+            
+            this.TRK_zoom.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F * ResolutionManager.sizefactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            
             this.SubMainLeft.Size = ResolutionManager.HUDSize;
             this.SubMainLeft.Location = ResolutionManager.HUDLocation;
             this.windDir1.Location = ResolutionManager.WindDirLocation;

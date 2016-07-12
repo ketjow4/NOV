@@ -119,6 +119,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="alglibnet2">
       <HintPath>ExtLibs\alglibnet2.dll</HintPath>
@@ -1625,6 +1628,9 @@
     </None>
     <None Include="airports.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Drivers\amd64\ftd2xx.lib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -3165,7 +3171,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="mykey.snk" />
-    <None Include="Properties\app.manifest" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\CurrentState.datasource" />
     <None Include="block_plane_0.dae">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
