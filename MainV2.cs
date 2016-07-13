@@ -410,7 +410,6 @@ namespace MissionPlanner
 
             int Xdpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSX);
             
-
             var Resolution = Screen.PrimaryScreen.Bounds;
             ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
             ResolutionManager.Initialize(Xdpi);

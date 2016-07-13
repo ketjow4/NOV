@@ -117,7 +117,7 @@ namespace MissionPlanner.Controls.Modification
 
                 TileButtonFontSize = 13f * sizefactor;
 
-                InputInfoFontSize = 23.25f * sizefactor;
+                InputInfoFontSize = 25.25f * sizefactor;
                 InputTextBoxFontSize = 27.0f * sizefactor;
                 InputButtonsFontSize = 18.75f * sizefactor;
                 InputSmallTextFontSize = 10.00f * sizefactor;
@@ -219,9 +219,9 @@ namespace MissionPlanner.Controls.Modification
 
                 TileButtonFontSize = 17f * sizefactor;
 
-                InputInfoFontSize = 32.25f * sizefactor;
+                InputInfoFontSize = 25.6f * sizefactor;
                 InputTextBoxFontSize = 42.0f * sizefactor;
-                InputButtonsFontSize = 26.75f * sizefactor;
+                InputButtonsFontSize = 20f * sizefactor;
 				InputSmallTextFontSize = 14.00f * sizefactor;
 
 				HeadLabelFontSize = 14f * sizefactor;
@@ -304,7 +304,7 @@ namespace MissionPlanner.Controls.Modification
 
                 TransparentLabelFont = new Font("Century Gothic", 36 * sizefactor);
 
-                InputInfoFontSize = 20.25f * sizefactor;
+                InputInfoFontSize = 22.25f * sizefactor;
                 InputTextBoxFontSize = 24.0f * sizefactor;
                 InputButtonsFontSize = 15.75f * sizefactor;
 				InputSmallTextFontSize = 8.00f * sizefactor;
