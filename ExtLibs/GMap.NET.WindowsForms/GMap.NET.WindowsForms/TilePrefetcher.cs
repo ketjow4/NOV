@@ -338,14 +338,9 @@ namespace GMap.NET
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            try
-            {
-                ConfirmUserAbort();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+
+            ConfirmUserAbort();
+
         }
 
         private void ConfirmUserAbort()

@@ -5925,7 +5925,6 @@ namespace MissionPlanner.GCSViews
                     downloadThread = new Thread(DownloadOnSmallZoomThread);
                     downloadThread.Name = "MapDownloadThread";
                     downloadThread.Start();
-                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Downloading...", "INFO");
                     input.setDownloadThread(downloadThread);
                     input.ShowDialog();
 
@@ -5935,20 +5934,6 @@ namespace MissionPlanner.GCSViews
                         TilesFlightPlanning.cancelOfflineMaps.Visible = false;
                         return;
                     }
-
-                    // 
-
-
-
-                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Downloading...","INFO");
-
-                    //for (int i = 16; i <= 20; i++)
-                    //{
-                    //    var list = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
-                    //    tilesCount.Add(list.Count);
-                    //}
-
-                    //NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
 
                     downloadThread.Join();
                 }

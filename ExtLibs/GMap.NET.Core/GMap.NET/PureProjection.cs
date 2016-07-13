@@ -215,20 +215,20 @@ namespace GMap.NET
          List<GPoint> ret = new List<GPoint>();
 
          GPoint topLeft = FromPixelToTileXY(FromLatLngToPixel(rect.LocationTopLeft, zoom));
-         GPoint rightBottom = FromPixelToTileXY(FromLatLngToPixel(rect.LocationRightBottom, zoom));
+         GPoint rightBottom = FromPixelToTileXY(FromLatLngToPixel(rect.LocationRightBottom, zoom));  
 
-            //long xFrom = topLeft.X - padding;
-            //long xTo = rightBottom.X + padding;
-
-            //long yFrom = topLeft.Y - padding;
-            //long yTo = rightBottom.Y + padding;
-
-         for (long x = topLeft.X - padding; x <= rightBottom.X + padding; x++)
+         for (long x = (topLeft.X - padding); x <= (rightBottom.X + padding); x++)
          {
-            for(long y = topLeft.Y; y <= rightBottom.Y; y++)
+            for(long y = (topLeft.Y - padding); y <= (rightBottom.Y + padding); y++)
             {
                GPoint p = new GPoint(x, y);
-               if(!ret.Contains(p) && p.X >= 0 && p.Y >= 0)
+
+                    if (ret.Contains(p))
+                    {
+                        int i = 8;
+                    }
+
+                    if (!ret.Contains(p) && p.X >= 0 && p.Y >= 0)
                {
                   ret.Add(p);
                }
