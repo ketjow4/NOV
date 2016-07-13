@@ -31,6 +31,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\..\extLibs\log4net.dll</HintPath>
@@ -341,6 +350,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconWarning32.png" />
+    <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconWarning48.png" />

@@ -85,6 +85,7 @@
             // 
             // progressBarDownload
             // 
+            this.progressBarDownload.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBarDownload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(206)))), ((int)(((byte)(252)))));
             this.progressBarDownload.Location = new System.Drawing.Point(3, 23);
             this.progressBarDownload.Name = "progressBarDownload";

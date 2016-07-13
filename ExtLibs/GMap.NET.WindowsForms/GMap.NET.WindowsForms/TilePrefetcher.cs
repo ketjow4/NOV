@@ -296,7 +296,7 @@ namespace GMap.NET
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             this.label1.Text = "Fetching tile at zoom (" + zoom + "): " + ((int)e.UserState).ToString() + " of " + all + ", complete: " + e.ProgressPercentage.ToString() + "%";
-             this.progressBarDownload.Value = e.ProgressPercentage;
+            this.progressBarDownload.Value = e.ProgressPercentage;
 
             if (Overlay != null)
             {
@@ -341,7 +341,8 @@ namespace GMap.NET
             try
             {
                 ConfirmUserAbort();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -349,13 +350,13 @@ namespace GMap.NET
 
         private void ConfirmUserAbort()
         {
-            NovMessageBox.ShowDialog(MessageBoxType.INFO,MessageBoxButtons.YesNo, "Are you sure you want to abort the pre-fetch process?", "Confirm Abort");
 
-            // if (MessageBox.Show("Are you sure you want to abort the pre-fetch process?", "Confirm Abort", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
-            // {
-            UserAborted = true;
-            this.Close();
-            //  }
+
+            if (NovMessageBox.ShowDialog(MessageBoxType.INFO, MessageBoxButtons.YesNo, "Are you sure you want to abort the pre-fetch process?", "Confirm Abort") == System.Windows.Forms.DialogResult.Yes)
+            {
+                UserAborted = true;
+                this.Close();
+            }
         }
     }
 
