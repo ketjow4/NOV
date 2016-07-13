@@ -89,6 +89,7 @@
             this.progressBarDownload.Location = new System.Drawing.Point(3, 23);
             this.progressBarDownload.Name = "progressBarDownload";
             this.progressBarDownload.Size = new System.Drawing.Size(376, 42);
+            this.progressBarDownload.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBarDownload.TabIndex = 3;
             // 
             // panel1

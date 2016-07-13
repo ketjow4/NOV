@@ -11,9 +11,9 @@ namespace GMap.NET
     using GMap.NET.WindowsForms;
     using GMap.NET.WindowsForms.Markers;
     using System.Drawing;
-    /// <summary>
-    /// form helping to prefetch tiles on local db
-    /// </summary>
+    using MissionPlanner.Controls;    /// <summary>
+                                      /// form helping to prefetch tiles on local db
+                                      /// </summary>
     public partial class TilePrefetcher : Form
     {
         BackgroundWorker worker = new BackgroundWorker();
@@ -296,7 +296,7 @@ namespace GMap.NET
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             this.label1.Text = "Fetching tile at zoom (" + zoom + "): " + ((int)e.UserState).ToString() + " of " + all + ", complete: " + e.ProgressPercentage.ToString() + "%";
-            // this.progressBarDownload.Value = e.ProgressPercentage;
+             this.progressBarDownload.Value = e.ProgressPercentage;
 
             if (Overlay != null)
             {
@@ -338,17 +338,24 @@ namespace GMap.NET
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            ConfirmUserAbort();
+            try
+            {
+                ConfirmUserAbort();
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void ConfirmUserAbort()
         {
-           // CustomMessageBox.Show()
-            if (MessageBox.Show("Are you sure you want to abort the pre-fetch process?", "Confirm Abort", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
-            {
-                UserAborted = true;
-                this.Close();
-            }
+            NovMessageBox.ShowDialog(MessageBoxType.INFO,MessageBoxButtons.YesNo, "Are you sure you want to abort the pre-fetch process?", "Confirm Abort");
+
+            // if (MessageBox.Show("Are you sure you want to abort the pre-fetch process?", "Confirm Abort", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+            // {
+            UserAborted = true;
+            this.Close();
+            //  }
         }
     }
 

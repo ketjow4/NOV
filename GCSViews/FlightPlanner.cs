@@ -5866,7 +5866,7 @@ namespace MissionPlanner.GCSViews
                 input.refreshInfo();
             }
 
-            NovMessageBox.Show(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
+         //   NovMessageBox.ShowDialog(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
             
         }
 
@@ -5902,7 +5902,9 @@ namespace MissionPlanner.GCSViews
                         tilesCount.Add(list[i].Count);
                     }
 
+                   
                     input = new OfflineMapsInput(tilesCount);
+                    input.downloadProgressBar.Value = 100;
                     input.OkClicked += Input_OkClicked;
                     input.ShowDialog();
 
