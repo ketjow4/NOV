@@ -5851,7 +5851,6 @@ namespace MissionPlanner.GCSViews
                 list[i] = MainMap.MapProvider.Projection.GetAreaTileList(area, i, 0);  //can be slow on 20 when area is big
                 tilesCount.Add(list[i].Count);
                 Thread.Sleep(500);
-                // input.downloadProgressBar.Value= (int)((double)(i - 16) / (20.0 - 16.0) * 100);
 
                 MethodInvoker mi = new MethodInvoker(() => input.downloadProgressBar.Value = (int)((double)(i - 16) / (20.0 - 16.0) * 100));
                 if (input.downloadProgressBar.InvokeRequired)
@@ -5865,8 +5864,6 @@ namespace MissionPlanner.GCSViews
 
                 input.refreshInfo();
             }
-
-         //   NovMessageBox.ShowDialog(MessageBoxType.INFO, MessageBoxButtons.OK, "Download complete!", "INFO");
             
         }
 
