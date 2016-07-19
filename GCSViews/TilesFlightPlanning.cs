@@ -48,6 +48,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton pathGenerationButton = null;
         private static TileButton Footprint = null;
         private static TileButton Camforward = null;
+        private static TileButton Circle = null;
 
         private static string polygonmodestring = "POLYGON\nMODE";
         public static EventHandler calcGrid = null;
@@ -203,6 +204,7 @@ namespace MissionPlanner.GCSViews
                 writeWaypoints = new TileButton("UPLOAD TO PLATFORM", 1, 6, SaveWPPlatformEvent),
                 altInfo,
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
+                Circle = new TileButton("CIRCLE",0,7,CircleClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
@@ -598,6 +600,26 @@ namespace MissionPlanner.GCSViews
                 ChangeOverLap(inputWindow.Result);
             }
         }
+
+       public static bool circleSet { get; set; }
+
+        private static void CircleClicked(object sender, EventArgs args)
+        {
+            if (!circleSet)
+            {
+                Circle.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                circleSet = true;
+            }
+           else
+            {
+                Circle.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                circleSet = false;
+            }
+
+
+
+        }
+
         #endregion
 
         private static List<TileButton> CreateCameraButtons()
