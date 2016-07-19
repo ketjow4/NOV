@@ -411,10 +411,10 @@ namespace MissionPlanner.GCSViews
             {
                 
 
-                int circleRadius = 3000; //in centimetres
+                int circleRadius = 30; //in meters
                 int circleRepeats = 1;
                 var intValidator = new NumericValidator<int>(0, 1000); //in meters
-                InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "CIRCLE RADIUS", false, (circleRadius / 100).ToString());
+                InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "CIRCLE RADIUS", false, (circleRadius).ToString());
                 // inputWindow.OnValidValueSet += ChangeAlt;
                 if (inputWindow.ShowDialog() == DialogResult.OK)
                 {
