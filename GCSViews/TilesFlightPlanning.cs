@@ -49,6 +49,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton Footprint = null;
         private static TileButton Camforward = null;
         private static TileButton Circle = null;
+        private static TileButton PointPhoto = null;
 
         private static string polygonmodestring = "POLYGON\nMODE";
         public static EventHandler calcGrid = null;
@@ -205,6 +206,7 @@ namespace MissionPlanner.GCSViews
                 altInfo,
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
                 Circle = new TileButton("CIRCLE",0,7,CircleClicked),
+                PointPhoto = new TileButton("PHOTO",1,7,PointPhotoClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
@@ -618,6 +620,22 @@ namespace MissionPlanner.GCSViews
 
 
 
+        }
+
+        public static bool pointPhotoSet { get; set; }
+
+        private static void PointPhotoClicked(object sender, EventArgs args)
+        {
+            if (!pointPhotoSet)
+            {
+                PointPhoto.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                pointPhotoSet = true;
+            }
+            else
+            {
+                PointPhoto.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                pointPhotoSet = false;
+            }
         }
 
         #endregion

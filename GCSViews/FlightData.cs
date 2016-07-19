@@ -3354,7 +3354,7 @@ namespace MissionPlanner.GCSViews
 			//if (DialogResult.Cancel == InputBox.Show("Enter Alt", "Enter Guided Mode Alt", ref alt))
 			//    return;
 
-			var intValidator = new NumericValidator<int>(50, 500);
+			var intValidator = new NumericValidator<int>(Tiles.altMin, Tiles.altMax);
 			InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "GUIDED MODE ALTITUDE", false, alt);
 			if (inputWindow.ShowDialog() == DialogResult.OK)
 			{

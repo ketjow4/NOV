@@ -409,8 +409,6 @@ namespace MissionPlanner.GCSViews
             }
             else if (TilesFlightPlanning.circleSet)
             {
-                
-
                 int circleRadius = 30; //in meters
                 int circleRepeats = 1;
                 var intValidator = new NumericValidator<int>(0, 1000); //in meters
@@ -444,9 +442,42 @@ namespace MissionPlanner.GCSViews
                 {
                     Commands.Rows.RemoveAt(selectedrow);
                 }
-                
-               
+            }
+            else if (TilesFlightPlanning.pointPhotoSet)
+            {
+                int fotoAltitude = 10;
 
+                var intValidator = new NumericValidator<int>(5, 100); //in meters
+                InputFlightPlanning<int> inputWindow = new InputFlightPlanning<int>(intValidator, "FOTO ALTITUDE", false, fotoAltitude.ToString());
+                // inputWindow.OnValidValueSet += ChangeAlt;
+                if (inputWindow.ShowDialog() == DialogResult.OK)
+                {
+                    fotoAltitude = inputWindow.Result;
+
+                    Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
+                    ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
+                    setfromMap(lat, lng, alt);
+
+                    selectedrow = Commands.Rows.Add();
+                    Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
+                    ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
+                    setfromMap(lat, lng, fotoAltitude);
+                    Commands.Rows[selectedrow].Cells[1].Value = 5; //delay time
+
+                    selectedrow = Commands.Rows.Add();
+                    Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString();
+                    ChangeColumnHeader(MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString());
+
+                    selectedrow = Commands.Rows.Add();
+                    Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
+                    ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
+                    setfromMap(lat, lng, alt);
+                }
+                else
+                {
+                    Commands.Rows.RemoveAt(selectedrow);
+                }
+                   
             }
             else
             {
@@ -455,7 +486,7 @@ namespace MissionPlanner.GCSViews
                 setfromMap(lat, lng, alt);
             }
 
-        //    setfromMap(lat, lng, alt);
+            //    setfromMap(lat, lng, alt);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
