@@ -86,6 +86,7 @@ namespace MissionPlanner.GCSViews
 
         List<int> groupmarkers = new List<int>();
 
+        List<int> photoWaypoints = new List<int>();
 
         public enum altmode
         {
@@ -152,6 +153,20 @@ namespace MissionPlanner.GCSViews
                 MainV2.comPort.MAV.cs.TrackerLocation = new PointLatLngAlt(lat, lng, alt, "");
                 return;
             }
+
+            if(photoWaypoints.Contains(int.Parse(pointno)-1))
+            {
+                
+                for (int i=0;i<5;i++)
+                {
+                    selectedrow = int.Parse(pointno) - 1;
+                    selectedrow -= i;
+                    if(i!=2)
+                    setfromMap(lat, lng, alt);
+                }
+                return;
+            }
+
 
             try
             {
@@ -471,7 +486,16 @@ namespace MissionPlanner.GCSViews
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
+                    setfromMap(lat, lng, fotoAltitude);
+                    Commands.Rows[selectedrow].Cells[1].Value = 5; //delay time
+
+                    selectedrow = Commands.Rows.Add();
+                    Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
+                    ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
                     setfromMap(lat, lng, alt);
+
+
+                    photoWaypoints.Add(selectedrow);
                 }
                 else
                 {
