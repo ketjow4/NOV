@@ -482,6 +482,8 @@ namespace MissionPlanner.GCSViews
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString());
+                    Commands.Rows[selectedrow].Cells[1].Value = 1;
+                    Commands.Rows[selectedrow].Cells[Lat.Index].Value = 1;
 
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();

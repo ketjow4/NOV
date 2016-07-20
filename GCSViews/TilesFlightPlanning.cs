@@ -205,8 +205,8 @@ namespace MissionPlanner.GCSViews
                 writeWaypoints = new TileButton("UPLOAD TO PLATFORM", 1, 6, SaveWPPlatformEvent),
                 altInfo,
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
-                Circle = new TileButton("CIRCLE",0,7,CircleClicked),
-                PointPhoto = new TileButton("PHOTO",1,7,PointPhotoClicked),
+                Circle = new TileButton("\u2610 CIRCLE",4,8,CircleClicked),
+                PointPhoto = new TileButton("\u2610 PHOTO",5,8,PointPhotoClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
@@ -232,6 +232,10 @@ namespace MissionPlanner.GCSViews
 
             tilesFlightPlanning.Where(tile => hidelist2.Contains(tile) && tile is TileButton)
                                .ForEach(tile => (tile as TileButton).Visible = false);
+
+
+            Circle.Visible = false;
+           PointPhoto.Visible = false;
 
 
             IsVisible(false);
@@ -467,11 +471,18 @@ namespace MissionPlanner.GCSViews
             {
                 s.Text = "WAYPOINT\nMODE";
                 FlightPlanner.instance.PolygonGridMode = false;
+
+                Circle.Visible = true;
+                PointPhoto.Visible = true;
+
             }
             else
             {
                 s.Text = polygonmodestring;
                 FlightPlanner.instance.PolygonGridMode = true;
+
+                Circle.Visible = false;
+                PointPhoto.Visible = false;
             }
         }
 
@@ -603,18 +614,23 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-       public static bool circleSet { get; set; }
+       public static bool circleSet { get; set; } = false;
 
         private static void CircleClicked(object sender, EventArgs args)
         {
             if (!circleSet)
             {
-                Circle.ChangeButtonColor(Color.FromArgb(86, 87, 89));
-                circleSet = true;
+                if (!pointPhotoSet)
+                {
+                    //Circle.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                    (sender as Label).Text = "\u2612 CIRCLE";       //checked
+                    circleSet = true;
+                }  
             }
            else
             {
-                Circle.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+               // Circle.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                (sender as Label).Text = "\u2610 CIRCLE";       //unchecked
                 circleSet = false;
             }
 
@@ -622,18 +638,23 @@ namespace MissionPlanner.GCSViews
 
         }
 
-        public static bool pointPhotoSet { get; set; }
+        public static bool pointPhotoSet { get; set; } = false;
 
         private static void PointPhotoClicked(object sender, EventArgs args)
         {
             if (!pointPhotoSet)
             {
-                PointPhoto.ChangeButtonColor(Color.FromArgb(86, 87, 89));
-                pointPhotoSet = true;
+                if(!circleSet)
+                {
+                    // PointPhoto.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                    (sender as Label).Text = "\u2612 PHOTO";       //checked
+                    pointPhotoSet = true;
+                } 
             }
             else
             {
-                PointPhoto.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                //PointPhoto.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                (sender as Label).Text = "\u2610 PHOTO";       //unchecked
                 pointPhotoSet = false;
             }
         }
