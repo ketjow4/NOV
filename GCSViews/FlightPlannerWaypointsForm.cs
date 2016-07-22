@@ -42,7 +42,7 @@ namespace MissionPlanner.GCSViews
             panelBASE.ResumeLayout();
             wp.ResumeLayout();
             wp.Icon = MissionPlanner.Properties.Resources.LOGO;
-            wp.Text = "Waypointy";
+            wp.Text = "Waypoints";
             wp.ShowDialog();
         }
 

@@ -164,6 +164,7 @@ namespace MissionPlanner.GCSViews
                     if(i!=2)
                     setfromMap(lat, lng, alt);
                 }
+                calculateWaypointDistance();
                 return;
             }
 
@@ -181,6 +182,7 @@ namespace MissionPlanner.GCSViews
             }
 
             setfromMap(lat, lng, alt);
+            calculateWaypointDistance();
         }
 
         /// <summary>
@@ -468,33 +470,39 @@ namespace MissionPlanner.GCSViews
                 if (inputWindow.ShowDialog() == DialogResult.OK)
                 {
                     fotoAltitude = inputWindow.Result;
+                    Color wpBackColor = Color.FromArgb(0, 120, 60);
 
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
                     setfromMap(lat, lng, alt);
+                    Commands.Rows[selectedrow].DefaultCellStyle.BackColor = wpBackColor;
 
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
                     setfromMap(lat, lng, fotoAltitude);
                     Commands.Rows[selectedrow].Cells[1].Value = 5; //delay time
+                    Commands.Rows[selectedrow].DefaultCellStyle.BackColor = wpBackColor;
 
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.DO_DIGICAM_CONTROL.ToString());
                     Commands.Rows[selectedrow].Cells[1].Value = 1;
                     Commands.Rows[selectedrow].Cells[Lat.Index].Value = 1;
+                    Commands.Rows[selectedrow].DefaultCellStyle.BackColor = wpBackColor;
 
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
                     setfromMap(lat, lng, fotoAltitude);
                     Commands.Rows[selectedrow].Cells[1].Value = 5; //delay time
+                    Commands.Rows[selectedrow].DefaultCellStyle.BackColor = wpBackColor;
 
                     selectedrow = Commands.Rows.Add();
                     Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.WAYPOINT.ToString();
                     ChangeColumnHeader(MAVLink.MAV_CMD.WAYPOINT.ToString());
                     setfromMap(lat, lng, alt);
+                    Commands.Rows[selectedrow].DefaultCellStyle.BackColor = wpBackColor;
 
 
                     photoWaypoints.Add(selectedrow);
@@ -513,6 +521,7 @@ namespace MissionPlanner.GCSViews
             }
 
             //    setfromMap(lat, lng, alt);
+            calculateWaypointDistance();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -1095,6 +1104,9 @@ namespace MissionPlanner.GCSViews
             {
             }
             // Commands.EndEdit();
+
+            calculateWaypointDistance();
+
         }
 
         private void Commands_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
@@ -1120,6 +1132,12 @@ namespace MissionPlanner.GCSViews
                     }
                 }
             }
+
+        }
+
+        private void Commands_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            calculateWaypointDistance();
         }
 
         /// <summary>
@@ -6357,6 +6375,14 @@ namespace MissionPlanner.GCSViews
 
             ChangeColumnHeader(MAVLink.MAV_CMD.TAKEOFF.ToString());
 
+            selectedrow = Commands.Rows.Add();
+
+            Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.DO_CHANGE_SPEED.ToString();
+
+            Commands.Rows[selectedrow].Cells[Param1.Index].Value = TilesFlightPlanning.FlyingSpeed;
+
+            ChangeColumnHeader(MAVLink.MAV_CMD.DO_CHANGE_SPEED.ToString());
+
             writeKML();
         }
 
@@ -7500,6 +7526,43 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 quickadd = false;
                 writeKML();
             }
+        }
+
+        public void addSpeedWaypoint(int speedValue)
+        {
+            int selectedrow = Commands.Rows.Add();
+
+            Commands.Rows[selectedrow].Cells[Command.Index].Value = MAVLink.MAV_CMD.DO_CHANGE_SPEED.ToString();
+
+            Commands.Rows[selectedrow].Cells[Param1.Index].Value = TilesFlightPlanning.FlyingSpeed;
+
+            ChangeColumnHeader(MAVLink.MAV_CMD.DO_CHANGE_SPEED.ToString());
+        }
+
+        public void calculateWaypointDistance()
+        {
+            double distance = 0;
+            for (int i = 0; i<Commands.Rows.Count;i++)
+            {
+                if(Commands.Rows[i].Cells[Command.Index].Value.ToString()==MAVLink.MAV_CMD.LOITER_TURNS.ToString())
+                {
+                    distance += double.Parse(Commands.Rows[i].Cells[Dist.Index].Value.ToString());
+                    distance += double.Parse(Commands.Rows[i].Cells[Param3.Index].Value.ToString()) * 2.0 * Math.PI * double.Parse(Commands.Rows[i].Cells[Param1.Index].Value.ToString());
+                }
+                else
+                {
+                    distance += double.Parse(Commands.Rows[i].Cells[Dist.Index].Value.ToString());
+                }
+            
+            }
+            TilesFlightPlanning.UpdateEstimatedDistance(distance / 1000.0);
+            calculateEstimatedTime(distance, TilesFlightPlanning.FlyingSpeed);
+        }
+
+        private void calculateEstimatedTime(double distance,int speed)
+        {
+            int time = (int)(distance/ speed); //in seconds
+            TilesFlightPlanning.UpdateEstimatedTime(time);
         }
     }
 }
