@@ -479,6 +479,7 @@
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
+    <Compile Include="GCSViews\GpsLocator.cs" />
     <Compile Include="GCSViews\InputFlightPlanning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -499,6 +500,7 @@
     <Compile Include="GCSViews\PlatformChoose.Designer.cs">
       <DependentUpon>PlatformChoose.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\PortFoundEventArgs.cs" />
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>

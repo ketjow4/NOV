@@ -104,7 +104,7 @@ namespace MissionPlanner.GCSViews.Modification
                 label.MouseLeave += LeaveHover;
             }
             panel.Dock = DockStyle.Fill;
-            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM"};    //ugly!!
+            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM","DISTANCE TO HOME","DISTANCE TO BASE"};    //ugly!!
         }
         public EventHandler ClickMethod;
 

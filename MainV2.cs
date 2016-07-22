@@ -29,7 +29,7 @@ using MissionPlanner;
 using MissionPlanner.Joystick;
 using MissionPlanner.Controls.Modification;
 using System.Collections.ObjectModel;
-
+using MissionPlanner.GCSViews;
 
 namespace MissionPlanner
 {
@@ -402,6 +402,10 @@ namespace MissionPlanner
 
             // Other constants may be founded on pinvoke.net
         }
+        GCSViews.GpsLocator locator = new GCSViews.GpsLocator();
+
+        public bool MarkerThreadrun = false;
+        public System.Threading.Thread PortFounderThread;
 
         public MainV2()
         {
@@ -413,8 +417,7 @@ namespace MissionPlanner
             var Resolution = Screen.PrimaryScreen.Bounds;
             ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
             ResolutionManager.Initialize(Xdpi);
-			NovMessageBoxForm.setWidth(
-				ResolutionManager.InputPanelSize.Width);
+			NovMessageBoxForm.setWidth(ResolutionManager.InputPanelSize.Width);
 
 
             //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
@@ -676,10 +679,16 @@ namespace MissionPlanner
             }
 
 
+
+            
+
+             
+
+
             try
             {
                 log.Info("Create FD");
-                FlightData = new GCSViews.FlightData();
+                FlightData = new GCSViews.FlightData(locator);
                 log.Info("Create FP");
                 FlightPlanner = new GCSViews.FlightPlanner();
                 //Configuration = new GCSViews.ConfigurationView.Setup();

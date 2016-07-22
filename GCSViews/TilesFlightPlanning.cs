@@ -50,6 +50,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton Footprint = null;
         private static TileButton Camforward = null;
         private static TileButton ntripbutton = null;
+        private static TileData DistanceToPlatform = null;
 
         private static string polygonmodestring = "POLYGON\nMODE";
         public static EventHandler calcGrid = null;
@@ -181,7 +182,7 @@ namespace MissionPlanner.GCSViews
             Footprint = new TileButton("\u2610 FOOTPRINT", 4, 8, FootprintEvent);
             Camforward = new TileButton("\u2610   CAM\nFORWARD", 5, 8, CameraFacingForwardEvent);
             angleInfo = new TileData("ANGLE", 6, 8, "deg", AngleSettingEvent);
-            
+
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
@@ -218,7 +219,8 @@ namespace MissionPlanner.GCSViews
                 numberofStripes = new TileData("NUMBER OF STRIPS",ResolutionManager.BottomOfScreenRow - 1,8,""),
                 groundResInfo = new TileData("GROUND RES", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
                 flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 6, "h:m:s"),
-                distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,7,"km"),
+                distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,7,"km")
+                //DistanceToPlatform = new TileData("DISTANCE TO PLATFORM",ResolutionManager.BottomOfScreenRow,7,"km")
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
             tilesFlightPlanning.AddRange(startFromButtons);
@@ -235,12 +237,11 @@ namespace MissionPlanner.GCSViews
             tilesFlightPlanning.Where(tile => hidelist2.Contains(tile) && tile is TileButton)
                                .ForEach(tile => (tile as TileButton).Visible = false);
 
-
-            PathPlanningTilesIsAreVisible(false);
+            PathPlanningTilesAreVisible(false);
             cancelOfflineMaps.Visible = false;
         }
 
-        private static void PathPlanningTilesIsAreVisible(bool visibility)
+        private static void PathPlanningTilesAreVisible(bool visibility)
         {
             sideLap.Visible = visibility;
             overLap.Visible = visibility;
@@ -451,7 +452,7 @@ namespace MissionPlanner.GCSViews
             pathGenerationButton.Visible = false;
             ntripbutton.Visible = false;
 
-            PathPlanningTilesIsAreVisible(true);
+            PathPlanningTilesAreVisible(true);
 
             FlightPlanner.instance.pathGenerationMode = true;
             FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
@@ -514,7 +515,7 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = true;
             ntripbutton.Visible = true;
 
-            PathPlanningTilesIsAreVisible(false);
+            PathPlanningTilesAreVisible(false);
 
 
             if (pathAcceptedEvent != null)
