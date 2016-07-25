@@ -86,7 +86,7 @@ namespace MissionPlanner.GCSViews
 
         List<int> groupmarkers = new List<int>();
 
-        List<int> photoWaypoints = new List<int>();
+        List<int> photoWaypoints = new List<int>(); //sorted list of photo waypoints
 
         public enum altmode
         {
@@ -154,15 +154,15 @@ namespace MissionPlanner.GCSViews
                 return;
             }
 
-            if(photoWaypoints.Contains(int.Parse(pointno)-1))
+            if (photoWaypoints.Contains(int.Parse(pointno) - 1))
             {
-                
-                for (int i=0;i<5;i++)
+
+                for (int i = 0; i < 5; i++)
                 {
                     selectedrow = int.Parse(pointno) - 1;
                     selectedrow -= i;
-                    if(i!=2)
-                    setfromMap(lat, lng, alt);
+                    if (i != 2)
+                        setfromMap(lat, lng, alt);
                 }
                 calculateWaypointDistance();
                 return;
@@ -511,7 +511,7 @@ namespace MissionPlanner.GCSViews
                 {
                     Commands.Rows.RemoveAt(selectedrow);
                 }
-                   
+
             }
             else
             {
@@ -522,6 +522,7 @@ namespace MissionPlanner.GCSViews
 
             //    setfromMap(lat, lng, alt);
             calculateWaypointDistance();
+            writeKML();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -2620,16 +2621,129 @@ namespace MissionPlanner.GCSViews
                     return;
                 if (e.ColumnIndex == Delete.Index && (e.RowIndex + 0) < Commands.RowCount) // delete
                 {
-                    quickadd = true;
-                    Commands.Rows.RemoveAt(e.RowIndex);
-                    quickadd = false;
+                    bool photoDeleted = false;
+
+                    for (int i = 0; i < photoWaypoints.Count; i++)
+                    {
+                        if (((e.RowIndex + 1) > (photoWaypoints[i] - 5)) && ((e.RowIndex) <= photoWaypoints[i]))
+                        {
+                            for (int j = 0; j < 5; j++)
+                            {
+                                Commands.Rows.RemoveAt(photoWaypoints[i] - 4);
+                            }
+                            photoWaypoints.RemoveAt(i);
+                            photoDeleted = true;
+                        }
+
+                        if (photoWaypoints.Count > 0)
+                        {
+                            if (e.RowIndex < photoWaypoints[i])
+                            {
+                                if (photoDeleted)
+                                {
+                                    photoWaypoints[i] -= 5;
+                                }
+                                else
+                                {
+                                    photoWaypoints[i] -= 1;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!photoDeleted)
+                    {
+                        quickadd = true;
+                        Commands.Rows.RemoveAt(e.RowIndex);
+                        quickadd = false;
+
+                    }
                     writeKML();
+
                 }
                 if (e.ColumnIndex == Up.Index && e.RowIndex != 0) // up
                 {
-                    DataGridViewRow myrow = Commands.CurrentRow;
-                    Commands.Rows.Remove(myrow);
-                    Commands.Rows.Insert(e.RowIndex - 1, myrow);
+                    bool movedGroup = false;
+                    for (int i = 0; i < photoWaypoints.Count; i++)
+                    {
+                        if (((e.RowIndex + 1) > (photoWaypoints[i] - 5)) && ((e.RowIndex) <= photoWaypoints[i]))
+                        {
+                            DataGridViewRow myrow1 = Commands.Rows[photoWaypoints[i] - 4];
+                            DataGridViewRow myrow2 = Commands.Rows[photoWaypoints[i] - 3];
+                            DataGridViewRow myrow3 = Commands.Rows[photoWaypoints[i] - 2];
+                            DataGridViewRow myrow4 = Commands.Rows[photoWaypoints[i] - 1];
+                            DataGridViewRow myrow5 = Commands.Rows[photoWaypoints[i]];
+
+                            Commands.Rows.Remove(myrow1);
+                            Commands.Rows.Remove(myrow2);
+                            Commands.Rows.Remove(myrow3);
+                            Commands.Rows.Remove(myrow4);
+                            Commands.Rows.Remove(myrow5);
+
+                            if (i > 0)
+                            {
+                               // if (((e.RowIndex - 5) > (photoWaypoints[i - 1] - 5)) && ((e.RowIndex - 5) <= photoWaypoints[i - 1])) 
+                               if(photoWaypoints[i]-5==photoWaypoints[i-1]) //up is a group of waypoints
+                                {
+                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow5);
+                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow4);
+                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow3);
+                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow2);
+                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow1);
+
+                                    photoWaypoints[i] -= 5;
+                                    photoWaypoints[i - 1] += 5;
+                                }
+                                else
+                                {
+                                    Commands.Rows.Insert(photoWaypoints[i] - 5, myrow5);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 5, myrow4);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 5, myrow3);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 5, myrow2);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 5, myrow1);
+
+                                    photoWaypoints[i] -= 1;
+                                }
+                            }
+                            else //there is only one photo waypoint
+                            {
+                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow5);
+                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow4);
+                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow3);
+                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow2);
+                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow1);
+
+                                photoWaypoints[i] -= 1;
+                            }
+
+                            movedGroup = true;
+                        }
+
+                    }
+
+                    photoWaypoints.Sort();
+
+                    if (!movedGroup)
+                    {
+                       // bool movedOverGroup = false;
+                        DataGridViewRow myrow = Commands.CurrentRow;
+                        Commands.Rows.Remove(myrow);
+
+
+                        if (photoWaypoints.Contains(e.RowIndex - 1))
+                        {
+                            int index = photoWaypoints.IndexOf(e.RowIndex - 1);
+                            Commands.Rows.Insert(e.RowIndex - 5, myrow);
+                            photoWaypoints[index] += 1;
+                        }
+                        else
+                        {
+                            Commands.Rows.Insert(e.RowIndex - 1, myrow);
+                        }
+
+
+                    }
+
                     writeKML();
                 }
                 if (e.ColumnIndex == Down.Index && e.RowIndex < Commands.RowCount - 1) // down
@@ -7542,9 +7656,9 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
         public void calculateWaypointDistance()
         {
             double distance = 0;
-            for (int i = 0; i<Commands.Rows.Count;i++)
+            for (int i = 0; i < Commands.Rows.Count; i++)
             {
-                if(Commands.Rows[i].Cells[Command.Index].Value.ToString()==MAVLink.MAV_CMD.LOITER_TURNS.ToString())
+                if (Commands.Rows[i].Cells[Command.Index].Value.ToString() == MAVLink.MAV_CMD.LOITER_TURNS.ToString())
                 {
                     distance += double.Parse(Commands.Rows[i].Cells[Dist.Index].Value.ToString());
                     distance += double.Parse(Commands.Rows[i].Cells[Param3.Index].Value.ToString()) * 2.0 * Math.PI * double.Parse(Commands.Rows[i].Cells[Param1.Index].Value.ToString());
@@ -7553,15 +7667,15 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 {
                     distance += double.Parse(Commands.Rows[i].Cells[Dist.Index].Value.ToString());
                 }
-            
+
             }
             TilesFlightPlanning.UpdateEstimatedDistance(distance / 1000.0);
             calculateEstimatedTime(distance, TilesFlightPlanning.FlyingSpeed);
         }
 
-        private void calculateEstimatedTime(double distance,int speed)
+        private void calculateEstimatedTime(double distance, int speed)
         {
-            int time = (int)(distance/ speed); //in seconds
+            int time = (int)(distance / speed); //in seconds
             TilesFlightPlanning.UpdateEstimatedTime(time);
         }
     }
