@@ -2668,33 +2668,46 @@ namespace MissionPlanner.GCSViews
                     {
                         if (((e.RowIndex + 1) > (photoWaypoints[i] - 5)) && ((e.RowIndex) <= photoWaypoints[i]))
                         {
-                            DataGridViewRow myrow1 = Commands.Rows[photoWaypoints[i] - 4];
-                            DataGridViewRow myrow2 = Commands.Rows[photoWaypoints[i] - 3];
-                            DataGridViewRow myrow3 = Commands.Rows[photoWaypoints[i] - 2];
-                            DataGridViewRow myrow4 = Commands.Rows[photoWaypoints[i] - 1];
-                            DataGridViewRow myrow5 = Commands.Rows[photoWaypoints[i]];
-
-                            Commands.Rows.Remove(myrow1);
-                            Commands.Rows.Remove(myrow2);
-                            Commands.Rows.Remove(myrow3);
-                            Commands.Rows.Remove(myrow4);
-                            Commands.Rows.Remove(myrow5);
-
-                            if (i > 0)
+                            if (photoWaypoints[i] - 5 >= 0)
                             {
-                               // if (((e.RowIndex - 5) > (photoWaypoints[i - 1] - 5)) && ((e.RowIndex - 5) <= photoWaypoints[i - 1])) 
-                               if(photoWaypoints[i]-5==photoWaypoints[i-1]) //up is a group of waypoints
-                                {
-                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow5);
-                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow4);
-                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow3);
-                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow2);
-                                    Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow1);
+                                DataGridViewRow myrow1 = Commands.Rows[photoWaypoints[i] - 4];
+                                DataGridViewRow myrow2 = Commands.Rows[photoWaypoints[i] - 3];
+                                DataGridViewRow myrow3 = Commands.Rows[photoWaypoints[i] - 2];
+                                DataGridViewRow myrow4 = Commands.Rows[photoWaypoints[i] - 1];
+                                DataGridViewRow myrow5 = Commands.Rows[photoWaypoints[i]];
 
-                                    photoWaypoints[i] -= 5;
-                                    photoWaypoints[i - 1] += 5;
+                                Commands.Rows.Remove(myrow1);
+                                Commands.Rows.Remove(myrow2);
+                                Commands.Rows.Remove(myrow3);
+                                Commands.Rows.Remove(myrow4);
+                                Commands.Rows.Remove(myrow5);
+
+                                if (i > 0)
+                                {
+                                    // if (((e.RowIndex - 5) > (photoWaypoints[i - 1] - 5)) && ((e.RowIndex - 5) <= photoWaypoints[i - 1])) 
+                                    if (photoWaypoints[i] - 5 == photoWaypoints[i - 1]) //up is a group of waypoints
+                                    {
+                                        Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow5);
+                                        Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow4);
+                                        Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow3);
+                                        Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow2);
+                                        Commands.Rows.Insert(photoWaypoints[i - 1] - 4, myrow1);
+
+                                        photoWaypoints[i] -= 5;
+                                        photoWaypoints[i - 1] += 5;
+                                    }
+                                    else
+                                    {
+                                        Commands.Rows.Insert(photoWaypoints[i] - 5, myrow5);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 5, myrow4);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 5, myrow3);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 5, myrow2);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 5, myrow1);
+
+                                        photoWaypoints[i] -= 1;
+                                    }
                                 }
-                                else
+                                else //there is only one photo waypoint
                                 {
                                     Commands.Rows.Insert(photoWaypoints[i] - 5, myrow5);
                                     Commands.Rows.Insert(photoWaypoints[i] - 5, myrow4);
@@ -2705,17 +2718,6 @@ namespace MissionPlanner.GCSViews
                                     photoWaypoints[i] -= 1;
                                 }
                             }
-                            else //there is only one photo waypoint
-                            {
-                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow5);
-                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow4);
-                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow3);
-                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow2);
-                                Commands.Rows.Insert(photoWaypoints[i] - 5, myrow1);
-
-                                photoWaypoints[i] -= 1;
-                            }
-
                             movedGroup = true;
                         }
 
@@ -2725,7 +2727,6 @@ namespace MissionPlanner.GCSViews
 
                     if (!movedGroup)
                     {
-                       // bool movedOverGroup = false;
                         DataGridViewRow myrow = Commands.CurrentRow;
                         Commands.Rows.Remove(myrow);
 
@@ -2748,14 +2749,100 @@ namespace MissionPlanner.GCSViews
                 }
                 if (e.ColumnIndex == Down.Index && e.RowIndex < Commands.RowCount - 1) // down
                 {
-                    DataGridViewRow myrow = Commands.CurrentRow;
-                    Commands.Rows.Remove(myrow);
-                    Commands.Rows.Insert(e.RowIndex + 1, myrow);
+
+                    bool movedGroup = false;
+                    for (int i = 0; i < photoWaypoints.Count; i++)
+                    {
+                        if (((e.RowIndex) > (photoWaypoints[i] - 5)) && ((e.RowIndex) <= photoWaypoints[i]))
+                        {
+                            if (photoWaypoints[i] < Commands.RowCount - 1)
+                            {
+                                DataGridViewRow myrow1 = Commands.Rows[photoWaypoints[i] - 4];
+                                DataGridViewRow myrow2 = Commands.Rows[photoWaypoints[i] - 3];
+                                DataGridViewRow myrow3 = Commands.Rows[photoWaypoints[i] - 2];
+                                DataGridViewRow myrow4 = Commands.Rows[photoWaypoints[i] - 1];
+                                DataGridViewRow myrow5 = Commands.Rows[photoWaypoints[i]];
+
+                                Commands.Rows.Remove(myrow1);
+                                Commands.Rows.Remove(myrow2);
+                                Commands.Rows.Remove(myrow3);
+                                Commands.Rows.Remove(myrow4);
+                                Commands.Rows.Remove(myrow5);
+
+                                if (photoWaypoints.Count > i + 1)
+                                {
+                                    // if (((e.RowIndex - 5) > (photoWaypoints[i - 1] - 5)) && ((e.RowIndex - 5) <= photoWaypoints[i - 1])) 
+                                    if (photoWaypoints[i] + 5 == photoWaypoints[i + 1]) //down is a group of waypoints
+                                    {
+                                        Commands.Rows.Insert(photoWaypoints[i + 1] - 4, myrow5);
+                                        Commands.Rows.Insert(photoWaypoints[i + 1] - 4, myrow4);
+                                        Commands.Rows.Insert(photoWaypoints[i + 1] - 4, myrow3);
+                                        Commands.Rows.Insert(photoWaypoints[i + 1] - 4, myrow2);
+                                        Commands.Rows.Insert(photoWaypoints[i + 1] - 4, myrow1);
+
+                                        photoWaypoints[i] += 5;
+                                        photoWaypoints[i + 1] -= 5;
+                                    }
+                                    else
+                                    {
+                                        Commands.Rows.Insert(photoWaypoints[i] - 3, myrow5);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 3, myrow4);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 3, myrow3);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 3, myrow2);
+                                        Commands.Rows.Insert(photoWaypoints[i] - 3, myrow1);
+
+                                        photoWaypoints[i] += 1;
+                                    }
+                                }
+                                else //there is only one photo waypoint
+                                {
+                                    Commands.Rows.Insert(photoWaypoints[i] - 3, myrow5);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 3, myrow4);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 3, myrow3);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 3, myrow2);
+                                    Commands.Rows.Insert(photoWaypoints[i] - 3, myrow1);
+
+                                    photoWaypoints[i] += 1;
+                                }  
+                            }
+                            movedGroup = true;
+                        }
+                        photoWaypoints.Sort();
+                    }
+
+
+
+                    if (!movedGroup)
+                    {
+                        DataGridViewRow myrow = Commands.CurrentRow;
+                        Commands.Rows.Remove(myrow);
+
+
+                        if (photoWaypoints.Contains(e.RowIndex + 5))
+                        {
+                            int index = photoWaypoints.IndexOf(e.RowIndex + 5);
+                            Commands.Rows.Insert(photoWaypoints[index], myrow);
+                            photoWaypoints[index] -= 1;
+                        }
+                        else
+                        {
+                            Commands.Rows.Insert(e.RowIndex + 1, myrow);
+                        }
+
+
+                    }
+                    //////////////////////////////////////////////////////////
+
+
+
+                    // DataGridViewRow myrow = Commands.CurrentRow;
+                    // Commands.Rows.Remove(myrow);
+                    // Commands.Rows.Insert(e.RowIndex + 1, myrow);
                     writeKML();
                 }
                 setgradanddistandaz();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 CustomMessageBox.Show("Row error");
             }
