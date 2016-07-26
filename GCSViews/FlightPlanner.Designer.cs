@@ -255,6 +255,7 @@ namespace MissionPlanner.GCSViews
 			this.Commands.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
 			dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
 			this.Commands.RowsDefaultCellStyle = dataGridViewCellStyle14;
+            this.Commands.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellClick);
 			this.Commands.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellContentClick);
 			this.Commands.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellEndEdit);
 			this.Commands.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.Commands_DataError);

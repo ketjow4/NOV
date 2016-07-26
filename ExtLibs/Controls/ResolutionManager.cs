@@ -137,7 +137,7 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
 
-                WaypointFormSize = new Size(850, 400);
+                WaypointFormSize = new Size(1000, 400);
             }
             else if (CurrentRes == Resolutions.r1366x768)
             {
@@ -241,7 +241,7 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
 
-                WaypointFormSize = new Size(850, 480);
+                WaypointFormSize = new Size(1000, 480);
             }
             else if(CurrentRes == Resolutions.r1920x1200)
             {
@@ -288,7 +288,7 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
 
-                WaypointFormSize = new Size(850, 533);
+                WaypointFormSize = new Size(1000, 533);
             }
             else //(CurrentRes == Resolutions.r1280x800)
             {

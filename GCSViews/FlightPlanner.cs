@@ -1537,6 +1537,9 @@ namespace MissionPlanner.GCSViews
                 }
 
                 setgradanddistandaz();
+
+                Commands.AutoResizeColumns();
+
             }
             catch (Exception ex)
             {
@@ -2841,11 +2844,17 @@ namespace MissionPlanner.GCSViews
                     writeKML();
                 }
                 setgradanddistandaz();
+                Commands.AutoResizeColumns();
             }
             catch (Exception ex)
             {
                 CustomMessageBox.Show("Row error");
             }
+        }
+
+        private void Commands_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Commands.AutoResizeColumns();
         }
 
         private void Commands_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
