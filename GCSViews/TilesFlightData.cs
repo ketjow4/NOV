@@ -106,11 +106,19 @@ namespace MissionPlanner.GCSViews
             commonTiles = tilesFlightMode;      //bad hax
             mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
 
-
+            SetupVideoPlayer(p);
             SetToView(tilesFlightMode, p);
             abortLandButton.Visible = false;
         }
 
+        private static void SetupVideoPlayer(Panel p)
+        {
+            VideoPlayer v = new VideoPlayer();
+            v.Location = new Point(1600 - 733, 900 - 410);
+            v.Size = new Size(670, 410);
+            p.Controls.Add(v);
+            v.BringToFront();
+        }
 
         #region EventsFlightData
 
@@ -188,7 +196,8 @@ namespace MissionPlanner.GCSViews
                 return;
             if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
-            
+
+            VideoPlayer.ChangeTaskBarVisibility(true);
             MainV2.config["grid_sidelap"] = TilesFlightPlanning.SideLap.ToString();
             MainV2.config["grid_overlap"] = TilesFlightPlanning.OverLap.ToString();
             MainV2.instance.Close();

@@ -338,7 +338,7 @@ namespace MissionPlanner.Controls.Modification
             }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);
-            AbortLandLocation = new PointF(5, BottomOfScreenRow - 0.1f);
+            AbortLandLocation = new PointF(3, BottomOfScreenRow - 0.1f);
 
             TransparentLabelSize = new System.Drawing.Size((7 * ScreenWidth) / 16, (3 * ScreenHeight) / 9);
             TransparentLabelLocation = new Point((ScreenWidth - TransparentLabelSize.Width) / 2, (ScreenHeight - TransparentLabelSize.Height) / 2);
