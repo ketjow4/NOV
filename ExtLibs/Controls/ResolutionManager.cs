@@ -83,6 +83,8 @@ namespace MissionPlanner.Controls.Modification
 
         public static int MagicWidth;
 
+        public static Size WaypointFormSize;
+
         public static Resolutions CurrentRes;
 
         private static int ScreenWidth;
@@ -134,6 +136,8 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+
+                WaypointFormSize = new Size(850, 400);
             }
             else if (CurrentRes == Resolutions.r1366x768)
             {
@@ -189,6 +193,8 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+
+                WaypointFormSize = new Size(850, 341);
             }
             else if(CurrentRes == Resolutions.r1920x1080)
             {
@@ -234,6 +240,8 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+
+                WaypointFormSize = new Size(850, 480);
             }
             else if(CurrentRes == Resolutions.r1920x1200)
             {
@@ -279,6 +287,8 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontButton = TileButtonFontSize - 0.5f; // 11.25f;
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+
+                WaypointFormSize = new Size(850, 533);
             }
             else //(CurrentRes == Resolutions.r1280x800)
             {
@@ -323,6 +333,8 @@ namespace MissionPlanner.Controls.Modification
                 PreFlightCheckFontButton = TileButtonFontSize; // 11.25f;
                 PreFlightCheckFontCheckBox = ValueLabelFontSize;//15.0f;
                 PreFlightCheckFontWarning = InputInfoFontSize;//21.75f;
+
+                WaypointFormSize = new Size(850, 400);
             }
 
             PanicButtonLocation = new PointF(4, BottomOfScreenRow - 0.1f);

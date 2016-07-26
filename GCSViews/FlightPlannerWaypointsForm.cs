@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews
 {
@@ -25,7 +25,8 @@ namespace MissionPlanner.GCSViews
             resources.ApplyResources(panelBASE, "panelBASE");
             panelBASE.BackColor = System.Drawing.Color.FromArgb(40, 40, 40);
 
-            wp.Size = new Size(850, 400);
+
+            wp.Size = ResolutionManager.WaypointFormSize;
             wp.FormBorderStyle = FormBorderStyle.FixedSingle;
             wp.StartPosition = FormStartPosition.CenterScreen;
             FlightPlanner.instance.panelWaypoints.SuspendLayout();
