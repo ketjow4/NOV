@@ -86,6 +86,11 @@ namespace MissionPlanner.Controls.Modification
 
         public static int MagicWidth;
 
+        public static Size VideoPlayerHidden;
+        public static Size VideoPlayerVisible;
+        public static Point VideoPlayerLocationVisible;
+        public static Point VideoPlayerLocationHidden;
+
         public static Size WaypointFormSize;
 
         public static Resolutions CurrentRes;
@@ -357,6 +362,11 @@ namespace MissionPlanner.Controls.Modification
             WindDirLocation = new Point(TileWidth, (int)((TileHeight + MarginSize) * WindSpeedLocation.Y));
             WindDirSize = new Size(TileHeight, TileHeight);
             DistBarLocation = new Point(TileWidth + 3 * MarginSize, 2 * (TileHeight + MarginSize));
+
+            VideoPlayerHidden = new Size(4 * (TileWidth + MarginSize) - MarginSize, 50);
+            VideoPlayerVisible = new Size(4 * (TileWidth + MarginSize) - MarginSize, HUDSize.Height + TileHeight);
+            VideoPlayerLocationVisible = new Point(ScreenWidth - VideoPlayerVisible.Width - FlightDataZoomTrackBarWidth - 11, ScreenHeight - VideoPlayerVisible.Height - 5);
+            VideoPlayerLocationHidden = new Point(ScreenWidth - VideoPlayerHidden.Width - FlightDataZoomTrackBarWidth - 11, ScreenHeight - VideoPlayerHidden.Height - 5);
         }
 
 

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews
 {
@@ -109,16 +110,16 @@ namespace MissionPlanner.GCSViews
 
         private void HideVideoPlayer()
         {
-            this.Location = new Point(1600 - 733, 900 - 57);
-            this.Size = new Size(670, 50);
-            IsHidden = true;
+            this.Location = ResolutionManager.VideoPlayerLocationHidden;
+            this.Size = ResolutionManager.VideoPlayerHidden;
+            //IsHidden = true;
         }
 
         private void ShowVideoPlayer()
         {
-            this.Location = new Point(1600 - 733, 900 - 410);
-            this.Size = new Size(670, 410);
-            IsHidden = false;
+            this.Location = ResolutionManager.VideoPlayerLocationVisible;
+            this.Size = ResolutionManager.VideoPlayerVisible;
+            //IsHidden = false;
         }
 
         private void DockButton_Click(object sender, EventArgs e)
@@ -165,7 +166,7 @@ namespace MissionPlanner.GCSViews
                 try
                 {
                     var Player = new ProcessStartInfo();
-                    Player.FileName = @"C:\Users\T430\Documents\GitHub\gstreamerreceiverwpf\GStreamerReceiverWPF\bin\x86\Debug\GStreamerReceiverWPF.exe";
+                    Player.FileName = @".\VideoPlayer\GStreamerReceiverWPF.exe";
                     Player.CreateNoWindow = false;
                     Player.ErrorDialog = false;
                     Player.UseShellExecute = false;

@@ -165,8 +165,8 @@ namespace MissionPlanner.GCSViews
         private static void SetupVideoPlayer(Panel p)
         {
             VideoPlayer v = new VideoPlayer();
-            v.Location = new Point(1600 - 733, 900 - 410);
-            v.Size = new Size(670, 410);
+            v.Location = ResolutionManager.VideoPlayerLocationVisible;
+            v.Size = ResolutionManager.VideoPlayerVisible;
             p.Controls.Add(v);
             v.BringToFront();
         }
