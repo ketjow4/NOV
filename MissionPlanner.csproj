@@ -515,6 +515,12 @@
     <Compile Include="GCSViews\ValueSlider\ValueSlider.Designer.cs">
       <DependentUpon>ValueSlider.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\VideoPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GCSViews\VideoPlayer.Designer.cs">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GeoRef\Georefimage.Designer.cs">
       <DependentUpon>georefimage.cs</DependentUpon>
     </Compile>
@@ -1279,6 +1285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\ValueSlider\ValueSlider.resx">
       <DependentUpon>ValueSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\VideoPlayer.resx">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GeoRef\Georefimage.ja-JP.resx">
       <DependentUpon>georefimage.cs</DependentUpon>

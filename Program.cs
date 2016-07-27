@@ -44,7 +44,7 @@ namespace MissionPlanner
 
             Thread = Thread.CurrentThread;
 
-            System.Windows.Forms.Application.EnableVisualStyles();
+           // System.Windows.Forms.Application.EnableVisualStyles();
 			try
 			{
 				Log4NetConfigurator.Configure();

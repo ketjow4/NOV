@@ -51,6 +51,11 @@ namespace MissionPlanner.GCSViews
         private static TileButton Camforward = null;
         private static TileButton ntripbutton = null;
         private static TileData DistanceToPlatform = null;
+        private static TileButton Circle = null;
+        private static TileButton PointPhoto = null;
+        private static TileButton PolygonMode = null;
+        private static TileData estimatedDistance = null;
+        private static TileData estimatedTime = null;
 
         private static string polygonmodestring = "POLYGON\nMODE";
         public static EventHandler calcGrid = null;
@@ -174,7 +179,7 @@ namespace MissionPlanner.GCSViews
             hidelist2.AddRange(startFromButtons.ToArray());
 
             obsHeadBtn.ClickMethod(null, null);
-            
+
             sideLap = new TileData("SIDELAP", 8, 8, "%", SidelapSettingEvent);
             overLap = new TileData("OVERLAP", 7, 8, "%", OverlapSettingEvent);
             flyingSpeed = new TileData("FLYING SPEED", 1, 4, "m/s", FlyingSettingEvent);
@@ -196,7 +201,7 @@ namespace MissionPlanner.GCSViews
                 ntripbutton = new TileButton("NTRIP", 0, 7,NTRIPevent),
                 new TileButton("COMPASS\nCALIBRATION",ResolutionManager.BottomOfScreenRow,0, CompassCalibrationEvent),
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
-                new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
+                PolygonMode = new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
                 new TileButton("ADD START\nPOINT", 0, 2, AddStartPointEvent),
                 new TileButton("CLEAR", 0, 3, ClearEvent),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, (sender, e) => { }, Color.FromArgb(255, 255, 51, 0)),
@@ -210,17 +215,20 @@ namespace MissionPlanner.GCSViews
                 writeWaypoints = new TileButton("UPLOAD TO PLATFORM", 1, 6, SaveWPPlatformEvent),
                 altInfo,
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
+                Circle = new TileButton("\u2610 CIRCLE",4,8,CircleClicked),
+                PointPhoto = new TileButton("\u2610 PHOTO",5,8,PointPhotoClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
                 Images,
-                area = new TileData("AREA",ResolutionManager.BottomOfScreenRow,8,"km\u00B2"),
+                area = new TileData("AREA",ResolutionManager.BottomOfScreenRow,7,"km\u00B2"),
                 distanceBetweenLines = new TileData("DIST BETWEEN IMAGES",ResolutionManager.BottomOfScreenRow - 1,7,"m"),
-                numberofStripes = new TileData("NUMBER OF STRIPS",ResolutionManager.BottomOfScreenRow - 1,8,""),
+                numberofStripes = new TileData("NUMBER OF STRIPS",ResolutionManager.BottomOfScreenRow - 1,6,""),
                 groundResInfo = new TileData("GROUND RES", ResolutionManager.BottomOfScreenRow, 5, "cm/p"),
-                flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 6, "h:m:s"),
-                distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,7,"km")
-                //DistanceToPlatform = new TileData("DISTANCE TO PLATFORM",ResolutionManager.BottomOfScreenRow,7,"km")
+                flightTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 8, "h:m:s"),
+                distanceTile = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,8,"km"),
+                estimatedTime = new TileData("FLIGHT TIME", ResolutionManager.BottomOfScreenRow - 1, 8, "h:m:s"),
+                estimatedDistance = new TileData("DISTANCE",ResolutionManager.BottomOfScreenRow,8,"km"),
             });
             tilesFlightPlanning.AddRange(cameras_buttons);
             tilesFlightPlanning.AddRange(startFromButtons);
@@ -238,7 +246,12 @@ namespace MissionPlanner.GCSViews
                                .ForEach(tile => (tile as TileButton).Visible = false);
 
             PathPlanningTilesAreVisible(false);
+            Circle.Visible = false;
+            PointPhoto.Visible = false;
+
+
             cancelOfflineMaps.Visible = false;
+            estimatedTime.Value = "0:00:00";
         }
 
         private static void PathPlanningTilesAreVisible(bool visibility)
@@ -451,8 +464,16 @@ namespace MissionPlanner.GCSViews
             accept.Visible = true;
             pathGenerationButton.Visible = false;
             ntripbutton.Visible = false;
+            estimatedDistance.Visible = false;
+            estimatedTime.Visible = false;
 
             PathPlanningTilesAreVisible(true);
+
+            PolygonMode.Label.Text = polygonmodestring;
+            FlightPlanner.instance.PolygonGridMode = true;
+            Circle.Visible = false;
+            PointPhoto.Visible = false;
+
 
             FlightPlanner.instance.pathGenerationMode = true;
             FlightPlanner.instance.MainMap.ZoomAndCenterMarkers("drawnpolygons");
@@ -490,15 +511,25 @@ namespace MissionPlanner.GCSViews
         {
             var s = sender as Label;
             // todo YEAH HACKING EVERYWHERE!
-            if (s.Text == polygonmodestring)
+            if (!FlightPlanner.instance.pathGenerationMode)
             {
-                s.Text = "WAYPOINT\nMODE";
-                FlightPlanner.instance.PolygonGridMode = false;
-            }
-            else
-            {
-                s.Text = polygonmodestring;
-                FlightPlanner.instance.PolygonGridMode = true;
+                if (s.Text == polygonmodestring)
+                {
+                    s.Text = "WAYPOINT\nMODE";
+                    FlightPlanner.instance.PolygonGridMode = false;
+
+                    Circle.Visible = true;
+                    PointPhoto.Visible = true;
+
+                }
+                else
+                {
+                    s.Text = polygonmodestring;
+                    FlightPlanner.instance.PolygonGridMode = true;
+
+                    Circle.Visible = false;
+                    PointPhoto.Visible = false;
+                }
             }
         }
 
@@ -517,6 +548,10 @@ namespace MissionPlanner.GCSViews
 
             PathPlanningTilesAreVisible(false);
 
+            estimatedDistance.Visible = true;
+            estimatedTime.Visible = true;
+
+
 
             if (pathAcceptedEvent != null)
             {
@@ -525,6 +560,7 @@ namespace MissionPlanner.GCSViews
 
             }
             FlightPlanner.instance.pathGenerationMode = false;
+            FlightPlanner.instance.calculateWaypointDistance();
         }
 
         
@@ -609,6 +645,8 @@ namespace MissionPlanner.GCSViews
             if (inputWindow.ShowDialog() == DialogResult.OK)
             {
                 ChangeSpeed(inputWindow.Result);
+                FlightPlanner.instance.addSpeedWaypoint(inputWindow.Result);
+                FlightPlanner.instance.calculateWaypointDistance(); //updates time
             }
         }
 
@@ -633,6 +671,52 @@ namespace MissionPlanner.GCSViews
                 ChangeOverLap(inputWindow.Result);
             }
         }
+
+        public static bool circleSet { get; set; } = false;
+
+        private static void CircleClicked(object sender, EventArgs args)
+        {
+            if (!circleSet)
+            {
+                if (!pointPhotoSet)
+                {
+                    //Circle.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                    (sender as Label).Text = "\u2612 CIRCLE";       //checked
+                    circleSet = true;
+                }
+            }
+            else
+            {
+                // Circle.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                (sender as Label).Text = "\u2610 CIRCLE";       //unchecked
+                circleSet = false;
+            }
+
+
+
+        }
+
+        public static bool pointPhotoSet { get; set; } = false;
+
+        private static void PointPhotoClicked(object sender, EventArgs args)
+        {
+            if (!pointPhotoSet)
+            {
+                if (!circleSet)
+                {
+                    // PointPhoto.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+                    (sender as Label).Text = "\u2612 PHOTO";       //checked
+                    pointPhotoSet = true;
+                }
+            }
+            else
+            {
+                //PointPhoto.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+                (sender as Label).Text = "\u2610 PHOTO";       //unchecked
+                pointPhotoSet = false;
+            }
+        }
+
         #endregion
 
         private static List<TileButton> CreateCameraButtons()
@@ -668,6 +752,36 @@ namespace MissionPlanner.GCSViews
                 i++;
             }
             return startFromButtons;
+        }
+
+
+        public static void UpdateEstimatedDistance(double distance)
+        {
+            estimatedDistance.Value = distance.ToString();
+        }
+
+        public static void UpdateEstimatedDistance(object sender, ChangeValueEventArgs<int> e)
+        {
+            UpdateEstimatedDistance(e.Value);
+        }
+
+        public static void UpdateEstimatedTime(int time)
+        {
+            int t = time;
+            string h, m, s;
+
+            s = (t % 60).ToString("D2");
+            t /= 60;
+            m = (t % 60).ToString("D2");
+            t /= 60;
+            h = (t % 60).ToString("D1");
+
+            estimatedTime.Value = h+':'+m+':'+s;
+        }
+
+        public static void UpdateEstimatedTime(object sender, ChangeValueEventArgs<int> e)
+        {
+            UpdateEstimatedTime(e.Value);
         }
     }
 }

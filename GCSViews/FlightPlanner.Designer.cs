@@ -255,6 +255,7 @@ namespace MissionPlanner.GCSViews
 			this.Commands.RowHeadersDefaultCellStyle = dataGridViewCellStyle13;
 			dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
 			this.Commands.RowsDefaultCellStyle = dataGridViewCellStyle14;
+            this.Commands.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellClick);
 			this.Commands.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellContentClick);
 			this.Commands.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_CellEndEdit);
 			this.Commands.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.Commands_DataError);
@@ -263,10 +264,11 @@ namespace MissionPlanner.GCSViews
 			this.Commands.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.Commands_RowEnter);
 			this.Commands.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.Commands_RowsAdded);
 			this.Commands.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.Commands_RowValidating);
-			// 
-			// Command
-			// 
-			this.Command.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
+            this.Commands.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.Commands_RowsRemoved);
+            // 
+            // Command
+            // 
+            this.Command.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
 			dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(67)))), ((int)(((byte)(68)))), ((int)(((byte)(69)))));
 			dataGridViewCellStyle10.ForeColor = System.Drawing.Color.White;
 			this.Command.DefaultCellStyle = dataGridViewCellStyle10;
