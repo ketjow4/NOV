@@ -14,6 +14,7 @@ using MissionPlanner.GCSViews.Modification; //classes for tiles
 using MissionPlanner.Utilities;
 using MissionPlanner.Validators;
 using MessageBox = System.CustomMessageBox;
+using MissionPlanner.Comms;
 
 namespace MissionPlanner.GCSViews
 {
@@ -48,6 +49,8 @@ namespace MissionPlanner.GCSViews
         private static TileButton pathGenerationButton = null;
         private static TileButton Footprint = null;
         private static TileButton Camforward = null;
+        private static TileButton ntripbutton = null;
+        private static TileData DistanceToPlatform = null;
         private static TileButton Circle = null;
         private static TileButton PointPhoto = null;
         private static TileButton PolygonMode = null;
@@ -73,6 +76,10 @@ namespace MissionPlanner.GCSViews
         public static int SideLap { get { return Convert.ToInt32(sideLap.Value); } set { sideLap.Value = value.ToString(); } }
         public static int OverLap { get { return Convert.ToInt32(overLap.Value); } set { overLap.Value = value.ToString(); } }
         public static int ImagesCount { set { Images.Value = value.ToString(); } }
+
+        internal static ICommsSerial comPort = new SerialPort();
+        private static System.Windows.Forms.ComboBox CMB_baudrate;
+        private static System.Threading.Thread t12;
 
 
         #region ChangeFunctions
@@ -181,7 +188,6 @@ namespace MissionPlanner.GCSViews
             Camforward = new TileButton("\u2610   CAM\nFORWARD", 5, 8, CameraFacingForwardEvent);
             angleInfo = new TileData("ANGLE", 6, 8, "deg", AngleSettingEvent);
 
-
             var tilesFlightPlanning = new List<TileInfo>(new TileInfo[]
             {
                 obsHeadBtn,
@@ -192,6 +198,7 @@ namespace MissionPlanner.GCSViews
                 Camforward,
                 sideLap,overLap,startFromBut,
 
+                ntripbutton = new TileButton("NTRIP", 0, 7,NTRIPevent),
                 new TileButton("COMPASS\nCALIBRATION",ResolutionManager.BottomOfScreenRow,0, CompassCalibrationEvent),
                 new TileButton("FLIGHT\nINFO", 0, 0, FlightInfoEvent),
                 PolygonMode = new TileButton("POLYGON\nMODE", 0, 1, PolygonModeEvent),
@@ -238,17 +245,16 @@ namespace MissionPlanner.GCSViews
             tilesFlightPlanning.Where(tile => hidelist2.Contains(tile) && tile is TileButton)
                                .ForEach(tile => (tile as TileButton).Visible = false);
 
-
+            PathPlanningTilesAreVisible(false);
             Circle.Visible = false;
             PointPhoto.Visible = false;
 
 
-            IsVisible(false);
             cancelOfflineMaps.Visible = false;
             estimatedTime.Value = "0:00:00";
         }
 
-        private static void IsVisible(bool visibility)
+        private static void PathPlanningTilesAreVisible(bool visibility)
         {
             sideLap.Visible = visibility;
             overLap.Visible = visibility;
@@ -267,6 +273,29 @@ namespace MissionPlanner.GCSViews
         }
 
         #region EventsFlightPlanner
+
+        private static void NTRIPevent(object sender, EventArgs args)
+        {            
+            comPort = new CommsNTRIP();
+            try
+            {
+                comPort.Open();
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show("Error Connecting\nif using com0com please rename the ports to COM??\n" +
+                                      ex.ToString());
+                return;
+            }
+            SerialInjectGPS inject = new SerialInjectGPS();
+            t12 = new System.Threading.Thread(new System.Threading.ThreadStart(inject.mainloop))
+            {
+                IsBackground = true,
+                Name = "injectgps"
+            };
+            t12.Start();
+
+        }
 
         private static void LoadPolygonFileEvent(object sender, EventArgs e)
         {
@@ -434,10 +463,11 @@ namespace MissionPlanner.GCSViews
             writeWaypoints.Visible = false;
             accept.Visible = true;
             pathGenerationButton.Visible = false;
+            ntripbutton.Visible = false;
             estimatedDistance.Visible = false;
             estimatedTime.Visible = false;
 
-            IsVisible(true);
+            PathPlanningTilesAreVisible(true);
 
             PolygonMode.Label.Text = polygonmodestring;
             FlightPlanner.instance.PolygonGridMode = true;
@@ -514,11 +544,13 @@ namespace MissionPlanner.GCSViews
             LoadWPFile.Visible = true;
             LoadWPPlatform.Visible = true;
             writeWaypoints.Visible = true;
+            ntripbutton.Visible = true;
+
+            PathPlanningTilesAreVisible(false);
 
             estimatedDistance.Visible = true;
             estimatedTime.Visible = true;
 
-            IsVisible(false);
 
 
             if (pathAcceptedEvent != null)
@@ -530,6 +562,8 @@ namespace MissionPlanner.GCSViews
             FlightPlanner.instance.pathGenerationMode = false;
             FlightPlanner.instance.calculateWaypointDistance();
         }
+
+        
 
         private static void CompassCalibrationEvent(object sender, EventArgs args)
         {

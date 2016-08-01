@@ -31,6 +31,10 @@ namespace MissionPlanner.GCSViews
         private static TileData windSpeed = null;
 
         public static TileButton ConnectButton;
+        private static TileData GPSfixing;
+
+        public static TileData DistToMovingBase { get; private set; }
+        public static TileData DistToHome { get; private set; }
 
         public static void BindingsForTransparentLabel()
         {
@@ -66,6 +70,8 @@ namespace MissionPlanner.GCSViews
 
         public static void SetTilesFlightData(Panel p)
         {
+            GpsLocator.GpsInfoEvent += GpsLocator_GpsInfoEvent;
+
             CurrentState.ArmedStatusChanged += Cs_ArmedSet;
             CurrentState.LandedChanged += CurrentState_LandedChanged;
 
@@ -73,6 +79,9 @@ namespace MissionPlanner.GCSViews
             windSpeed = new TileData("WIND SPEED", ResolutionManager.WindSpeedLocation.Y, ResolutionManager.WindSpeedLocation.X, "m/s");
             TileData mode;
 
+            DistToMovingBase = new TileData("DISTANCE TO BASE", 1, 2, "m", DistToBaseEventClc);
+            DistToHome = new TileData("DISTANCE TO HOME", 1, 2, "m", DistToHomeEventClc);
+            
             var tilesFlightMode = new List<TileInfo>(new TileInfo[]
             {
                 new TileButton("FLIGHT\nINFO", 0, 0, (sender, e) => {}, Color.FromArgb(255, 255, 51, 0)),
@@ -82,13 +91,14 @@ namespace MissionPlanner.GCSViews
                 new TileData("BATTERY REMAINING", 0, 4, "%"),
                 new TileButton("FLIGHT\nPLANNING", 1, 0, FlighPlanningShowEvent),
                 new TileData("AIR SPEED", 1, 1, "m/s"),
-                new TileData("DISTANCE TO HOME", 1, 2, "m"),
+                DistToHome,
+                DistToMovingBase,
                 new TileData("BATTERY VOLTAGE", 1, 3, "V"),
                 new TileData("CURRENT", 1, 4, "A"),
                 new TileData("GPSHDOP", 1, 5, ""),
                 new TileData("GPS SAT COUNT", 1, 6, ""),
                 new TileData("RADIO SIGNAL", 0, 5, "%"),
-                new TileButton("START\nMISSION",2,6,StartMissionEvent),
+                new TileButton("START\nMISSION",2,6,StartMissionEvent),                
                 guidedModeButton = new TileButton("GUIDED\nMODE",3,8,GuidedModeEvent),
                 mode = new TileData("MODE",0,6,""),
                 panicButton = new TileButton("BRAKE",ResolutionManager.PanicButtonLocation.Y,ResolutionManager.PanicButtonLocation.X, PanicButtonEvent),
@@ -98,19 +108,68 @@ namespace MissionPlanner.GCSViews
                 new TileButton("RESTART", 2, 7, RestartMissionEvent),
                 new TileButton("RETURN", 2, 8, ReturnToLaunchEvent),
                 new TileButton("LAND", 1, 8, LandEvent),
-                 ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent),
+                ConnectButton = new TileButton("CONNECT", 0, 7, ConnectEvent),
             ArmButton = new TileButton("ARM", 0, 8, ArmDisarmEvent),
             exitButton = new TileButton("EXIT", 2, 0, ExitEvent),
             takeOff = new TileButton("TAKEOFF", 4, 8, TakeOffEvent),
+            GPSfixing = new TileData("GPS CONNECTED",7,0,""),
             });
             commonTiles = tilesFlightMode;      //bad hax
             mode.ValueLabel.Width = ResolutionManager.MagicWidth;    //ugly !!!
 
-
+            SetupVideoPlayer(p);
             SetToView(tilesFlightMode, p);
             abortLandButton.Visible = false;
+
+            GPSfixing.Visible = false;
+            DistToHome.Visible = true;
+            DistToMovingBase.Visible = false;
+            
         }
 
+        private static void DistToBaseEventClc(object sender, EventArgs e)
+        {
+            DistToHome.Visible = true;
+            DistToMovingBase.Visible = false;
+        }
+
+        private static void DistToHomeEventClc(object sender, EventArgs e)
+        {
+            if (MainV2.comPort.MAV.cs.MovingBase.Lat != 0 && MainV2.comPort.MAV.cs.MovingBase.Lng != 0)
+            {
+                DistToHome.Visible = false;
+                DistToMovingBase.Visible = true;
+            }
+        }
+
+        private static void GpsLocator_GpsInfoEvent(object sender, PortFoundEventArgs args)
+        {
+            try
+            {
+                GPSfixing.Label.BeginInvoke(new MethodInvoker(delegate
+                {
+                    GPSfixing.Value = args.Message;
+                    if (args.Message == "FIX OK")
+                    {
+                        GPSfixing.Visible = false;
+                    }
+                    else
+                        GPSfixing.Visible = true;
+                }));
+            }
+            catch
+            {
+            }
+        }
+
+        private static void SetupVideoPlayer(Panel p)
+        {
+            VideoPlayer v = new VideoPlayer();
+            v.Location = ResolutionManager.VideoPlayerLocationVisible;
+            v.Size = ResolutionManager.VideoPlayerVisible;
+            p.Controls.Add(v);
+            v.BringToFront();
+        }
 
         #region EventsFlightData
 
@@ -188,7 +247,8 @@ namespace MissionPlanner.GCSViews
                 return;
             if (CustomMessageBox.Show("Exit application?", "Exit", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 return;
-            
+
+            VideoPlayer.ChangeTaskBarVisibility(true);
             MainV2.config["grid_sidelap"] = TilesFlightPlanning.SideLap.ToString();
             MainV2.config["grid_overlap"] = TilesFlightPlanning.OverLap.ToString();
             MainV2.instance.Close();

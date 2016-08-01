@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+
 namespace MissionPlanner
 {
     partial class MainV2
@@ -223,7 +225,8 @@ namespace MissionPlanner
             // 
             // MainV2
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;            
             resources.ApplyResources(this, "$this");
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.menu);

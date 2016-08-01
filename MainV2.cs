@@ -29,7 +29,7 @@ using MissionPlanner;
 using MissionPlanner.Joystick;
 using MissionPlanner.Controls.Modification;
 using System.Collections.ObjectModel;
-
+using MissionPlanner.GCSViews;
 
 namespace MissionPlanner
 {
@@ -142,12 +142,12 @@ namespace MissionPlanner
 		public static event MapPositionChangedEventHandler MapPositionChangedEvent;
 		public static event MapZoomChangedEventHandler MapZoomChangedEvent;
 
-		/// <summary>
-		/// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
-		/// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
-		/// control for layout reasons.
-		/// </summary>
-		static internal ConnectionControl _connectionControl;
+        /// <summary>
+        /// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
+        /// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
+        /// control for layout reasons.
+        /// </summary>
+        static internal ConnectionControl _connectionControl;
 
 		#region nested classes
 		private static class NativeMethods
@@ -386,40 +386,38 @@ namespace MissionPlanner
             }
         }
 
-        private enum ProcessDPIAwareness
-        {
-            ProcessDPIUnaware = 0,
-            ProcessSystemDPIAware = 1,
-            ProcessPerMonitorDPIAware = 2
-        }
+        [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
+        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
 
-        [DllImport("shcore.dll")]
-        private static extern int SetProcessDpiAwareness(ProcessDPIAwareness value);
-
-        private static void SetDpiAwareness()
+        public enum DeviceCap
         {
-            try
-            {
-                if (Environment.OSVersion.Version.Major >= 6)
-                {
-                    SetProcessDpiAwareness(ProcessDPIAwareness.ProcessPerMonitorDPIAware);
-                }
-            }
-            catch (EntryPointNotFoundException)//this exception occures if OS does not implement this API, just ignore it.
-            {
-            }
+            /// <summary>
+            /// Logical pixels inch in X
+            /// </summary>
+            LOGPIXELSX = 88,
+            /// <summary>
+            /// Logical pixels inch in Y
+            /// </summary>
+            LOGPIXELSY = 90
+
+            // Other constants may be founded on pinvoke.net
         }
+        GCSViews.GpsLocator locator = new GCSViews.GpsLocator();
+
+        public bool MarkerThreadrun = false;
+        public System.Threading.Thread PortFounderThread;
 
         public MainV2()
         {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
 
-
-            SetDpiAwareness();
+            int Xdpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSX);
+            
             var Resolution = Screen.PrimaryScreen.Bounds;
             ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
-            ResolutionManager.Initialize();
-			NovMessageBoxForm.setWidth(
-				ResolutionManager.InputPanelSize.Width);
+            ResolutionManager.Initialize(Xdpi);
+			NovMessageBoxForm.setWidth(ResolutionManager.InputPanelSize.Width);
 
 
             //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
@@ -454,11 +452,11 @@ namespace MissionPlanner
             //    Font = new Font(Font.Name, 8.25f*96f/CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet,
             //        Font.GdiVerticalFont);
 
+
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
-			this.WindowState = FormWindowState.Maximized;
-
-			MyView = new MainSwitcher(this);
+			
+            MyView = new MainSwitcher(this);
             View = MyView;
 			MapPositionChangedEventHandler mapPositionChangedEventHandler
 				= new MapPositionChangedEventHandler(syncMapPositions);
@@ -476,7 +474,7 @@ namespace MissionPlanner
             //this.TopMost = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-
+            
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
@@ -681,10 +679,16 @@ namespace MissionPlanner
             }
 
 
+
+            
+
+             
+
+
             try
             {
                 log.Info("Create FD");
-                FlightData = new GCSViews.FlightData();
+                FlightData = new GCSViews.FlightData(locator);
                 log.Info("Create FP");
                 FlightPlanner = new GCSViews.FlightPlanner();
                 //Configuration = new GCSViews.ConfigurationView.Setup();

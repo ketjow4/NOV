@@ -14,6 +14,11 @@ using MissionPlanner.GCSViews.Modification; //classes for tiles
 using MissionPlanner.Utilities;
 using MissionPlanner.Validators;
 using MessageBox = System.CustomMessageBox;
+using MissionPlanner.Comms;
+using GMap.NET;
+using System.Globalization;
+using GMap.NET.WindowsForms.Markers;
+using GMap.NET.WindowsForms;
 
 namespace MissionPlanner.GCSViews
 {
@@ -56,6 +61,7 @@ namespace MissionPlanner.GCSViews
         public static int fsMin = 0;
         public static int fsMax = 0;
 
+
         public static void SetToView(List<TileInfo> list, Panel p)
         {
             foreach (var tile in list)
@@ -74,7 +80,6 @@ namespace MissionPlanner.GCSViews
                 p.Controls.Add(panel);
                 panel.BringToFront();
             }
-        }
-
+        }      
     }
 }

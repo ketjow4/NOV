@@ -145,7 +145,7 @@ namespace MissionPlanner
             }
         }
 
-        private void mainloop()
+        public void mainloop()
         {
             DateTime lastrecv = DateTime.MinValue;
             threadrun = true;

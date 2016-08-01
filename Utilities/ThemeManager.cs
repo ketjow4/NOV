@@ -104,7 +104,7 @@ namespace MissionPlanner.Utilities
         {
             List<Control> temp = new List<Control>();
 
-            temp.Add(new GCSViews.FlightData());
+            //temp.Add(new GCSViews.FlightData());
             temp.Add(new GCSViews.FlightPlanner());
             temp.Add(new GCSViews.Help());
             temp.Add(new GCSViews.InitialSetup());

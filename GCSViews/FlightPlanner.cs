@@ -567,7 +567,7 @@ namespace MissionPlanner.GCSViews
 
             //Resolution manager changes
             this.trackBar1.Width = ResolutionManager.FlightPlanningZoomTrackBarWidth;
-
+            this.trackBar1.ValueBoxFont = new System.Drawing.Font("Century Gothic", 20.25F * ResolutionManager.sizefactor, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             // config map             
             MainMap.CacheLocation = Path.GetDirectoryName(Application.ExecutablePath) + Path.DirectorySeparatorChar +
                                     "gmapcache" + Path.DirectorySeparatorChar;

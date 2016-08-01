@@ -119,6 +119,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="alglibnet2">
       <HintPath>ExtLibs\alglibnet2.dll</HintPath>
@@ -476,6 +479,7 @@
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
+    <Compile Include="GCSViews\GpsLocator.cs" />
     <Compile Include="GCSViews\InputFlightPlanning.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -496,6 +500,7 @@
     <Compile Include="GCSViews\PlatformChoose.Designer.cs">
       <DependentUpon>PlatformChoose.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\PortFoundEventArgs.cs" />
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -509,6 +514,12 @@
     </Compile>
     <Compile Include="GCSViews\ValueSlider\ValueSlider.Designer.cs">
       <DependentUpon>ValueSlider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCSViews\VideoPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GCSViews\VideoPlayer.Designer.cs">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GeoRef\Georefimage.Designer.cs">
       <DependentUpon>georefimage.cs</DependentUpon>
@@ -1275,6 +1286,9 @@
     <EmbeddedResource Include="GCSViews\ValueSlider\ValueSlider.resx">
       <DependentUpon>ValueSlider.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\VideoPlayer.resx">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GeoRef\Georefimage.ja-JP.resx">
       <DependentUpon>georefimage.cs</DependentUpon>
     </EmbeddedResource>
@@ -1625,6 +1639,9 @@
     </None>
     <None Include="airports.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
     </None>
     <None Include="Drivers\amd64\ftd2xx.lib">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -3165,7 +3182,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="mykey.snk" />
-    <None Include="Properties\app.manifest" />
+    <None Include="Properties\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\DataSources\CurrentState.datasource" />
     <None Include="block_plane_0.dae">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

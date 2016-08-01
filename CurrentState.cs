@@ -669,7 +669,7 @@ namespace MissionPlanner
             set { _homelocation = value; }
         }
 
-        public PointLatLngAlt MovingBase = null;
+        public PointLatLngAlt MovingBase = new PointLatLngAlt();
 
         static PointLatLngAlt _trackerloc = new PointLatLngAlt();
 

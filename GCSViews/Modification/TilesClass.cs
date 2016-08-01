@@ -41,9 +41,11 @@ namespace MissionPlanner.GCSViews.Modification
         private readonly Label headLabel;
         private readonly List<string> ButtonsNames;
 
+
         public TileData(string text, double row, double column, string unit = "", EventHandler handler = null)
             : base(text, row, column)
         {
+            
             this.unit = unit;
             ClickMethod = handler;
             panel = new Panel { Size = ResolutionManager.PanelSize };
@@ -57,8 +59,8 @@ namespace MissionPlanner.GCSViews.Modification
                 Left = ResolutionManager.HeadLabelLeft,
                 Width = ResolutionManager.HeadLabelWidth,
                 TextAlign = ContentAlignment.TopLeft
-
             };
+
             unitLabel = new Label()
             {
                 Text = unit,
@@ -68,6 +70,7 @@ namespace MissionPlanner.GCSViews.Modification
             };
             unitLabel.Top = ResolutionManager.UnitLabelTop;
             unitLabel.Left = ResolutionManager.UnitLabelLeft;
+           
 
             valueLabel = new Label()
             {
@@ -77,8 +80,15 @@ namespace MissionPlanner.GCSViews.Modification
                 Text = "0",
                 Height = ResolutionManager.ValueLabelHeight,
                 Width = ResolutionManager.ValueLabelWidth,         //new for 1280x800 design
-                Name = text.Replace(' ', '_').Replace('\n', '_')
+                Name = text.Replace(' ', '_').Replace('\n', '_'),                
             };
+
+            //headLabel.AutoSize = true;
+            //UnitLabel.AutoSize = true;
+            //valueLabel.AutoSize = true;
+            //panel.AutoSize = true;
+
+
             valueLabel.Top = ResolutionManager.ValueLabelTop;
             panel.Controls.Add(unitLabel);
             panel.Controls.Add(valueLabel);
@@ -94,12 +104,11 @@ namespace MissionPlanner.GCSViews.Modification
                 label.MouseLeave += LeaveHover;
             }
             panel.Dock = DockStyle.Fill;
-            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM"};    //ugly!!
+            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM","DISTANCE TO HOME","DISTANCE TO BASE"};    //ugly!!
         }
         public EventHandler ClickMethod;
 
         
-
         private void EnterHover(object sender, EventArgs args)
         {
             foreach (var name in ButtonsNames)
@@ -151,9 +160,6 @@ namespace MissionPlanner.GCSViews.Modification
     }
 
 
-
-
-
     public class TileButton : TileInfo
     {
         private readonly Color color;
@@ -177,7 +183,10 @@ namespace MissionPlanner.GCSViews.Modification
             };
             label.Click += ClickMethod;
             SetHoverEvents();
+                        
         }
+
+        
 
         public EventHandler ClickMethod;
 
