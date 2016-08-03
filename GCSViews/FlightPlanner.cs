@@ -7774,5 +7774,17 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             int time = (int)(distance / speed); //in seconds
             TilesFlightPlanning.UpdateEstimatedTime(time);
         }
+
+        public List<PointLatLng> getWPList()
+        {
+            List<PointLatLng> list = new List<PointLatLng>();
+
+            for (int i = 0; i < Commands.Rows.Count; i++)
+            {
+                list.Add(new PointLatLng((double.Parse((string)Commands.Rows[i].Cells[5].Value)), (double.Parse((string)Commands.Rows[i].Cells[6].Value))));
+            }
+
+            return list;
+        }
     }
 }

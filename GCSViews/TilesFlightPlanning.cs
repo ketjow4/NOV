@@ -15,6 +15,8 @@ using MissionPlanner.Utilities;
 using MissionPlanner.Validators;
 using MessageBox = System.CustomMessageBox;
 using MissionPlanner.Comms;
+using GMap.NET;
+using MissionPlanner;
 
 namespace MissionPlanner.GCSViews
 {
@@ -56,6 +58,7 @@ namespace MissionPlanner.GCSViews
         private static TileButton PolygonMode = null;
         private static TileData estimatedDistance = null;
         private static TileData estimatedTime = null;
+        private static TileButton RoadModeButton = null;
 
         private static string polygonmodestring = "POLYGON\nMODE";
         public static EventHandler calcGrid = null;
@@ -217,6 +220,7 @@ namespace MissionPlanner.GCSViews
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
                 Circle = new TileButton("\u2610 CIRCLE",4,8,CircleClicked),
                 PointPhoto = new TileButton("\u2610 PHOTO",5,8,PointPhotoClicked),
+                RoadModeButton = new TileButton("\u2610 ROAD MODE",6,8,RoadModeClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
@@ -715,6 +719,40 @@ namespace MissionPlanner.GCSViews
                 (sender as Label).Text = "\u2610 PHOTO";       //unchecked
                 pointPhotoSet = false;
             }
+        }
+
+        public static bool roadModeSet { get; set; } = false;
+
+        private static void RoadModeClicked(object sender, EventArgs args)
+        {
+            List<PointLatLng> list = FlightPlanner.instance.getWPList();
+
+            RoadMode roadObj = new RoadMode(list);
+
+            roadObj.work(30);
+
+            list = roadObj.getWPs();
+
+            for(int i =0;i<list.Count;i++)
+            {
+                FlightPlanner.instance.AddCommand(MAVLink.MAV_CMD.WAYPOINT, 0, 0, 0, 0, list[i].Lng, list[i].Lat, AltitudeVal);
+            }
+
+            //if (!roadModeSet)
+            //{
+            //    if (!circleSet)
+            //    {
+            //        // PointPhoto.ChangeButtonColor(Color.FromArgb(86, 87, 89));
+            //        (sender as Label).Text = "\u2612 ROAD MODE";       //checked
+            //        roadModeSet = true;
+            //    }
+            //}
+            //else
+            //{
+            //    //PointPhoto.ChangeButtonColor(Color.FromArgb(22, 23, 24));
+            //    (sender as Label).Text = "\u2610 ROAD MODE";       //unchecked
+            //    roadModeSet = false;
+            //}
         }
 
         #endregion

@@ -12,20 +12,62 @@ namespace MissionPlanner
     public class RoadMode
     {
         private List<PointLatLng> origWaypoints;
-        private List<PointLatLng> calculatedWPs;
+        private List<PointLatLng> calculatedWPs = new List<PointLatLng>();
 
-        public RoadMode()
+
+        public RoadMode(List<PointLatLng> list)
         {
-
+            origWaypoints = list;
         }
 
-        public void getWPs()
+        public List<PointLatLng> getWPs()
         {
-
+            return calculatedWPs;
         }
 
         public void setWPs()
         {
+            //int Alt = 25;
+
+            //foreach(PointLatLng p in calculatedWPs)
+            //{
+            //    plugin.Host.AddWPtoList(MAVLink.MAV_CMD.WAYPOINT, 0, 0, 0, 0, p.Lng, p.Lat, Alt * CurrentState.multiplierdist);
+            //}
+           
+        }
+
+        public void work(double distance)
+        {
+            List<PointLatLng> list1 = new List<PointLatLng>();
+            List<PointLatLng> list2 = new List<PointLatLng>();
+            PointLatLng[] res = new PointLatLng[2];
+
+            res = calculateWP(origWaypoints[0], origWaypoints[1], origWaypoints[0], distance);
+            list1.Add(res[0]);
+            list2.Add(res[1]);
+
+            for(int i=0;i<origWaypoints.Count-1;i++)
+            {
+                PointLatLng center = new PointLatLng((origWaypoints[i].Lat + origWaypoints[i + 1].Lat) / 2, (origWaypoints[i].Lng + origWaypoints[i + 1].Lng) / 2);
+                res = calculateWP(origWaypoints[0], origWaypoints[1], center, distance);
+                list1.Add(res[0]);
+                list2.Add(res[1]);
+            }
+            res = calculateWP(origWaypoints[origWaypoints.Count-2], origWaypoints[origWaypoints.Count - 1], origWaypoints[origWaypoints.Count - 1], distance);
+            list1.Add(res[0]);
+            list2.Add(res[1]);
+
+            list1.Reverse();
+
+            for(int i = 0; i < list1.Count; i++)
+            {
+                calculatedWPs.Add(list1[i]);
+            }
+
+            for(int i =0;i<list2.Count;i++)
+            {
+                calculatedWPs.Add(list2[i]);
+            }
 
         }
 
@@ -40,13 +82,17 @@ namespace MissionPlanner
             double x1;
             double y1;
 
-            double diff = Math.Abs(calculateDistanceBetweenPoints(first, second) - calculateDistanceBetweenPoints(first, new PointLatLng(second.Lat, second.Lng + 1.0))); //1 degree distance
-
-            double radius = distance / diff;
-
-
-
             A = (first.Lat - second.Lat) / (first.Lng - second.Lng);
+
+            double length = Math.Sqrt(1.0 + Math.Pow(A, 2.0));
+
+
+            double diff = Math.Abs(calculateDistanceBetweenPoints(first, second) - calculateDistanceBetweenPoints(first, new PointLatLng(second.Lat+A, second.Lng + 1.0))); 
+
+            double radius = distance / (diff/length);
+
+
+       
             B = -1;
             C = center.Lat - A * center.Lng;
 
