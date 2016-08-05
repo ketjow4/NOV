@@ -220,7 +220,7 @@ namespace MissionPlanner.GCSViews
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
                 Circle = new TileButton("\u2610 CIRCLE",4,8,CircleClicked),
                 PointPhoto = new TileButton("\u2610 PHOTO",5,8,PointPhotoClicked),
-                RoadModeButton = new TileButton("\u2610 ROAD MODE",6,8,RoadModeClicked),
+                RoadModeButton = new TileButton("ROAD MODE",6,8,RoadModeClicked),
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 

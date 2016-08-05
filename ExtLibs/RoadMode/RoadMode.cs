@@ -13,11 +13,17 @@ namespace MissionPlanner
     {
         private List<PointLatLng> origWaypoints;
         private List<PointLatLng> calculatedWPs = new List<PointLatLng>();
+        private double oneDegNSLength;
+        private double oneDegWELength;
 
 
         public RoadMode(List<PointLatLng> list)
         {
             origWaypoints = list;
+            oneDegNSLength = calculateDistanceBetweenPoints(new PointLatLng(0, 0), new PointLatLng(1, 0));
+
+            if(origWaypoints.Count>0)
+            oneDegWELength = calculateDistanceBetweenPoints(new PointLatLng(origWaypoints[0].Lat, 0), new PointLatLng(origWaypoints[0].Lat, 1));
         }
 
         public List<PointLatLng> getWPs()
@@ -42,7 +48,7 @@ namespace MissionPlanner
             List<PointLatLng> list2 = new List<PointLatLng>();
             PointLatLng[] res = new PointLatLng[2];
 
-            res = calculateWP(origWaypoints[0], origWaypoints[1], origWaypoints[0], distance);
+            res = calculateWP(origWaypoints[0], origWaypoints[1], origWaypoints[0], distance); //calculate waypoints in the beginning
             list1.Add(res[0]);
             list2.Add(res[1]);
 
@@ -53,7 +59,7 @@ namespace MissionPlanner
                 list1.Add(res[0]);
                 list2.Add(res[1]);
             }
-            res = calculateWP(origWaypoints[origWaypoints.Count-2], origWaypoints[origWaypoints.Count - 1], origWaypoints[origWaypoints.Count - 1], distance);
+            res = calculateWP(origWaypoints[origWaypoints.Count-2], origWaypoints[origWaypoints.Count - 1], origWaypoints[origWaypoints.Count - 1], distance); //calculate waypoints in the end
             list1.Add(res[0]);
             list2.Add(res[1]);
 
@@ -89,10 +95,11 @@ namespace MissionPlanner
 
             A = (first.Lat - second.Lat) / (first.Lng - second.Lng);
 
-            double length = Math.Sqrt(1.0 + Math.Pow(A, 2.0));
+             double length = Math.Sqrt(1.0 + Math.Pow(A, 2.0));
 
+            // double diff = calculateDistanceBetweenPoints(first, new PointLatLng(first.Lat+A, first.Lng + 1.0)); 
 
-            double diff = calculateDistanceBetweenPoints(first, new PointLatLng(first.Lat+A, first.Lng + 1.0)); 
+            double diff = Math.Sqrt(Math.Pow(1.0*oneDegWELength,2.0)+Math.Pow(A*oneDegNSLength,2.0));
 
             double radius = distance / (diff/length);
 
@@ -117,17 +124,17 @@ namespace MissionPlanner
             return result;
         }
 
-        private double calculateDistanceBetweenPoints(PointLatLng first,PointLatLng second) //calculates distance in metres
+        private double calculateDistanceBetweenPoints(PointLatLng first,PointLatLng second) //calculates distance in metres http://www.movable-type.co.uk/scripts/latlong.html
         {
             double R = 6371000;
-            double fi1 = first.Lat*(Math.PI/180);
-            double fi2 = second.Lat * (Math.PI / 180);
-            double deltaFi = (second.Lat - first.Lat) * (Math.PI / 180);
-            double deltaLambda = (second.Lng - first.Lng) * (Math.PI / 180);
+            double fi1 = first.Lat*(Math.PI/180.0);
+            double fi2 = second.Lat * (Math.PI / 180.0);
+            double deltaFi = (second.Lat - first.Lat) * (Math.PI / 180.0);
+            double deltaLambda = (second.Lng - first.Lng) * (Math.PI / 180.0);
 
-            double a = Math.Sin(deltaFi / 2) * Math.Sin(deltaFi / 2) + Math.Cos(fi1) * Math.Cos(fi2) * Math.Sin(deltaLambda / 2) * Math.Sin(deltaLambda / 2);
+            double a = Math.Sin(deltaFi / 2.0) * Math.Sin(deltaFi / 2.0) + Math.Cos(fi1) * Math.Cos(fi2) * Math.Sin(deltaLambda / 2.0) * Math.Sin(deltaLambda / 2.0);
 
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1.0 - a));
 
             return R * c;
         }
