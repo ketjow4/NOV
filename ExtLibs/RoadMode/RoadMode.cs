@@ -49,7 +49,7 @@ namespace MissionPlanner
             for(int i=0;i<origWaypoints.Count-1;i++)
             {
                 PointLatLng center = new PointLatLng((origWaypoints[i].Lat + origWaypoints[i + 1].Lat) / 2, (origWaypoints[i].Lng + origWaypoints[i + 1].Lng) / 2);
-                res = calculateWP(origWaypoints[0], origWaypoints[1], center, distance);
+                res = calculateWP(origWaypoints[i], origWaypoints[i+1], center, distance);
                 list1.Add(res[0]);
                 list2.Add(res[1]);
             }
@@ -73,10 +73,15 @@ namespace MissionPlanner
 
         private PointLatLng[] calculateWP(PointLatLng first, PointLatLng second, PointLatLng center, double distance)
         {
+            //line between points parametres
             double A;
             double B;
             double C;
+
+            //perpendicular line offset
             double c;
+
+            //coordinates of result waypoints
             double x0;
             double y0;
             double x1;
@@ -87,7 +92,7 @@ namespace MissionPlanner
             double length = Math.Sqrt(1.0 + Math.Pow(A, 2.0));
 
 
-            double diff = Math.Abs(calculateDistanceBetweenPoints(first, second) - calculateDistanceBetweenPoints(first, new PointLatLng(second.Lat+A, second.Lng + 1.0))); 
+            double diff = calculateDistanceBetweenPoints(first, new PointLatLng(first.Lat+A, first.Lng + 1.0)); 
 
             double radius = distance / (diff/length);
 
@@ -98,8 +103,8 @@ namespace MissionPlanner
 
             c = center.Lat + center.Lng / A;
 
-            x0 = (radius * Math.Sqrt(Math.Pow(A, 2.0) + Math.Pow(B, 2.0)) - B * c - C) / (A - B / A);
-            x1 = (radius * Math.Sqrt(Math.Pow(A, 2.0) + Math.Pow(B, 2.0)) + B * c + C) / (-A + B / A);
+            x1 = (radius * Math.Sqrt(Math.Pow(A, 2.0) + Math.Pow(B, 2.0)) - B * c - C) / (A - B / A);
+            x0 = (radius * Math.Sqrt(Math.Pow(A, 2.0) + Math.Pow(B, 2.0)) + B * c + C) / (-A + B / A);
             y0 = -x0 / A + c;
             y1 = -x1 / A + c;
 
