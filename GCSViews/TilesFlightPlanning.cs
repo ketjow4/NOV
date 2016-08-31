@@ -287,7 +287,7 @@ namespace MissionPlanner.GCSViews
             }
             catch (Exception ex)
             {
-                CustomMessageBox.Show("Error Connecting\nif using com0com please rename the ports to COM??\n" +
+                CustomMessageBox.Show("Error Connecting\n if using com0 please rename the ports to COM0\n" +
                                       ex.ToString());
                 return;
             }
