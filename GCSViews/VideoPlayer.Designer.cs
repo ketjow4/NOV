@@ -56,6 +56,7 @@
             this.splitContainer1.Panel2MinSize = 0;
             this.splitContainer1.Size = new System.Drawing.Size(544, 324);
             this.splitContainer1.SplitterDistance = 48;
+            this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -152,6 +153,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.Name = "VideoPlayer";
             this.Size = new System.Drawing.Size(544, 324);
             this.splitContainer1.Panel1.ResumeLayout(false);

@@ -364,7 +364,7 @@ namespace MissionPlanner.Controls.Modification
             DistBarLocation = new Point(TileWidth + 3 * MarginSize, 2 * (TileHeight + MarginSize));
 
             VideoPlayerHidden = new Size(4 * (TileWidth + MarginSize) - MarginSize, 50);
-            VideoPlayerVisible = new Size(4 * (TileWidth + MarginSize) - MarginSize, HUDSize.Height + TileHeight);
+            VideoPlayerVisible = new Size(4 * (TileWidth + MarginSize) - MarginSize, HUDSize.Height + TileHeight + 5);
             VideoPlayerLocationVisible = new Point(ScreenWidth - VideoPlayerVisible.Width - FlightDataZoomTrackBarWidth - 11, ScreenHeight - VideoPlayerVisible.Height - 5);
             VideoPlayerLocationHidden = new Point(ScreenWidth - VideoPlayerHidden.Width - FlightDataZoomTrackBarWidth - 11, ScreenHeight - VideoPlayerHidden.Height - 5);
         }

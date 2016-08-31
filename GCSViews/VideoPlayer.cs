@@ -75,7 +75,12 @@ namespace MissionPlanner.GCSViews
         {
             InitializeComponent();
             ChangeTaskBarVisibility(false);
-            HideVideoPlayer();
+            Thread t = new Thread(() => 
+            {
+                while (!this.IsHandleCreated) Thread.Sleep(20);
+                this.BeginInvoke(new MethodInvoker(delegate { HideVideoPlayer(); }));
+            } );
+            t.Start();
         }
 
         public static void ChangeTaskBarVisibility(bool show)
@@ -95,35 +100,37 @@ namespace MissionPlanner.GCSViews
         {
             if(IsHidden)
             { 
-                splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
                 ShowVideoPlayer();
-                HideButton.Text = "HIDE";
             }
             else
             {
-                splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
                 HideVideoPlayer();
-                HideButton.Text = "SHOW";
             }
-            IsHidden = !IsHidden;
+
         }
 
         private void HideVideoPlayer()
         {
+            splitContainer1.Panel2Collapsed = true;
             this.Location = ResolutionManager.VideoPlayerLocationHidden;
             this.Size = ResolutionManager.VideoPlayerHidden;
-            //IsHidden = true;
+            HideButton.Text = "SHOW";
+            IsHidden = true;
         }
 
         private void ShowVideoPlayer()
         {
+            splitContainer1.Panel2Collapsed = false;
             this.Location = ResolutionManager.VideoPlayerLocationVisible;
             this.Size = ResolutionManager.VideoPlayerVisible;
-            //IsHidden = false;
+            HideButton.Text = "HIDE";
+            IsHidden = false;
         }
 
         private void DockButton_Click(object sender, EventArgs e)
         {
+            if(IsRunning)
+            { 
             if (IsDocked == true)
             {
                 HideVideoPlayer();
@@ -142,9 +149,11 @@ namespace MissionPlanner.GCSViews
                 DockButton.Text = "UNDOCK";
                 SetParent(appWin, splitContainer1.Panel2.Handle);
                 // Move the window to overlay it on this window
+                Thread.Sleep(100);
                 MoveWindow(appWin, 0, 0, splitContainer1.Panel2.Width, splitContainer1.Panel2.Height, true);
             }
             IsDocked = !IsDocked;
+            }
         }
 
         private void StartButton_Click(object sender, EventArgs e)
@@ -181,12 +190,16 @@ namespace MissionPlanner.GCSViews
                     // Get the main handle
                     appWin = p.MainWindowHandle;
 
+                    if (IsHidden)
+                        ShowVideoPlayer();
+
                     // Put it into this form
                     SetParent(appWin, this.splitContainer1.Panel2.Handle);
 
                     // Move the window to overlay it on this window
                     MoveWindow(appWin, 0, 0, splitContainer1.Panel2.Width, splitContainer1.Panel2.Height, true);
                     IsRunning = !IsRunning;
+                    IsDocked = true;
                     StartButton.Text = "STOP";
                 }
                 catch (Exception ex)
@@ -198,7 +211,10 @@ namespace MissionPlanner.GCSViews
 
         private void PhotoButton_Click(object sender, EventArgs e)
         {
-            MainV2.comPort.setDigicamControl(true);     //NEED TESTING
+            if(GCSViews.Tiles.connected)
+                MainV2.comPort.setDigicamControl(true);     //NEED TESTING
+            else
+                CustomMessageBox.Show("First connect GCS to UAV", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
     }
 }
