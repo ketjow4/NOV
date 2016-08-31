@@ -220,7 +220,7 @@ namespace MissionPlanner.GCSViews
                 SaveWPFile = new TileButton("SAVE WP FILE", 0,6, SaveWPFileEvent),
                 Circle = new TileButton("\u2610 CIRCLE",4,8,CircleClicked),
                 PointPhoto = new TileButton("\u2610 PHOTO",5,8,PointPhotoClicked),
-                RoadModeButton = new TileButton("ROAD MODE",6,8,RoadModeClicked),
+                //RoadModeButton = new TileButton("ROAD MODE",6,8,RoadModeClicked),   //this feature is not finished yet 
                 LoadWPFile = new TileButton("LOAD WP FILE", 0,5, LoadWPFileEvent),
                 LoadWPPlatform = new TileButton("LOAD FROM PLATFORM",1,5,LoadWPPlatformEvent),
 
@@ -315,7 +315,7 @@ namespace MissionPlanner.GCSViews
                     FlightPlanner.instance.loadKMLFileToolStripMenuItem_Click(file, e);
                 else if (ext == ".poly")
                     FlightPlanner.instance.loadPolygonToolStripMenuItem_Click(file, e);
-                else
+                else if (ext == ".shp")
                     FlightPlanner.instance.fromSHPToolStripMenuItem_Click(file, e); //NOT TESTED!!!
             }
         }
