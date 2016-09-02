@@ -159,9 +159,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\lapack_lite.dll</HintPath>
     </Reference>
-    <Reference Include="LibVLC.NET">
-      <HintPath>ExtLibs\LibVLC.NET\bin\x86\Debug\LibVLC.NET.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -214,9 +211,6 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="tlogThumbnailHandler">
-      <HintPath>ExtLibs\tlogThumbnailHandler\bin\Debug\tlogThumbnailHandler.dll</HintPath>
-    </Reference>
     <Reference Include="Transitions">
       <HintPath>extLibs\Transitions.dll</HintPath>
     </Reference>
@@ -7120,6 +7114,10 @@
       <Project>{29976BA4-A04D-4A80-A866-098C879C2FDE}</Project>
       <Name>KMLib</Name>
     </ProjectReference>
+    <ProjectReference Include="ExtLibs\LibVLC.NET\LibVLC.NET.csproj">
+      <Project>{bb06dff7-4f41-4b9d-a3c3-3b6d2b8702b6}</Project>
+      <Name>LibVLC.NET</Name>
+    </ProjectReference>
     <ProjectReference Include="ExtLibs\Mavlink\MAVLink.csproj">
       <Project>{20296734-5F3C-4593-A0D5-DD20B440B13A}</Project>
       <Name>MAVLink</Name>
@@ -7135,6 +7133,10 @@
     <ProjectReference Include="ExtLibs\SharpKml\SharpKml.csproj">
       <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
       <Name>SharpKml</Name>
+    </ProjectReference>
+    <ProjectReference Include="ExtLibs\tlogThumbnailHandler\tlogThumbnailHandler.csproj">
+      <Project>{aba78b2e-77c3-4377-8568-9542ac227971}</Project>
+      <Name>tlogThumbnailHandler</Name>
     </ProjectReference>
     <ProjectReference Include="ExtLibs\Utilities\MissionPlanner.Utilities.csproj">
       <Project>{1378A66C-38E4-46F5-A05F-DC04EF7D4D16}</Project>
