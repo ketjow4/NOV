@@ -13,7 +13,8 @@ namespace GMap.NET
     using System.Drawing;
     using MissionPlanner.Controls;    /// <summary>
                                       /// form helping to prefetch tiles on local db
-                                      /// </summary>
+                                      /// </summary> 
+
     public partial class TilePrefetcher : Form
     {
         BackgroundWorker worker = new BackgroundWorker();
@@ -347,7 +348,7 @@ namespace GMap.NET
         {
 
 
-            if (NovMessageBox.ShowDialog(MessageBoxType.INFO, MessageBoxButtons.YesNo, "Are you sure you want to abort the pre-fetch process?", "Confirm Abort") == System.Windows.Forms.DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to abort the pre-fetch process?", "Confirm Abort", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
             {
                 UserAborted = true;
                 this.Close();

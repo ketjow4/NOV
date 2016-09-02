@@ -7177,10 +7177,6 @@
       <Project>{664FC484-2A94-4B0D-808F-A71F88E06B11}</Project>
       <Name>px4uploader</Name>
     </ProjectReference>
-    <ProjectReference Include="ExtLibs\RoadMode\RoadMode.csproj">
-      <Project>{61fa79c5-6d6d-4a97-946c-b8c466426975}</Project>
-      <Name>RoadMode</Name>
-    </ProjectReference>
     <ProjectReference Include="ExtLibs\SharpKml\SharpKml.csproj">
       <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>
       <Name>SharpKml</Name>

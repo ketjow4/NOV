@@ -725,8 +725,9 @@ namespace MissionPlanner.GCSViews
 
         private static void RoadModeClicked(object sender, EventArgs args)
         {
-            List<PointLatLng> list = FlightPlanner.instance.getWPList();
+            /*List<PointLatLng> list = FlightPlanner.instance.getWPList();
 
+			
             RoadMode roadObj = new RoadMode(list);
 
             roadObj.work(30);
@@ -737,7 +738,7 @@ namespace MissionPlanner.GCSViews
             {
                 FlightPlanner.instance.AddCommand(MAVLink.MAV_CMD.WAYPOINT, 0, 0, 0, 0, list[i].Lng, list[i].Lat, AltitudeVal);
             }
-
+			*/
             //if (!roadModeSet)
             //{
             //    if (!circleSet)
