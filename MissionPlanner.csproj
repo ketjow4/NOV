@@ -7,12 +7,12 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MissionPlanner</RootNamespace>
-    <AssemblyName>NOVGCS</AssemblyName>
+    <AssemblyName>Novelty Flight Manager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
     <PublishUrl>C:\Users\T430\Desktop\Novelty\Publish\</PublishUrl>
     <Install>true</Install>
@@ -117,6 +117,8 @@
   <PropertyGroup>
     <DelaySign>false</DelaySign>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="alglibnet2">
       <HintPath>ExtLibs\alglibnet2.dll</HintPath>
@@ -177,6 +179,10 @@
     <Reference Include="NumpyDotNet, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>DLLs\NumpyDotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>packages\NUnit.3.2.1\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ObjectListView">
       <HintPath>packages\Unofficial.ObjectListView.2.6.0\lib\net20\ObjectListView.dll</HintPath>
@@ -289,6 +295,7 @@
     <Compile Include="CodeGen.cs" />
     <Compile Include="Comms\CommsSerialScan.cs" />
     <Compile Include="Comms\MAVLinkSerialPort.cs" />
+    <Compile Include="ConsoleOverride.cs" />
     <Compile Include="Controls\ConnectionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -395,6 +402,7 @@
     </Compile>
     <Compile Include="Controls\Waypoints\Spline2.cs" />
     <Compile Include="Controls\Waypoints\Spline.cs" />
+    <Compile Include="Decryption\Decryption.cs" />
     <Compile Include="GCSViews\ConfigurationView\ConfigAccelerometerCalibration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -462,13 +470,14 @@
       <DependentUpon>ConfigWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="GCSViews\FlightPlannerWaypointsForm.cs" />
+    <Compile Include="GCSViews\GpsLocator.cs" />
     <Compile Include="GCSViews\InputFlightPlanning.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GCSViews\InputFlightPlanning.Designer.cs">
       <DependentUpon>InputFlightPlanning.cs</DependentUpon>
     </Compile>
-    <Compile Include="GCSViews\Modification\ResolutionManager.cs" />
+    <Compile Include="GCSViews\Modification\ChangeValueEventArgs.cs" />
     <Compile Include="GCSViews\Modification\TilesClass.cs" />
     <Compile Include="GCSViews\OfflineMapsInput.cs">
       <SubType>Form</SubType>
@@ -476,11 +485,32 @@
     <Compile Include="GCSViews\OfflineMapsInput.Designer.cs">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
     </Compile>
+    <Compile Include="GCSViews\PlatformChoose.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\PlatformChoose.Designer.cs">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCSViews\PortFoundEventArgs.cs" />
     <Compile Include="GCSViews\PreFlightCheck.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GCSViews\PreFlightCheck.Designer.cs">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCSViews\TilesFlightData.cs" />
+    <Compile Include="GCSViews\TilesFlightPlanning.cs" />
+    <Compile Include="GCSViews\ValueSlider\ValueSlider.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GCSViews\ValueSlider\ValueSlider.Designer.cs">
+      <DependentUpon>ValueSlider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GCSViews\VideoPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GCSViews\VideoPlayer.Designer.cs">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="GeoRef\Georefimage.Designer.cs">
       <DependentUpon>georefimage.cs</DependentUpon>
@@ -491,6 +521,7 @@
     <Compile Include="GeoRef\Rational.cs" />
     <Compile Include="GeoRef\SingleLocation.cs" />
     <Compile Include="GeoRef\VehicleLocation.cs" />
+    <Compile Include="GetDpi\ScreenExtentions.cs" />
     <Compile Include="HIL\QuadCopter.cs" />
     <Compile Include="Joystick\Joy_Do_Repeat_Servo.cs">
       <SubType>Form</SubType>
@@ -534,6 +565,7 @@
     <Compile Include="Joystick\Joy_Mount_Mode.Designer.cs">
       <DependentUpon>Joy_Mount_Mode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Log4NetConfigurator.cs" />
     <Compile Include="LogReporter\LogReporter.cs" />
     <Compile Include="L10N.cs" />
     <Compile Include="Log\CollectionBuffer.cs" />
@@ -1212,6 +1244,9 @@
     <EmbeddedResource Include="GCSViews\OfflineMapsInput.resx">
       <DependentUpon>OfflineMapsInput.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\PlatformChoose.resx">
+      <DependentUpon>PlatformChoose.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\PreFlightCheck.resx">
       <DependentUpon>PreFlightCheck.cs</DependentUpon>
     </EmbeddedResource>
@@ -1238,6 +1273,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GCSViews\Terminal.zh-TW.resx">
       <DependentUpon>Terminal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\ValueSlider\ValueSlider.resx">
+      <DependentUpon>ValueSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GCSViews\VideoPlayer.resx">
+      <DependentUpon>VideoPlayer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GeoRef\Georefimage.ja-JP.resx">
       <DependentUpon>georefimage.cs</DependentUpon>
@@ -1656,6 +1697,10 @@
     <Compile Include="Utilities\Update.cs" />
     <Compile Include="Utilities\VersionDetection.cs" />
     <Compile Include="Utilities\vlcrender.cs" />
+    <Compile Include="Validators\IValidator.cs" />
+    <Compile Include="Validators\NumberConverter.cs" />
+    <Compile Include="Validators\NumericValidator.cs" />
+    <Compile Include="Validators\NumericValidatorBase.cs" />
     <Compile Include="Warnings\CustomWarning.cs" />
     <Compile Include="Warnings\WarningControl.cs">
       <SubType>UserControl</SubType>
@@ -3263,6 +3308,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ExtLibs\LibVLC.NET\LibVLC.NET.csproj" />
+    <Content Include="log4net_config.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="LogAnalyzer\DataflashLog.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -3334,9 +3383,8 @@
     <Content Include="mavgraphs.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Resources\ogar.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="Resources\ogar.png" />
+    <Content Include="Resources\novelty_splash.bmp" />
     <Content Include="Scripts\example5 inject data.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -6931,7 +6979,6 @@
     <None Include="Resources\PlusFramesGreen_06.png" />
     <None Include="Resources\pixhawk.jpg" />
     <None Include="Resources\novelty.png" />
-    <None Include="Resources\novelty_splash.bmp" />
     <Content Include="Resources\rover.png" />
     <Content Include="Resources\splash.jpg" />
     <Content Include="Scripts\datetime.py">
@@ -7129,6 +7176,10 @@
     <ProjectReference Include="ExtLibs\px4uploader\px4uploader.csproj">
       <Project>{664FC484-2A94-4B0D-808F-A71F88E06B11}</Project>
       <Name>px4uploader</Name>
+    </ProjectReference>
+    <ProjectReference Include="ExtLibs\RoadMode\RoadMode.csproj">
+      <Project>{61fa79c5-6d6d-4a97-946c-b8c466426975}</Project>
+      <Name>RoadMode</Name>
     </ProjectReference>
     <ProjectReference Include="ExtLibs\SharpKml\SharpKml.csproj">
       <Project>{53F12A60-E9CC-44BC-8366-1AE3AB2B547D}</Project>

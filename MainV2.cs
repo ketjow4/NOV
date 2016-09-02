@@ -27,7 +27,9 @@ using System.Web.Script.Serialization;
 using System.Speech.Synthesis;
 using MissionPlanner;
 using MissionPlanner.Joystick;
+using MissionPlanner.Controls.Modification;
 using System.Collections.ObjectModel;
+using MissionPlanner.GCSViews;
 
 namespace MissionPlanner
 {
@@ -140,12 +142,12 @@ namespace MissionPlanner
 		public static event MapPositionChangedEventHandler MapPositionChangedEvent;
 		public static event MapZoomChangedEventHandler MapZoomChangedEvent;
 
-		/// <summary>
-		/// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
-		/// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
-		/// control for layout reasons.
-		/// </summary>
-		static internal ConnectionControl _connectionControl;
+        /// <summary>
+        /// This 'Control' is the toolstrip control that holds the comport combo, baudrate combo etc
+        /// Otiginally seperate controls, each hosted in a toolstip sqaure, combined into this custom
+        /// control for layout reasons.
+        /// </summary>
+        static internal ConnectionControl _connectionControl;
 
 		#region nested classes
 		private static class NativeMethods
@@ -383,19 +385,44 @@ namespace MissionPlanner
                 MenuSimulation.Visible = true;
             }
         }
-		
+
+        [DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
+        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
+
+        public enum DeviceCap
+        {
+            /// <summary>
+            /// Logical pixels inch in X
+            /// </summary>
+            LOGPIXELSX = 88,
+            /// <summary>
+            /// Logical pixels inch in Y
+            /// </summary>
+            LOGPIXELSY = 90
+
+            // Other constants may be founded on pinvoke.net
+        }
+        GCSViews.GpsLocator locator = new GCSViews.GpsLocator();
+
+        public bool MarkerThreadrun = false;
+        public System.Threading.Thread PortFounderThread;
+
         public MainV2()
         {
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            IntPtr desktop = g.GetHdc();
+
+            int Xdpi = GetDeviceCaps(desktop, (int)DeviceCap.LOGPIXELSX);
             
             var Resolution = Screen.PrimaryScreen.Bounds;
-            GCSViews.Modification.ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
-            GCSViews.Modification.ResolutionManager.Initialize();
+            ResolutionManager.ParseResolution(Resolution.Width, Resolution.Height);
+            ResolutionManager.Initialize(Xdpi);
+			NovMessageBoxForm.setWidth(ResolutionManager.InputPanelSize.Width);
 
 
-
-            MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
-            report = new Thread(new ThreadStart(nowyreporter.SendMail));
-            report.Start();
+            //MissionPlanner.LogReporter.LogReporter nowyreporter = new LogReporter.LogReporter();
+            //report = new Thread(new ThreadStart(nowyreporter.SendMail));
+            //report.Start();
 
             // set this before we reset it
             MainV2.config["NUM_tracklength"] = "2000";
@@ -411,25 +438,25 @@ namespace MissionPlanner
             // setup adsb
             Utilities.adsb.UpdatePlanePosition += adsb_UpdatePlanePosition;
 
-            Form splash = Program.Splash;
-
+			Splash splash = Program.Splash;
+			splash.VersionNumber = Application.ProductVersion;
             splash.Refresh();
 
             Application.DoEvents();
 
             instance = this;
 
-            //disable dpi scaling
-            if (Font.Name != "宋体")
-                //Chinese displayed normally when scaling. But would be too small or large using this line of code.
-                Font = new Font(Font.Name, 8.25f*96f/CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet,
-                    Font.GdiVerticalFont);
+            ////disable dpi scaling                                     -------------------DELETED--------------------
+            //if (Font.Name != "宋体")
+            //    //Chinese displayed normally when scaling. But would be too small or large using this line of code.
+            //    Font = new Font(Font.Name, 8.25f*96f/CreateGraphics().DpiX, Font.Style, Font.Unit, Font.GdiCharSet,
+            //        Font.GdiVerticalFont);
+
 
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
-			this.WindowState = FormWindowState.Maximized;
-
-			MyView = new MainSwitcher(this);
+			
+            MyView = new MainSwitcher(this);
             View = MyView;
 			MapPositionChangedEventHandler mapPositionChangedEventHandler
 				= new MapPositionChangedEventHandler(syncMapPositions);
@@ -447,7 +474,7 @@ namespace MissionPlanner
             //this.TopMost = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.WindowState = FormWindowState.Maximized;
-
+            
 
             _connectionControl = toolStripConnectionControl.ConnectionControl;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
@@ -652,10 +679,16 @@ namespace MissionPlanner
             }
 
 
+
+            
+
+             
+
+
             try
             {
                 log.Info("Create FD");
-                FlightData = new GCSViews.FlightData();
+                FlightData = new GCSViews.FlightData(locator);
                 log.Info("Create FP");
                 FlightPlanner = new GCSViews.FlightPlanner();
                 //Configuration = new GCSViews.ConfigurationView.Setup();
@@ -1178,10 +1211,10 @@ namespace MissionPlanner
                 catch { }
 
                 //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
-                if (GCSViews.Tiles.ConnectButton.Label.Text == "DISCONNECT")
+                if (GCSViews.TilesFlightData.ConnectButton.Label.Text == "DISCONNECT")
                 {
-                    GCSViews.Tiles.ConnectButton.Label.Text = "CONNECT";
-                    GCSViews.Tiles.connected = true;
+                    GCSViews.TilesFlightData.ConnectButton.Label.Text = "CONNECT";
+                    GCSViews.Tiles.connected = false;
                 }
 
                 this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
@@ -1462,9 +1495,9 @@ namespace MissionPlanner
                     this.MenuConnect.Image = displayicons.disconnect;
 
                     
-                     if (GCSViews.Tiles.ConnectButton.Label.Text == "CONNECT")
+                     if (GCSViews.TilesFlightData.ConnectButton.Label.Text == "CONNECT")
                     {
-                        GCSViews.Tiles.ConnectButton.Label.Text = "DISCONNECT";
+                        GCSViews.TilesFlightData.ConnectButton.Label.Text = "DISCONNECT";
                         GCSViews.Tiles.connected = true;
                     }
 
@@ -2219,7 +2252,7 @@ namespace MissionPlanner
                     if (speechEnable && speechEngine != null && (DateTime.Now - speechlowspeedtime).TotalSeconds > 10 &&
                         (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen))
                     {
-                        if (MainV2.getConfig("speechlowspeedenabled") == "True" && MainV2.comPort.MAV.cs.armed)
+                        if (MainV2.getConfig("speechlowspeedenabled") == "True" && MainV2.comPort.MAV.cs.Armed)
                         {
                             float warngroundspeed = 0;
                             float.TryParse(MainV2.getConfig("speechlowgroundspeedtrigger"), out warngroundspeed);
@@ -2263,7 +2296,7 @@ namespace MissionPlanner
                             altwarningmax = (int)Math.Max(MainV2.comPort.MAV.cs.alt, altwarningmax);
 
                             if (MainV2.getConfig("speechaltenabled") == "True" && MainV2.comPort.MAV.cs.alt != 0.00 &&
-                                (MainV2.comPort.MAV.cs.alt <= warnalt) && MainV2.comPort.MAV.cs.armed)
+                                (MainV2.comPort.MAV.cs.alt <= warnalt) && MainV2.comPort.MAV.cs.Armed)
                             {
                                 if (altwarningmax > warnalt)
                                 {
@@ -2311,7 +2344,7 @@ namespace MissionPlanner
                         && (DateTime.Now - connecttime).TotalSeconds > 30
                         && (DateTime.Now - nodatawarning).TotalSeconds > 5
                         && (MainV2.comPort.logreadmode || comPort.BaseStream.IsOpen)
-                        && MainV2.comPort.MAV.cs.armed)
+                        && MainV2.comPort.MAV.cs.Armed)
                     {
                         if (speechEnable && speechEngine != null)
                         {
@@ -2327,11 +2360,11 @@ namespace MissionPlanner
                     }
 
                     // get home point on armed status change.
-                    if (armedstatus != MainV2.comPort.MAV.cs.armed && comPort.BaseStream.IsOpen)
+                    if (armedstatus != MainV2.comPort.MAV.cs.Armed && comPort.BaseStream.IsOpen)
                     {
-                        armedstatus = MainV2.comPort.MAV.cs.armed;
+                        armedstatus = MainV2.comPort.MAV.cs.Armed;
                         // status just changed to armed
-                        if (MainV2.comPort.MAV.cs.armed == true && MainV2.comPort.MAV.aptype != MAVLink.MAV_TYPE.GIMBAL)
+                        if (MainV2.comPort.MAV.cs.Armed == true && MainV2.comPort.MAV.aptype != MAVLink.MAV_TYPE.GIMBAL)
                         {
                             try
                             {

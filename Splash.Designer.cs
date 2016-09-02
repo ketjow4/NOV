@@ -30,6 +30,7 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Splash));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			this.Version = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -46,6 +47,18 @@
 			this.pictureBox1.TabIndex = 2;
 			this.pictureBox1.TabStop = false;
 			// 
+			// Version
+			// 
+			this.Version.BackColor = System.Drawing.Color.Transparent;
+			this.Version.Location = new System.Drawing.Point(568, 355);
+			this.Version.Margin = new System.Windows.Forms.Padding(3);
+			this.Version.Name = "Version";
+			this.Version.Padding = new System.Windows.Forms.Padding(3);
+			this.Version.Size = new System.Drawing.Size(200, 19);
+			this.Version.TabIndex = 3;
+			this.Version.Text = "version: 1.?";
+			this.Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// Splash
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -53,6 +66,7 @@
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.ClientSize = new System.Drawing.Size(770, 375);
 			this.ControlBox = false;
+			this.Controls.Add(this.Version);
 			this.Controls.Add(this.pictureBox1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -72,5 +86,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-    }
+		private System.Windows.Forms.Label Version;
+	}
 }

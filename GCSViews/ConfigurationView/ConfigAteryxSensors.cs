@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using MissionPlanner.Controls;
+using MessageBox = System.CustomMessageBox;
 
 namespace MissionPlanner.GCSViews.ConfigurationView
 {
@@ -45,7 +46,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
 
                 if ((MainV2.comPort.MAV.cs.airspeed > 7.0) || (MainV2.comPort.MAV.cs.groundspeed > 10.0))
                 {
-                    MessageBox.Show("Unable - UAV airborne");
+					MessageBox.Show("Unable - UAV airborne");
                     ((Button) sender).Enabled = true;
                     return;
                 }
@@ -54,7 +55,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             }
             catch
             {
-                MessageBox.Show("Failed to Zero Attitude");
+				MessageBox.Show("Failed to Zero Attitude");
             }
             ((Button) sender).Enabled = true;
         }
@@ -67,7 +68,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
 
                 if ((MainV2.comPort.MAV.cs.airspeed > 7.0) || (MainV2.comPort.MAV.cs.groundspeed > 10.0))
                 {
-                    MessageBox.Show("Unable - UAV airborne");
+					MessageBox.Show("Unable - UAV airborne");
                     ((Button) sender).Enabled = true;
                     return;
                 }
@@ -77,7 +78,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             }
             catch
             {
-                MessageBox.Show("The Command failed to execute");
+				MessageBox.Show("The Command failed to execute");
             }
             ((Button) sender).Enabled = true;
         }

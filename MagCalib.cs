@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Collections;
@@ -16,7 +14,7 @@ using MissionPlanner.Controls;
 
 namespace MissionPlanner
 {
-    public class MagCalib
+	public class MagCalib
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -306,7 +304,7 @@ namespace MissionPlanner
             return true;
         }
 
-        static void prd_DoWork(object sender, ProgressWorkerEventArgs e, object passdata = null)
+        static void prd_DoWork(object sender, MissionPlanner.Controls.Old.ProgressWorkerEventArgs e, object passdata = null)
         {
             // turn learning off
             MainV2.comPort.setParam("COMPASS_LEARN", 0);

@@ -8,91 +8,150 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Threading;
-
+using MissionPlanner.Controls.Modification;
 using MissionPlanner.Controls;
+using MissionPlanner.Validators;
+using System.Runtime.InteropServices;
 
 namespace MissionPlanner.GCSViews
 {
-    public partial class PreFlightCheck : Form
+    public partial class PreFlightCheck : Form, INotifyPropertyChanged
     {
-        private Thread thread;
-        private volatile bool stop = false;
+        private double gpsfix;
+        private double gpshdop;
+        private string warningText;
+        private bool lowVoltageWarning;
+
+        public double Gpsfix
+        {
+            get
+            {
+                return gpsfix;
+            }
+
+            set
+            {
+                gpsfix = value;
+                OnPropertyChanged("Gpsfix");
+            }
+        }
+
+        public double Gpshdop
+        {
+            get
+            {
+                return gpshdop;
+            }
+
+            set
+            {
+                gpshdop = value;
+                OnPropertyChanged("Gpshdop");
+            }
+        }
+
+        public string WarningText
+        {
+            get
+            {
+                return warningText;
+            }
+
+            set
+            {
+                warningText = value;
+                OnPropertyChanged("WarningText");
+            }
+        }
+
+        public bool LowVoltageWarning
+        {
+            get
+            {
+                return lowVoltageWarning;
+            }
+
+            set
+            {
+                lowVoltageWarning = value;
+                OnPropertyChanged("LowVoltageWarning");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
+        }
 
         public PreFlightCheck()
         {
             InitializeComponent();
-
+            
             Utilities.ThemeManager.ApplyThemeTo(this);
             ReadyButton.Enabled = false;
             DialogResult = System.Windows.Forms.DialogResult.Cancel;
 
+            DataBindings.Add(new Binding("Gpshdop", FlightData.instance.bindingSource1, "gpshdop", true));
+            DataBindings.Add(new Binding("Gpsfix", FlightData.instance.bindingSource1, "gpsstatus", true));
+            DataBindings.Add(new Binding("WarningText", FlightData.instance.hud1.data, "warning", true));
+            DataBindings.Add(new Binding("LowVoltageWarning", FlightData.instance.hud1.data, "lowvoltagealert", true));
+            warning_label.DataBindings.Add(new Binding("Text", FlightData.instance.hud1.data, "warning", true));
+
             ReadEmployeeData("data.csv");
 
-            AutoCheck();
-            thread = new Thread(new ThreadStart(Do_AutoCheck));
-            thread.Start();
+            PropertyChanged += AutoCheck;
+
+            this.Size = ResolutionManager.PreFlightCheckSize;
+            SetFonts();
         }
 
-        //Need to refactor
-        public void Do_AutoCheck()
+
+        private void SetFonts()
         {
-            try
+            Font ButtonFont = new Font("Century Gothic", ResolutionManager.PreFlightCheckFontButton, FontStyle.Regular);
+            Font CheckBoxFont = new Font("Century Gothic", ResolutionManager.PreFlightCheckFontCheckBox, FontStyle.Regular);
+            foreach (var element in this.tableLayoutPanel1.Controls)
             {
-                while(!stop)
-                {
-                Boolean enabled = true;
-                String text = "";
-                float gpsfix = 0;
-                float gpshdop = 0;
-
-                FlightData.instance.hud1.Invoke(new MethodInvoker(delegate { gpsfix =  FlightData.instance.hud1.gpsfix; gpshdop = FlightData.instance.hud1.gpshdop;}));
-
-                if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
-                {
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToGreen();  }));
-                }
-                else
-                {
-                    enabled = false;
-                    GPSFix.Invoke(new MethodInvoker(delegate{ GPSFixToRed(); }));
-                }
-                if (FlightData.instance.hud1.lowvoltagealert)
-                {
-                    enabled = false;
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToRed(); }));
-                }
-                else
-                    BatteryVol.Invoke(new MethodInvoker(delegate { BatteryVolToGreen(); }));
-                
-                warning_label.Invoke(new MethodInvoker(delegate { warning_label.Text = FlightData.instance.hud1.warning;
-                                                              text   = warning_label.Text;}));
-
-            if (text != "")
-                enabled = false;
-
-
-            if (enabled == false)
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
+            }
+            foreach (var element in this.tableLayoutPanel3.Controls)
             {
-                ReadyButton.Invoke(new MethodInvoker(delegate { ReadyButton.Enabled = enabled; }));
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
             }
-            if(stop)
-                break;
-
-            Thread.Sleep(100);
-                }
-            }
-            catch (Exception ex)
+            foreach (var element in this.tableLayoutPanel4.Controls)
             {
-                //silnet errors here because of no waiting to kill process before close window
-                //MessageBox.Show("Transparent Label error" + ex.Message);
-                // log errors
+                if (element is MyButton)
+                    (element as MyButton).Font = ButtonFont;
             }
+            foreach (var checkbox in this.CheckBoxTableLayout.Controls)
+            {
+                (checkbox as CheckBox).Font = CheckBoxFont;
+            }
+            EmployeeLabel.Font = CheckBoxFont;      //this font is used because is the same as for checkbox
+            employee_data.Font = ButtonFont;         //this font is used because is the same as for buttons
+            warning_label.Font = new Font("Century Gothic", ResolutionManager.PreFlightCheckFontWarning, FontStyle.Regular); 
         }
-        
 
         private void ReadEmployeeData(string FilePath)
         {
-            string[] allLines = File.ReadAllLines(FilePath);
+            StreamReader sr = new StreamReader("Amplify.rex");
+            String sSecretKey = sr.ReadToEnd().Trim();
+
+            byte[] tempforhex = Decryption.FromHex(sSecretKey);
+            string keyinascii = Encoding.ASCII.GetString(tempforhex);
+
+            GCHandle gch = GCHandle.Alloc(keyinascii, GCHandleType.Pinned);
+
+            string[] allLines = Decryption.DecryptFile("data.rex", keyinascii);
+            allLines = allLines.Take(allLines.Length - 1).ToArray();
 
             var query = from line in allLines
                         let data = line.Split(',')
@@ -111,8 +170,41 @@ namespace MissionPlanner.GCSViews
 
         private void ReadyButton_Click(object sender, EventArgs e)
         {
+            StreamReader sr = new StreamReader("Amplify.rex");
+            String sSecretKey = sr.ReadToEnd().Trim();
+
+            byte[] tempforhex = Decryption.FromHex(sSecretKey);
+            string keyinascii = Encoding.ASCII.GetString(tempforhex);
+
+            GCHandle gch = GCHandle.Alloc(keyinascii, GCHandleType.Pinned);
+            
+            string[] allLines = Decryption.DecryptFile("data.rex", keyinascii);
+
+            var query = from line in allLines
+                        let data = line.Split(',')
+                        select new
+                        {
+                            ID = data[2],
+                            PIN = data[3]
+                        };
+
+            var intValidator = new NumericValidator<int>(0, 9999);
+            InputFlightPlanning<int> pinForm = new InputFlightPlanning<int>(intValidator, "ENTER PIN", false, "",'*');
+            this.Hide();
+            pinForm.ShowDialog();
+            int result;
+            int temp = employee_data.SelectedItem.ToString().LastIndexOf(":");
+            int.TryParse(employee_data.SelectedItem.ToString().Substring(temp+1),out result);   //+1 bo następny znak za znakiem ':'
+
+            var b = query.Where(a => a.ID == result.ToString());
+
+            if (b.FirstOrDefault() != null)
+                if (pinForm.Result.ToString() != b.FirstOrDefault().PIN)
+                {
+                    DialogResult = DialogResult.Cancel;
+                    return;
+                }
             SaveLogFile();
-            stop = true;
             DialogResult = DialogResult.OK;
         }
 
@@ -120,7 +212,6 @@ namespace MissionPlanner.GCSViews
         private void SaveLogFile()
         {
             String pathString = CreateLogFile();
-
             FileInfo fInfo = new FileInfo(pathString);
 
             using (StreamWriter outfile = new StreamWriter(pathString))
@@ -131,10 +222,8 @@ namespace MissionPlanner.GCSViews
                 outfile.WriteLine("All system are checked and ready to fly.");
                 outfile.Close();
             }
-            // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
         }
-
 
         private String CreateLogFile()
         {
@@ -163,7 +252,6 @@ namespace MissionPlanner.GCSViews
                 outfile.WriteLine("Time: " + DateTime.Now.ToString());
                 outfile.Close();
             }
-            // Set the IsReadOnly property.
             fInfo.IsReadOnly = true;
         }
 
@@ -175,12 +263,8 @@ namespace MissionPlanner.GCSViews
                 if ((checkbox as CheckBox).Checked == false)
                 {
                     enabled = false;
+                    break;
                 }
-            }
-
-            if (!AutoCheck())
-            {
-                enabled = false;
             }
 
             object SelectedItem = new object();
@@ -191,30 +275,29 @@ namespace MissionPlanner.GCSViews
             ReadyButton.Enabled = enabled;
         }
 
-        private bool AutoCheck()
+        private void AutoCheck(object obj, PropertyChangedEventArgs e)
         {
             Boolean enabled = true;
-            if (FlightData.instance.hud1.gpsfix != 0 && FlightData.instance.hud1.gpsfix != 1 && FlightData.instance.hud1.gpshdop < 2.21)
+
+            if (gpsfix != 0 && gpsfix != 1 && gpshdop < 2.21)
             {
                 GPSFixToGreen();
+                enabled = true;
             }
             else
             {
-                enabled = false;
                 GPSFixToRed();
-            }
-            if (FlightData.instance.hud1.lowvoltagealert)
-            {
                 enabled = false;
-                BatteryVolToRed();
             }
-            else
-                BatteryVolToGreen();
-            warning_label.Text = FlightData.instance.hud1.warning;
-
             if (warning_label.Text != "")
                 enabled = false;
-            return enabled;
+            else
+                enabled = true;
+            if(LowVoltageWarning)
+                enabled = false;
+            else
+                enabled = true;
+            ReadyButton.Enabled = enabled;
         }
 
         private void CompassCalibrationButton_Click(object sender, EventArgs e)

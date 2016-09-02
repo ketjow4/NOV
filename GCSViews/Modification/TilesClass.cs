@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using IronPython.Runtime.Operations;
+using MissionPlanner.Controls.Modification;
 
 namespace MissionPlanner.GCSViews.Modification
 {
@@ -40,9 +41,11 @@ namespace MissionPlanner.GCSViews.Modification
         private readonly Label headLabel;
         private readonly List<string> ButtonsNames;
 
+
         public TileData(string text, double row, double column, string unit = "", EventHandler handler = null)
             : base(text, row, column)
         {
+            
             this.unit = unit;
             ClickMethod = handler;
             panel = new Panel { Size = ResolutionManager.PanelSize };
@@ -56,8 +59,8 @@ namespace MissionPlanner.GCSViews.Modification
                 Left = ResolutionManager.HeadLabelLeft,
                 Width = ResolutionManager.HeadLabelWidth,
                 TextAlign = ContentAlignment.TopLeft
-
             };
+
             unitLabel = new Label()
             {
                 Text = unit,
@@ -67,6 +70,7 @@ namespace MissionPlanner.GCSViews.Modification
             };
             unitLabel.Top = ResolutionManager.UnitLabelTop;
             unitLabel.Left = ResolutionManager.UnitLabelLeft;
+           
 
             valueLabel = new Label()
             {
@@ -76,8 +80,15 @@ namespace MissionPlanner.GCSViews.Modification
                 Text = "0",
                 Height = ResolutionManager.ValueLabelHeight,
                 Width = ResolutionManager.ValueLabelWidth,         //new for 1280x800 design
-                Name = text.Replace(' ', '_').Replace('\n', '_')
+                Name = text.Replace(' ', '_').Replace('\n', '_'),                
             };
+
+            //headLabel.AutoSize = true;
+            //UnitLabel.AutoSize = true;
+            //valueLabel.AutoSize = true;
+            //panel.AutoSize = true;
+
+
             valueLabel.Top = ResolutionManager.ValueLabelTop;
             panel.Controls.Add(unitLabel);
             panel.Controls.Add(valueLabel);
@@ -93,12 +104,11 @@ namespace MissionPlanner.GCSViews.Modification
                 label.MouseLeave += LeaveHover;
             }
             panel.Dock = DockStyle.Fill;
-            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM"};    //ugly!!
+            ButtonsNames = new List<string>() {"ALTITUDE ", "OBSERVATION HEAD", "SIDELAP", "OVERLAP", "FLYING SPEED", "ANGLE", "START FROM","DISTANCE TO HOME","DISTANCE TO BASE"};    //ugly!!
         }
         public EventHandler ClickMethod;
 
         
-
         private void EnterHover(object sender, EventArgs args)
         {
             foreach (var name in ButtonsNames)
@@ -150,15 +160,12 @@ namespace MissionPlanner.GCSViews.Modification
     }
 
 
-
-
-
     public class TileButton : TileInfo
     {
         private readonly Color color;
         private Label label;
-        private readonly Color hoverColor = Color.FromArgb(85, 86, 88);
-        private readonly Color standardColor = Color.FromArgb(22, 23, 24);
+        private static readonly Color hoverColor = Color.FromArgb(85, 86, 88);
+        private static readonly Color standardColor = Color.FromArgb(22, 23, 24);
 
         public TileButton(string text, double row, double column, EventHandler handler = null, Color? color = null)
             : base(text, row, column)
@@ -175,9 +182,11 @@ namespace MissionPlanner.GCSViews.Modification
                 Font = new Font("Century Gothic", ResolutionManager.TileButtonFontSize)
             };
             label.Click += ClickMethod;
-            label.MouseEnter += EnterHover;
-            label.MouseLeave += LeaveHover;
+            SetHoverEvents();
+                        
         }
+
+        
 
         public EventHandler ClickMethod;
 
@@ -190,6 +199,19 @@ namespace MissionPlanner.GCSViews.Modification
         {
             set { if (label.Parent != null) label.Parent.Visible = value; }
             get { return label.Parent != null && label.Parent.Visible; }
+        }
+
+
+        public void UnsetHoverEvent()
+        {
+            label.MouseHover -= EnterHover;
+            label.MouseLeave -= LeaveHover;
+        }
+
+        public void SetHoverEvents()
+        {
+            label.MouseEnter += EnterHover;
+            label.MouseLeave += LeaveHover;
         }
 
         private void EnterHover(object sender, EventArgs args)
@@ -219,6 +241,33 @@ namespace MissionPlanner.GCSViews.Modification
         public void SetToHoverColor()
         {
             this.label.BackColor = hoverColor;
+        }
+
+        public Color PanelColor
+        {
+            set {
+                    label.BackColor = value;
+                }
+
+            get {
+                    return label.BackColor;
+                }
+        }
+
+        public static Color StandardColor
+        {
+            get
+            {
+                return standardColor;
+            }
+        }
+
+        public static Color HoverColor
+        {
+            get
+            {
+                return hoverColor;
+            }
         }
     }
 }

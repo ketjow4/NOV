@@ -669,7 +669,7 @@ namespace MissionPlanner
             set { _homelocation = value; }
         }
 
-        public PointLatLngAlt MovingBase = null;
+        public PointLatLngAlt MovingBase = new PointLatLngAlt();
 
         static PointLatLngAlt _trackerloc = new PointLatLngAlt();
 
@@ -804,7 +804,7 @@ namespace MissionPlanner
         public float freemem { get; set; }
         public float load { get; set; }
         public float brklevel { get; set; }
-        public bool armed { get; set; }
+        private bool armed;
 
         // Sik radio
         [DisplayText("Sik Radio rssi")]
@@ -1094,7 +1094,7 @@ namespace MissionPlanner
                     {
                         lastsecondcounter = datetime;
 
-                        if (lastpos.Lat != 0 && lastpos.Lng != 0 && armed)
+                        if (lastpos.Lat != 0 && lastpos.Lng != 0 && Armed)
                         {
                             if (!mavinterface.BaseStream.IsOpen && !mavinterface.logreadmode)
                                 distTraveled = 0;
@@ -1413,11 +1413,11 @@ namespace MissionPlanner
                         }
                         else
                         {
-                            armed = (hb.base_mode & (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) ==
+                            Armed = (hb.base_mode & (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) ==
                                     (byte) MAVLink.MAV_MODE_FLAG.SAFETY_ARMED;
 
                             // for future use
-                            landed = hb.system_status == (byte) MAVLink.MAV_STATE.STANDBY;
+                            Landed = hb.system_status == (byte) MAVLink.MAV_STATE.STANDBY;
 
                             failsafe = hb.system_status == (byte) MAVLink.MAV_STATE.CRITICAL;
 
@@ -2270,7 +2270,7 @@ namespace MissionPlanner
         }
 
 
-        public bool landed { get; set; }
+        private bool landed;
 
         public bool terrainactive { get; set; }
 
@@ -2365,5 +2365,37 @@ namespace MissionPlanner
         public float rpm1 { get; set; }
 
         public float rpm2 { get; set; }
+
+        public static event EventHandler ArmedStatusChanged;
+
+        public static event EventHandler LandedChanged;
+
+        public bool Armed
+        {
+            get
+            {
+                return armed;
+            }
+
+            set
+            {
+                if (ArmedStatusChanged != null && value != armed) ArmedStatusChanged(this, null);
+                armed = value;
+            }
+        }
+
+        public bool Landed
+        {
+            get
+            {
+                return landed;
+            }
+
+            set
+            {
+                if (LandedChanged != null && value != landed) LandedChanged(this, null);
+                landed = value;
+            }
+        }
     }
 }

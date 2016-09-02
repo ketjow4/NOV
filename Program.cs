@@ -44,10 +44,18 @@ namespace MissionPlanner
 
             Thread = Thread.CurrentThread;
 
-            System.Windows.Forms.Application.EnableVisualStyles();
-            XmlConfigurator.Configure();
+           // System.Windows.Forms.Application.EnableVisualStyles();
+			try
+			{
+				Log4NetConfigurator.Configure();
+			}
+			catch(Exception e)
+			{
+				log.Info(e.Message);
+			}
             log.Info("******************* Logging Configured *******************");
-            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+			log.Info("Flight Manager version: " + Application.ProductVersion);
+			System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
 
             ServicePointManager.DefaultConnectionLimit = 10;
 
@@ -68,7 +76,7 @@ namespace MissionPlanner
             }
 
             // setup theme provider
-            CustomMessageBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
+            //CustomMessageBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             Controls.MainSwitcher.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
             MissionPlanner.Controls.InputBox2.ApplyTheme += MissionPlanner.Utilities.ThemeManager.ApplyThemeTo;
@@ -101,7 +109,7 @@ namespace MissionPlanner
             WebRequest.DefaultWebProxy = WebRequest.GetSystemWebProxy();
             WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultNetworkCredentials;
 
-            string name = "Novelty";
+            string name = "Novelty Flight Manager";
 
             if (File.Exists(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt"))
                 name = File.ReadAllText(Application.StartupPath + Path.DirectorySeparatorChar + "logo.txt",
@@ -217,7 +225,7 @@ namespace MissionPlanner
 
             Splash = new MissionPlanner.Splash();
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Splash.Text = "Novelty"; //name+" " + Application.ProductVersion + " build " + strVersion;
+            Splash.Text = "Novelty Flight Manager"; //name+" " + Application.ProductVersion + " build " + strVersion;
             Splash.Show();
 
             Application.DoEvents();

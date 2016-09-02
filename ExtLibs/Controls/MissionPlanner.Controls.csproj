@@ -31,6 +31,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\..\extLibs\log4net.dll</HintPath>
@@ -72,6 +81,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ControlExt.cs" />
+    <Compile Include="ControlHelpers.cs" />
     <Compile Include="Coords.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -117,6 +127,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HUDT.resx</DependentUpon>
     </Compile>
+    <Compile Include="HUDT.zh-Hans.Designer.cs" />
     <Compile Include="IActivate.cs" />
     <Compile Include="IDynamicParameterControl.cs" />
     <Compile Include="ImageLabel.cs">
@@ -133,6 +144,22 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="MainSwitcher.cs" />
+    <Compile Include="MsgBox\ButtonClickEventArgs.cs" />
+    <Compile Include="MsgBox\ButtonInfo.cs" />
+    <Compile Include="MsgBox\MessageBox.cs" />
+    <Compile Include="MsgBox\MessageBoxButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MsgBox\MessageBoxButton.Designer.cs">
+      <DependentUpon>MessageBoxButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MsgBox\NovMessageBox.cs" />
+    <Compile Include="MsgBox\NovMessageBoxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MsgBox\NovMessageBoxForm.Designer.cs">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MyButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -169,9 +196,16 @@
     <Compile Include="ProgressReporterDialogue.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProgressReporterDialogue.designer.cs">
+    <Compile Include="ProgressReporterDialogue.Designer.cs">
       <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressReporterDialogueOld.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressReporterDialogueOld.designer.cs">
+      <DependentUpon>ProgressReporterDialogueOld.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressReporterDialogueTest.cs" />
     <Compile Include="ProgressReporterSphere.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,6 +240,7 @@
     <Compile Include="RangeControl.Designer.cs">
       <DependentUpon>RangeControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ResolutionManager.cs" />
     <Compile Include="Sphere.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -257,9 +292,17 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HUDT.zh-Hans.resx">
       <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HUDT.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageLabel.resx">
       <DependentUpon>ImageLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MsgBox\MessageBoxButton.resx">
+      <DependentUpon>MessageBoxButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MsgBox\NovMessageBoxForm.resx">
+      <DependentUpon>NovMessageBoxForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyProgressBar.resx">
       <DependentUpon>MyProgressBar.cs</DependentUpon>
@@ -270,8 +313,11 @@
     <EmbeddedResource Include="ProgressReporterDialogue.resx">
       <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProgressReporterDialogue.zh-Hans.resx">
-      <DependentUpon>ProgressReporterDialogue.cs</DependentUpon>
+    <EmbeddedResource Include="ProgressReporterDialogueOld.resx">
+      <DependentUpon>ProgressReporterDialogueOld.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressReporterDialogueOld.zh-Hans.resx">
+      <DependentUpon>ProgressReporterDialogueOld.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressReporterSphere.resx">
       <DependentUpon>ProgressReporterSphere.cs</DependentUpon>
@@ -304,6 +350,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconWarning32.png" />
+    <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\iconWarning48.png" />
